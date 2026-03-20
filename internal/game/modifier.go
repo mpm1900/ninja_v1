@@ -19,8 +19,8 @@ type Modifier struct {
 	Name     string    `json:"name"`
 	Duration *int      `json:"duration"`
 
-	Mutations []ModifierMutation
-	Triggers  []Trigger
+	Mutations []ModifierMutation `json:"-"`
+	Triggers  []Trigger          `json:"-"`
 }
 
 type ModifierTransaction struct {

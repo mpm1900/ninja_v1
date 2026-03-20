@@ -1,0 +1,42 @@
+type ActorBaseStat =
+  | 'accuracy'
+  | 'evasion'
+  | 'genjutsu'
+  | 'hp'
+  | 'ninjutsu'
+  | 'speed'
+  | 'stamina'
+  | 'taijutsu'
+
+type Nature = 'earth' | 'fire' | 'lightning' | 'water' | 'wind' | 'yang' | 'yin'
+
+type ActorStats<T> = Record<ActorBaseStat, T>
+type NatureStats<T> = Record<Nature, T>
+
+type Actor = {
+  ID: string
+  actor_ID: string
+  player_ID: string
+  name: string
+  level: number
+  experience: number
+  action_count: number
+  alive: true
+  active: true
+  critical: number
+  base_stats: ActorStats<number>
+  staged_stats: ActorStats<number>
+  pre_stats: ActorStats<number>
+  stats: ActorStats<number>
+  natures: Array<Nature>
+  nature_damage: NatureStats<number>
+  nature_resistance: NatureStats<number>
+  applied_modifiers: Array<string>
+  innate_modifiers: Array<{
+    ID: string
+    name: string
+    duration: number | null
+  }>
+}
+
+export type { Actor }

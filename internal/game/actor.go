@@ -1,7 +1,6 @@
 package game
 
 import (
-	"fmt"
 	"maps"
 	"slices"
 	"sort"
@@ -36,6 +35,7 @@ type ResourceValues struct {
 
 type Actor struct {
 	ID       uuid.UUID `json:"ID"`
+	ActorID  uuid.UUID `json:"actor_ID"`
 	PlayerID uuid.UUID `json:"player_ID"`
 	Name     string    `json:"name"`
 
@@ -61,7 +61,7 @@ type Actor struct {
 type ResolvedActor struct {
 	Actor
 	BaseStats        map[BaseStat]int `json:"base_stats"`
-	PreStats         map[BaseStat]int `json:"mapped_stats"`
+	PreStats         map[BaseStat]int `json:"pre_stats"`
 	AppliedModifiers []uuid.UUID      `json:"applied_modifiers"`
 }
 
@@ -214,7 +214,7 @@ func cloneActor(a Actor) Actor {
 	return b
 }
 
-func resolveActorBase(actor Actor, mtransactions []ModifierTransaction, atransactions []ModifierTransaction) ResolvedActor {
+func resolveActor(actor Actor, mtransactions []ModifierTransaction, atransactions []ModifierTransaction) ResolvedActor {
 	context := Context{
 		SourcePlayerID:    actor.PlayerID,
 		SourceActorID:     actor.ID,
@@ -222,24 +222,20 @@ func resolveActorBase(actor Actor, mtransactions []ModifierTransaction, atransac
 		TargetActorIDs:    []uuid.UUID{},
 		TargetPositionIDs: []uuid.UUID{},
 	}
+
+	applied := make(map[uuid.UUID]struct{})
 	transactions := []ModifierTransaction{}
-	transactions = append(transactions, mtransactions...)
 	transactions = append(transactions, atransactions...)
+	transactions = append(transactions, mtransactions...)
 	mutations := GetMutations(transactions)
 	mutations = append(mutations, SPECIAL_MUTATIONS...)
-	applied := make(map[uuid.UUID]struct{})
 	sort.Slice(mutations, func(i, j int) bool {
 		return mutations[j].Priority > mutations[i].Priority
 	})
 
-	for _, mut := range mutations {
-		fmt.Println(mut.ModifierID, mut.Priority)
-	}
-
 	mapped := cloneActor(actor)
 	for _, mutation := range mutations {
 		tx := MakeTransaction(&mutation.ActorMutation, &context)
-
 		m, apply := ResolveTransaction(mapped, &tx, mapped)
 		if apply {
 			if mutation.ModifierID != nil {
@@ -257,8 +253,8 @@ func resolveActorBase(actor Actor, mtransactions []ModifierTransaction, atransac
 }
 
 func ResolveActor(actor Actor, mtransactions []ModifierTransaction, atransactions []ModifierTransaction) ResolvedActor {
-	resolved := resolveActorBase(actor, mtransactions, atransactions)
-	pre := resolveActorBase(actor, []ModifierTransaction{}, []ModifierTransaction{})
+	resolved := resolveActor(actor, mtransactions, atransactions)
+	pre := resolveActor(actor, []ModifierTransaction{}, []ModifierTransaction{})
 	resolved.PreStats = maps.Clone(pre.Stats)
 
 	return resolved
