@@ -33,7 +33,7 @@ type Actor = {
   natures: Array<Nature>
   nature_damage: NatureStats<number>
   nature_resistance: NatureStats<number>
-  applied_modifiers: Array<string>
+  applied_modifiers: Record<string, number>
   innate_modifiers: Array<Modifier>
 }
 

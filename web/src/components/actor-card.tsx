@@ -47,8 +47,8 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
           </div>
         )}
         <div>
-          {actor?.applied_modifiers.map((ID) => (
-            <span key={ID}>{modifiers.find((m) => m.ID === ID)?.name}</span>
+          {Object.entries(actor?.applied_modifiers ?? {}).map(([ID, count]) => (
+            <span key={ID}>{modifiers.find((m) => m.ID === ID)?.name}{count > 0 ? ` (${count + 1})` : null}</span>
           ))}
         </div>
       </CardContent>

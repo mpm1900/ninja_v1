@@ -1,7 +1,5 @@
 import {
-  checkActorStat,
   type Actor,
-  type ActorBaseStat,
 } from '#/lib/game/actor'
 import {
   createColumnHelper,
@@ -19,7 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from './ui/table'
-import { cn } from '#/lib/utils'
 import { Checkbox } from './ui/checkbox'
 import { ActorStat } from './actor-stat'
 

@@ -1,5 +1,4 @@
 import type { ActorBaseStat } from '#/lib/game/actor'
-import { FaPrayingHands } from 'react-icons/fa'
 import { GiHearts, GiSprint, GiFist } from 'react-icons/gi'
 import { MdEnergySavingsLeaf } from 'react-icons/md'
 

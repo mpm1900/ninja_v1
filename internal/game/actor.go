@@ -61,9 +61,9 @@ type Actor struct {
 
 type ResolvedActor struct {
 	Actor
-	BaseStats        map[BaseStat]int `json:"base_stats"`
-	PreStats         map[BaseStat]int `json:"pre_stats"`
-	AppliedModifiers []uuid.UUID      `json:"applied_modifiers"`
+	BaseStats        map[BaseStat]int  `json:"base_stats"`
+	PreStats         map[BaseStat]int  `json:"pre_stats"`
+	AppliedModifiers map[uuid.UUID]int `json:"applied_modifiers"`
 }
 
 type ActorMutation = Mutation[Actor, Actor, Context]
@@ -84,7 +84,7 @@ func resolve(actor Actor, pre Actor) ResolvedActor {
 	return ResolvedActor{
 		Actor:            actor,
 		BaseStats:        pre.Stats,
-		AppliedModifiers: []uuid.UUID{},
+		AppliedModifiers: map[uuid.UUID]int{},
 	}
 }
 
@@ -255,7 +255,7 @@ func resolveActor(actor Actor, mtransactions []ModifierTransaction, atransaction
 			if mutation.ModifierID != nil {
 				if count, ok := applied[*mutation.ModifierID]; ok {
 					applied[*mutation.ModifierID] = count + 1
-				} else {	
+				} else {
 					applied[*mutation.ModifierID] = 0
 				}
 			}
@@ -264,9 +264,7 @@ func resolveActor(actor Actor, mtransactions []ModifierTransaction, atransaction
 	}
 
 	resolved := resolve(mapped, actor)
-	for key := range applied {
-		resolved.AppliedModifiers = append(resolved.AppliedModifiers, key)
-	}
+	maps.Copy(resolved.AppliedModifiers, applied)
 	return resolved
 }
 
