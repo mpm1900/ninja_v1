@@ -1,12 +1,13 @@
-import {
-  type Actor,
-} from '#/lib/game/actor'
+import { type Actor } from '#/lib/game/actor'
 import {
   createColumnHelper,
   flexRender,
   functionalUpdate,
   getCoreRowModel,
+  getExpandedRowModel,
   useReactTable,
+  type ExpandedState,
+  type Row,
   type RowSelectionState,
   type Table as TableDef,
 } from '@tanstack/react-table'
@@ -20,27 +21,34 @@ import {
 } from './ui/table'
 import { Checkbox } from './ui/checkbox'
 import { ActorStat } from './actor-stat'
+import { Button } from './ui/button'
+import { ChevronDown, ChevronLeft } from 'lucide-react'
+import { Fragment, useState, type ReactNode } from 'react'
 
 type ActorsTableMeta = {
   onRowCheckedChange?: (actor: Actor, selected: boolean) => void
 }
 
-function getActorsTableMeta(table: TableDef<Actor>): ActorsTableMeta | undefined {
+function getActorsTableMeta(
+  table: TableDef<Actor>
+): ActorsTableMeta | undefined {
   return table.options.meta as ActorsTableMeta | undefined
 }
 
-
 const helper = createColumnHelper<Actor>()
 const columns = [
-  helper.accessor('ID', {
-    header: '',
+  helper.display({
+    id: 'select',
     cell: ({ row, table }) => (
       <Checkbox
         checked={row.getIsSelected()}
         disabled={!row.getCanSelect()}
         onCheckedChange={(checked) => {
           row.toggleSelected(!!checked)
-          getActorsTableMeta(table)?.onRowCheckedChange?.(row.original, !!checked)
+          getActorsTableMeta(table)?.onRowCheckedChange?.(
+            row.original,
+            !!checked
+          )
         }}
       />
     ),
@@ -64,6 +72,19 @@ const columns = [
   helper.accessor('stats.taijutsu', {
     cell: (props) => <ActorStat actor={props.row.original} stat="taijutsu" />,
   }),
+  helper.display({
+    id: 'actions',
+    cell: ({ row }) => (
+      <Button
+        size="icon"
+        variant="ghost"
+        disabled={!row.getCanExpand()}
+        onClick={row.getToggleExpandedHandler()}
+      >
+        {row.getIsExpanded() ? <ChevronDown /> : <ChevronLeft />}
+      </Button>
+    ),
+  }),
 ]
 
 function ActorsTable({
@@ -72,23 +93,30 @@ function ActorsTable({
   rowSelection,
   onRowSelectionChange,
   onRowCheckedChange,
+  subRow,
 }: {
   data: Array<Actor>
   enabled: boolean
   rowSelection: RowSelectionState
   onRowSelectionChange: (rowSelection: RowSelectionState) => void
   onRowCheckedChange?: (actor: Actor, selected: boolean) => void
+  subRow?: (props: { row: Row<Actor> }) => ReactNode
 }) {
+  //const [expanded, setExpanded] = useState<ExpandedState>({})
   const table = useReactTable({
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    getRowCanExpand: (row) => row.getIsSelected(),
     getRowId: (a) => a.actor_ID,
     enableRowSelection: enabled,
+    // onExpandedChange: setExpanded,
     onRowSelectionChange: (updater) => {
       onRowSelectionChange(functionalUpdate(updater, rowSelection))
     },
     state: {
+      expanded: rowSelection,
       rowSelection,
     },
     meta: {
@@ -114,13 +142,20 @@ function ActorsTable({
       </TableHeader>
       <TableBody>
         {table.getRowModel().rows.map((row) => (
-          <TableRow key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <TableCell key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </TableCell>
-            ))}
-          </TableRow>
+          <Fragment key={row.id}>
+            <TableRow>
+              {row.getVisibleCells().map((cell) => (
+                <TableCell key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </TableRow>
+            {row.getIsExpanded() && subRow && (
+              <tr>
+                <td colSpan={row.getAllCells().length}>{subRow({ row })}</td>
+              </tr>
+            )}
+          </Fragment>
         ))}
       </TableBody>
     </Table>

@@ -18,6 +18,8 @@ import { clientsStore, type Client } from '#/lib/stores/clients'
 import { ActorCard } from '#/components/actor-card'
 import { modifiersQuery } from '#/lib/queries/modifiers'
 import { Button } from '#/components/ui/button'
+import { Card, CardContent } from '#/components/ui/card'
+import { ModifiersTable } from '#/components/modifiers-table'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -35,7 +37,6 @@ function App() {
   const status = useStore(socketStore, (s) => s.status)
   const client = useStore(clientsStore, (c) => c[0] as Client | undefined)
   const game = useStore(gameStore, (g) => g)
-  const [rows, setRows] = useState<RowSelectionState>({})
 
   return (
     <main className="">
@@ -56,7 +57,7 @@ function App() {
           />
         </div>
       </header>
-      <div>
+      <div className="space-y-6">
         <div className="grid grid-cols-3 gap-2 p-2">
           <ActorCard actor={game.actors[0]} game={game} />
           <ActorCard actor={game.actors[1]} game={game} />
@@ -68,17 +69,19 @@ function App() {
         <ActorsTable
           data={actors.data}
           enabled={status === 'open'}
-          rowSelection={rows}
+          rowSelection={Object.fromEntries(
+            game.actors.map((a) => [a.actor_ID, true])
+          )}
           onRowCheckedChange={(a, checked) => {
             if (!client) return
-            const actor = game.actors.find(ga => ga.actor_ID === a.actor_ID)
+            const actor = game.actors.find((ga) => ga.actor_ID === a.actor_ID)
             const ID = checked ? a.actor_ID : actor!.ID
 
             sendContextMessage({
               type: checked ? 'add-actor' : 'remove-actor',
-              clientID: client!.ID,
+              clientID: client.ID,
               context: {
-                sourcePlayerID: client!.ID,
+                sourcePlayerID: client.ID,
                 sourceActorID: ID,
                 parentActorID: ID,
                 targetActorIDs: [],
@@ -88,37 +91,59 @@ function App() {
           }}
           onRowSelectionChange={(r) => {
             if (!client) return
-            setRows(r)
+            // setRows(r)
           }}
+          subRow={({ row }) => (
+            <Card className="rounded-t-none border-t-0 mx-2 mb-2">
+              <CardContent>
+                {modifiers.data.map((m) => (
+                  <Button
+                    key={m.ID}
+                    onClick={() => {
+                      if (!client) return
+                      const actor = row.original
 
+                      sendContextMessage({
+                        type: 'add-modifier',
+                        clientID: client.ID,
+                        modifierID: m.ID,
+                        context: {
+                          sourcePlayerID: actor.player_ID,
+                          sourceActorID: actor.ID,
+                          parentActorID: actor.ID,
+                          targetActorIDs: [],
+                          targetPositionIDs: [],
+                        },
+                      })
+                    }}
+                  >
+                    {m.name}
+                  </Button>
+                ))}
+              </CardContent>
+            </Card>
+          )}
         />
-        <div>
-          {modifiers.data.map((m) => (
-            <Button
-              key={m.ID}
-              onClick={() => {
-                if (!client) return
-                const actor = game.actors[0]
-                if (!actor) return
+        <ModifiersTable
+          data={game.modifiers}
+          onRowRemove={(modifier) => {
+            if (!client) return
 
-                sendContextMessage({
-                  type: 'add-modifier',
-                  clientID: client.ID!,
-                  modifierID: m.ID,
-                  context: {
-                    sourcePlayerID: actor.player_ID,
-                    sourceActorID: actor.ID,
-                    parentActorID: actor.ID,
-                    targetActorIDs: [],
-                    targetPositionIDs: [],
-                  },
-                })
-              }}
-            >
-              {m.name}
-            </Button>
-          ))}
-        </div>
+            sendContextMessage({
+              type: 'remove-modifier',
+              clientID: client.ID,
+              modifierID: modifier.ID,
+              context: {
+                sourceActorID: null,
+                sourcePlayerID: null,
+                parentActorID: null,
+                targetActorIDs: [],
+                targetPositionIDs: [],
+              },
+            })
+          }}
+        />
+
         <pre>{JSON.stringify(game, null, 2)}</pre>
       </div>
     </main>

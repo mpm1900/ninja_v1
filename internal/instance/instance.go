@@ -100,7 +100,9 @@ func Reducer(instance *Instance, request Request) int {
 			return none
 		}
 
-		instance.Game.AddActor(all[index])
+		actor := all[index]
+		actor.PlayerID = request.ClientID
+		instance.Game.AddActor(actor)
 		return state
 	case "remove-actor":
 		index := slices.IndexFunc(instance.Game.Actors, func(a game.Actor) bool {
@@ -123,6 +125,13 @@ func Reducer(instance *Instance, request Request) int {
 			})
 		}
 		return state
+	case "remove-modifier":
+		instance.Game.FilterModifiers(func(m game.ModifierTransaction) bool {
+			return m.ID != *request.ModifierID
+		})
+		return state
+
+
 	default:
 		return none
 	}

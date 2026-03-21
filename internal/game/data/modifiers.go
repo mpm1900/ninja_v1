@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
-var GenjustuUpSource = modifiers.NewStatDoublerSource(game.StatGenjutsu, "Genjustu Up")
+var GenjustuUpSource = modifiers.NewStatDoublerSource(game.StatGenjutsu, "Genjutsu Up")
 
 var MODIFIERS = map[uuid.UUID]game.Modifier{
 	GenjustuUpSource.ID: GenjustuUpSource,
