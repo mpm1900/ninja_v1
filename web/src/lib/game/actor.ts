@@ -39,4 +39,11 @@ type Actor = {
   }>
 }
 
-export type { Actor }
+function checkActorStat(actor: Actor, key: ActorBaseStat) {
+  const stat = actor.stats[key]
+  const pre = actor.pre_stats[key]
+  return stat === pre ? 0 : stat > pre ? 1 : -1
+}
+
+export type { Actor, ActorBaseStat }
+export { checkActorStat }

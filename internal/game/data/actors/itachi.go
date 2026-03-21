@@ -18,12 +18,13 @@ func NewItachi(playerID uuid.UUID, level int) game.Actor {
 					return actor.ID == context.SourceActorID
 				},
 				Delta: func(actor game.Actor, context *game.Context) game.Actor {
-					actor.Stats[game.StatNinjutsu] = actor.Stats[game.StatNinjutsu] * 2
+					actor.Stats[game.StatNinjutsu] = actor.Stats[game.StatNinjutsu] / 2
 					return actor
 				},
 			},
 		},
 	}
+
 	return game.Actor{
 		ID:       uuid.New(),
 		PlayerID: playerID,

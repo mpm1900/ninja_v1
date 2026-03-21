@@ -94,18 +94,26 @@ func MapBaseStat(stat, level int) int {
 	return ratio + 5
 }
 
-func MapResource(stat, level int) int {
+func MapResourceStat(stat, level int) int {
 	return MapBaseStat(stat, level) + level + 5
 }
 
-func MapBaseStats(actor Actor) Actor {
-	actor.Stats[StatHP] = MapResource(actor.Stats[StatHP], actor.Level)
-	actor.Stats[StatStamina] = MapResource(actor.Stats[StatStamina], actor.Level)
+func (actor *Actor) MapBase(stat BaseStat) {
+	actor.Stats[stat] = MapBaseStat(actor.Stats[stat], actor.Level)
+}
 
-	actor.Stats[StatNinjutsu] = MapBaseStat(actor.Stats[StatNinjutsu], actor.Level)
-	actor.Stats[StatGenjutsu] = MapBaseStat(actor.Stats[StatGenjutsu], actor.Level)
-	actor.Stats[StatTaijutsu] = MapBaseStat(actor.Stats[StatTaijutsu], actor.Level)
-	actor.Stats[StatSpeed] = MapBaseStat(actor.Stats[StatSpeed], actor.Level)
+func (actor *Actor) MapResource(stat BaseStat) {
+	actor.Stats[stat] = MapResourceStat(actor.Stats[stat], actor.Level)
+}
+
+func MapBaseStats(actor Actor) Actor {
+	actor.MapResource(StatHP)
+	actor.MapResource(StatStamina)
+
+	actor.MapBase(StatNinjutsu)
+	actor.MapBase(StatGenjutsu)
+	actor.MapBase(StatTaijutsu)
+	actor.MapBase(StatSpeed)
 
 	return actor
 }
@@ -120,13 +128,17 @@ func MapStagedStat(stat, stage, mod int) int {
 	return stat
 }
 
+func (actor *Actor) MapStaged(stat BaseStat, mod int) {
+	actor.Stats[stat] = MapStagedStat(actor.Stats[stat], actor.Stages[stat], 2)
+}
+
 func MapStagedStats(actor Actor) Actor {
-	actor.Stats[StatNinjutsu] = MapStagedStat(actor.Stats[StatNinjutsu], actor.Stages[StatNinjutsu], 2)
-	actor.Stats[StatGenjutsu] = MapStagedStat(actor.Stats[StatGenjutsu], actor.Stages[StatGenjutsu], 2)
-	actor.Stats[StatTaijutsu] = MapStagedStat(actor.Stats[StatTaijutsu], actor.Stages[StatTaijutsu], 2)
-	actor.Stats[StatSpeed] = MapStagedStat(actor.Stats[StatSpeed], actor.Stages[StatSpeed], 2)
-	actor.Stats[StatEvasion] = MapStagedStat(actor.Stats[StatEvasion], actor.Stages[StatEvasion], 3)
-	actor.Stats[StatAccuracy] = MapStagedStat(actor.Stats[StatAccuracy], actor.Stages[StatAccuracy], 3)
+	actor.MapStaged(StatNinjutsu, 2)
+	actor.MapStaged(StatGenjutsu, 2)
+	actor.MapStaged(StatTaijutsu, 2)
+	actor.MapStaged(StatSpeed, 2)
+	actor.MapStaged(StatEvasion, 3)
+	actor.MapStaged(StatAccuracy, 3)
 	return actor
 }
 
@@ -198,7 +210,7 @@ func GetMutations(transactions []ModifierTransaction) []ModifierMutation {
 	return mutations
 }
 
-func cloneActor(a Actor) Actor {
+func (a Actor) Clone() Actor {
 	b := a
 
 	// b.Resources = maps.Clone(a.Resources)
@@ -233,7 +245,7 @@ func resolveActor(actor Actor, mtransactions []ModifierTransaction, atransaction
 		return mutations[j].Priority > mutations[i].Priority
 	})
 
-	mapped := cloneActor(actor)
+	mapped := actor.Clone()
 	for _, mutation := range mutations {
 		tx := MakeTransaction(&mutation.ActorMutation, &context)
 		m, apply := ResolveTransaction(mapped, &tx, mapped)

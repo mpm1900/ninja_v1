@@ -1,3 +1,4 @@
+import { ActorsTable } from '#/components/actors-table'
 import { actorsQuery } from '#/lib/queries/actors'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
@@ -14,7 +15,7 @@ function App() {
   console.log(query.data)
   return (
     <main className="px-4 pb-8 pt-14">
-      <pre>{JSON.stringify(query.data, null, 4)}</pre>
+      <ActorsTable data={query.data} />
     </main>
   )
 }

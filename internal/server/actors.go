@@ -29,7 +29,7 @@ func (ah *ActorsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (ah *ActorsHandler) GetAllActors() []game.Actor {
 	return []game.Actor{
-		actors.NewItachi(uuid.Nil, 0),
+		actors.NewItachi(uuid.Nil, 40),
 	}
 }
 
