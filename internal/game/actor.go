@@ -2,6 +2,7 @@ package game
 
 import (
 	"maps"
+	"math"
 	"slices"
 	"sort"
 
@@ -90,8 +91,8 @@ func resolve(actor Actor, pre Actor) ResolvedActor {
 func MapBaseStat(stat, level int) int {
 	base := (stat + 15) * 2
 	ev := 0 // TODO
-	ratio := ((base + ev) * level) / 100
-	return ratio + 5
+	ratio := float64((base+ev)*level) / 100
+	return int(math.Floor(ratio + 5))
 }
 
 func MapResourceStat(stat, level int) int {
@@ -119,13 +120,14 @@ func MapBaseStats(actor Actor) Actor {
 }
 
 func MapStagedStat(stat, stage, mod int) int {
+	m := 1.0
 	if stage > 0 {
-		return stat * ((stage + mod) / mod)
+		m = float64(stage+mod) / float64(mod)
+	} else if stage < 0 {
+		m = float64(mod) / float64(-stage+mod)
 	}
-	if stage < 0 {
-		return stat * (mod / (-1*stage + mod))
-	}
-	return stat
+
+	return int(math.Floor(float64(stat) * m))
 }
 
 func (actor *Actor) MapStaged(stat BaseStat, mod int) {
@@ -161,9 +163,9 @@ func GetActorModifiers(game Game) []ModifierTransaction {
 
 	for _, actor := range activeActors {
 		context := Context{
-			SourcePlayerID:    actor.PlayerID,
-			SourceActorID:     actor.ID,
-			ParentActorID:     actor.ID,
+			SourcePlayerID:    &actor.PlayerID,
+			SourceActorID:     &actor.ID,
+			ParentActorID:     &actor.ID,
 			TargetActorIDs:    []uuid.UUID{},
 			TargetPositionIDs: []uuid.UUID{},
 		}
@@ -228,9 +230,9 @@ func (a Actor) Clone() Actor {
 
 func resolveActor(actor Actor, mtransactions []ModifierTransaction, atransactions []ModifierTransaction) ResolvedActor {
 	context := Context{
-		SourcePlayerID:    actor.PlayerID,
-		SourceActorID:     actor.ID,
-		ParentActorID:     actor.ID,
+		SourcePlayerID:    &actor.PlayerID,
+		SourceActorID:     &actor.ID,
+		ParentActorID:     &actor.ID,
 		TargetActorIDs:    []uuid.UUID{},
 		TargetPositionIDs: []uuid.UUID{},
 	}

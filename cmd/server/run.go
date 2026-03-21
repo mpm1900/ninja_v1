@@ -25,7 +25,7 @@ func main1() {
 			ModifierID: &modifier.ID,
 			ActorMutation: game.ActorMutation{
 				Filter: func(actor game.Actor, context *game.Context) bool {
-					return actor.ID == context.SourceActorID
+					return actor.ID == *context.SourceActorID
 				},
 				Delta: func(actor game.Actor, context *game.Context) game.Actor {
 					actor.Stats[game.StatNinjutsu] = actor.Stats[game.StatNinjutsu] * 2
@@ -37,7 +37,7 @@ func main1() {
 	transaction := game.ModifierTransaction{
 		ID: uuid.New(),
 		Context: &game.Context{
-			SourceActorID: actor.ID,
+			SourceActorID: &actor.ID,
 		},
 		Mutation: modifier,
 	}

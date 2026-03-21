@@ -1,10 +1,10 @@
 import type { Actor } from './actor'
 
 type Context = {
-  sourcePlayerID: string
+  sourcePlayerID: string | null
 
-  parentActorID: string
-  sourceActorID: string
+  parentActorID: string | null
+  sourceActorID: string | null
 
   targetActorIDs: Array<string>
   targetPositionIDs: Array<string>

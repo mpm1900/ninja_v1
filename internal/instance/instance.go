@@ -7,6 +7,7 @@ import (
 	"slices"
 
 	"ninja_v1/internal/game"
+	data "ninja_v1/internal/game/data"
 
 	"github.com/google/uuid"
 )
@@ -47,7 +48,7 @@ func (i *Instance) UnregisterClient(client *Client) {
 
 func (i *Instance) BroadcastGame() {
 	game := i.Game
-	fmt.Printf("BROADCAST STATE %#v\n", game)
+	// fmt.Printf("BROADCAST STATE %#v\n", game)
 	for _, client := range i.Clients {
 		clientState := game
 		select {
@@ -85,6 +86,18 @@ const (
 
 func Reducer(instance *Instance, request Request) int {
 	switch request.Type {
+	case "set-actors":
+		// fmt.Print(request)
+		all := data.GetAllActors()
+		var actors []game.Actor
+		for _, a := range all {
+			if slices.Contains(request.Context.TargetActorIDs, a.ActorID) {
+				a.PlayerID = request.ClientID
+				actors = append(actors, a)
+			}
+		}
+		instance.Game.SetActors(actors)
+		return state
 	default:
 		return none
 	}
@@ -101,7 +114,6 @@ func (i *Instance) Run() {
 			i.UnregisterClient(client)
 			i.BroadcastClients()
 		case request := <-i.ReadRequest:
-			fmt.Printf("to a request: %s \n", request.Type)
 			switch Reducer(i, request) {
 			case state:
 				i.BroadcastGame()

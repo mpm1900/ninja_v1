@@ -6,9 +6,7 @@ import (
 	"net/http"
 
 	"ninja_v1/internal/game"
-	actors "ninja_v1/internal/game/data/actors"
-
-	"github.com/google/uuid"
+	data "ninja_v1/internal/game/data"
 )
 
 type ActorsHandler struct {
@@ -27,15 +25,9 @@ func (ah *ActorsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ah.mux.ServeHTTP(w, r)
 }
 
-func (ah *ActorsHandler) GetAllActors() []game.Actor {
-	return []game.Actor{
-		actors.NewItachi(uuid.Nil, 40),
-	}
-}
-
 func (ah *ActorsHandler) MakeGame() game.Game {
 	return game.Game{
-		Actors:    ah.GetAllActors(),
+		Actors:    data.GetAllActors(),
 		Modifiers: []game.ModifierTransaction{},
 	}
 }

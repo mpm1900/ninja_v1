@@ -88,10 +88,12 @@ const columns = [
 
 function ActorsTable({
   data,
+  enabled,
   rowSelection,
   onRowSelectionChange,
 }: {
   data: Array<Actor>
+  enabled: boolean
   rowSelection: RowSelectionState
   onRowSelectionChange: (rowSelection: RowSelectionState) => void
 }) {
@@ -99,8 +101,8 @@ function ActorsTable({
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
-    getRowId: (a) => a.ID,
-    enableRowSelection: true,
+    getRowId: (a) => a.actor_ID,
+    enableRowSelection: enabled,
     onRowSelectionChange: (updater) => {
       onRowSelectionChange(functionalUpdate(updater, rowSelection))
     },

@@ -152,11 +152,11 @@ function sendSocketMessage(
   return true
 }
 
-function sendContextMessage(type: string, context: Context) {
-  return sendSocketMessage(JSON.stringify({ type, context }))
+function sendContextMessage(request: { type: string, context: Context, clientID: string }) {
+  return sendSocketMessage(JSON.stringify(request))
 }
 
-export type {}
+export type { }
 export {
   socketStore,
   connectSocket,

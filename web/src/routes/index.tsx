@@ -14,6 +14,7 @@ import { Loader, Signal, Unplug } from 'lucide-react'
 import { gameStore } from '#/lib/stores/game'
 import { useState } from 'react'
 import type { RowSelectionState } from '@tanstack/react-table'
+import { clientsStore, type Client } from '#/lib/stores/clients'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -27,6 +28,7 @@ function App() {
   const actors = useSuspenseQuery(actorsQuery)
   const instanceID = useStore(socketStore, (s) => s.instanceID)
   const status = useStore(socketStore, (s) => s.status)
+  const client = useStore(clientsStore, (c) => c[0] as Client | undefined)
   const game = useStore(gameStore, (g) => g)
   const [rows, setRows] = useState<RowSelectionState>({})
 
@@ -34,31 +36,44 @@ function App() {
     <main className="">
       <header className="flex justify-between p-2">
         <div></div>
-        <InstanceCombobox
-          icon={
-            <>
-              {status === 'idle' && <Unplug />}
-              {status === 'connecting' && <Loader />}
-              {status === 'open' && <Signal />}
-            </>
-          }
-          value={instanceID}
-          onValueChange={connectSocket}
-        />
+        <div>
+          <code className="px-4">{status}</code>
+          <InstanceCombobox
+            icon={
+              <>
+                {status === 'idle' && <Unplug />}
+                {status === 'connecting' && <Loader />}
+                {status === 'open' && <Signal />}
+              </>
+            }
+            value={instanceID}
+            onValueChange={connectSocket}
+          />
+        </div>
       </header>
       <ActorsTable
         data={actors.data}
+        enabled={status === 'open'}
         rowSelection={rows}
         onRowSelectionChange={(r) => {
-          const sourceActorID = Object.entries(r).find((r) => r[1])?.[0] ?? ''
-          console.log(sourceActorID, r)
-          sendContextMessage('add-actor', {
-            sourcePlayerID: '',
-            sourceActorID,
-            parentActorID: sourceActorID,
-            targetActorIDs: [],
-            targetPositionIDs: [],
+          if (!client) return
+
+          const actorIDs = Object.entries(r)
+            .filter((r) => r[1])
+            .map((r) => r[0])
+
+          sendContextMessage({
+            type: 'set-actors',
+            clientID: client!.ID,
+            context: {
+              sourcePlayerID: null,
+              sourceActorID: null,
+              parentActorID: null,
+              targetActorIDs: actorIDs,
+              targetPositionIDs: [],
+            },
           })
+
           setRows(r)
         }}
       />
