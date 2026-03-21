@@ -11,6 +11,16 @@ const config = defineConfig({
     tsconfigPaths: true,
   },
   plugins: [devtools(), tailwindcss(), tanstackStart(), viteReact()],
+  server: {
+    host: '0.0.0.0',
+    proxy: {
+      '/games': {
+        target: 'http://localhost:3005/games',
+        changeOrigin: true,
+        ws: true,
+      },
+    },
+  }
 })
 
 export default config

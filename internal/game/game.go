@@ -5,10 +5,10 @@ type GameTransaction struct {
 }
 
 type Game struct {
-	Actors    []Actor `json:"actors"`
-	Modifiers []ModifierTransaction
+	Actors    []Actor               `json:"actors"`
+	Modifiers []ModifierTransaction `json:"modifiers"`
 
-	Transactions []GameTransaction
-	Actions      []ActionTransaction[Game]
-	Trigger      []ActionTransaction[Game]
+	Transactions []GameTransaction         `json:"transactions"`
+	Actions      []ActionTransaction[Game] `json:"actions"`
+	Trigger      []ActionTransaction[Game] `json:"triggers"`
 }

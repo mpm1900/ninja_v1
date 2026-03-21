@@ -13,13 +13,19 @@ type Server struct {
 
 func NewServer(ctx context.Context) *Server {
 	logger := slog.Default()
+
 	actorsHandler := NewActorsHandler(ctx)
+	instancesHandler := NewInstancesHandler(ctx)
+
 	mux := http.NewServeMux()
 	api := http.NewServeMux()
 
 	api.HandleFunc("GET /actors", actorsHandler.HandleGetActors)
+	api.HandleFunc("GET /instances", instancesHandler.HandleGetGames)
 
 	mux.Handle("/api/", http.StripPrefix("/api", api))
+	mux.Handle("/games/", http.StripPrefix("/games", instancesHandler))
+
 	return &Server{
 		Server: &http.Server{
 			Addr:    ":3005",

@@ -6,8 +6,10 @@ import {
 import {
   createColumnHelper,
   flexRender,
+  functionalUpdate,
   getCoreRowModel,
   useReactTable,
+  type RowSelectionState,
 } from '@tanstack/react-table'
 import {
   Table,
@@ -18,6 +20,7 @@ import {
   TableRow,
 } from './ui/table'
 import { cn } from '#/lib/utils'
+import { Checkbox } from './ui/checkbox'
 
 function Stat({ stat, actor }: { actor: Actor; stat: ActorBaseStat }) {
   return (
@@ -37,6 +40,31 @@ function Stat({ stat, actor }: { actor: Actor; stat: ActorBaseStat }) {
 
 const helper = createColumnHelper<Actor>()
 const columns = [
+  helper.accessor('ID', {
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllRowsSelected()
+            ? true
+            : table.getIsSomeRowsSelected()
+              ? 'indeterminate'
+              : false
+        }
+        onCheckedChange={(checked) => {
+          table.toggleAllRowsSelected(!!checked)
+        }}
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        disabled={!row.getCanSelect()}
+        onCheckedChange={(checked) => {
+          row.toggleSelected(!!checked)
+        }}
+      />
+    ),
+  }),
   helper.accessor('name', {}),
   helper.accessor('stats.hp', {
     cell: (props) => <Stat actor={props.row.original} stat="hp" />,
@@ -58,11 +86,27 @@ const columns = [
   }),
 ]
 
-function ActorsTable({ data }: { data: Array<Actor> }) {
+function ActorsTable({
+  data,
+  rowSelection,
+  onRowSelectionChange,
+}: {
+  data: Array<Actor>
+  rowSelection: RowSelectionState
+  onRowSelectionChange: (rowSelection: RowSelectionState) => void
+}) {
   const table = useReactTable({
-    data,
     columns,
+    data,
     getCoreRowModel: getCoreRowModel(),
+    getRowId: (a) => a.ID,
+    enableRowSelection: true,
+    onRowSelectionChange: (updater) => {
+      onRowSelectionChange(functionalUpdate(updater, rowSelection))
+    },
+    state: {
+      rowSelection,
+    },
   })
 
   return (
