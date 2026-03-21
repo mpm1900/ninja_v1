@@ -8,6 +8,7 @@ import {
   getCoreRowModel,
   useReactTable,
   type RowSelectionState,
+  type Table as TableDef,
 } from '@tanstack/react-table'
 import {
   Table,
@@ -20,29 +21,26 @@ import {
 import { Checkbox } from './ui/checkbox'
 import { ActorStat } from './actor-stat'
 
+type ActorsTableMeta = {
+  onRowCheckedChange?: (actor: Actor, selected: boolean) => void
+}
+
+function getActorsTableMeta(table: TableDef<Actor>): ActorsTableMeta | undefined {
+  return table.options.meta as ActorsTableMeta | undefined
+}
+
+
 const helper = createColumnHelper<Actor>()
 const columns = [
   helper.accessor('ID', {
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllRowsSelected()
-            ? true
-            : table.getIsSomeRowsSelected()
-              ? 'indeterminate'
-              : false
-        }
-        onCheckedChange={(checked) => {
-          table.toggleAllRowsSelected(!!checked)
-        }}
-      />
-    ),
-    cell: ({ row }) => (
+    header: '',
+    cell: ({ row, table }) => (
       <Checkbox
         checked={row.getIsSelected()}
         disabled={!row.getCanSelect()}
         onCheckedChange={(checked) => {
           row.toggleSelected(!!checked)
+          getActorsTableMeta(table)?.onRowCheckedChange?.(row.original, !!checked)
         }}
       />
     ),
@@ -73,11 +71,13 @@ function ActorsTable({
   enabled,
   rowSelection,
   onRowSelectionChange,
+  onRowCheckedChange,
 }: {
   data: Array<Actor>
   enabled: boolean
   rowSelection: RowSelectionState
   onRowSelectionChange: (rowSelection: RowSelectionState) => void
+  onRowCheckedChange?: (actor: Actor, selected: boolean) => void
 }) {
   const table = useReactTable({
     columns,
@@ -91,6 +91,9 @@ function ActorsTable({
     state: {
       rowSelection,
     },
+    meta: {
+      onRowCheckedChange,
+    } as const,
   })
 
   return (

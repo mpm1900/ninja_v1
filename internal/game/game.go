@@ -3,6 +3,8 @@ package game
 import (
 	"encoding/json"
 	"slices"
+
+	"github.com/google/uuid"
 )
 
 type GameTransaction struct {
@@ -18,14 +20,6 @@ type Game struct {
 	Trigger      []ActionTransaction[Game] `json:"triggers"`
 }
 
-func (g *Game) SetActors(actors []Actor) {
-	g.Actors = slices.Clone(actors)
-}
-
-func (g *Game) AddModifier(modifier ModifierTransaction) {
-	g.Modifiers = append(g.Modifiers, modifier)
-}
-
 func (g *Game) FilterModifiers(predicate func(modifier ModifierTransaction) bool) {
 	filtered := g.Modifiers[:0]
 	for _, m := range g.Modifiers {
@@ -35,6 +29,20 @@ func (g *Game) FilterModifiers(predicate func(modifier ModifierTransaction) bool
 	}
 
 	g.Modifiers = filtered
+}
+
+func (g *Game) AddModifier(modifier ModifierTransaction) {
+	g.Modifiers = append(g.Modifiers, modifier)
+}
+
+func (g *Game) AddActor(actor Actor) {
+	g.Actors = append(g.Actors, actor)
+}
+
+func (g *Game) RemoveActor(actorID uuid.UUID) {
+	g.Actors = slices.DeleteFunc(g.Actors, func(a Actor) bool {
+		return a.ID == actorID
+	})
 }
 
 func (g Game) MarshalJSON() ([]byte, error) {

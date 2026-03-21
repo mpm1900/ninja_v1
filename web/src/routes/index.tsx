@@ -69,27 +69,28 @@ function App() {
           data={actors.data}
           enabled={status === 'open'}
           rowSelection={rows}
-          onRowSelectionChange={(r) => {
+          onRowCheckedChange={(a, checked) => {
             if (!client) return
-
-            const actorIDs = Object.entries(r)
-              .filter((r) => r[1])
-              .map((r) => r[0])
+            const actor = game.actors.find(ga => ga.actor_ID === a.actor_ID)
+            const ID = checked ? a.actor_ID : actor!.ID
 
             sendContextMessage({
-              type: 'set-actors',
+              type: checked ? 'add-actor' : 'remove-actor',
               clientID: client!.ID,
               context: {
-                sourcePlayerID: null,
-                sourceActorID: null,
-                parentActorID: null,
-                targetActorIDs: actorIDs,
+                sourcePlayerID: client!.ID,
+                sourceActorID: ID,
+                parentActorID: ID,
+                targetActorIDs: [],
                 targetPositionIDs: [],
               },
             })
-
+          }}
+          onRowSelectionChange={(r) => {
+            if (!client) return
             setRows(r)
           }}
+
         />
         <div>
           {modifiers.data.map((m) => (
