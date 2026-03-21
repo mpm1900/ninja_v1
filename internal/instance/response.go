@@ -10,10 +10,10 @@ type Response struct {
 	Clients []*Client  `json:"clients"`
 }
 
-func NewStateMessage(state game.Game) Response {
+func NewStateMessage(state *game.Game) Response {
 	return Response{
 		Type:    "state",
-		State:   &state,
+		State:   state,
 		Clients: nil,
 	}
 }
@@ -23,5 +23,13 @@ func NewClientsMessage(clients []*Client) Response {
 		Type:    "clients",
 		State:   nil,
 		Clients: clients,
+	}
+}
+
+func PostRegisterMssage(client *Client, state *game.Game) Response {
+	return Response{
+		Type:    "join-success",
+		State:   state,
+		Clients: []*Client{client},
 	}
 }

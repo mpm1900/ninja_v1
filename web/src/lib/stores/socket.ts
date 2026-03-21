@@ -81,7 +81,7 @@ function connectSocket(instanceID: string) {
 
     try {
       const message = JSON.parse(event.data) as {
-        type: 'state' | 'clients'
+        type: 'state' | 'clients' | 'join-success'
         state: Game | null
         clients: Array<Client> | null
       }
@@ -91,6 +91,10 @@ function connectSocket(instanceID: string) {
       }
       if (message.type === 'clients') {
         clientsStore.setState(() => message.clients!)
+      }
+      if (message.type === 'join-success') {
+        gameStore.setState(() => message.state!)
+        console.log(message.clients![0])
       }
     } catch {
       // Ignore non-JSON websocket payloads

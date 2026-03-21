@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"time"
 
-	"ninja_v1/internal/game"
-
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )
@@ -32,9 +30,7 @@ type Client struct {
 	ctx      context.Context
 	cancel   context.CancelFunc
 	instance *Instance
-
-	nextState   chan game.Game
-	nextClients chan []*Client
+	inbox    chan Response
 }
 
 func NewClient(instance *Instance) *Client {
@@ -45,8 +41,9 @@ func NewClient(instance *Instance) *Client {
 		cancel:   cancel,
 		instance: instance,
 
-		nextState:   make(chan game.Game, 5),
-		nextClients: make(chan []*Client, 5),
+		//nextState:   make(chan game.Game, 5),
+		//nextClients: make(chan []*Client, 5),
+		inbox: make(chan Response, 5),
 	}
 }
 
@@ -61,24 +58,11 @@ func (c *Client) Connect(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func (c *Client) WriteState(state game.Game) error {
-	json, err := json.Marshal(NewStateMessage(state))
+func (c *Client) WriteResponse(response *Response) error {
+	json, err := json.Marshal(response)
 	if err != nil {
 		return err
 	}
-	if err = c.conn.WriteMessage(websocket.TextMessage, json); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (c *Client) WriteClients(clients []*Client) error {
-	json, err := json.Marshal(NewClientsMessage(clients))
-	if err != nil {
-		return err
-	}
-
 	if err = c.conn.WriteMessage(websocket.TextMessage, json); err != nil {
 		return err
 	}
@@ -139,14 +123,9 @@ func (c *Client) listenOut() {
 
 	for {
 		select {
-		case state := <-c.nextState:
+		case response := <-c.inbox:
 			c.conn.SetWriteDeadline(time.Now().Add(WriteWait))
-			if err := c.WriteState(state); err != nil {
-				return
-			}
-		case clients := <-c.nextClients:
-			c.conn.SetWriteDeadline(time.Now().Add(WriteWait))
-			if err := c.WriteClients(clients); err != nil {
+			if err := c.WriteResponse(&response); err != nil {
 				return
 			}
 		// this block ensures that the client doesnt' get disconnected

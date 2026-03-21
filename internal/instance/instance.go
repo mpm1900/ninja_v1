@@ -2,7 +2,6 @@ package instance
 
 import (
 	"context"
-	"fmt"
 	"maps"
 	"slices"
 
@@ -36,23 +35,18 @@ func NewInstance(ctx context.Context, id uuid.UUID) *Instance {
 }
 
 func (i *Instance) RegisterClient(client *Client) {
-	fmt.Println("connecting client")
 	i.Clients[client.ID] = client
 }
 
 func (i *Instance) UnregisterClient(client *Client) {
-	// if _, ok := i.Clients[client.ID]; ok {
 	delete(i.Clients, client.ID)
-	// }
 }
 
 func (i *Instance) BroadcastGame() {
-	game := i.Game
 	// fmt.Printf("BROADCAST STATE %#v\n", game)
 	for _, client := range i.Clients {
-		clientState := game
 		select {
-		case client.nextState <- clientState:
+		case client.inbox <- NewStateMessage(&i.Game):
 		// if a client is unable to handle the state update,
 		//   unregister them so they don't the loop
 		default:
@@ -61,15 +55,15 @@ func (i *Instance) BroadcastGame() {
 	}
 }
 
-func (i *Instance) SendState(client *Client) {
-	client.nextState <- i.Game
+func (i *Instance) PostRegister(client *Client) {
+	client.inbox <- PostRegisterMssage(client, &i.Game)
 }
 
 func (i *Instance) BroadcastClients() {
 	clients := slices.Collect(maps.Values(i.Clients))
 	for _, client := range i.Clients {
 		select {
-		case client.nextClients <- clients:
+		case client.inbox <- NewClientsMessage(clients):
 		// if a client is unable to handle the state update,
 		//   unregister them so they don't the loop
 		default:
@@ -87,7 +81,6 @@ const (
 func Reducer(instance *Instance, request Request) int {
 	switch request.Type {
 	case "set-actors":
-		// fmt.Print(request)
 		all := data.GetAllActors()
 		var actors []game.Actor
 		for _, a := range all {
@@ -109,7 +102,7 @@ func (i *Instance) Run() {
 		case client := <-i.Register:
 			i.RegisterClient(client)
 			i.BroadcastClients()
-			i.SendState(client)
+			i.PostRegister(client)
 		case client := <-i.Unregister:
 			i.UnregisterClient(client)
 			i.BroadcastClients()
