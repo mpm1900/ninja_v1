@@ -5,7 +5,7 @@ import { ActorStat } from './actor-stat'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 
 function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
-  const modifiers = (game.modifiers ?? []).concat(actor?.innate_modifiers ?? [])
+  const modifiers = (game.modifiers ?? []).map(m => m.mutation).concat(actor?.innate_modifiers ?? [])
   const HpIcon = STAT_ICONS.hp
   const StaminaIcon = STAT_ICONS.stamina
   const SpeedIcon = STAT_ICONS.speed
@@ -48,7 +48,7 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
         )}
         <div>
           {actor?.applied_modifiers.map((ID) => (
-            <span>{modifiers.find((m) => m.ID === ID)?.name}</span>
+            <span key={ID}>{modifiers.find((m) => m.ID === ID)?.name}</span>
           ))}
         </div>
       </CardContent>

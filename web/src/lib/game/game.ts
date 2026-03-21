@@ -1,5 +1,5 @@
 import type { Actor } from './actor'
-import type { Modifier } from './modifier'
+import type { ModifierTransaction } from './modifier'
 
 type Context = {
   sourcePlayerID: string | null
@@ -13,7 +13,7 @@ type Context = {
 
 type Game = {
   actors: Actor[]
-  modifiers: Modifier[]
+  modifiers: ModifierTransaction[]
 
   // TODO
 }

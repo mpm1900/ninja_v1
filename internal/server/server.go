@@ -14,14 +14,15 @@ type Server struct {
 func NewServer(ctx context.Context) *Server {
 	logger := slog.Default()
 
-	actorsHandler := NewActorsHandler(ctx)
+	dataHandler := NewDataHandler(ctx)
 	instancesHandler := NewInstancesHandler(ctx)
 
 	mux := http.NewServeMux()
 	api := http.NewServeMux()
 
-	api.HandleFunc("GET /actors", actorsHandler.HandleGetActors)
+	api.HandleFunc("GET /actors", dataHandler.HandleGetActors)
 	api.HandleFunc("GET /instances", instancesHandler.HandleGetGames)
+	api.HandleFunc("GET /modifiers", dataHandler.HandleGetModifiers)
 
 	mux.Handle("/api/", http.StripPrefix("/api", api))
 	mux.Handle("/games/", http.StripPrefix("/games", instancesHandler))

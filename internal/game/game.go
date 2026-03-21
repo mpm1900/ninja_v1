@@ -22,6 +22,10 @@ func (g *Game) SetActors(actors []Actor) {
 	g.Actors = slices.Clone(actors)
 }
 
+func (g *Game) AddModifier(modifier ModifierTransaction) {
+	g.Modifiers = append(g.Modifiers, modifier)
+}
+
 func (g Game) MarshalJSON() ([]byte, error) {
 	actorModifiers := GetActorModifiers(g)
 	resolved := make([]ResolvedActor, 0, len(g.Actors))

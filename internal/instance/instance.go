@@ -7,6 +7,7 @@ import (
 
 	"ninja_v1/internal/game"
 	data "ninja_v1/internal/game/data"
+	actors "ninja_v1/internal/game/data/actors"
 
 	"github.com/google/uuid"
 )
@@ -23,6 +24,15 @@ type Instance struct {
 }
 
 func NewInstance(ctx context.Context, id uuid.UUID) *Instance {
+	mods := make([]game.ModifierTransaction, 0)
+	mods = append(mods, game.ModifierTransaction{
+		ID: uuid.New(),
+		Context: &game.Context{
+			SourceActorID: &actors.ItachiID,
+		},
+		Mutation: data.GenjustuUpSource,
+	})
+
 	return &Instance{
 		ID:          id,
 		ctx:         ctx,
@@ -90,6 +100,15 @@ func Reducer(instance *Instance, request Request) int {
 			}
 		}
 		instance.Game.SetActors(actors)
+		return state
+	case "add-modifier":
+		if modifier, ok := data.MODIFIERS[*request.ModifierID]; ok {
+			instance.Game.AddModifier(game.ModifierTransaction{
+				ID:       uuid.New(),
+				Mutation: modifier,
+				Context:  &request.Context,
+			})
+		}
 		return state
 	default:
 		return none

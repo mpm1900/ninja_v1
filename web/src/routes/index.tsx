@@ -16,17 +16,21 @@ import { useState } from 'react'
 import type { RowSelectionState } from '@tanstack/react-table'
 import { clientsStore, type Client } from '#/lib/stores/clients'
 import { ActorCard } from '#/components/actor-card'
+import { modifiersQuery } from '#/lib/queries/modifiers'
+import { Button } from '#/components/ui/button'
 
 export const Route = createFileRoute('/')({
   component: App,
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData(actorsQuery)
+    await context.queryClient.ensureQueryData(modifiersQuery)
     await context.queryClient.ensureQueryData(instancesQuery)
   },
 })
 
 function App() {
   const actors = useSuspenseQuery(actorsQuery)
+  const modifiers = useSuspenseQuery(modifiersQuery)
   const instanceID = useStore(socketStore, (s) => s.instanceID)
   const status = useStore(socketStore, (s) => s.status)
   const client = useStore(clientsStore, (c) => c[0] as Client | undefined)
@@ -87,6 +91,33 @@ function App() {
             setRows(r)
           }}
         />
+        <div>
+          {modifiers.data.map((m) => (
+            <Button
+              key={m.ID}
+              onClick={() => {
+                if (!client) return
+                const actor = game.actors[0]
+                if (!actor) return
+
+                sendContextMessage({
+                  type: 'add-modifier',
+                  clientID: client.ID!,
+                  modifierID: m.ID,
+                  context: {
+                    sourcePlayerID: actor.player_ID,
+                    sourceActorID: actor.ID,
+                    parentActorID: actor.ID,
+                    targetActorIDs: [],
+                    targetPositionIDs: [],
+                  },
+                })
+              }}
+            >
+              {m.name}
+            </Button>
+          ))}
+        </div>
         <pre>{JSON.stringify(game, null, 2)}</pre>
       </div>
     </main>

@@ -2,6 +2,7 @@ package game
 
 import (
 	"ninja_v1/internal/game"
+	// modifiers "ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -9,21 +10,6 @@ import (
 var ItachiID = uuid.New()
 
 func NewItachi(playerID uuid.UUID, level int) game.Actor {
-	modifier := game.MakeModifier("Ninjusu Half-er")
-	modifier.Mutations = []game.ModifierMutation{
-		{
-			ModifierID: &modifier.ID,
-			ActorMutation: game.ActorMutation{
-				Filter: func(actor game.Actor, context *game.Context) bool {
-					return actor.ID == *context.SourceActorID
-				},
-				Delta: func(actor game.Actor, context *game.Context) game.Actor {
-					actor.Stages[game.StatNinjutsu] = actor.Stages[game.StatNinjutsu] - 2
-					return actor
-				},
-			},
-		},
-	}
 
 	return game.Actor{
 		ID:       uuid.New(),
@@ -85,7 +71,7 @@ func NewItachi(playerID uuid.UUID, level int) game.Actor {
 			game.NsYin,
 		},
 
-		InnateModifiers: []game.Modifier{modifier},
+		InnateModifiers: []game.Modifier{},
 		Actions:         []game.Action[game.Game]{},
 	}
 }

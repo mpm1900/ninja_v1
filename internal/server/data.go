@@ -3,37 +3,39 @@ package server
 import (
 	"context"
 	"encoding/json"
+	"maps"
 	"net/http"
+	"slices"
 
 	"ninja_v1/internal/game"
 	data "ninja_v1/internal/game/data"
 )
 
-type ActorsHandler struct {
+type DataHandler struct {
 	mux *http.ServeMux
 }
 
-func NewActorsHandler(ctx context.Context) *ActorsHandler {
-	handler := &ActorsHandler{
+func NewDataHandler(ctx context.Context) *DataHandler {
+	handler := &DataHandler{
 		mux: http.NewServeMux(),
 	}
 
 	return handler
 }
 
-func (ah *ActorsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	ah.mux.ServeHTTP(w, r)
+func (dh *DataHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	dh.mux.ServeHTTP(w, r)
 }
 
-func (ah *ActorsHandler) MakeGame() game.Game {
+func (dh *DataHandler) MakeGame() game.Game {
 	return game.Game{
 		Actors:    data.GetAllActors(),
 		Modifiers: []game.ModifierTransaction{},
 	}
 }
 
-func (ah *ActorsHandler) HandleGetActors(w http.ResponseWriter, r *http.Request) {
-	g := ah.MakeGame()
+func (dh *DataHandler) HandleGetActors(w http.ResponseWriter, r *http.Request) {
+	g := dh.MakeGame()
 
 	actorModifiers := game.GetActorModifiers(g)
 	resolved := make([]game.ResolvedActor, 0, len(g.Actors))
@@ -45,6 +47,15 @@ func (ah *ActorsHandler) HandleGetActors(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(resolved); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+}
+
+func (dh *DataHandler) HandleGetModifiers(w http.ResponseWriter, r *http.Request) {
+	modifiers := slices.Collect(maps.Values(data.MODIFIERS))
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(modifiers); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

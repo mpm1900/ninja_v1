@@ -18,6 +18,13 @@ type SocketState = {
   url: string | null
 }
 
+type SocketRequest = {
+  type: string
+  context: Context
+  clientID: string
+  modifierID?: string
+}
+
 const DEFAULT_HOST = 'localhost:3005'
 
 function getSocketUrl(instanceID: string): string {
@@ -85,7 +92,6 @@ function connectSocket(instanceID: string) {
         state: Game | null
         clients: Array<Client> | null
       }
-      console.log(message.type)
       if (message.type === 'state') {
         gameStore.setState(() => message.state!)
       }
@@ -94,7 +100,6 @@ function connectSocket(instanceID: string) {
       }
       if (message.type === 'join-success') {
         gameStore.setState(() => message.state!)
-        console.log(message.clients![0])
       }
     } catch {
       // Ignore non-JSON websocket payloads
@@ -151,16 +156,15 @@ function sendSocketMessage(
     return false
   }
 
-  console.log('sending', payload)
   socket.send(payload)
   return true
 }
 
-function sendContextMessage(request: { type: string, context: Context, clientID: string }) {
+function sendContextMessage(request: SocketRequest) {
   return sendSocketMessage(JSON.stringify(request))
 }
 
-export type { }
+export type {}
 export {
   socketStore,
   connectSocket,

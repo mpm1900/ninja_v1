@@ -237,7 +237,7 @@ func resolveActor(actor Actor, mtransactions []ModifierTransaction, atransaction
 		TargetPositionIDs: []uuid.UUID{},
 	}
 
-	applied := make(map[uuid.UUID]struct{})
+	applied := make(map[uuid.UUID]int)
 	transactions := []ModifierTransaction{}
 	transactions = append(transactions, atransactions...)
 	transactions = append(transactions, mtransactions...)
@@ -253,7 +253,11 @@ func resolveActor(actor Actor, mtransactions []ModifierTransaction, atransaction
 		m, apply := ResolveTransaction(mapped, &tx, mapped)
 		if apply {
 			if mutation.ModifierID != nil {
-				applied[*mutation.ModifierID] = struct{}{}
+				if count, ok := applied[*mutation.ModifierID]; ok {
+					applied[*mutation.ModifierID] = count + 1
+				} else {	
+					applied[*mutation.ModifierID] = 0
+				}
 			}
 			mapped = m
 		}
