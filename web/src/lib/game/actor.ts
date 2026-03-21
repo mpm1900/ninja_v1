@@ -1,3 +1,5 @@
+import type { Modifier } from './modifier'
+
 type ActorBaseStat =
   | 'accuracy'
   | 'evasion'
@@ -32,11 +34,7 @@ type Actor = {
   nature_damage: NatureStats<number>
   nature_resistance: NatureStats<number>
   applied_modifiers: Array<string>
-  innate_modifiers: Array<{
-    ID: string
-    name: string
-    duration: number | null
-  }>
+  innate_modifiers: Array<Modifier>
 }
 
 function checkActorStat(actor: Actor, key: ActorBaseStat) {

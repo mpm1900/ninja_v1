@@ -9,7 +9,7 @@ import (
 var ItachiID = uuid.New()
 
 func NewItachi(playerID uuid.UUID, level int) game.Actor {
-	modifier := game.MakeModifier("Ninjusu doubler")
+	modifier := game.MakeModifier("Ninjusu Half-er")
 	modifier.Mutations = []game.ModifierMutation{
 		{
 			ModifierID: &modifier.ID,

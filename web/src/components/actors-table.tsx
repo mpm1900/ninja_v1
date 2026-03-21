@@ -21,22 +21,7 @@ import {
 } from './ui/table'
 import { cn } from '#/lib/utils'
 import { Checkbox } from './ui/checkbox'
-
-function Stat({ stat, actor }: { actor: Actor; stat: ActorBaseStat }) {
-  return (
-    <span>
-      <span
-        className={cn({
-          'text-green-400': checkActorStat(actor, stat) === 1,
-          'text-red-300': checkActorStat(actor, stat) === -1,
-        })}
-      >
-        {actor.stats[stat]}
-      </span>{' '}
-      <span className="text-muted-foreground">({actor.base_stats[stat]})</span>
-    </span>
-  )
-}
+import { ActorStat } from './actor-stat'
 
 const helper = createColumnHelper<Actor>()
 const columns = [
@@ -67,22 +52,22 @@ const columns = [
   }),
   helper.accessor('name', {}),
   helper.accessor('stats.hp', {
-    cell: (props) => <Stat actor={props.row.original} stat="hp" />,
+    cell: (props) => <ActorStat actor={props.row.original} stat="hp" />,
   }),
   helper.accessor('stats.stamina', {
-    cell: (props) => <Stat actor={props.row.original} stat="stamina" />,
+    cell: (props) => <ActorStat actor={props.row.original} stat="stamina" />,
   }),
   helper.accessor('stats.speed', {
-    cell: (props) => <Stat actor={props.row.original} stat="speed" />,
+    cell: (props) => <ActorStat actor={props.row.original} stat="speed" />,
   }),
   helper.accessor('stats.ninjutsu', {
-    cell: (props) => <Stat actor={props.row.original} stat="ninjutsu" />,
+    cell: (props) => <ActorStat actor={props.row.original} stat="ninjutsu" />,
   }),
   helper.accessor('stats.genjutsu', {
-    cell: (props) => <Stat actor={props.row.original} stat="genjutsu" />,
+    cell: (props) => <ActorStat actor={props.row.original} stat="genjutsu" />,
   }),
   helper.accessor('stats.taijutsu', {
-    cell: (props) => <Stat actor={props.row.original} stat="taijutsu" />,
+    cell: (props) => <ActorStat actor={props.row.original} stat="taijutsu" />,
   }),
 ]
 
