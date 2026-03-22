@@ -19,11 +19,14 @@ func main1() {
 	actor.Actions = []game.Action{action1, action2}
 
 	var g game.Game
-	modifier := game.MakeModifier("Ninjusu doubler")
+	modifier := game.Modifier{
+		ID:   uuid.New(),
+		Name: "Test",
+	}
 	modifier.Mutations = []game.ModifierMutation{
 		{
 			ModifierID: &modifier.ID,
-			ActorMutation: game.ActorMutation{
+			Mutation: game.Mutation[game.Actor, game.Actor, game.Context]{
 				Filter: func(actor game.Actor, context *game.Context) bool {
 					return actor.ID == *context.SourceActorID
 				},

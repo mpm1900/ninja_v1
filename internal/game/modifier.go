@@ -10,7 +10,7 @@ type Trigger struct {
 }
 
 type ModifierMutation struct {
-	ActorMutation
+	Mutation[Actor, Actor, Context]
 	ModifierID    *uuid.UUID
 	TransactionID *uuid.UUID
 }
@@ -24,17 +24,22 @@ type Modifier struct {
 	Triggers  []Trigger          `json:"triggers"`
 }
 
-func MakeModifier(name string) Modifier {
-	id := uuid.New()
-	modifier := Modifier{
-		ID:   id,
-		Name: name,
+func MakeModifierMutation(
+	modifierID *uuid.UUID,
+	priority int,
+	filter func(input Actor, context *Context) bool,
+	delta func(input Actor, context *Context) Actor,
+) ModifierMutation {
+	return ModifierMutation{
+		ModifierID: modifierID,
+		Mutation: Mutation[Actor, Actor, Context]{
+			Filter:   filter,
+			Delta:    delta,
+			Priority: priority,
+		},
 	}
-
-	return modifier
 }
 
 func MakeModifierTransaction(modifier *Modifier, context *Context) Transaction[Modifier, Context] {
 	return MakeTransaction(modifier, context)
-
 }

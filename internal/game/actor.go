@@ -66,8 +66,6 @@ type ResolvedActor struct {
 	AppliedModifiers map[uuid.UUID]int `json:"applied_modifiers"`
 }
 
-type ActorMutation = Mutation[Actor, Actor, Context]
-
 const (
 	PriorityPreBaseStats    = -11
 	PriorityMapBaseStats    = -10
@@ -179,22 +177,22 @@ func GetActorModifiers(game Game) []Transaction[Modifier, Context] {
 }
 
 var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
-	{
-		ActorMutation: ActorMutation{
-			Delta: func(input Actor, context *Context) Actor {
-				return MapBaseStats(input)
-			},
-			Priority: PriorityMapBaseStats,
+	MakeModifierMutation(
+		nil,
+		PriorityMapBaseStats,
+		AllFilter,
+		func(input Actor, context *Context) Actor {
+			return MapBaseStats(input)
 		},
-	},
-	{
-		ActorMutation: ActorMutation{
-			Delta: func(input Actor, context *Context) Actor {
-				return MapStagedStats(input)
-			},
-			Priority: PriorityPreStagedStats,
+	),
+	MakeModifierMutation(
+		nil,
+		PriorityMapStagedStats,
+		AllFilter,
+		func(input Actor, context *Context) Actor {
+			return MapStagedStats(input)
 		},
-	},
+	),
 }
 
 func GetMutationsFromTransactions(transactions []Transaction[Modifier, Context]) []ModifierMutation {
@@ -257,7 +255,7 @@ func resolveActor(actor Actor, mtransactions []Transaction[Modifier, Context], a
 			}
 		}
 
-		tx := MakeTransaction(&mutation.ActorMutation, &context)
+		tx := MakeTransaction(&mutation.Mutation, &context)
 		a, apply := ResolveTransaction(mapped, &tx, mapped)
 		if apply {
 			if mutation.ModifierID != nil {

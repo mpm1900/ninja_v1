@@ -1,5 +1,9 @@
 package game
 
+func AllFilter(actor Actor, context *Context) bool {
+	return true
+}
+
 func ActiveFilter(actor Actor, context *Context) bool {
 	return actor.Active
 }
