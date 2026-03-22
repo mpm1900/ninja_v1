@@ -5,10 +5,11 @@ import {
   functionalUpdate,
   getCoreRowModel,
   getExpandedRowModel,
+  getSortedRowModel,
   useReactTable,
-  type ExpandedState,
   type Row,
   type RowSelectionState,
+  type SortingState,
   type Table as TableDef,
 } from '@tanstack/react-table'
 import {
@@ -20,7 +21,7 @@ import {
   TableRow,
 } from './ui/table'
 import { Checkbox } from './ui/checkbox'
-import { ActorStat } from './actor-stat'
+import { ActorStatBase } from './actor-stat'
 import { Button } from './ui/button'
 import { ChevronDown, ChevronLeft } from 'lucide-react'
 import { Fragment, useState, type ReactNode } from 'react'
@@ -54,26 +55,89 @@ const columns = [
     ),
   }),
   helper.accessor('name', {}),
-  helper.accessor('stats.hp', {
-    cell: (props) => <ActorStat actor={props.row.original} stat="hp" />,
+  helper.accessor('level', {}),
+  helper.accessor('base_stats.hp', {
+    header: ({ column }) => (
+      <Button
+        className="-ml-4"
+        variant="ghost"
+        onClick={() => column.toggleSorting()}
+      >
+        hp
+      </Button>
+    ),
+    cell: (props) => <ActorStatBase actor={props.row.original} stat="hp" />,
   }),
-  helper.accessor('stats.stamina', {
-    cell: (props) => <ActorStat actor={props.row.original} stat="stamina" />,
+  helper.accessor('base_stats.stamina', {
+    header: ({ column }) => (
+      <Button
+        className="-ml-4"
+        variant="ghost"
+        onClick={() => column.toggleSorting()}
+      >
+        stamina
+      </Button>
+    ),
+    cell: (props) => (
+      <ActorStatBase actor={props.row.original} stat="stamina" />
+    ),
   }),
-  helper.accessor('stats.speed', {
-    cell: (props) => <ActorStat actor={props.row.original} stat="speed" />,
+  helper.accessor('base_stats.speed', {
+    header: ({ column }) => (
+      <Button
+        className="-ml-4"
+        variant="ghost"
+        onClick={() => column.toggleSorting()}
+      >
+        speed
+      </Button>
+    ),
+    cell: (props) => <ActorStatBase actor={props.row.original} stat="speed" />,
   }),
-  helper.accessor('stats.ninjutsu', {
-    cell: (props) => <ActorStat actor={props.row.original} stat="ninjutsu" />,
+  helper.accessor('base_stats.ninjutsu', {
+    header: ({ column }) => (
+      <Button
+        className="-ml-4"
+        variant="ghost"
+        onClick={() => column.toggleSorting()}
+      >
+        ninjutsu
+      </Button>
+    ),
+    cell: (props) => (
+      <ActorStatBase actor={props.row.original} stat="ninjutsu" />
+    ),
   }),
-  helper.accessor('stats.genjutsu', {
-    cell: (props) => <ActorStat actor={props.row.original} stat="genjutsu" />,
+  helper.accessor('base_stats.genjutsu', {
+    header: ({ column }) => (
+      <Button
+        className="-ml-4"
+        variant="ghost"
+        onClick={() => column.toggleSorting()}
+      >
+        genjutsu
+      </Button>
+    ),
+    cell: (props) => (
+      <ActorStatBase actor={props.row.original} stat="genjutsu" />
+    ),
   }),
-  helper.accessor('stats.taijutsu', {
-    cell: (props) => <ActorStat actor={props.row.original} stat="taijutsu" />,
+  helper.accessor('base_stats.taijutsu', {
+    header: ({ column }) => (
+      <Button
+        className="-ml-4"
+        variant="ghost"
+        onClick={() => column.toggleSorting()}
+      >
+        taijutsu
+      </Button>
+    ),
+    cell: (props) => (
+      <ActorStatBase actor={props.row.original} stat="taijutsu" />
+    ),
   }),
   helper.display({
-    id: 'total',
+    header: 'total',
     cell: ({ row }) => getTotalBaseStats(row.original),
   }),
   helper.display({
@@ -102,11 +166,12 @@ function ActorsTable({
   data: Array<Actor>
   enabled: boolean
   rowSelection: RowSelectionState
-  onRowSelectionChange: (rowSelection: RowSelectionState) => void
+  onRowSelectionChange?: (rowSelection: RowSelectionState) => void
   onRowCheckedChange?: (actor: Actor, selected: boolean) => void
   subRow?: (props: { row: Row<Actor> }) => ReactNode
 }) {
-  //const [expanded, setExpanded] = useState<ExpandedState>({})
+  // const [expanded, setExpanded] = useState<ExpandedState>({})
+  const [sorting, setSorting] = useState<SortingState>([])
   const table = useReactTable({
     columns,
     data,
@@ -114,14 +179,17 @@ function ActorsTable({
     getExpandedRowModel: getExpandedRowModel(),
     getRowCanExpand: (row) => row.getIsSelected(),
     getRowId: (a) => a.actor_ID,
+    getSortedRowModel: getSortedRowModel(),
     enableRowSelection: enabled,
     // onExpandedChange: setExpanded,
     onRowSelectionChange: (updater) => {
-      onRowSelectionChange(functionalUpdate(updater, rowSelection))
+      onRowSelectionChange?.(functionalUpdate(updater, rowSelection))
     },
+    onSortingChange: setSorting,
     state: {
       expanded: rowSelection,
       rowSelection,
+      sorting,
     },
     meta: {
       onRowCheckedChange,

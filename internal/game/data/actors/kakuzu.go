@@ -7,15 +7,15 @@ import (
 	"github.com/google/uuid"
 )
 
-var ItachiID = uuid.New()
+var KakuzuID = uuid.New()
 
-func NewItachi(playerID uuid.UUID, level int) game.Actor {
+func NewKakuzu(playerID uuid.UUID, level int) game.Actor {
 
 	return game.Actor{
 		ID:       uuid.New(),
 		PlayerID: playerID,
-		ActorID:  ItachiID,
-		Name:     "Itachi Uchiha",
+		ActorID:  KakuzuID,
+		Name:     "Kakuzu",
 
 		Level:       level,
 		Experience:  0,
@@ -25,12 +25,12 @@ func NewItachi(playerID uuid.UUID, level int) game.Actor {
 		Alive:  true,
 
 		Stats: map[game.BaseStat]int{
-			game.StatHP:       60,
-			game.StatStamina:  60,
-			game.StatNinjutsu: 120,
-			game.StatGenjutsu: 155,
-			game.StatTaijutsu: 90,
-			game.StatSpeed:    125,
+			game.StatHP:       100,
+			game.StatStamina:  110,
+			game.StatNinjutsu: 134,
+			game.StatGenjutsu: 95,
+			game.StatTaijutsu: 100,
+			game.StatSpeed:    61,
 			game.StatEvasion:  0,
 			game.StatAccuracy: 1,
 		},
@@ -48,27 +48,27 @@ func NewItachi(playerID uuid.UUID, level int) game.Actor {
 
 		Critical: 1.50,
 		NatureDamage: map[game.Nature]float64{
-			game.NatureFire:      1.30,
+			game.NatureFire:      1.00,
 			game.NatureWind:      1.00,
-			game.NatureLightning: 1.05,
-			game.NatureEarth:     0.95,
-			game.NatureWater:     0.90,
+			game.NatureLightning: 1.00,
+			game.NatureEarth:     1.00,
+			game.NatureWater:     1.00,
 			game.NatureYin:       1.00,
 			game.NatureYang:      1.00,
 		},
 		NatureResistance: map[game.Nature]float64{
-			game.NatureFire:      1.15,
+			game.NatureFire:      1.00,
 			game.NatureWind:      1.00,
 			game.NatureLightning: 1.00,
 			game.NatureEarth:     1.00,
-			game.NatureWater:     0.95,
+			game.NatureWater:     1.00,
 			game.NatureYin:       1.00,
 			game.NatureYang:      1.00,
 		},
 
 		Natures: []game.NatureSet{
-			game.NsFire,
-			game.NsYin,
+			game.NsWind,
+			game.NsEarth,
 		},
 
 		InnateModifiers: []game.Modifier{},

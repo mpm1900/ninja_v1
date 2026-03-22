@@ -12,8 +12,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { Loader, Signal, Unplug } from 'lucide-react'
 import { gameStore } from '#/lib/stores/game'
-import { useState } from 'react'
-import type { RowSelectionState } from '@tanstack/react-table'
 import { clientsStore, type Client } from '#/lib/stores/clients'
 import { ActorCard } from '#/components/actor-card'
 import { modifiersQuery } from '#/lib/queries/modifiers'
@@ -89,10 +87,6 @@ function App() {
               },
             })
           }}
-          onRowSelectionChange={(r) => {
-            if (!client) return
-            // setRows(r)
-          }}
           subRow={({ row }) => (
             <Card className="rounded-t-none border-t-0 mx-2 mb-2">
               <CardContent>
@@ -101,7 +95,9 @@ function App() {
                     key={m.ID}
                     onClick={() => {
                       if (!client) return
-                      const actor = game.actors.find(a => a.actor_ID === row.original.actor_ID)
+                      const actor = game.actors.find(
+                        (a) => a.actor_ID === row.original.actor_ID
+                      )
                       if (!actor) return
 
                       sendContextMessage({

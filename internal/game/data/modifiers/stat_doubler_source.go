@@ -15,9 +15,7 @@ func NewStatDoublerSource(stat game.BaseStat, name string) game.Modifier {
 			{
 				ModifierID: &statDoublerID,
 				ActorMutation: game.ActorMutation{
-					Filter: func(actor game.Actor, context *game.Context) bool {
-						return actor.ID == *context.SourceActorID
-					},
+					Filter: game.SourceFilter,
 					Delta: func(actor game.Actor, context *game.Context) game.Actor {
 						actor.Stages[stat] = actor.Stages[stat] + 2
 						return actor

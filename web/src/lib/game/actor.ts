@@ -12,6 +12,18 @@ type ActorBaseStat =
 
 type Nature = 'earth' | 'fire' | 'lightning' | 'water' | 'wind' | 'yang' | 'yin'
 
+
+const natureNames: Partial<Record<Nature, string>> = {
+  fire: '火',
+  wind: '風',
+  lightning: '雷',
+  earth: '土',
+  water: '水',
+  yin: '陰',
+  yang: '陽',
+}
+
+
 type ActorStats<T> = Record<ActorBaseStat, T>
 type NatureStats<T> = Record<Nature, T>
 
@@ -52,5 +64,5 @@ function getTotalBaseStats(actor: Actor) {
   return Object.values(stats).reduce((p, c) => p + c, 0)
 }
 
-export type { Actor, ActorBaseStat }
-export { checkActorStat, getTotalBaseStats }
+export type { Nature, Actor, ActorBaseStat }
+export { natureNames, checkActorStat, getTotalBaseStats }

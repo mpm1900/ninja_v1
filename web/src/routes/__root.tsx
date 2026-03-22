@@ -8,6 +8,7 @@ import TanStackQueryProvider from '../integrations/tanstack-query/root-provider'
 import styles from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
+import { TooltipProvider } from '#/components/ui/tooltip'
 
 interface RouterContext {
   queryClient: QueryClient
@@ -47,7 +48,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="font-sans antialiased wrap-anywhere">
-        <TanStackQueryProvider>{children}</TanStackQueryProvider>
+        <TanStackQueryProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+        </TanStackQueryProvider>
         <Scripts />
       </body>
     </html>

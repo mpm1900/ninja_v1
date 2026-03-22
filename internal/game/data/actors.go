@@ -9,7 +9,8 @@ import (
 
 func GetAllActors() []game.Actor {
 	return []game.Actor{
-		actors.NewItachi(uuid.Nil, 40),
-		actors.NewKisame(uuid.Nil, 40),
+		actors.NewItachi(uuid.Nil, 24),
+		actors.NewKisame(uuid.Nil, 24),
+		actors.NewKakuzu(uuid.Nil, 24),
 	}
 }

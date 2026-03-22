@@ -2,10 +2,13 @@ import { STAT_ICONS } from '#/data/icons'
 import type { Actor } from '#/lib/game/actor'
 import type { Game } from '#/lib/game/game'
 import { ActorStat } from './actor-stat'
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { NatureBadge } from './nature-badge'
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from './ui/card'
 
 function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
-  const modifiers = (game.modifiers ?? []).map(m => m.mutation).concat(actor?.innate_modifiers ?? [])
+  const modifiers = (game.modifiers ?? [])
+    .map((m) => m.mutation)
+    .concat(actor?.innate_modifiers ?? [])
   const HpIcon = STAT_ICONS.hp
   const StaminaIcon = STAT_ICONS.stamina
   const SpeedIcon = STAT_ICONS.speed
@@ -14,9 +17,21 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
   const Taijutsu = STAT_ICONS.taijutsu
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>{actor?.name}</CardTitle>
-      </CardHeader>
+      {actor && (
+        <CardHeader className="fle">
+          <CardTitle>
+            <span className="text-muted-foreground text-sm">
+              Lv.{actor.level}
+            </span>{' '}
+            {actor.name}
+          </CardTitle>
+          <CardAction className="flex gap-1">
+            {actor.natures?.map((nature) => (
+              <NatureBadge nature={nature} />
+            ))}
+          </CardAction>
+        </CardHeader>
+      )}
       <CardContent>
         {actor && (
           <div className="grid grid-cols-6 gap-2">
@@ -48,7 +63,10 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
         )}
         <div>
           {Object.entries(actor?.applied_modifiers ?? {}).map(([ID, count]) => (
-            <span key={ID}>{modifiers.find((m) => m.ID === ID)?.name}{count > 0 ? ` (${count + 1})` : null}</span>
+            <span key={ID}>
+              {modifiers.find((m) => m.ID === ID)?.name}
+              {count > 0 ? ` (${count + 1})` : null}
+            </span>
           ))}
         </div>
       </CardContent>

@@ -54,7 +54,7 @@ type Actor struct {
 	NatureResistance map[Nature]float64 `json:"nature_resistance"`
 	Critical         float64            `json:"critical"`
 
-	Natures         []NatureSet    `json:"naures"`
+	Natures         []NatureSet    `json:"natures"`
 	InnateModifiers []Modifier     `json:"innate_modifiers"`
 	Actions         []Action[Game] `json:"actions"`
 }
