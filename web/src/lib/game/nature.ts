@@ -1,4 +1,12 @@
-type Nature = 'fire' | 'wind' | 'lightning' | 'earth' | 'water' | 'yang' | 'yin'
+type Nature =
+  | 'pure'
+  | 'fire'
+  | 'wind'
+  | 'lightning'
+  | 'earth'
+  | 'water'
+  | 'yang'
+  | 'yin'
 type NatureSet =
   | Nature
   | 'scorch'
@@ -13,6 +21,7 @@ type NatureSet =
   | 'dust'
 
 const natureNames: Partial<Record<NatureSet, string>> = {
+  pure: '纯',
   fire: '火',
   wind: '風',
   lightning: '雷',
@@ -32,9 +41,10 @@ const natureIndexes: Record<NatureSet, number> = {
   water: 4,
   yin: 5,
   yang: 6,
-  scorch: 7,
-  lava: 8,
-  boil: 9,
+  pure: 7,
+  scorch: 8,
+  lava: 9,
+  boil: 10,
   magnet: 12,
   ice: 13,
   explosion: 14,

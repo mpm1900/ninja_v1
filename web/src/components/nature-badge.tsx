@@ -11,12 +11,13 @@ const variants = cva<t>(
     variants: {
       variant: {
         none: '',
+        pure: 'bg-slate-500',
         fire: 'bg-red-500',
         wind: 'bg-emerald-700',
-        lightning: 'bg-yellow-400 text-black! text-shadow-none',
+        lightning: 'bg-yellow-400',
         earth: 'bg-taupe-600',
         water: 'bg-blue-500',
-        yang: 'bg-neutral-300 text-black! text-shadow-none',
+        yang: 'bg-neutral-300',
         yin: 'bg-violet-500',
         wood: 'bg-olive-600 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300! text-shadow-[1px_1px_0px_#000000]',
         yinyang:

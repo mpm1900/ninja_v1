@@ -10,8 +10,11 @@ import (
 func GetAllActors() []game.Actor {
 	return []game.Actor{
 		actors.NewItachi(uuid.Nil, 24),
+		actors.NewSasuke(uuid.Nil, 24),
 		actors.NewKisame(uuid.Nil, 24),
 		actors.NewKakuzu(uuid.Nil, 24),
+		actors.NewNaruto(uuid.Nil, 24),
+		actors.NewMinato(uuid.Nil, 24),
 		actors.NewYamato(uuid.Nil, 24),
 		actors.NewRaikage(uuid.Nil, 24),
 		actors.NewKaguya(uuid.Nil, 24),

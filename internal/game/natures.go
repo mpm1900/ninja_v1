@@ -3,6 +3,7 @@ package game
 type Nature string
 
 const (
+	NaturePure		Nature = "pure"
 	NatureFire      Nature = "fire"
 	NatureWind      Nature = "wind"
 	NatureLightning Nature = "lightning"
@@ -15,6 +16,7 @@ const (
 type NatureSet string
 
 const (
+	NsPure 		NatureSet = NatureSet(NaturePure)
 	NsFire      NatureSet = NatureSet(NatureFire)
 	NsWind      NatureSet = NatureSet(NatureWind)
 	NsLightning NatureSet = NatureSet(NatureLightning)
