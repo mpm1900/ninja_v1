@@ -15,6 +15,7 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
   const NinjutsuIcon = STAT_ICONS.ninjutsu
   const GenjutsuIcon = STAT_ICONS.genjutsu
   const Taijutsu = STAT_ICONS.taijutsu
+  console.log(modifiers)
   return (
     <Card>
       {actor && (
@@ -27,7 +28,7 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
           </CardTitle>
           <CardAction className="flex gap-1">
             {actor.natures?.map((nature) => (
-              <NatureBadge nature={nature} />
+              <NatureBadge key={nature} nature={nature} />
             ))}
           </CardAction>
         </CardHeader>

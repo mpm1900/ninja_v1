@@ -5,7 +5,7 @@ import (
 )
 
 type Trigger struct {
-	Action[Game]
+	Action
 	On string `json:"on"`
 }
 
@@ -21,13 +21,7 @@ type Modifier struct {
 	Duration *int      `json:"duration"`
 
 	Mutations []ModifierMutation `json:"-"`
-	Triggers  []Trigger          `json:"-"`
-}
-
-type ModifierTransaction struct {
-	ID       uuid.UUID `json:"ID"`
-	Context  *Context  `json:"context"`
-	Mutation Modifier  `json:"mutation"`
+	Triggers  []Trigger          `json:"triggers"`
 }
 
 func MakeModifier(name string) Modifier {
@@ -40,11 +34,7 @@ func MakeModifier(name string) Modifier {
 	return modifier
 }
 
-func MakeModifierTransaction(modifier Modifier, context *Context) ModifierTransaction {
-	id := uuid.New()
-	return ModifierTransaction{
-		ID:       id,
-		Context:  context,
-		Mutation: modifier,
-	}
+func MakeModifierTransaction(modifier *Modifier, context *Context) Transaction[Modifier, Context] {
+	return MakeTransaction(modifier, context)
+
 }

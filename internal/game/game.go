@@ -7,20 +7,20 @@ import (
 	"github.com/google/uuid"
 )
 
-type GameTransaction struct {
-	Transaction[Game, Game, Context]
+type GameMutation struct {
+	Mutation[Game, Game, Context]
 }
 
 type Game struct {
-	Actors    []Actor               `json:"actors"`
-	Modifiers []ModifierTransaction `json:"modifiers"`
+	Actors    []Actor                          `json:"actors"`
+	Modifiers []Transaction[Modifier, Context] `json:"modifiers"`
 
-	Transactions []GameTransaction         `json:"transactions"`
-	Actions      []ActionTransaction[Game] `json:"actions"`
-	Trigger      []ActionTransaction[Game] `json:"triggers"`
+	Transactions []Transaction[GameMutation, Context] `json:"transactions"`
+	Actions      []Transaction[Action, Context]       `json:"actions"`
+	Trigger      []Transaction[Action, Context]       `json:"triggers"`
 }
 
-func (g *Game) FilterModifiers(predicate func(modifier ModifierTransaction) bool) {
+func (g *Game) FilterModifiers(predicate func(modifier Transaction[Modifier, Context]) bool) {
 	filtered := g.Modifiers[:0]
 	for _, m := range g.Modifiers {
 		if predicate(m) {
@@ -31,7 +31,7 @@ func (g *Game) FilterModifiers(predicate func(modifier ModifierTransaction) bool
 	g.Modifiers = filtered
 }
 
-func (g *Game) AddModifier(modifier ModifierTransaction) {
+func (g *Game) AddModifier(modifier Transaction[Modifier, Context]) {
 	g.Modifiers = append(g.Modifiers, modifier)
 }
 
@@ -54,12 +54,12 @@ func (g Game) MarshalJSON() ([]byte, error) {
 	}
 
 	type gameJSON struct {
-		Actors    []ResolvedActor       `json:"actors"`
-		Modifiers []ModifierTransaction `json:"modifiers"`
+		Actors []ResolvedActor `json:"actors"`
 
-		Transactions []GameTransaction         `json:"transactions"`
-		Actions      []ActionTransaction[Game] `json:"actions"`
-		Trigger      []ActionTransaction[Game] `json:"triggers"`
+		Modifiers    []Transaction[Modifier, Context]     `json:"modifiers"`
+		Transactions []Transaction[GameMutation, Context] `json:"transactions"`
+		Actions      []Transaction[Action, Context]       `json:"actions"`
+		Trigger      []Transaction[Action, Context]       `json:"triggers"`
 	}
 
 	return json.Marshal(gameJSON{

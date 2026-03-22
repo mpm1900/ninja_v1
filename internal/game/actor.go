@@ -54,9 +54,9 @@ type Actor struct {
 	NatureResistance map[Nature]float64 `json:"nature_resistance"`
 	Critical         float64            `json:"critical"`
 
-	Natures         []NatureSet    `json:"natures"`
-	InnateModifiers []Modifier     `json:"innate_modifiers"`
-	Actions         []Action[Game] `json:"actions"`
+	Natures         []NatureSet `json:"natures"`
+	InnateModifiers []Modifier  `json:"innate_modifiers"`
+	Actions         []Action    `json:"actions"`
 }
 
 type ResolvedActor struct {
@@ -155,8 +155,8 @@ func GetActors(game Game, predicate func(Actor) bool) []Actor {
 	return actors
 }
 
-func GetActorModifiers(game Game) []ModifierTransaction {
-	var modifiers []ModifierTransaction
+func GetActorModifiers(game Game) []Transaction[Modifier, Context] {
+	var modifiers []Transaction[Modifier, Context]
 	activeActors := GetActors(game, func(a Actor) bool {
 		return a.Active
 	})
@@ -170,7 +170,7 @@ func GetActorModifiers(game Game) []ModifierTransaction {
 			TargetPositionIDs: []uuid.UUID{},
 		}
 		for _, modifier := range actor.InnateModifiers {
-			transaction := MakeModifierTransaction(modifier, &context)
+			transaction := MakeModifierTransaction(&modifier, &context)
 			modifiers = append(modifiers, transaction)
 		}
 	}
@@ -197,7 +197,7 @@ var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
 	},
 }
 
-func GetMutationsFromTransactions(transactions []ModifierTransaction) []ModifierMutation {
+func GetMutationsFromTransactions(transactions []Transaction[Modifier, Context]) []ModifierMutation {
 	var mutations []ModifierMutation
 	for _, transaction := range transactions {
 		var muts []ModifierMutation
@@ -227,9 +227,9 @@ func (a Actor) Clone() Actor {
 	return b
 }
 
-func resolveActor(actor Actor, mtransactions []ModifierTransaction, atransactions []ModifierTransaction) ResolvedActor {
+func resolveActor(actor Actor, mtransactions []Transaction[Modifier, Context], atransactions []Transaction[Modifier, Context]) ResolvedActor {
 	applied := make(map[uuid.UUID]int)
-	transactions := []ModifierTransaction{}
+	transactions := []Transaction[Modifier, Context]{}
 	transactions = append(transactions, atransactions...)
 	transactions = append(transactions, mtransactions...)
 	mutations := GetMutationsFromTransactions(transactions)
@@ -278,7 +278,7 @@ func resolveActor(actor Actor, mtransactions []ModifierTransaction, atransaction
 
 func ResolveActor(actor Actor, game Game) ResolvedActor {
 	resolved := resolveActor(actor, game.Modifiers, GetActorModifiers(game))
-	pre := resolveActor(actor, []ModifierTransaction{}, []ModifierTransaction{})
+	pre := resolveActor(actor, []Transaction[Modifier, Context]{}, []Transaction[Modifier, Context]{})
 	resolved.PreStats = maps.Clone(pre.Stats)
 
 	return resolved

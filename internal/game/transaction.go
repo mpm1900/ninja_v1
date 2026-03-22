@@ -1,23 +1,26 @@
 package game
 
+import "github.com/google/uuid"
+
 type Mutation[I any, O any, C any] struct {
 	Delta    func(input I, context *C) O    `json:"-"`
 	Filter   func(input I, context *C) bool `json:"-"`
 	Priority int                            `json:"priority"`
 }
 
-type Transaction[I any, O any, C any] struct {
-	ID       string             `json:"ID"`
-	Context  *C                 `json:"context"`
-	Priority int                `json:"priority"`
-	Mutation *Mutation[I, O, C] `json:"-"`
+type Transaction[M any, C any] struct {
+	ID       uuid.UUID `json:"ID"`
+	Context  *C        `json:"context"`
+	Priority int       `json:"priority"`
+	Mutation *M        `json:"mutation"`
 }
 
-func MakeTransaction[I any, O any, C any](
-	mutation *Mutation[I, O, C],
-	context *C) Transaction[I, O, C] {
-	return Transaction[I, O, C]{
-		ID:       "",
+func MakeTransaction[M any, C any](
+	mutation *M,
+	context *C,
+) Transaction[M, C] {
+	return Transaction[M, C]{
+		ID:       uuid.New(),
 		Context:  context,
 		Mutation: mutation,
 	}
@@ -25,7 +28,7 @@ func MakeTransaction[I any, O any, C any](
 
 func CheckTransaction[I any, O any, C any](
 	input I,
-	transaction *Transaction[I, O, C],
+	transaction *Transaction[Mutation[I, O, C], C],
 ) bool {
 	if transaction == nil || transaction.Mutation == nil {
 		return false
@@ -38,7 +41,7 @@ func CheckTransaction[I any, O any, C any](
 
 func ResolveTransaction[I any, O any, C any](
 	input I,
-	transaction *Transaction[I, O, C],
+	transaction *Transaction[Mutation[I, O, C], C],
 	fallback O,
 ) (O, bool) {
 	if !CheckTransaction(input, transaction) {
@@ -50,7 +53,7 @@ func ResolveTransaction[I any, O any, C any](
 
 func ResolveTransactionFn[I any, O any, C any](
 	input I,
-	transaction *Transaction[I, O, C],
+	transaction *Transaction[Mutation[I, O, C], C],
 	fallback func(I) O,
 ) (O, bool) {
 	return ResolveTransaction(input, transaction, fallback(input))

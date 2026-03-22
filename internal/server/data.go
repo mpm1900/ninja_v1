@@ -30,7 +30,7 @@ func (dh *DataHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (dh *DataHandler) MakeGame() game.Game {
 	return game.Game{
 		Actors:    data.GetAllActors(),
-		Modifiers: []game.ModifierTransaction{},
+		Modifiers: []game.Transaction[game.Modifier, game.Context]{},
 	}
 }
 

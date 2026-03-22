@@ -7,32 +7,22 @@ import (
 
 	"ninja_v1/internal/game"
 	data "ninja_v1/internal/game/data"
-	actors "ninja_v1/internal/game/data/actors"
 
 	"github.com/google/uuid"
 )
 
 type Instance struct {
-	ID      uuid.UUID             `json:"ID"`
-	ctx     context.Context       `json:"-"`
-	Clients map[uuid.UUID]*Client `json:"-"`
-	Game    game.Game             `json:"-"`
+	ID      uuid.UUID
+	ctx     context.Context
+	Clients map[uuid.UUID]*Client
+	Game    game.Game
 
-	Register    chan *Client `json:"-"`
-	Unregister  chan *Client `json:"-"`
-	ReadRequest chan Request `json:"-"`
+	Register    chan *Client
+	Unregister  chan *Client
+	ReadRequest chan Request
 }
 
 func NewInstance(ctx context.Context, id uuid.UUID) *Instance {
-	mods := make([]game.ModifierTransaction, 0)
-	mods = append(mods, game.ModifierTransaction{
-		ID: uuid.New(),
-		Context: &game.Context{
-			SourceActorID: &actors.ItachiID,
-		},
-		Mutation: data.GenjustuUpSource,
-	})
-
 	return &Instance{
 		ID:          id,
 		ctx:         ctx,
@@ -122,14 +112,14 @@ func Reducer(instance *Instance, request Request) int {
 		}
 
 		if modifier, ok := data.MODIFIERS[*request.ModifierID]; ok {
-			transaction := game.MakeModifierTransaction(modifier, &request.Context)
+			transaction := game.MakeModifierTransaction(&modifier, &request.Context)
 			instance.Game.AddModifier(transaction)
 			return state
 		}
 
 		return none
 	case "remove-modifier":
-		instance.Game.FilterModifiers(func(m game.ModifierTransaction) bool {
+		instance.Game.FilterModifiers(func(m game.Transaction[game.Modifier, game.Context]) bool {
 			return m.ID != *request.ModifierID
 		})
 		return state

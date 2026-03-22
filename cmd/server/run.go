@@ -12,11 +12,11 @@ import (
 
 func main1() {
 	// Action has unexported fields, so build zero-values first, then include them.
-	var action1 game.Action[game.Game]
-	var action2 game.Action[game.Game]
+	var action1 game.Action
+	var action2 game.Action
 
 	actor := actors.NewItachi(uuid.New(), 50)
-	actor.Actions = []game.Action[game.Game]{action1, action2}
+	actor.Actions = []game.Action{action1, action2}
 
 	var g game.Game
 	modifier := game.MakeModifier("Ninjusu doubler")

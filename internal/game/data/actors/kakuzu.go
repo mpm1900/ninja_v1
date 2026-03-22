@@ -72,6 +72,6 @@ func NewKakuzu(playerID uuid.UUID, level int) game.Actor {
 		},
 
 		InnateModifiers: []game.Modifier{},
-		Actions:         []game.Action[game.Game]{},
+		Actions:         []game.Action{},
 	}
 }
