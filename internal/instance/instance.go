@@ -117,20 +117,22 @@ func Reducer(instance *Instance, request Request) int {
 		return state
 
 	case "add-modifier":
-		if modifier, ok := data.MODIFIERS[*request.ModifierID]; ok {
-			instance.Game.AddModifier(game.ModifierTransaction{
-				ID:       uuid.New(),
-				Mutation: modifier,
-				Context:  &request.Context,
-			})
+		if request.ModifierID == nil {
+			return none
 		}
-		return state
+
+		if modifier, ok := data.MODIFIERS[*request.ModifierID]; ok {
+			transaction := game.MakeModifierTransaction(modifier, &request.Context)
+			instance.Game.AddModifier(transaction)
+			return state
+		}
+
+		return none
 	case "remove-modifier":
 		instance.Game.FilterModifiers(func(m game.ModifierTransaction) bool {
 			return m.ID != *request.ModifierID
 		})
 		return state
-
 
 	default:
 		return none

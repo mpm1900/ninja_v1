@@ -1,4 +1,4 @@
-import { type Actor } from '#/lib/game/actor'
+import { getTotalBaseStats, type Actor } from '#/lib/game/actor'
 import {
   createColumnHelper,
   flexRender,
@@ -71,6 +71,10 @@ const columns = [
   }),
   helper.accessor('stats.taijutsu', {
     cell: (props) => <ActorStat actor={props.row.original} stat="taijutsu" />,
+  }),
+  helper.display({
+    id: 'total',
+    cell: ({ row }) => getTotalBaseStats(row.original),
   }),
   helper.display({
     id: 'actions',

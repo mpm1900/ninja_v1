@@ -36,12 +36,10 @@ func (dh *DataHandler) MakeGame() game.Game {
 
 func (dh *DataHandler) HandleGetActors(w http.ResponseWriter, r *http.Request) {
 	g := dh.MakeGame()
-
-	actorModifiers := game.GetActorModifiers(g)
 	resolved := make([]game.ResolvedActor, 0, len(g.Actors))
 
 	for _, a := range g.Actors {
-		resolvedActor := game.ResolveActor(a, g.Modifiers, actorModifiers)
+		resolvedActor := game.ResolveActor(a, g)
 		resolved = append(resolved, resolvedActor)
 	}
 

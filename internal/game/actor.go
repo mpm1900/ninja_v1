@@ -170,11 +170,7 @@ func GetActorModifiers(game Game) []ModifierTransaction {
 			TargetPositionIDs: []uuid.UUID{},
 		}
 		for _, modifier := range actor.InnateModifiers {
-			transaction := ModifierTransaction{
-				ID:       uuid.New(),
-				Context:  &context,
-				Mutation: modifier,
-			}
+			transaction := MakeModifierTransaction(modifier, &context)
 			modifiers = append(modifiers, transaction)
 		}
 	}
@@ -184,7 +180,6 @@ func GetActorModifiers(game Game) []ModifierTransaction {
 
 var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
 	{
-		ModifierID: nil,
 		ActorMutation: ActorMutation{
 			Delta: func(input Actor, context *Context) Actor {
 				return MapBaseStats(input)
@@ -193,7 +188,6 @@ var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
 		},
 	},
 	{
-		ModifierID: nil,
 		ActorMutation: ActorMutation{
 			Delta: func(input Actor, context *Context) Actor {
 				return MapStagedStats(input)
@@ -203,10 +197,15 @@ var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
 	},
 }
 
-func GetMutations(transactions []ModifierTransaction) []ModifierMutation {
+func GetMutationsFromTransactions(transactions []ModifierTransaction) []ModifierMutation {
 	var mutations []ModifierMutation
 	for _, transaction := range transactions {
-		mutations = append(mutations, transaction.Mutation.Mutations...)
+		var muts []ModifierMutation
+		for _, mut := range transaction.Mutation.Mutations {
+			mut.TransactionID = &transaction.ID
+			muts = append(muts, mut)
+		}
+		mutations = append(mutations, muts...)
 	}
 
 	return mutations
@@ -229,28 +228,37 @@ func (a Actor) Clone() Actor {
 }
 
 func resolveActor(actor Actor, mtransactions []ModifierTransaction, atransactions []ModifierTransaction) ResolvedActor {
-	context := Context{
-		SourcePlayerID:    &actor.PlayerID,
-		SourceActorID:     &actor.ID,
-		ParentActorID:     &actor.ID,
-		TargetActorIDs:    []uuid.UUID{},
-		TargetPositionIDs: []uuid.UUID{},
-	}
-
 	applied := make(map[uuid.UUID]int)
 	transactions := []ModifierTransaction{}
 	transactions = append(transactions, atransactions...)
 	transactions = append(transactions, mtransactions...)
-	mutations := GetMutations(transactions)
+	mutations := GetMutationsFromTransactions(transactions)
 	mutations = append(mutations, SPECIAL_MUTATIONS...)
 	sort.Slice(mutations, func(i, j int) bool {
-		return mutations[j].Priority > mutations[i].Priority
+		return mutations[i].Priority < mutations[j].Priority
 	})
 
 	mapped := actor.Clone()
 	for _, mutation := range mutations {
+		context := Context{
+			SourcePlayerID:    &actor.PlayerID,
+			SourceActorID:     &actor.ID,
+			ParentActorID:     &actor.ID,
+			TargetActorIDs:    []uuid.UUID{},
+			TargetPositionIDs: []uuid.UUID{},
+		}
+
+		if mutation.TransactionID != nil {
+			for _, transaction := range transactions {
+				if transaction.ID == *mutation.TransactionID && transaction.Context != nil {
+					context = *transaction.Context
+					break
+				}
+			}
+		}
+
 		tx := MakeTransaction(&mutation.ActorMutation, &context)
-		m, apply := ResolveTransaction(mapped, &tx, mapped)
+		a, apply := ResolveTransaction(mapped, &tx, mapped)
 		if apply {
 			if mutation.ModifierID != nil {
 				if count, ok := applied[*mutation.ModifierID]; ok {
@@ -259,7 +267,7 @@ func resolveActor(actor Actor, mtransactions []ModifierTransaction, atransaction
 					applied[*mutation.ModifierID] = 0
 				}
 			}
-			mapped = m
+			mapped = a
 		}
 	}
 
@@ -268,8 +276,8 @@ func resolveActor(actor Actor, mtransactions []ModifierTransaction, atransaction
 	return resolved
 }
 
-func ResolveActor(actor Actor, mtransactions []ModifierTransaction, atransactions []ModifierTransaction) ResolvedActor {
-	resolved := resolveActor(actor, mtransactions, atransactions)
+func ResolveActor(actor Actor, game Game) ResolvedActor {
+	resolved := resolveActor(actor, game.Modifiers, GetActorModifiers(game))
 	pre := resolveActor(actor, []ModifierTransaction{}, []ModifierTransaction{})
 	resolved.PreStats = maps.Clone(pre.Stats)
 

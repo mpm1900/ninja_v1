@@ -10,5 +10,6 @@ import (
 func GetAllActors() []game.Actor {
 	return []game.Actor{
 		actors.NewItachi(uuid.Nil, 40),
+		actors.NewKisame(uuid.Nil, 40),
 	}
 }

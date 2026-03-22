@@ -7,15 +7,15 @@ import (
 	"github.com/google/uuid"
 )
 
-var ItachiID = uuid.New()
+var KisameID = uuid.New()
 
-func NewItachi(playerID uuid.UUID, level int) game.Actor {
+func NewKisame(playerID uuid.UUID, level int) game.Actor {
 
 	return game.Actor{
 		ID:       uuid.New(),
 		PlayerID: playerID,
-		ActorID:  ItachiID,
-		Name:     "Itachi Uchiha",
+		ActorID:  KisameID,
+		Name:     "Kisame Hoshigaki",
 
 		Level:       level,
 		Experience:  0,
@@ -25,12 +25,12 @@ func NewItachi(playerID uuid.UUID, level int) game.Actor {
 		Alive:  true,
 
 		Stats: map[game.BaseStat]int{
-			game.StatHP:       60,
-			game.StatStamina:  60,
-			game.StatNinjutsu: 120,
-			game.StatGenjutsu: 155,
-			game.StatTaijutsu: 90,
-			game.StatSpeed:    125,
+			game.StatHP:       110,
+			game.StatStamina:  120,
+			game.StatNinjutsu: 110,
+			game.StatGenjutsu: 60,
+			game.StatTaijutsu: 110,
+			game.StatSpeed:    90,
 			game.StatEvasion:  0,
 			game.StatAccuracy: 1,
 		},

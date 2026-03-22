@@ -46,11 +46,10 @@ func (g *Game) RemoveActor(actorID uuid.UUID) {
 }
 
 func (g Game) MarshalJSON() ([]byte, error) {
-	actorModifiers := GetActorModifiers(g)
 	resolved := make([]ResolvedActor, 0, len(g.Actors))
 
 	for _, a := range g.Actors {
-		resolvedActor := ResolveActor(a, g.Modifiers, actorModifiers)
+		resolvedActor := ResolveActor(a, g)
 		resolved = append(resolved, resolvedActor)
 	}
 

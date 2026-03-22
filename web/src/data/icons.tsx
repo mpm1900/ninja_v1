@@ -1,5 +1,10 @@
 import type { ActorBaseStat } from '#/lib/game/actor'
-import { GiHearts, GiSprint, GiFist } from 'react-icons/gi'
+import {
+  GiHearts,
+  GiSprint,
+  GiPunch,
+  GiMagicSwirl,
+} from 'react-icons/gi'
 import { MdEnergySavingsLeaf } from 'react-icons/md'
 
 import type { IconType } from 'react-icons/lib'
@@ -92,10 +97,10 @@ const STAT_ICONS: Record<ActorBaseStat, IconType | null> = {
   evasion: null,
   genjutsu: Genjutsu,
   hp: GiHearts,
-  ninjutsu: Ninjutsu, // FaPrayingHands,
+  ninjutsu: GiMagicSwirl,
   speed: GiSprint,
   stamina: MdEnergySavingsLeaf,
-  taijutsu: GiFist,
+  taijutsu: GiPunch,
 }
 
 export { STAT_ICONS }

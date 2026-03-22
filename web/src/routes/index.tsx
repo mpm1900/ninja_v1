@@ -81,11 +81,11 @@ function App() {
               type: checked ? 'add-actor' : 'remove-actor',
               clientID: client.ID,
               context: {
-                sourcePlayerID: client.ID,
-                sourceActorID: ID,
-                parentActorID: ID,
-                targetActorIDs: [],
-                targetPositionIDs: [],
+                source_player_ID: client.ID,
+                source_actor_ID: ID,
+                parent_actor_ID: ID,
+                target_actor_IDs: [],
+                target_position_IDs: [],
               },
             })
           }}
@@ -101,18 +101,19 @@ function App() {
                     key={m.ID}
                     onClick={() => {
                       if (!client) return
-                      const actor = row.original
+                      const actor = game.actors.find(a => a.actor_ID === row.original.actor_ID)
+                      if (!actor) return
 
                       sendContextMessage({
                         type: 'add-modifier',
                         clientID: client.ID,
                         modifierID: m.ID,
                         context: {
-                          sourcePlayerID: actor.player_ID,
-                          sourceActorID: actor.ID,
-                          parentActorID: actor.ID,
-                          targetActorIDs: [],
-                          targetPositionIDs: [],
+                          source_player_ID: client.ID,
+                          source_actor_ID: actor.ID,
+                          parent_actor_ID: actor.ID,
+                          target_actor_IDs: [],
+                          target_position_IDs: [],
                         },
                       })
                     }}
@@ -134,11 +135,11 @@ function App() {
               clientID: client.ID,
               modifierID: modifier.ID,
               context: {
-                sourceActorID: null,
-                sourcePlayerID: null,
-                parentActorID: null,
-                targetActorIDs: [],
-                targetPositionIDs: [],
+                source_player_ID: null,
+                source_actor_ID: null,
+                parent_actor_ID: null,
+                target_actor_IDs: [],
+                target_position_IDs: [],
               },
             })
           }}

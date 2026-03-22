@@ -43,5 +43,14 @@ function checkActorStat(actor: Actor, key: ActorBaseStat) {
   return stat === pre ? 0 : stat > pre ? 1 : -1
 }
 
+function getTotalBaseStats(actor: Actor) {
+  const stats: Actor['base_stats'] = {
+    ...actor.base_stats,
+    accuracy: 0,
+    evasion: 0,
+  }
+  return Object.values(stats).reduce((p, c) => p + c, 0)
+}
+
 export type { Actor, ActorBaseStat }
-export { checkActorStat }
+export { checkActorStat, getTotalBaseStats }

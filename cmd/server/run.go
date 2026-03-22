@@ -34,14 +34,7 @@ func main1() {
 			},
 		},
 	}
-	transaction := game.ModifierTransaction{
-		ID: uuid.New(),
-		Context: &game.Context{
-			SourceActorID: &actor.ID,
-		},
-		Mutation: modifier,
-	}
-	resolved := game.ResolveActor(actor, []game.ModifierTransaction{transaction}, game.GetActorModifiers(g))
+	resolved := game.ResolveActor(actor, g)
 
 	actorJSON, err := json.MarshalIndent(actor, "", "  ")
 	if err != nil {

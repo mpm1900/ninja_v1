@@ -11,7 +11,8 @@ type Trigger struct {
 
 type ModifierMutation struct {
 	ActorMutation
-	ModifierID *uuid.UUID `json:"modifier_ID"`
+	ModifierID    *uuid.UUID
+	TransactionID *uuid.UUID
 }
 
 type Modifier struct {
@@ -37,4 +38,13 @@ func MakeModifier(name string) Modifier {
 	}
 
 	return modifier
+}
+
+func MakeModifierTransaction(modifier Modifier, context *Context) ModifierTransaction {
+	id := uuid.New()
+	return ModifierTransaction{
+		ID:       id,
+		Context:  context,
+		Mutation: modifier,
+	}
 }

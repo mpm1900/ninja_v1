@@ -7,8 +7,8 @@ import (
 )
 
 type Request struct {
-	Type       string
-	ClientID   uuid.UUID
-	ModifierID *uuid.UUID
-	Context    game.Context
+	Type       string       `json:"type"`
+	ClientID   uuid.UUID    `json:"clientID"`
+	ModifierID *uuid.UUID   `json:"modifierID"`
+	Context    game.Context `json:"context"`
 }
