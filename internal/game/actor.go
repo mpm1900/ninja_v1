@@ -54,9 +54,9 @@ type Actor struct {
 	NatureResistance map[Nature]float64 `json:"nature_resistance"`
 	Critical         float64            `json:"critical"`
 
-	Natures         []NatureSet `json:"natures"`
-	InnateModifiers []Modifier  `json:"innate_modifiers"`
-	Actions         []Action    `json:"actions"`
+	Natures         map[NatureSet][]Nature `json:"natures"`
+	InnateModifiers []Modifier             `json:"innate_modifiers"`
+	Actions         []Action               `json:"actions"`
 }
 
 type ResolvedActor struct {
@@ -218,7 +218,7 @@ func (a Actor) Clone() Actor {
 	b.NatureDamage = maps.Clone(a.NatureDamage)
 	b.NatureResistance = maps.Clone(a.NatureResistance)
 
-	b.Natures = slices.Clone(a.Natures)
+	b.Natures = maps.Clone(a.Natures)
 	b.InnateModifiers = slices.Clone(a.InnateModifiers)
 	b.Actions = slices.Clone(a.Actions)
 

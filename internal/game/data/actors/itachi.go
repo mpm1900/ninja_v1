@@ -66,10 +66,10 @@ func NewItachi(playerID uuid.UUID, level int) game.Actor {
 			game.NatureYang:      1.00,
 		},
 
-		Natures: []game.NatureSet{
+		Natures: game.MapNatures([]game.NatureSet{
 			game.NsFire,
 			game.NsYin,
-		},
+		}),
 
 		InnateModifiers: []game.Modifier{},
 		Actions:         []game.Action{},

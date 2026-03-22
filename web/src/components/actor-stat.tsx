@@ -14,8 +14,8 @@ function getBaseStatColorClass(value: number) {
   if (value < 140) return 'text-green-400'
   if (value < 160) return 'text-teal-400'
   if (value < 180) return 'text-teal-200'
-  if (value < 220) return 'text-pink-200'
-  return 'text-pink-300'
+  if (value < 220) return 'text-pink-300'
+  return 'text-white'
 }
 
 function ActorStat({

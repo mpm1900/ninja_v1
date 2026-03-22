@@ -15,13 +15,13 @@ const (
 type NatureSet string
 
 const (
-	NsFire      NatureSet = "fire"
-	NsWind      NatureSet = "wind"
-	NsLightning NatureSet = "lightning"
-	NsEarth     NatureSet = "earth"
-	NsWater     NatureSet = "water"
-	NsYin       NatureSet = "yin"
-	NsYang      NatureSet = "yang"
+	NsFire      NatureSet = NatureSet(NatureFire)
+	NsWind      NatureSet = NatureSet(NatureWind)
+	NsLightning NatureSet = NatureSet(NatureLightning)
+	NsEarth     NatureSet = NatureSet(NatureEarth)
+	NsWater     NatureSet = NatureSet(NatureWater)
+	NsYin       NatureSet = NatureSet(NatureYin)
+	NsYang      NatureSet = NatureSet(NatureYang)
 
 	NsScorch    NatureSet = "scorch"
 	NsLava      NatureSet = "lava"
@@ -56,4 +56,12 @@ var NATURES = map[NatureSet][]Nature{
 	NsWood:      {NatureEarth, NatureWater},
 	NsYinYang:   {NatureYin, NatureYang},
 	NsDust:      {NatureFire, NatureEarth, NatureWind},
+}
+
+func MapNatures(keys []NatureSet) map[NatureSet][]Nature {
+	natures := make(map[NatureSet][]Nature)
+	for _, key := range keys {
+		natures[key] = NATURES[key]
+	}
+	return natures
 }

@@ -12,6 +12,8 @@ func GetAllActors() []game.Actor {
 		actors.NewItachi(uuid.Nil, 24),
 		actors.NewKisame(uuid.Nil, 24),
 		actors.NewKakuzu(uuid.Nil, 24),
+		actors.NewYamato(uuid.Nil, 24),
+		actors.NewRaikage(uuid.Nil, 24),
 		actors.NewKaguya(uuid.Nil, 24),
 	}
 }

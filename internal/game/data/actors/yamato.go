@@ -7,15 +7,15 @@ import (
 	"github.com/google/uuid"
 )
 
-var KakuzuID = uuid.New()
+var YamatoID = uuid.New()
 
-func NewKakuzu(playerID uuid.UUID, level int) game.Actor {
+func NewYamato(playerID uuid.UUID, level int) game.Actor {
 
 	return game.Actor{
 		ID:       uuid.New(),
 		PlayerID: playerID,
-		ActorID:  KakuzuID,
-		Name:     "Kakuzu",
+		ActorID:  YamatoID,
+		Name:     "Yamato",
 
 		Level:       level,
 		Experience:  0,
@@ -25,12 +25,12 @@ func NewKakuzu(playerID uuid.UUID, level int) game.Actor {
 		Alive:  true,
 
 		Stats: map[game.BaseStat]int{
-			game.StatHP:       100,
-			game.StatStamina:  110,
-			game.StatNinjutsu: 134,
-			game.StatGenjutsu: 95,
-			game.StatTaijutsu: 100,
-			game.StatSpeed:    71,
+			game.StatHP:       76,
+			game.StatStamina:  71,
+			game.StatNinjutsu: 104,
+			game.StatGenjutsu: 71,
+			game.StatTaijutsu: 104,
+			game.StatSpeed:    108,
 			game.StatEvasion:  0,
 			game.StatAccuracy: 1,
 		},
@@ -67,11 +67,10 @@ func NewKakuzu(playerID uuid.UUID, level int) game.Actor {
 		},
 
 		Natures: game.MapNatures([]game.NatureSet{
-			game.NsFire,
-			game.NsWind,
 			game.NsEarth,
+			game.NsYang,
+			game.NsWood,
 		}),
-
 		InnateModifiers: []game.Modifier{},
 		Actions:         []game.Action{},
 	}

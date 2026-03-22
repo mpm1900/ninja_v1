@@ -1,6 +1,7 @@
 import { STAT_ICONS } from '#/data/icons'
 import type { Actor } from '#/lib/game/actor'
 import type { Game } from '#/lib/game/game'
+import { natureIndexes, type NatureSet } from '#/lib/game/nature'
 import { ActorStat } from './actor-stat'
 import { NatureBadge } from './nature-badge'
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from './ui/card'
@@ -26,15 +27,17 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
             {actor.name}
           </CardTitle>
           <CardAction className="flex gap-1">
-            {actor.natures?.map((nature) => (
-              <NatureBadge key={nature} nature={nature} />
-            ))}
+            {(Object.keys(actor.natures) as Array<NatureSet>)
+              .sort((a, b) => natureIndexes[a] - natureIndexes[b])
+              .map((nature) => (
+                <NatureBadge key={nature} nature={nature} />
+              ))}
           </CardAction>
         </CardHeader>
       )}
-      <CardContent>
+      <CardContent className="space-y-2">
         {actor && (
-          <div className="grid grid-cols-3 lg:grid-cols-6 gap-2">
+          <div className="grid grid-cols-3 lg:grid-cols-6 space-x-2">
             <div className="flex items-center gap-2">
               {HpIcon && <HpIcon />}
               <ActorStat actor={actor} stat="hp" showBase={false} />

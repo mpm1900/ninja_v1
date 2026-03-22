@@ -1,4 +1,5 @@
 import type { Modifier } from './modifier'
+import type { Nature, NatureSet } from './nature'
 
 type ActorBaseStat =
   | 'accuracy'
@@ -9,20 +10,6 @@ type ActorBaseStat =
   | 'speed'
   | 'stamina'
   | 'taijutsu'
-
-type Nature = 'earth' | 'fire' | 'lightning' | 'water' | 'wind' | 'yang' | 'yin'
-
-
-const natureNames: Partial<Record<Nature, string>> = {
-  fire: '火',
-  wind: '風',
-  lightning: '雷',
-  earth: '土',
-  water: '水',
-  yin: '陰',
-  yang: '陽',
-}
-
 
 type ActorStats<T> = Record<ActorBaseStat, T>
 type NatureStats<T> = Record<Nature, T>
@@ -42,7 +29,7 @@ type Actor = {
   staged_stats: ActorStats<number>
   pre_stats: ActorStats<number>
   stats: ActorStats<number>
-  natures: Array<Nature>
+  natures: Partial<Record<NatureSet, Array<Nature>>>
   nature_damage: NatureStats<number>
   nature_resistance: NatureStats<number>
   applied_modifiers: Record<string, number>
@@ -64,5 +51,5 @@ function getTotalBaseStats(actor: Actor) {
   return Object.values(stats).reduce((p, c) => p + c, 0)
 }
 
-export type { Nature, Actor, ActorBaseStat }
-export { natureNames, checkActorStat, getTotalBaseStats }
+export type { Actor, ActorBaseStat }
+export { checkActorStat, getTotalBaseStats }

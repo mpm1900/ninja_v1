@@ -66,11 +66,11 @@ func NewKaguya(playerID uuid.UUID, level int) game.Actor {
 			game.NatureYang:      1.00,
 		},
 
-		Natures: []game.NatureSet{
+		Natures: game.MapNatures([]game.NatureSet{
 			game.NsYin,
 			game.NsYang,
-		},
-
+			game.NsYinYang,
+		}),
 		InnateModifiers: []game.Modifier{},
 		Actions:         []game.Action{},
 	}

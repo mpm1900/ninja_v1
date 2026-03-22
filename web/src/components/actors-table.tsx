@@ -67,6 +67,7 @@ const columns = [
       </Button>
     ),
     cell: (props) => <ActorStatBase actor={props.row.original} stat="hp" />,
+    sortingFn: 'alphanumeric',
   }),
   helper.accessor('base_stats.stamina', {
     header: ({ column }) => (
@@ -146,7 +147,7 @@ const columns = [
       <Button
         size="icon"
         variant="ghost"
-        disabled={!row.getCanExpand()}
+        disabled={!row.getIsSelected()}
         onClick={row.getToggleExpandedHandler()}
       >
         {row.getIsExpanded() ? <ChevronDown /> : <ChevronLeft />}

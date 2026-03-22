@@ -66,10 +66,10 @@ func NewKisame(playerID uuid.UUID, level int) game.Actor {
 			game.NatureYang:      1.00,
 		},
 
-		Natures: []game.NatureSet{
+		Natures: game.MapNatures([]game.NatureSet{
 			game.NsWater,
 			game.NsYang,
-		},
+		}),
 
 		InnateModifiers: []game.Modifier{},
 		Actions:         []game.Action{},
