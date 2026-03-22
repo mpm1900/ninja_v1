@@ -15,7 +15,6 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
   const NinjutsuIcon = STAT_ICONS.ninjutsu
   const GenjutsuIcon = STAT_ICONS.genjutsu
   const Taijutsu = STAT_ICONS.taijutsu
-  console.log(modifiers)
   return (
     <Card>
       {actor && (
@@ -35,7 +34,7 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
       )}
       <CardContent>
         {actor && (
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-3 lg:grid-cols-6 gap-2">
             <div className="flex items-center gap-2">
               {HpIcon && <HpIcon />}
               <ActorStat actor={actor} stat="hp" showBase={false} />

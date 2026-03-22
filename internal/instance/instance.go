@@ -12,14 +12,14 @@ import (
 )
 
 type Instance struct {
-	ID      uuid.UUID
-	ctx     context.Context
-	Clients map[uuid.UUID]*Client
-	Game    game.Game
+	ID      uuid.UUID             `json:"ID"`
+	ctx     context.Context       `json:"-"`
+	Clients map[uuid.UUID]*Client `json:"clients,omitempty"`
+	Game    game.Game             `json:"game"`
 
-	Register    chan *Client
-	Unregister  chan *Client
-	ReadRequest chan Request
+	Register    chan *Client `json:"-"`
+	Unregister  chan *Client `json:"-"`
+	ReadRequest chan Request `json:"-"`
 }
 
 func NewInstance(ctx context.Context, id uuid.UUID) *Instance {

@@ -25,12 +25,12 @@ var upgrader = websocket.Upgrader{
 }
 
 type Client struct {
-	ID       uuid.UUID
-	conn     *websocket.Conn
-	ctx      context.Context
-	cancel   context.CancelFunc
-	instance *Instance
-	inbox    chan Response
+	ID       uuid.UUID          `json:"ID"`
+	conn     *websocket.Conn    `json:"-"`
+	ctx      context.Context    `json:"-"`
+	cancel   context.CancelFunc `json:"-"`
+	instance *Instance          `json:"-"`
+	inbox    chan Response      `json:"-"`
 }
 
 func NewClient(instance *Instance) *Client {
