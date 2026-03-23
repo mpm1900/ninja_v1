@@ -42,7 +42,7 @@ var Kakashi = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsLightning,
 		game.NsEarth,
-		game.NsWater,
+		game.NsYin,
 	}),
 	InnateModifiers: []game.Modifier{},
 	ActionIDs:       []uuid.UUID{},

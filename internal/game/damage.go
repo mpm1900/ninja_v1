@@ -23,13 +23,16 @@ func DamageEquation(config DamageTerms) int {
 	return int(math.Floor(raw))
 }
 
-func GetDamage(source ResolvedActor, targets []ResolvedActor, stat BaseStat, power int) []int {
+func GetDamage(source ResolvedActor, targets []ResolvedActor, stat AttackStat, power int) []int {
 	damages := make([]int, len(targets))
+	attack := int(math.Floor(float64(source.Stats[BaseStat(stat)]) * source.AttackModifiers[stat]))
+
 	for i, target := range targets {
+		defense := int(math.Floor(float64(target.Stats[BaseStat(stat)]) * target.DefenseModifiers[stat]))
 		damages[i] = DamageEquation(DamageTerms{
-			Attack:   source.Stats[stat],
+			Attack:   attack,
 			Critical: 1.00,
-			Defense:  target.Stats[stat],
+			Defense:  defense,
 			Level:    source.Level,
 			Nature:   1.00,
 			Offset:   0,

@@ -22,8 +22,11 @@ func NewServer(ctx context.Context) *Server {
 
 	api.HandleFunc("GET /actions", dataHandler.HandleGetActions)
 	api.HandleFunc("GET /actors", dataHandler.HandleGetActors)
-	api.HandleFunc("GET /instances", instancesHandler.HandleGetGames)
 	api.HandleFunc("GET /modifiers", dataHandler.HandleGetModifiers)
+	api.HandleFunc("POST /{actionID}/validate", dataHandler.HandleIsActionContextValid)
+
+	api.HandleFunc("GET /instances", instancesHandler.HandleGetGames)
+	api.HandleFunc("POST /{instanceID}/{actionID}/targets", instancesHandler.HandleGetTargets)
 
 	mux.Handle("/api/", http.StripPrefix("/api", api))
 	mux.Handle("/socket/", http.StripPrefix("/socket", instancesHandler))

@@ -41,7 +41,6 @@ var Kisame = game.ActorDef{
 	},
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsWater,
-		game.NsYang,
 	}),
 
 	InnateModifiers: []game.Modifier{},

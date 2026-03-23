@@ -1,7 +1,8 @@
 import { Store } from '@tanstack/store'
 import { clientsStore, type Client } from './clients'
 import { gameStore } from './game'
-import type { Context, Game } from '../game/game'
+import type { Game } from '../game/game'
+import type { Context } from '../game/context'
 
 type SocketStatus =
   | 'idle'
@@ -164,7 +165,7 @@ function sendContextMessage(request: SocketRequest) {
   return sendSocketMessage(JSON.stringify(request))
 }
 
-export type { }
+export type {}
 export {
   socketStore,
   connectSocket,

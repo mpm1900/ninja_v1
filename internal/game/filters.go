@@ -13,6 +13,9 @@ func TargetLengthFilter(length int) func(*Context) bool {
 func AllFilter(actor Actor, context *Context) bool {
 	return true
 }
+func OtherFilter(actor Actor, context *Context) bool {
+	return actor.ID != *context.SourceActorID
+}
 
 func ActiveFilter(actor Actor, context *Context) bool {
 	return actor.Active

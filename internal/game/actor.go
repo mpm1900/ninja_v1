@@ -16,14 +16,22 @@ const (
 	ResourceStamina Resource = "stamina"
 )
 
+type AttackStat string
+
+const (
+	AttackNinjutsu AttackStat = "ninjutsu"
+	AttackGenjutsu AttackStat = "genjutsu"
+	AttackTaijutsu AttackStat = "taijutsu"
+)
+
 type BaseStat string
 
 const (
-	StatHP       BaseStat = "hp"
-	StatStamina  BaseStat = "stamina"
-	StatNinjutsu BaseStat = "ninjutsu"
-	StatGenjutsu BaseStat = "genjutsu"
-	StatTaijutsu BaseStat = "taijutsu"
+	StatHP       BaseStat = BaseStat(ResourceHP)
+	StatStamina  BaseStat = BaseStat(ResourceStamina)
+	StatNinjutsu BaseStat = BaseStat(AttackNinjutsu)
+	StatGenjutsu BaseStat = BaseStat(AttackGenjutsu)
+	StatTaijutsu BaseStat = BaseStat(AttackTaijutsu)
 	StatSpeed    BaseStat = "speed"
 	StatEvasion  BaseStat = "evasion"
 	StatAccuracy BaseStat = "accuracy"
@@ -48,15 +56,17 @@ type ActorDef struct {
 
 type Actor struct {
 	ActorDef
-	ID         uuid.UUID        `json:"ID"`
-	PlayerID   uuid.UUID        `json:"player_ID"`
-	Level      int              `json:"level"`
-	Experience int              `json:"experience"`
-	Alive      bool             `json:"alive"`
-	Active     bool             `json:"active"`
-	Damage     int              `json:"damage"`
-	Stages     map[BaseStat]int `json:"staged_stats"`
-	Actions    []Action         `json:"actions"`
+	ID               uuid.UUID              `json:"ID"`
+	PlayerID         uuid.UUID              `json:"player_ID"`
+	Level            int                    `json:"level"`
+	Experience       int                    `json:"experience"`
+	Alive            bool                   `json:"alive"`
+	Active           bool                   `json:"active"`
+	Damage           int                    `json:"damage"`
+	Stages           map[BaseStat]int       `json:"staged_stats"`
+	AttackModifiers  map[AttackStat]float64 `json:"attack_modifiers"`
+	DefenseModifiers map[AttackStat]float64 `json:"defense_modifiers"`
+	Actions          []Action               `json:"actions"`
 }
 
 type ResolvedActor struct {
@@ -90,7 +100,7 @@ func GetExperienceToNextLevel(level, exp int) int {
 	return GetBaseExperience(level+1) - (GetBaseExperience(level) + exp)
 }
 
-func NewActor(def ActorDef, playerID uuid.UUID, experience int) Actor {
+func MakeActor(def ActorDef, playerID uuid.UUID, experience int) Actor {
 	return Actor{
 		ActorDef:   def,
 		ID:         uuid.New(),
@@ -109,6 +119,16 @@ func NewActor(def ActorDef, playerID uuid.UUID, experience int) Actor {
 			StatSpeed:    0,
 			StatEvasion:  0,
 			StatAccuracy: 0,
+		},
+		AttackModifiers: map[AttackStat]float64{
+			AttackGenjutsu: 1,
+			AttackNinjutsu: 1,
+			AttackTaijutsu: 1,
+		},
+		DefenseModifiers: map[AttackStat]float64{
+			AttackGenjutsu: 1,
+			AttackNinjutsu: 1,
+			AttackTaijutsu: 1,
 		},
 	}
 }

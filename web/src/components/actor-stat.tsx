@@ -7,18 +7,24 @@ import {
 import { cn } from '#/lib/utils'
 
 function getBaseStatColorClass(value: number) {
-  if (value < 60) return 'text-red-500'
+  if (value < 45) return 'text-rose-600'
+  if (value < 55) return 'text-red-500'
+  if (value < 65) return 'text-orange-600'
   if (value < 75) return 'text-orange-500'
-  if (value < 90) return 'text-amber-500'
-  if (value < 105) return 'text-yellow-400'
-  if (value < 120) return 'text-lime-400'
-  if (value < 140) return 'text-green-400'
-  if (value < 160) return 'text-teal-400'
-  if (value < 180) return 'text-cyan-300'
+  if (value < 85) return 'text-amber-500'
+  if (value < 95) return 'text-yellow-500'
+  if (value <= 100) return 'text-yellow-300'
+  if (value < 110) return 'text-lime-400'
+  if (value < 120) return 'text-green-500'
+  if (value < 130) return 'text-green-400'
+  if (value < 140) return 'text-emerald-500'
+  if (value < 150) return 'text-teal-500'
+  if (value < 165) return 'text-teal-300'
+  if (value < 180) return 'text-cyan-400'
   if (value < 200) return 'text-blue-400'
-  if (value < 220) return 'text-fuchsia-400'
-  return 'text-fuchsia-300'
+  return 'text-fuchsia-400'
 }
+
 
 function ActorStat({
   stat,

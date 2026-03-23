@@ -7,9 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type GameMutation struct {
-	Mutation[Game, Game]
-}
+type GameMutation = Mutation[Game, Game]
 
 type Game struct {
 	Actors    []Actor                 `json:"actors"`

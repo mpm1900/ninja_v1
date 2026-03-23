@@ -58,11 +58,10 @@ const columns = [
   }),
   helper.accessor('name', {}),
   helper.accessor('natures', {
-    cell: ({ row }) => (Object.keys(row.getValue('natures')) as Array<NatureSet>)
-      .sort((a, b) => natureIndexes[a] - natureIndexes[b])
-      .map((nature) => (
-        <NatureBadge key={nature} nature={nature} />
-      ))
+    cell: ({ row }) =>
+      (Object.keys(row.getValue('natures')) as Array<NatureSet>)
+        .sort((a, b) => natureIndexes[a] - natureIndexes[b])
+        .map((nature) => <NatureBadge key={nature} nature={nature} />),
   }),
   helper.accessor('stats.hp', {
     header: ({ column }) => (
@@ -187,8 +186,9 @@ function ActorsTable({
   onRowCheckedChange?: (actor: ActorDef, selected: boolean) => void
   subRow?: (props: { row: Row<ActorDef> }) => ReactNode
 }) {
-  const [sorting, setSorting] = useState<SortingState>([{ id: 'total', desc: true }])
-  console.log(sorting)
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: 'total', desc: true },
+  ])
   const table = useReactTable({
     columns,
     data,

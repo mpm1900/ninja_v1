@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"sync"
 
+	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data"
 	"ninja_v1/internal/instance"
 
 	"github.com/google/uuid"
@@ -29,7 +31,7 @@ func NewInstancesHandler(ctx context.Context) *InstancesHandler {
 
 	go defaultInstance.Run()
 
-	handler.mux.HandleFunc("GET /{gameID}/connect", handler.handleGameConnection(ctx))
+	handler.mux.HandleFunc("GET /{instanceID}/connect", handler.handleGameConnection(ctx))
 	return handler
 }
 
@@ -78,9 +80,56 @@ func (ih *InstancesHandler) HandleGetGames(w http.ResponseWriter, r *http.Reques
 	}
 }
 
+func (ih *InstancesHandler) HandleGetTargets(w http.ResponseWriter, r *http.Request) {
+	instanceID, err := uuid.Parse(r.PathValue("instanceID"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	actionID, err := uuid.Parse(r.PathValue("actionID"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	var context game.Context
+	err = json.NewDecoder(r.Body).Decode(&context)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	instance, ok := ih.GetInstance(instanceID)
+	if !ok {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	action, ok := data.ACTIONS[actionID]
+	if !ok {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	targets := game.GetActors(instance.Game, func(a game.Actor) bool {
+		return action.TargetPredicate(a, &context)
+	})
+	targetIDs := make([]uuid.UUID, 0, len(targets))
+	for _, a := range targets {
+		targetIDs = append(targetIDs, a.ID)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(targetIDs)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+}
+
 func (ih *InstancesHandler) handleGameConnection(ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		instanceID, err := uuid.Parse(r.PathValue("gameID"))
+		instanceID, err := uuid.Parse(r.PathValue("instanceID"))
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			return

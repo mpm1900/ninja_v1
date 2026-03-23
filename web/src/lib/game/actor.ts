@@ -31,8 +31,9 @@ type Actor = ActorDef & {
   player_ID: string
   level: number
   experience: number
-  alive: true
-  active: true
+  alive: boolean
+  active: boolean
+  damage: number
   base_stats: ActorStats<number>
   staged_stats: ActorStats<number>
   pre_stats: ActorStats<number>

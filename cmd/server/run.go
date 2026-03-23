@@ -15,7 +15,7 @@ func main1() {
 	var action1 game.Action
 	var action2 game.Action
 
-	actor := game.NewActor(actors.Itachi, uuid.New(), 0)
+	actor := game.MakeActor(actors.Itachi, uuid.New(), 0)
 	actor.Actions = []game.Action{action1, action2}
 
 	var g game.Game

@@ -7,7 +7,10 @@ import (
 	"net/http"
 	"slices"
 
+	"ninja_v1/internal/game"
 	data "ninja_v1/internal/game/data"
+
+	"github.com/google/uuid"
 )
 
 type DataHandler struct {
@@ -48,6 +51,32 @@ func (dh *DataHandler) HandleGetModifiers(w http.ResponseWriter, r *http.Request
 	modifiers := slices.Collect(maps.Values(data.MODIFIERS))
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(modifiers); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+}
+
+func (dh *DataHandler) HandleIsActionContextValid(w http.ResponseWriter, r *http.Request) {
+	actionID, err := uuid.Parse(r.PathValue("actionID"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	var context game.Context
+	err = json.NewDecoder(r.Body).Decode(&context)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	action, ok := data.ACTIONS[actionID]
+	if !ok {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	valid := action.ContextValidate(&context)
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(valid)
+	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
