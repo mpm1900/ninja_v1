@@ -2,6 +2,7 @@ import {
   checkActorStat,
   type Actor,
   type ActorBaseStat,
+  type ActorDef,
 } from '#/lib/game/actor'
 import { cn } from '#/lib/utils'
 
@@ -13,9 +14,10 @@ function getBaseStatColorClass(value: number) {
   if (value < 120) return 'text-lime-400'
   if (value < 140) return 'text-green-400'
   if (value < 160) return 'text-teal-400'
-  if (value < 180) return 'text-teal-200'
-  if (value < 220) return 'text-pink-300'
-  return 'text-white'
+  if (value < 180) return 'text-cyan-300'
+  if (value < 200) return 'text-blue-400'
+  if (value < 220) return 'text-fuchsia-400'
+  return 'text-fuchsia-300'
 }
 
 function ActorStat({
@@ -51,29 +53,17 @@ function ActorStat({
 function ActorStatBase({
   stat,
   actor,
-  showStat = true,
   ...props
 }: React.ComponentProps<'span'> & {
-  actor: Actor
+  actor: ActorDef
   stat: ActorBaseStat
-  showStat?: boolean
 }) {
   return (
     <span data-role="actor-stat" {...props}>
-      <span className={getBaseStatColorClass(actor.base_stats[stat])}>
-        {actor.base_stats[stat]}
+      <span className={getBaseStatColorClass(actor.stats[stat])}>
+        {actor.stats[stat]}
       </span>
-      {showStat && (
-        <span
-          className={cn('opacity-50 text-muted-foreground', {
-            'text-green-400': checkActorStat(actor, stat) === 1,
-            'text-red-300': checkActorStat(actor, stat) === -1,
-          })}
-        >
-          {' '}
-          ({actor.stats[stat]})
-        </span>
-      )}
+
     </span>
   )
 }

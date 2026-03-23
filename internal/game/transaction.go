@@ -2,33 +2,33 @@ package game
 
 import "github.com/google/uuid"
 
-type Mutation[I any, O any, C any] struct {
-	Delta    func(input I, context *C) O    `json:"-"`
-	Filter   func(input I, context *C) bool `json:"-"`
-	Priority int                            `json:"priority"`
+type Mutation[I any, O any] struct {
+	Delta    func(input I, context *Context) O    `json:"-"`
+	Filter   func(input I, context *Context) bool `json:"-"`
+	Priority int                                  `json:"priority"`
 }
 
-type Transaction[M any, C any] struct {
+type Transaction[M any] struct {
 	ID       uuid.UUID `json:"ID"`
-	Context  *C        `json:"context"`
+	Context  *Context  `json:"context"`
 	Priority int       `json:"priority"`
 	Mutation *M        `json:"mutation"`
 }
 
-func MakeTransaction[M any, C any](
+func MakeTransaction[M any](
 	mutation *M,
-	context *C,
-) Transaction[M, C] {
-	return Transaction[M, C]{
+	context *Context,
+) Transaction[M] {
+	return Transaction[M]{
 		ID:       uuid.New(),
 		Context:  context,
 		Mutation: mutation,
 	}
 }
 
-func CheckTransaction[I any, O any, C any](
+func CheckTransaction[I any, O any](
 	input I,
-	transaction *Transaction[Mutation[I, O, C], C],
+	transaction *Transaction[Mutation[I, O]],
 ) bool {
 	if transaction == nil || transaction.Mutation == nil {
 		return false
@@ -39,9 +39,9 @@ func CheckTransaction[I any, O any, C any](
 	return transaction.Mutation.Filter(input, transaction.Context)
 }
 
-func ResolveTransaction[I any, O any, C any](
+func ResolveTransaction[I any, O any](
 	input I,
-	transaction *Transaction[Mutation[I, O, C], C],
+	transaction *Transaction[Mutation[I, O]],
 	fallback O,
 ) (O, bool) {
 	if !CheckTransaction(input, transaction) {
@@ -51,9 +51,9 @@ func ResolveTransaction[I any, O any, C any](
 	return transaction.Mutation.Delta(input, transaction.Context), true
 }
 
-func ResolveTransactionFn[I any, O any, C any](
+func ResolveTransactionFn[I any, O any](
 	input I,
-	transaction *Transaction[Mutation[I, O, C], C],
+	transaction *Transaction[Mutation[I, O]],
 	fallback func(I) O,
 ) (O, bool) {
 	return ResolveTransaction(input, transaction, fallback(input))

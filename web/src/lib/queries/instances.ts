@@ -3,7 +3,6 @@ import { createServerFn } from "@tanstack/react-start";
 
 const getInstances = createServerFn().handler(async () => {
   const response = await fetch(`${process.env.API_URL}/api/instances`)
-  console.log(response)
   const data = await response.json()
   return data
 })

@@ -10,7 +10,7 @@ type Trigger struct {
 }
 
 type ModifierMutation struct {
-	Mutation[Actor, Actor, Context]
+	Mutation[Actor, Actor]
 	ModifierID    *uuid.UUID
 	TransactionID *uuid.UUID
 }
@@ -32,7 +32,7 @@ func MakeModifierMutation(
 ) ModifierMutation {
 	return ModifierMutation{
 		ModifierID: modifierID,
-		Mutation: Mutation[Actor, Actor, Context]{
+		Mutation: Mutation[Actor, Actor]{
 			Filter:   filter,
 			Delta:    delta,
 			Priority: priority,
@@ -40,6 +40,6 @@ func MakeModifierMutation(
 	}
 }
 
-func MakeModifierTransaction(modifier *Modifier, context *Context) Transaction[Modifier, Context] {
+func MakeModifierTransaction(modifier *Modifier, context *Context) Transaction[Modifier] {
 	return MakeTransaction(modifier, context)
 }

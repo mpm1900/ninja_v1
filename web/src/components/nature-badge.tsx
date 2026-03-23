@@ -19,9 +19,10 @@ const variants = cva<t>(
         water: 'bg-blue-500',
         yang: 'bg-neutral-300',
         yin: 'bg-violet-500',
-        wood: 'bg-olive-600 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300! text-shadow-[1px_1px_0px_#000000]',
+        wood: 'bg-olive-600 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
         yinyang:
           'bg-[linear-gradient(135deg,theme(colors.neutral.300)_0%,theme(colors.neutral.300)_50%,theme(colors.violet.500)_50%,theme(colors.violet.500)_100%)] text-amber-300! shadow-[inset_0_0_0_1px_theme(colors.amber.300)]',
+        jashin: 'bg-rose-950 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
       },
     },
     defaultVariants: {

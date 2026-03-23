@@ -15,18 +15,17 @@ func main1() {
 	var action1 game.Action
 	var action2 game.Action
 
-	actor := actors.NewItachi(uuid.New(), 50)
+	actor := game.NewActor(actors.Itachi, uuid.New(), 0)
 	actor.Actions = []game.Action{action1, action2}
 
 	var g game.Game
 	modifier := game.Modifier{
-		ID:   uuid.New(),
-		Name: "Test",
+		ID: uuid.New(),
 	}
 	modifier.Mutations = []game.ModifierMutation{
 		{
 			ModifierID: &modifier.ID,
-			Mutation: game.Mutation[game.Actor, game.Actor, game.Context]{
+			Mutation: game.Mutation[game.Actor, game.Actor]{
 				Filter: func(actor game.Actor, context *game.Context) bool {
 					return actor.ID == *context.SourceActorID
 				},
@@ -57,7 +56,6 @@ func main1() {
 	fmt.Printf("ID=%s Name=%s PlayerID=%s\n", resolved.ID, resolved.Name, resolved.PlayerID)
 	fmt.Printf("Active=%t Alive=%t Level=%d XP=%d ActionCount=%d\n",
 		resolved.Active, resolved.Alive, resolved.Level, resolved.Experience, resolved.ActionCount)
-	fmt.Printf("Critical=%.2f\n", resolved.Critical)
 
 	fmt.Printf("Stats: hp=%d stamina=%d ninjutsu=%d genjutsu=%d taijutsu=%d speed=%d evasion=%d accuracy=%d\n",
 		resolved.Stats[game.StatHP],

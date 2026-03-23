@@ -34,29 +34,29 @@ type ResourceValues struct {
 	Offset int
 }
 
+type ActorDef struct {
+	ActorID          uuid.UUID              `json:"actor_ID"`
+	Name             string                 `json:"name"`
+	ActionCount      int                    `json:"action_count"`
+	Stats            map[BaseStat]int       `json:"stats"`
+	NatureDamage     map[Nature]float64     `json:"nature_damage"`
+	NatureResistance map[Nature]float64     `json:"nature_resistance"`
+	Natures          map[NatureSet][]Nature `json:"natures"`
+	InnateModifiers  []Modifier             `json:"innate_modifiers"`
+	ActionIDs        []uuid.UUID            `json:"action_IDs"`
+}
+
 type Actor struct {
-	ID       uuid.UUID `json:"ID"`
-	ActorID  uuid.UUID `json:"actor_ID"`
-	PlayerID uuid.UUID `json:"player_ID"`
-	Name     string    `json:"name"`
-
-	Level       int `json:"level"`
-	Experience  int `json:"experience"`
-	ActionCount int `json:"action_count"`
-
-	Alive  bool `json:"alive"`
-	Active bool `json:"active"`
-
-	// Resources        map[Resource]ResourceValues
-	Stats            map[BaseStat]int   `json:"stats"`
-	Stages           map[BaseStat]int   `json:"staged_stats"`
-	NatureDamage     map[Nature]float64 `json:"nature_damage"`
-	NatureResistance map[Nature]float64 `json:"nature_resistance"`
-	Critical         float64            `json:"critical"`
-
-	Natures         map[NatureSet][]Nature `json:"natures"`
-	InnateModifiers []Modifier             `json:"innate_modifiers"`
-	Actions         []Action               `json:"actions"`
+	ActorDef
+	ID         uuid.UUID        `json:"ID"`
+	PlayerID   uuid.UUID        `json:"player_ID"`
+	Level      int              `json:"level"`
+	Experience int              `json:"experience"`
+	Alive      bool             `json:"alive"`
+	Active     bool             `json:"active"`
+	Damage     int              `json:"damage"`
+	Stages     map[BaseStat]int `json:"staged_stats"`
+	Actions    []Action         `json:"actions"`
 }
 
 type ResolvedActor struct {
@@ -77,6 +77,41 @@ const (
 	PriorityZero            = 19
 	PrioritySet             = 20
 )
+
+func GetLevel(experience int) int {
+	return int(math.Floor(math.Cbrt(float64(experience))))
+}
+
+func GetBaseExperience(level int) int {
+	return int(math.Floor(math.Pow(float64(level), 3)))
+}
+
+func GetExperienceToNextLevel(level, exp int) int {
+	return GetBaseExperience(level+1) - (GetBaseExperience(level) + exp)
+}
+
+func NewActor(def ActorDef, playerID uuid.UUID, experience int) Actor {
+	return Actor{
+		ActorDef:   def,
+		ID:         uuid.New(),
+		PlayerID:   playerID,
+		Level:      GetLevel(experience),
+		Experience: experience,
+		Alive:      true,
+		Active:     true, // TODO set to false
+		Damage:     0,
+		Stages: map[BaseStat]int{
+			StatHP:       0,
+			StatStamina:  0,
+			StatNinjutsu: 0,
+			StatGenjutsu: 0,
+			StatTaijutsu: 0,
+			StatSpeed:    0,
+			StatEvasion:  0,
+			StatAccuracy: 0,
+		},
+	}
+}
 
 func resolve(actor Actor, pre Actor) ResolvedActor {
 	return ResolvedActor{
@@ -153,8 +188,8 @@ func GetActors(game Game, predicate func(Actor) bool) []Actor {
 	return actors
 }
 
-func GetActorModifiers(game Game) []Transaction[Modifier, Context] {
-	var modifiers []Transaction[Modifier, Context]
+func GetActorModifiers(game Game) []Transaction[Modifier] {
+	var modifiers []Transaction[Modifier]
 	activeActors := GetActors(game, func(a Actor) bool {
 		return a.Active
 	})
@@ -195,7 +230,7 @@ var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
 	),
 }
 
-func GetMutationsFromTransactions(transactions []Transaction[Modifier, Context]) []ModifierMutation {
+func GetMutationsFromTransactions(transactions []Transaction[Modifier]) []ModifierMutation {
 	var mutations []ModifierMutation
 	for _, transaction := range transactions {
 		var muts []ModifierMutation
@@ -225,9 +260,9 @@ func (a Actor) Clone() Actor {
 	return b
 }
 
-func resolveActor(actor Actor, mtransactions []Transaction[Modifier, Context], atransactions []Transaction[Modifier, Context]) ResolvedActor {
+func resolveActor(actor Actor, mtransactions []Transaction[Modifier], atransactions []Transaction[Modifier]) ResolvedActor {
 	applied := make(map[uuid.UUID]int)
-	transactions := []Transaction[Modifier, Context]{}
+	transactions := []Transaction[Modifier]{}
 	transactions = append(transactions, atransactions...)
 	transactions = append(transactions, mtransactions...)
 	mutations := GetMutationsFromTransactions(transactions)
@@ -276,7 +311,7 @@ func resolveActor(actor Actor, mtransactions []Transaction[Modifier, Context], a
 
 func ResolveActor(actor Actor, game Game) ResolvedActor {
 	resolved := resolveActor(actor, game.Modifiers, GetActorModifiers(game))
-	pre := resolveActor(actor, []Transaction[Modifier, Context]{}, []Transaction[Modifier, Context]{})
+	pre := resolveActor(actor, []Transaction[Modifier]{}, []Transaction[Modifier]{})
 	resolved.PreStats = maps.Clone(pre.Stats)
 
 	return resolved

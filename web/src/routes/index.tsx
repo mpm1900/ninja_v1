@@ -18,10 +18,13 @@ import { modifiersQuery } from '#/lib/queries/modifiers'
 import { Button } from '#/components/ui/button'
 import { Card, CardContent } from '#/components/ui/card'
 import { ModifiersTable } from '#/components/modifiers-table'
+import { actionsQuery } from '#/lib/queries/actions'
+import { Tabs, TabsList, TabsTrigger } from '#/components/ui/tabs'
 
 export const Route = createFileRoute('/')({
   component: App,
   loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData(actionsQuery)
     await context.queryClient.ensureQueryData(actorsQuery)
     await context.queryClient.ensureQueryData(modifiersQuery)
     await context.queryClient.ensureQueryData(instancesQuery)
@@ -29,12 +32,15 @@ export const Route = createFileRoute('/')({
 })
 
 function App() {
+  const actions = useSuspenseQuery(actionsQuery)
   const actors = useSuspenseQuery(actorsQuery)
   const modifiers = useSuspenseQuery(modifiersQuery)
   const instanceID = useStore(socketStore, (s) => s.instanceID)
   const status = useStore(socketStore, (s) => s.status)
   const client = useStore(clientsStore, (c) => c[0] as Client | undefined)
   const game = useStore(gameStore, (g) => g)
+
+  console.log(actions.data)
 
   return (
     <main className="">
@@ -118,12 +124,20 @@ function App() {
                       {m.name}
                     </Button>
                   ))}
+                  <hr />
+                  <Tabs defaultValue={actions.data[0].ID}>
+                    <TabsList>
+                      {actions.data.map(a => (
+                        <TabsTrigger key={a.ID} value={a.ID}>{a.config.name}</TabsTrigger>
+                      ))}
+                    </TabsList>
+                  </Tabs>
                 </CardContent>
               </Card>
             )}
           />
           <ModifiersTable
-            data={game.modifiers}
+            data={game.modifiers ?? []}
             onRowRemove={(modifier) => {
               if (!client) return
 

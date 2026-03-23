@@ -1,4 +1,4 @@
-import { getTotalBaseStats, type Actor } from '#/lib/game/actor'
+import { getTotalBaseStats, type ActorDef } from '#/lib/game/actor'
 import {
   createColumnHelper,
   flexRender,
@@ -25,18 +25,20 @@ import { ActorStatBase } from './actor-stat'
 import { Button } from './ui/button'
 import { ChevronDown, ChevronLeft } from 'lucide-react'
 import { Fragment, useState, type ReactNode } from 'react'
+import { natureIndexes, type NatureSet } from '#/lib/game/nature'
+import { NatureBadge } from './nature-badge'
 
 type ActorsTableMeta = {
-  onRowCheckedChange?: (actor: Actor, selected: boolean) => void
+  onRowCheckedChange?: (actor: ActorDef, selected: boolean) => void
 }
 
 function getActorsTableMeta(
-  table: TableDef<Actor>
+  table: TableDef<ActorDef>
 ): ActorsTableMeta | undefined {
   return table.options.meta as ActorsTableMeta | undefined
 }
 
-const helper = createColumnHelper<Actor>()
+const helper = createColumnHelper<ActorDef>()
 const columns = [
   helper.display({
     id: 'select',
@@ -55,8 +57,14 @@ const columns = [
     ),
   }),
   helper.accessor('name', {}),
-  helper.accessor('level', {}),
-  helper.accessor('base_stats.hp', {
+  helper.accessor('natures', {
+    cell: ({ row }) => (Object.keys(row.getValue('natures')) as Array<NatureSet>)
+      .sort((a, b) => natureIndexes[a] - natureIndexes[b])
+      .map((nature) => (
+        <NatureBadge key={nature} nature={nature} />
+      ))
+  }),
+  helper.accessor('stats.hp', {
     header: ({ column }) => (
       <Button
         className="-ml-4"
@@ -69,7 +77,7 @@ const columns = [
     cell: (props) => <ActorStatBase actor={props.row.original} stat="hp" />,
     sortingFn: 'alphanumeric',
   }),
-  helper.accessor('base_stats.stamina', {
+  helper.accessor('stats.stamina', {
     header: ({ column }) => (
       <Button
         className="-ml-4"
@@ -83,7 +91,7 @@ const columns = [
       <ActorStatBase actor={props.row.original} stat="stamina" />
     ),
   }),
-  helper.accessor('base_stats.speed', {
+  helper.accessor('stats.speed', {
     header: ({ column }) => (
       <Button
         className="-ml-4"
@@ -95,7 +103,7 @@ const columns = [
     ),
     cell: (props) => <ActorStatBase actor={props.row.original} stat="speed" />,
   }),
-  helper.accessor('base_stats.ninjutsu', {
+  helper.accessor('stats.ninjutsu', {
     header: ({ column }) => (
       <Button
         className="-ml-4"
@@ -109,7 +117,7 @@ const columns = [
       <ActorStatBase actor={props.row.original} stat="ninjutsu" />
     ),
   }),
-  helper.accessor('base_stats.genjutsu', {
+  helper.accessor('stats.genjutsu', {
     header: ({ column }) => (
       <Button
         className="-ml-4"
@@ -123,7 +131,7 @@ const columns = [
       <ActorStatBase actor={props.row.original} stat="genjutsu" />
     ),
   }),
-  helper.accessor('base_stats.taijutsu', {
+  helper.accessor('stats.taijutsu', {
     header: ({ column }) => (
       <Button
         className="-ml-4"
@@ -137,9 +145,17 @@ const columns = [
       <ActorStatBase actor={props.row.original} stat="taijutsu" />
     ),
   }),
-  helper.display({
-    header: 'total',
-    cell: ({ row }) => getTotalBaseStats(row.original),
+  helper.accessor((a) => getTotalBaseStats(a), {
+    id: 'total',
+    header: ({ column }) => (
+      <Button
+        className="-ml-4"
+        variant="ghost"
+        onClick={() => column.toggleSorting()}
+      >
+        total
+      </Button>
+    ),
   }),
   helper.display({
     id: 'actions',
@@ -164,15 +180,15 @@ function ActorsTable({
   onRowCheckedChange,
   subRow,
 }: {
-  data: Array<Actor>
+  data: Array<ActorDef>
   enabled: boolean
   rowSelection: RowSelectionState
   onRowSelectionChange?: (rowSelection: RowSelectionState) => void
-  onRowCheckedChange?: (actor: Actor, selected: boolean) => void
-  subRow?: (props: { row: Row<Actor> }) => ReactNode
+  onRowCheckedChange?: (actor: ActorDef, selected: boolean) => void
+  subRow?: (props: { row: Row<ActorDef> }) => ReactNode
 }) {
-  // const [expanded, setExpanded] = useState<ExpandedState>({})
-  const [sorting, setSorting] = useState<SortingState>([])
+  const [sorting, setSorting] = useState<SortingState>([{ id: 'total', desc: true }])
+  console.log(sorting)
   const table = useReactTable({
     columns,
     data,

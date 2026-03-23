@@ -5,9 +5,11 @@ import (
 )
 
 type ActionMutation struct {
-	Mutation[Game, []Transaction[GameMutation, Context], Context]
+	Mutation[Game, []Transaction[GameMutation]]
 }
-type ActionConfig struct{}
+type ActionConfig struct {
+	Name string `json:"name"`
+}
 
 /** [This comment was not written by an LLM]
  * Action Function Members for Action "a"
@@ -24,8 +26,21 @@ type ActionConfig struct{}
 type Action struct {
 	ActionMutation
 	ID              uuid.UUID                  `json:"ID"`
-	Name            string                     `json:"name"`
 	Config          ActionConfig               `json:"config"`
 	TargetPredicate func(Actor, *Context) bool `json:"-"`
 	ContextValidate func(*Context) bool        `json:"-"`
+}
+
+func MakeActionMutation(
+	priority int,
+	filter func(Game, *Context) bool,
+	delta func(Game, *Context) []Transaction[GameMutation],
+) ActionMutation {
+	return ActionMutation{
+		Mutation: Mutation[Game, []Transaction[GameMutation]]{
+			Delta:    delta,
+			Filter:   filter,
+			Priority: priority,
+		},
+	}
 }

@@ -4,13 +4,7 @@ import type { Modifier } from '../game/modifier'
 
 const getModifiers = createServerFn().handler(async () => {
   const response = await fetch(`${process.env.API_URL}/api/modifiers`)
-  const text = await response.text()
-
-  if (!text.trim()) {
-    return [] as Array<Modifier>
-  }
-
-  const data = JSON.parse(text)
+  const data = await response.json()
   return data as Array<Modifier>
 })
 

@@ -2,22 +2,22 @@ package game
 
 import (
 	"ninja_v1/internal/game"
-	// modifiers "ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
 
-var Minato = game.ActorDef{
+var Orochimaru = game.ActorDef{
 	ActorID:     uuid.New(),
-	Name:        "Minato Namikaze",
+	Name:        "Orochimaru",
 	ActionCount: 6,
+
 	Stats: map[game.BaseStat]int{
-		game.StatHP:       60,
-		game.StatStamina:  60,
-		game.StatNinjutsu: 120,
-		game.StatGenjutsu: 80,
-		game.StatTaijutsu: 100,
-		game.StatSpeed:    200,
+		game.StatHP:       115,
+		game.StatStamina:  100,
+		game.StatNinjutsu: 134,
+		game.StatGenjutsu: 100,
+		game.StatTaijutsu: 90,
+		game.StatSpeed:    101,
 		game.StatEvasion:  0,
 		game.StatAccuracy: 1,
 	},
@@ -40,11 +40,10 @@ var Minato = game.ActorDef{
 		game.NatureYang:      1.00,
 	},
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsFire,
 		game.NsWind,
-		game.NsLightning,
+		game.NsEarth,
+		game.NsYin,
 	}),
-
 	InnateModifiers: []game.Modifier{},
 	ActionIDs:       []uuid.UUID{},
 }

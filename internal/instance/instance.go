@@ -81,17 +81,8 @@ const (
 func Reducer(instance *Instance, request Request) int {
 	switch request.Type {
 	case "add-actor":
-		all := data.GetAllActors()
-		index := slices.IndexFunc(all, func(a game.Actor) bool {
-			return a.ActorID == *request.Context.SourceActorID
-		})
-
-		if index == -1 {
-			return none
-		}
-
-		actor := all[index]
-		actor.PlayerID = request.ClientID
+		def := data.ACTORS[*request.Context.SourceActorID]
+		actor := game.NewActor(def, request.ClientID, 13824)
 		instance.Game.AddActor(actor)
 		return state
 	case "remove-actor":
@@ -119,7 +110,7 @@ func Reducer(instance *Instance, request Request) int {
 
 		return none
 	case "remove-modifier":
-		instance.Game.FilterModifiers(func(m game.Transaction[game.Modifier, game.Context]) bool {
+		instance.Game.FilterModifiers(func(m game.Transaction[game.Modifier]) bool {
 			return m.ID != *request.ModifierID
 		})
 		return state

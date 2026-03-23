@@ -1,0 +1,15 @@
+import { createServerFn } from '@tanstack/react-start'
+import { queryOptions } from '@tanstack/react-query'
+
+const getActions = createServerFn().handler(async () => {
+  const response = await fetch(`${process.env.API_URL}/api/actions`)
+  const data = await response.json()
+  return data as Array<Action>
+})
+
+const actionsQuery = queryOptions({
+  queryKey: ['actions'],
+  queryFn: () => getActions(),
+})
+
+export { actionsQuery, getActions }

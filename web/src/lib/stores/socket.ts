@@ -28,7 +28,7 @@ type SocketRequest = {
 const DEFAULT_HOST = 'localhost:3005'
 
 function getSocketUrl(instanceID: string): string {
-  return `ws://${DEFAULT_HOST}/games/${instanceID}/connect`
+  return `ws://${DEFAULT_HOST}/socket/${instanceID}/connect`
 }
 
 const socketStore = new Store<SocketState>({
@@ -164,7 +164,7 @@ function sendContextMessage(request: SocketRequest) {
   return sendSocketMessage(JSON.stringify(request))
 }
 
-export type {}
+export type { }
 export {
   socketStore,
   connectSocket,

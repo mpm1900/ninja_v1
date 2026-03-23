@@ -19,6 +19,7 @@ type NatureSet =
   | 'wood'
   | 'yinyang'
   | 'dust'
+  | 'jashin'
 
 const natureNames: Partial<Record<NatureSet, string>> = {
   pure: '纯',
@@ -31,6 +32,7 @@ const natureNames: Partial<Record<NatureSet, string>> = {
   yang: '陽',
   wood: '木',
   yinyang: '陰陽',
+  jashin: '邪',
 }
 
 const natureIndexes: Record<NatureSet, number> = {
@@ -52,6 +54,7 @@ const natureIndexes: Record<NatureSet, number> = {
   wood: 16,
   yinyang: 17,
   dust: 18,
+  jashin: 19,
 }
 
 export type { Nature, NatureSet }

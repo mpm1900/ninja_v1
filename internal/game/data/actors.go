@@ -7,16 +7,19 @@ import (
 	"github.com/google/uuid"
 )
 
-func GetAllActors() []game.Actor {
-	return []game.Actor{
-		actors.NewItachi(uuid.Nil, 24),
-		actors.NewSasuke(uuid.Nil, 24),
-		actors.NewKisame(uuid.Nil, 24),
-		actors.NewKakuzu(uuid.Nil, 24),
-		actors.NewNaruto(uuid.Nil, 24),
-		actors.NewMinato(uuid.Nil, 24),
-		actors.NewYamato(uuid.Nil, 24),
-		actors.NewRaikage(uuid.Nil, 24),
-		actors.NewKaguya(uuid.Nil, 24),
-	}
+var ACTORS map[uuid.UUID]game.ActorDef = map[uuid.UUID]game.ActorDef{
+	actors.Itachi.ActorID:     actors.Itachi,
+	actors.Sasuke.ActorID:     actors.Sasuke,
+	actors.Kisame.ActorID:     actors.Kisame,
+	actors.Kakuzu.ActorID:     actors.Kakuzu,
+	actors.Hidan.ActorID:      actors.Hidan,
+	actors.Naruto.ActorID:     actors.Naruto,
+	actors.Minato.ActorID:     actors.Minato,
+	actors.Jiraiya.ActorID:    actors.Jiraiya,
+	actors.Orochimaru.ActorID: actors.Orochimaru,
+	actors.Yamato.ActorID:     actors.Yamato,
+	actors.Raikage.ActorID:    actors.Raikage,
+	actors.Kaguya.ActorID:     actors.Kaguya,
+	actors.Guy.ActorID:        actors.Guy,
+	actors.Kakashi.ActorID:    actors.Kakashi,
 }
