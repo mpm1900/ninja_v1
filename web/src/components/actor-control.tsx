@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from './ui/select'
 import { sendContextMessage } from '#/lib/stores/socket'
+import { Button } from './ui/button'
 
 function ActorControl({
   actor_ID,
@@ -41,19 +42,19 @@ function ActorControl({
     <Card className="grid grid-cols-2 rounded-t-none border-t-0 mx-2 mb-2 py-2 gap-0">
       <div>
         <CardHeader className="px-2 flex justify-between">
-          <Tabs
-            className="w-full"
-            value={activeActionID}
-            onValueChange={setActiveActionID}
-          >
-            <TabsList className="w-full grid grid-cols-3">
-              {actions.data.map((a) => (
-                <TabsTrigger key={a.ID} value={a.ID}>
-                  {a.config.name}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
+          <div className="w-full grid grid-cols-3">
+            {actions.data.map((a) => (
+              <Button
+                key={a.ID}
+                variant={a.ID === activeActionID ? 'default' : 'outline'}
+                onClick={() => {
+                  setActiveActionID(a.ID)
+                }}
+              >
+                {a.config.name}
+              </Button>
+            ))}
+          </div>
         </CardHeader>
         <CardContent className="px-2">
           <ActionControl

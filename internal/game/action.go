@@ -10,6 +10,7 @@ type ActionConfig struct {
 	Accuracy *int        `json:"accuracy"`
 	Stat     *AttackStat `json:"stat"`
 	Power    *int        `json:"power"`
+	Recoil   *float64    `json:"recoil"`
 }
 
 type ActionMutation Mutation[Game, []Transaction[GameMutation]]

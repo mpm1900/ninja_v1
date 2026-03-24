@@ -108,9 +108,14 @@ func (g *Game) UpdateActor(actorID uuid.UUID, updater func(Actor) Actor) {
 	g.Actors[index] = updater(g.Actors[index])
 }
 
-func (g *Game) ExecuteTransaction(transaction Transaction[Action]) {
+func (g *Game) PushTransaction(transaction Transaction[Action]) {
 	transactions := ResolveAction(*g, transaction)
 	g.Transactions = append(g.Transactions, transactions...)
+}
+
+func (g *Game) JumpTransaction(transaction Transaction[GameMutation]) {
+	next := Queue[GameTransaction]{transaction}
+	g.Transactions = append(next, g.Transactions...)
 }
 
 func (g *Game) Flush() {

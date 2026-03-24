@@ -15,28 +15,36 @@ type Context struct {
 }
 
 func (g Game) GetTargets(context Context) []Actor {
-	count := len(context.TargetActorIDs) + len(context.TargetPositionIDs)
-	targets := make([]Actor, 0, count)
-	for _, targetID := range context.TargetActorIDs {
-		i := slices.IndexFunc(g.Actors, func(a Actor) bool {
-			return a.ID == targetID
-		})
-		if i == -1 {
-			continue
+	targets := g.GetActors(func(a Actor) bool {
+		return slices.Contains(context.TargetActorIDs, a.ID)
+	})
+	posTargets := g.GetActors(func(a Actor) bool {
+		if a.PositionID == nil {
+			return false
 		}
+		return slices.Contains(context.TargetPositionIDs, *a.PositionID)
+	})
 
-		targets = append(targets, g.Actors[i])
-	}
-	for _, positionID := range context.TargetPositionIDs {
-		i := slices.IndexFunc(g.Actors, func(a Actor) bool {
-			return a.PositionID != nil && *a.PositionID == positionID
-		})
-		if i == -1 {
-			continue
-		}
-
-		targets = append(targets, g.Actors[i])
-	}
-
+	targets = append(targets, posTargets...)
 	return targets
+}
+
+func (g Game) GetSource(context Context) (bool, Actor) {
+	if context.SourceActorID == nil {
+		return false, Actor{}
+	}
+
+	return g.GetActor(func(a Actor) bool {
+		return a.ID == *context.SourceActorID
+	})
+}
+
+func (g Game) GetParent(context Context) (bool, Actor) {
+	if context.ParentActorID == nil {
+		return false, Actor{}
+	}
+
+	return g.GetActor(func(a Actor) bool {
+		return a.ID == *context.ParentActorID
+	})
 }

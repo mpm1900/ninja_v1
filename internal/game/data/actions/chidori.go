@@ -7,15 +7,19 @@ import (
 	"github.com/google/uuid"
 )
 
-func MakeLeafJab() game.Action {
-	accuracy := 100
-	power := 50
-	stat := game.AttackTaijutsu
+func MakeChidori() game.Action {
+	accuracy := 80
+	power := 80
+	recoil := 0.2
+	nature := game.NsLightning
+	stat := game.AttackNinjutsu
 	config := game.ActionConfig{
-		Name:     "Leaf Jab",
+		Name:     "雷遁: Chidori",
+		Nature:   &nature,
 		Accuracy: &accuracy,
 		Power:    &power,
 		Stat:     &stat,
+		Recoil:   &recoil,
 	}
 	return game.Action{
 		ID:              uuid.New(),

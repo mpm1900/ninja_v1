@@ -128,13 +128,11 @@ func Reducer(instance *Instance, request Request) int {
 		}
 
 		instance.Game.Status = game.GameStatusRunning
+		transaction := game.MakeTransaction(action, request.Context)
+		instance.Game.PushTransaction(transaction)
 
 		go func() {
 			time.Sleep(time.Second)
-
-			transaction := game.MakeTransaction(action, request.Context)
-			instance.Game.ExecuteTransaction(transaction)
-
 			for instance.Game.Next() {
 				instance.BroadcastGame()
 				time.Sleep(time.Second)

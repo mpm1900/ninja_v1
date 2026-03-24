@@ -13,7 +13,7 @@ func MakeFireball() game.Action {
 	nature := game.NsFire
 	stat := game.AttackNinjutsu
 	config := game.ActionConfig{
-		Name:     "Fire Release: Fireball",
+		Name:     "火遁: Fireball",
 		Nature:   &nature,
 		Accuracy: &accuracy,
 		Power:    &power,
@@ -33,12 +33,10 @@ func MakeFireball() game.Action {
 				// accuracy checks TODO
 				// fmt.Print(config.Accuracy)
 
+				damages := mutations.NewDamage(config)
 				transactions = append(
 					transactions,
-					game.MakeTransaction(
-						mutations.NewDamage(*config.Stat, *config.Power, config.Nature),
-						context,
-					),
+					mutations.MakeDamageTransactions(context, damages)...,
 				)
 
 				return transactions
