@@ -23,6 +23,10 @@ type ActionMutation Mutation[Game, []Transaction[GameMutation]]
  *
  * action.ContextValidate(*Context) => does this context represent a valid targets selection for this action
  * -- this is used to check "is the number of targets correct?" and other checks.
+ *
+ *
+ * action.Delta(Game, *Context) => resolution of the Action
+ * -- can include random events
  */
 type Action struct {
 	ActionMutation

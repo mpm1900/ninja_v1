@@ -28,7 +28,7 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
               </span>{' '}
               {actor.name}
             </ItemTitle>
-            <ItemActions>
+            <ItemActions className='gap-0'>
               {(Object.keys(actor.natures) as Array<NatureSet>)
                 .sort((a, b) => natureIndexes[a] - natureIndexes[b])
                 .map((nature) => (
@@ -41,27 +41,27 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
           {actor && <HealthBar actor={actor} />}
           {actor && (
             <div className="grid grid-cols-3 lg:grid-cols-6 space-x-2">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 justify-center">
                 {HpIcon && <HpIcon />}
                 <ActorStat actor={actor} stat="hp" showBase={false} />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 justify-center">
                 {StaminaIcon && <StaminaIcon />}
                 <ActorStat actor={actor} stat="stamina" showBase={false} />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 justify-center">
                 {SpeedIcon && <SpeedIcon />}
                 <ActorStat actor={actor} stat="speed" showBase={false} />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 justify-center">
                 {NinjutsuIcon && <NinjutsuIcon />}
                 <ActorStat actor={actor} stat="ninjutsu" showBase={false} />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 justify-center">
                 {GenjutsuIcon && <GenjutsuIcon />}
                 <ActorStat actor={actor} stat="genjutsu" showBase={false} />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 justify-center">
                 {Taijutsu && <Taijutsu />}
                 <ActorStat actor={actor} stat="taijutsu" showBase={false} />
               </div>

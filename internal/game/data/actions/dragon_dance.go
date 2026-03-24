@@ -30,12 +30,7 @@ func MakeDragonDance() game.Action {
 					modifiers.SpeedUpSource,
 				}
 				mutation := mutations.AddModifiers(modifiers)
-				transaction := game.MakeTransaction(mutation, &game.Context{
-					SourcePlayerID: context.SourcePlayerID,
-					SourceActorID:  context.SourceActorID,
-					ParentActorID:  context.ParentActorID,
-					TargetActorIDs: context.TargetActorIDs,
-				})
+				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)
 
 				return transactions

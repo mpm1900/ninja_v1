@@ -70,7 +70,7 @@ function ActionControl({
       ...context,
       target_actor_IDs: [],
     })
-  }, [game.actors.length])
+  }, [game])
 
   return (
     <div>
