@@ -142,19 +142,19 @@ func resolve(actor Actor, pre Actor) ResolvedActor {
 	}
 }
 
-func MapBaseStat(stat, level int) int {
-	base := (stat + 15) * 2
-	ev := 0 // TODO
-	ratio := float64((base+ev)*level) / 100
-	return int(math.Floor(ratio + 5))
+func MapBaseStat(stat, level int, nature float64) int {
+	base := float64((stat * 2) + 15)
+	ev := 0.0 // TODO
+	ratio := float64((base+(ev/4))*float64(level)) / 100
+	return int(math.Floor((ratio + 5) * nature))
 }
 
 func MapResourceStat(stat, level int) int {
-	return MapBaseStat(stat, level) + level + 5
+	return MapBaseStat(stat, level, 1.0) + level + 5
 }
 
 func (actor *Actor) MapBase(stat BaseStat) {
-	actor.Stats[stat] = MapBaseStat(actor.Stats[stat], actor.Level)
+	actor.Stats[stat] = MapBaseStat(actor.Stats[stat], actor.Level, 1.0)
 }
 
 func (actor *Actor) MapResource(stat BaseStat) {
@@ -258,7 +258,6 @@ func GetMutationsFromTransactions(transactions []Transaction[Modifier]) []Modifi
 func (a Actor) Clone() Actor {
 	b := a
 
-	// b.Resources = maps.Clone(a.Resources)
 	b.Stats = maps.Clone(a.Stats)
 	b.Stages = maps.Clone(a.Stages)
 	b.NatureDamage = maps.Clone(a.NatureDamage)
