@@ -2,7 +2,7 @@ package game
 
 import (
 	"encoding/json"
-	"fmt"
+	"maps"
 	"slices"
 
 	"github.com/google/uuid"
@@ -13,38 +13,34 @@ type GameTransaction = Transaction[GameMutation]
 
 type GameStatus string
 
+type Player = uuid.UUID
+
 const (
 	GameStatusRunning GameStatus = "running"
 	GameStatusIdle    GameStatus = "idle"
 )
 
-type Queue[T any] []T
-
-func (q *Queue[T]) Enqueue(value T) {
-	*q = append(*q, value)
-}
-
-func (q *Queue[T]) Dequeue() (T, error) {
-	if len(*q) == 0 {
-		var zero T
-		return zero, fmt.Errorf("queue is empty")
-	}
-
-	value := (*q)[0]
-	var zero T
-	(*q)[0] = zero
-	*q = (*q)[1:]
-	return value, nil
-}
-
 type Game struct {
 	Status    GameStatus              `json:"status"`
+	Players   map[Player]struct{}     `json:"players"`
 	Actors    []Actor                 `json:"actors"`
 	Modifiers []Transaction[Modifier] `json:"modifiers"`
 
 	Transactions Queue[GameTransaction]     `json:"transactions"`
 	Actions      Queue[Transaction[Action]] `json:"actions"`
-	Trigger      Queue[Transaction[Action]] `json:"triggers"`
+	Triggers     Queue[Transaction[Action]] `json:"triggers"`
+}
+
+func NewGame() Game {
+	return Game{
+		Status:       GameStatusIdle,
+		Players:      make(map[Player]struct{}),
+		Actors:       make([]Actor, 0),
+		Modifiers:    make([]Transaction[Modifier], 0),
+		Transactions: MakeQueue[GameTransaction](),
+		Actions:      MakeQueue[Transaction[Action]](),
+		Triggers:     MakeQueue[Transaction[Action]](),
+	}
 }
 
 func (g Game) GetActor(predicate func(Actor) bool) (bool, Actor) {
@@ -76,6 +72,14 @@ func (g *Game) FilterModifiers(predicate func(modifier Transaction[Modifier]) bo
 	}
 
 	g.Modifiers = filtered
+}
+
+func (g *Game) AddPlayer(player Player) {
+	g.Players[player] = struct{}{}
+}
+
+func (g *Game) RemovePlayer(player Player) {
+	delete(g.Players, player)
 }
 
 func (g *Game) AddModifier(modifier Transaction[Modifier]) {
@@ -138,21 +142,23 @@ func (g Game) MarshalJSON() ([]byte, error) {
 	}
 
 	type gameJSON struct {
-		Status GameStatus      `json:"status"`
-		Actors []ResolvedActor `json:"actors"`
+		Status  GameStatus      `json:"status"`
+		Players []Player        `json:"players"`
+		Actors  []ResolvedActor `json:"actors"`
 
 		Modifiers    []Transaction[Modifier]     `json:"modifiers"`
 		Transactions []Transaction[GameMutation] `json:"transactions"`
 		Actions      []Transaction[Action]       `json:"actions"`
-		Trigger      []Transaction[Action]       `json:"triggers"`
+		Triggers     []Transaction[Action]       `json:"triggers"`
 	}
 
 	return json.Marshal(gameJSON{
 		Status:       g.Status,
+		Players:      slices.Collect(maps.Keys(g.Players)),
 		Actors:       resolved,
 		Modifiers:    g.Modifiers,
 		Transactions: g.Transactions,
 		Actions:      g.Actions,
-		Trigger:      g.Trigger,
+		Triggers:     g.Triggers,
 	})
 }

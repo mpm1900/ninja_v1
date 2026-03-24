@@ -32,9 +32,7 @@ func NewInstance(ctx context.Context, id uuid.UUID) *Instance {
 		Unregister:  make(chan *Client),
 		ReadRequest: make(chan Request),
 
-		Game: game.Game{
-			Status: game.GameStatusIdle,
-		},
+		Game: game.NewGame(),
 	}
 }
 
@@ -130,7 +128,6 @@ func Reducer(instance *Instance, request Request) int {
 		}
 
 		instance.Game.Status = game.GameStatusRunning
-		instance.BroadcastGame()
 
 		go func() {
 			time.Sleep(time.Second)
@@ -149,9 +146,23 @@ func Reducer(instance *Instance, request Request) int {
 
 		return state
 
+	case SetActorPlayer:
+		targets := instance.Game.GetTargets(request.Context)
+
+		if len(targets) == 0 {
+			return none
+		}
+
+		instance.Game.UpdateActor(targets[0].ID, func(a game.Actor) game.Actor {
+			a.PlayerID = *request.Context.SourcePlayerID
+			return a
+		})
+		return state
+
 	default:
 		return none
 	}
+
 }
 
 func (i *Instance) Run() {
@@ -160,10 +171,17 @@ func (i *Instance) Run() {
 		case client := <-i.Register:
 			i.RegisterClient(client)
 			i.BroadcastClients()
+
+			i.Game.AddPlayer(client.ID)
+			i.BroadcastGame()
+
 			i.PostRegister(client)
 		case client := <-i.Unregister:
 			i.UnregisterClient(client)
 			i.BroadcastClients()
+
+			i.Game.RemovePlayer(client.ID)
+			i.BroadcastGame()
 		case request := <-i.ReadRequest:
 			switch Reducer(i, request) {
 			case state:

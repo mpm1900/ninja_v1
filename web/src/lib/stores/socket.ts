@@ -25,6 +25,7 @@ type SocketRequestType =
   | 'add-modifier'
   | 'remove-modifier'
   | 'push-action'
+  | 'set-actor-player'
 
 type SocketRequest = {
   type: SocketRequestType

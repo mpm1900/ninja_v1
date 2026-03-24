@@ -102,7 +102,7 @@ func (c *Client) listenIn() {
 			// if this error is an expected close error
 			// or a message format error,
 			//    then we can close the client
-			fmt.Print(err)
+			fmt.Println(err)
 			break
 		}
 

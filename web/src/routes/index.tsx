@@ -40,7 +40,6 @@ function App() {
     <ClientOnly>
       <main className="">
         <header className="flex justify-between p-2">
-          <div></div>
           <div>
             <code className="px-4">{status}</code>
             <InstanceCombobox
@@ -55,6 +54,7 @@ function App() {
               onValueChange={connectSocket}
             />
           </div>
+          <div></div>
         </header>
         <div className="space-y-6">
           <div>
@@ -92,7 +92,10 @@ function App() {
                 })
               }}
               subRow={({ row }) => (
-                <ActorControl actor_ID={row.original.actor_ID} enabled={game.status == 'idle'} />
+                <ActorControl
+                  actor_ID={row.original.actor_ID}
+                  enabled={game.status == 'idle'}
+                />
               )}
             />
             <ModifiersTable

@@ -7,12 +7,14 @@ import (
 	"github.com/google/uuid"
 )
 
-func MakeLeafJab() game.Action {
-	accuracy := 100
+func MakeFireball() game.Action {
+	accuracy := 80
 	power := 50
-	stat := game.AttackTaijutsu
+	nature := game.NsFire
+	stat := game.AttackNinjutsu
 	config := game.ActionConfig{
-		Name:     "Leaf Jab",
+		Name:     "Fire Release: Fireball",
+		Nature:   &nature,
 		Accuracy: &accuracy,
 		Power:    &power,
 		Stat:     &stat,

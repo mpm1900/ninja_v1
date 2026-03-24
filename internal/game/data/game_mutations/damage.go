@@ -23,7 +23,7 @@ func NewDamage(stat game.AttackStat, power int, nature *game.NatureSet) game.Gam
 				return g
 			}
 
-			targets := game.GetTargets(g, context)
+			targets := g.GetTargets(context)
 			source := game.ResolveActor(s, g)
 			for _, t := range targets {
 				target := game.ResolveActor(t, g)

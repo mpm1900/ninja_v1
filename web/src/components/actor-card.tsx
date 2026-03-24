@@ -17,18 +17,19 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
   const NinjutsuIcon = STAT_ICONS.ninjutsu
   const GenjutsuIcon = STAT_ICONS.genjutsu
   const Taijutsu = STAT_ICONS.taijutsu
+  const playerIndex = actor ? game.players.indexOf(actor.player_ID) : -1
   return (
-    <Item variant='muted'>
+    <Item variant="muted">
       <ItemContent>
         {actor && (
-          <div className='flex justify-between'>
+          <div className="flex justify-between">
             <ItemTitle>
               <span className="text-muted-foreground text-sm">
                 Lv.{actor.level}
               </span>{' '}
-              {actor.name}
+              {actor.name} ({playerIndex})
             </ItemTitle>
-            <ItemActions className='gap-0'>
+            <ItemActions className="gap-0">
               {(Object.keys(actor.natures) as Array<NatureSet>)
                 .sort((a, b) => natureIndexes[a] - natureIndexes[b])
                 .map((nature) => (
@@ -67,13 +68,15 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
               </div>
             </div>
           )}
-          <div className='flex flex-wrap gap-3'>
-            {Object.entries(actor?.applied_modifiers ?? {}).map(([ID, count]) => (
-              <span key={ID}>
-                {modifiers.find((m) => m.group_ID === ID)?.name}
-                {count > 0 ? ` (${count})` : null}
-              </span>
-            ))}
+          <div className="flex flex-wrap gap-3">
+            {Object.entries(actor?.applied_modifiers ?? {}).map(
+              ([ID, count]) => (
+                <span key={ID}>
+                  {modifiers.find((m) => m.group_ID === ID)?.name}
+                  {count > 0 ? ` (${count})` : null}
+                </span>
+              )
+            )}
           </div>
         </div>
       </ItemContent>

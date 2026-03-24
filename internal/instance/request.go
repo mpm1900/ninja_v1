@@ -14,6 +14,7 @@ const (
 	AddModifier    RequestType = "add-modifier"
 	RemoveModifier RequestType = "remove-modifier"
 	PushAction     RequestType = "push-action"
+	SetActorPlayer RequestType = "set-actor-player"
 )
 
 type Request struct {

@@ -5,9 +5,11 @@ import (
 )
 
 type ActionConfig struct {
-	Name     string     `json:"name"`
-	Accuracy *int       `json:"accuracy"`
-	Nature   *NatureSet `json:"nature"`
+	Name     string      `json:"name"`
+	Nature   *NatureSet  `json:"nature"`
+	Accuracy *int        `json:"accuracy"`
+	Stat     *AttackStat `json:"stat"`
+	Power    *int        `json:"power"`
 }
 
 type ActionMutation Mutation[Game, []Transaction[GameMutation]]

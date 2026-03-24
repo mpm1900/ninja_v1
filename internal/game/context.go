@@ -14,11 +14,13 @@ type Context struct {
 	TargetPositionIDs []uuid.UUID `json:"target_position_IDs"`
 }
 
-func GetTargets(g Game, context Context) []Actor {
+func (g Game) GetTargets(context Context) []Actor {
 	count := len(context.TargetActorIDs) + len(context.TargetPositionIDs)
 	targets := make([]Actor, 0, count)
 	for _, targetID := range context.TargetActorIDs {
-		i := slices.IndexFunc(g.Actors, func(a Actor) bool { return a.ID == targetID })
+		i := slices.IndexFunc(g.Actors, func(a Actor) bool {
+			return a.ID == targetID
+		})
 		if i == -1 {
 			continue
 		}
@@ -30,7 +32,7 @@ func GetTargets(g Game, context Context) []Actor {
 			return a.PositionID != nil && *a.PositionID == positionID
 		})
 		if i == -1 {
-			break
+			continue
 		}
 
 		targets = append(targets, g.Actors[i])
