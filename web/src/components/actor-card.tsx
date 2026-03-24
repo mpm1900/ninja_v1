@@ -67,10 +67,10 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
               </div>
             </div>
           )}
-          <div>
+          <div className='flex flex-wrap gap-3'>
             {Object.entries(actor?.applied_modifiers ?? {}).map(([ID, count]) => (
               <span key={ID}>
-                {modifiers.find((m) => m.ID === ID)?.name}
+                {modifiers.find((m) => m.group_ID === ID)?.name}
                 {count > 0 ? ` (${count + 1})` : null}
               </span>
             ))}

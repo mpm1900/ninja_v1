@@ -2,7 +2,6 @@ package mutations
 
 import (
 	"ninja_v1/internal/game"
-	"slices"
 )
 
 func ApplyDamage(g game.Game, target game.ResolvedActor, damage int) {
@@ -14,13 +13,6 @@ func ApplyDamage(g game.Game, target game.ResolvedActor, damage int) {
 }
 
 func NewDamage(stat game.AttackStat, power int, nature *game.NatureSet) *game.GameMutation {
-	natures := []game.Nature{}
-	if nature != nil {
-		if mapped, ok := game.NATURES[*nature]; ok {
-			natures = mapped
-		}
-	}
-
 	return &game.GameMutation{
 		Delta: func(g game.Game, context *game.Context) game.Game {
 			ok, s := g.GetActor(func(a game.Actor) bool {
@@ -31,10 +23,7 @@ func NewDamage(stat game.AttackStat, power int, nature *game.NatureSet) *game.Ga
 				return g
 			}
 
-			targets := g.GetActors(func(a game.Actor) bool {
-				return slices.Contains(context.TargetActorIDs, a.ID)
-			})
-
+			targets := game.GetTargets(g, *context)
 			source := game.ResolveActor(s, g)
 			for _, t := range targets {
 				target := game.ResolveActor(t, g)
@@ -43,7 +32,7 @@ func NewDamage(stat game.AttackStat, power int, nature *game.NatureSet) *game.Ga
 					[]game.ResolvedActor{target},
 					stat,
 					power,
-					natures,
+					nature,
 				)
 
 				for _, damage := range damages {

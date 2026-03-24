@@ -1,11 +1,8 @@
-import { sendContextMessage } from '#/lib/stores/socket'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { Button } from './ui/button'
 import { Card, CardContent } from './ui/card'
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs'
 import { useStore } from '@tanstack/react-store'
 import { actionsQuery } from '#/lib/queries/actions'
-import { modifiersQuery } from '#/lib/queries/modifiers'
 import { clientsStore, type Client } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
 import { useState } from 'react'
@@ -14,7 +11,6 @@ import { ActionControl } from './action-control'
 
 function ActorControl({ actor_ID, enabled }: { actor_ID: string, enabled: boolean }) {
   const actions = useSuspenseQuery(actionsQuery)
-  const modifiers = useSuspenseQuery(modifiersQuery)
   const client = useStore(clientsStore, (c) => c[0] as Client)
   const game = useStore(gameStore, (g) => g)
   const source = game.actors.find((a) => a.actor_ID === actor_ID)!
@@ -28,25 +24,8 @@ function ActorControl({ actor_ID, enabled }: { actor_ID: string, enabled: boolea
   })
 
   return (
-    <Card className="rounded-t-none border-t-0 mx-2 mb-2">
-      <CardContent>
-        {modifiers.data.map((m) => (
-          <Button
-            key={m.ID}
-            disabled={!enabled}
-            onClick={() => {
-              sendContextMessage({
-                type: 'add-modifier',
-                client_ID: client.ID,
-                modifier_ID: m.ID,
-                context,
-              })
-            }}
-          >
-            {m.name}
-          </Button>
-        ))}
-        <hr className="my-4" />
+    <Card className="rounded-t-none border-t-0 mx-2 mb-2 py-2">
+      <CardContent className='px-2'>
         <Tabs value={activeActionID} onValueChange={setActiveActionID}>
           <TabsList>
             {actions.data.map((a) => (

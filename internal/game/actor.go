@@ -60,8 +60,9 @@ type Actor struct {
 	PlayerID         uuid.UUID              `json:"player_ID"`
 	Level            int                    `json:"level"`
 	Experience       int                    `json:"experience"`
-	Alive            bool                   `json:"alive"`
+	PositionID       *uuid.UUID             `json:"position_ID"`
 	Active           bool                   `json:"active"`
+	Alive            bool                   `json:"alive"`
 	Damage           int                    `json:"damage"`
 	Stages           map[BaseStat]int       `json:"staged_stats"`
 	AttackModifiers  map[AttackStat]float64 `json:"attack_modifiers"`
@@ -313,11 +314,11 @@ func resolveActor(actor Actor, mtransactions []Transaction[Modifier], atransacti
 		tx := MakeTransaction(&mutation.Mutation, &context)
 		a, apply := ResolveTransaction(mapped, &tx, mapped)
 		if apply {
-			if mutation.ModifierID != nil {
-				if count, ok := applied[*mutation.ModifierID]; ok {
-					applied[*mutation.ModifierID] = count + 1
+			if mutation.ModifierGroupID != nil {
+				if count, ok := applied[*mutation.ModifierGroupID]; ok {
+					applied[*mutation.ModifierGroupID] = count + 1
 				} else {
-					applied[*mutation.ModifierID] = 0
+					applied[*mutation.ModifierGroupID] = 0
 				}
 			}
 			mapped = a

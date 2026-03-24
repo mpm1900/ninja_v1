@@ -1,7 +1,8 @@
-import type { Context } from "./game"
+import type { Context } from "./context"
 
 type Modifier = {
   ID: string
+  group_ID: string
   name: string
   duration: number | null
 }

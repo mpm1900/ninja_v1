@@ -29,6 +29,7 @@ type ActorDef = {
 type Actor = ActorDef & {
   ID: string
   player_ID: string
+  position_ID: string | null
   level: number
   experience: number
   alive: boolean

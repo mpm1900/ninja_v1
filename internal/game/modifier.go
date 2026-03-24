@@ -11,12 +11,13 @@ type Trigger struct {
 
 type ModifierMutation struct {
 	Mutation[Actor, Actor]
-	ModifierID    *uuid.UUID
-	TransactionID *uuid.UUID
+	ModifierGroupID *uuid.UUID
+	TransactionID   *uuid.UUID
 }
 
 type Modifier struct {
 	ID       uuid.UUID `json:"ID"`
+	GroupID  uuid.UUID `json:"group_ID"`
 	Name     string    `json:"name"`
 	Duration *int      `json:"duration"`
 
@@ -25,13 +26,13 @@ type Modifier struct {
 }
 
 func MakeModifierMutation(
-	modifierID *uuid.UUID,
+	modifierGroupID *uuid.UUID,
 	priority int,
 	filter func(input Actor, context *Context) bool,
 	delta func(input Actor, context *Context) Actor,
 ) ModifierMutation {
 	return ModifierMutation{
-		ModifierID: modifierID,
+		ModifierGroupID: modifierGroupID,
 		Mutation: Mutation[Actor, Actor]{
 			Filter:   filter,
 			Delta:    delta,

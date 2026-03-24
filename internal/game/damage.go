@@ -1,7 +1,10 @@
 package game
 
 import (
+	"fmt"
+	"maps"
 	"math"
+	"slices"
 )
 
 type DamageTerms struct {
@@ -18,10 +21,11 @@ type DamageTerms struct {
 }
 
 func DamageEquation(terms DamageTerms) int {
-	level_mod := float64(2*terms.Level)/5 + 2
 	pow_ad := float64(terms.Power) * float64(terms.Attack) / float64(terms.Defense)
-	base := (level_mod*pow_ad)/50 + 2
+	level_mod := float64(2*terms.Level)/5 + 2
+	base := (pow_ad*level_mod)/50 + 2
 	raw := (base * terms.Critical * terms.Nature * terms.Random * terms.Other) + float64(terms.Offset)
+	fmt.Printf("(((%d * %d / %d) * ((2 * %d / 5) + 2) / 50 + 2) * (%f) = %f \n", terms.Power, terms.Attack, terms.Defense, terms.Level, terms.Nature, raw)
 	return int(math.Floor(raw))
 }
 
@@ -36,7 +40,24 @@ func GetNaturesModifier(source, target ResolvedActor, natures []Nature) float64 
 	return nature_mod
 }
 
-func GetDamage(source ResolvedActor, targets []ResolvedActor, stat AttackStat, power int, natures []Nature) []int {
+func GetStabModifier(source ResolvedActor, nature *NatureSet) float64 {
+	if nature == nil {
+		return 1.00
+	}
+
+	natures := slices.Collect(maps.Keys(source.Natures))
+	index := slices.IndexFunc(natures, func(n NatureSet) bool {
+		return n == *nature
+	})
+
+	if index == -1 {
+		return 1.00
+	}
+
+	return 1.5
+}
+
+func GetDamage(source ResolvedActor, targets []ResolvedActor, stat AttackStat, power int, nature *NatureSet) []int {
 	damages := make([]int, len(targets))
 	if power == 0 {
 		return damages
@@ -51,7 +72,12 @@ func GetDamage(source ResolvedActor, targets []ResolvedActor, stat AttackStat, p
 		d_mod := target.DefenseModifiers[stat]
 		defense := int(math.Floor(d_base * d_mod))
 
+		var natures []Nature
+		if nature != nil {
+			natures = NATURES[*nature]
+		}
 		nature_mod := GetNaturesModifier(source, target, natures)
+		stab_mod := GetStabModifier(source, nature)
 
 		damages[i] = DamageEquation(DamageTerms{
 			Attack:   attack,
@@ -63,7 +89,7 @@ func GetDamage(source ResolvedActor, targets []ResolvedActor, stat AttackStat, p
 			Other:    1.00,
 			Power:    power,
 			Random:   1.00,
-			STAB:     1.00,
+			STAB:     stab_mod,
 		})
 	}
 	return damages
