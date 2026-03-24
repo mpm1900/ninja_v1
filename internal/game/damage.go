@@ -1,6 +1,8 @@
 package game
 
-import "math"
+import (
+	"math"
+)
 
 type DamageTerms struct {
 	Attack   int
@@ -15,26 +17,48 @@ type DamageTerms struct {
 	STAB     float64
 }
 
-func DamageEquation(config DamageTerms) int {
-	level_mod := float64(2*config.Level)/5 + 2
-	pow_ad := float64(config.Attack) / float64(config.Defense)
-	term := (level_mod*pow_ad)/50 + 2
-	raw := term*config.Critical*config.Nature*config.Random*config.Other + float64(config.Offset)
+func DamageEquation(terms DamageTerms) int {
+	level_mod := float64(2*terms.Level)/5 + 2
+	pow_ad := float64(terms.Power) * float64(terms.Attack) / float64(terms.Defense)
+	base := (level_mod*pow_ad)/50 + 2
+	raw := (base * terms.Critical * terms.Nature * terms.Random * terms.Other) + float64(terms.Offset)
 	return int(math.Floor(raw))
 }
 
-func GetDamage(source ResolvedActor, targets []ResolvedActor, stat AttackStat, power int) []int {
+func GetNaturesModifier(source, target ResolvedActor, natures []Nature) float64 {
+	nature_mod := 1.0
+	for _, nature := range natures {
+		a_offset := (source.NatureDamage[nature] - 1)
+		d_offset := (target.NatureResistance[nature] - 1)
+		nature_mod += (a_offset - d_offset)
+	}
+
+	return nature_mod
+}
+
+func GetDamage(source ResolvedActor, targets []ResolvedActor, stat AttackStat, power int, natures []Nature) []int {
 	damages := make([]int, len(targets))
-	attack := int(math.Floor(float64(source.Stats[BaseStat(stat)]) * source.AttackModifiers[stat]))
+	if power == 0 {
+		return damages
+	}
+
+	a_base := float64(source.Stats[BaseStat(stat)])
+	a_mod := source.AttackModifiers[stat]
+	attack := int(math.Floor(a_base * a_mod))
 
 	for i, target := range targets {
-		defense := int(math.Floor(float64(target.Stats[BaseStat(stat)]) * target.DefenseModifiers[stat]))
+		d_base := float64(target.Stats[BaseStat(stat)])
+		d_mod := target.DefenseModifiers[stat]
+		defense := int(math.Floor(d_base * d_mod))
+
+		nature_mod := GetNaturesModifier(source, target, natures)
+
 		damages[i] = DamageEquation(DamageTerms{
 			Attack:   attack,
 			Critical: 1.00,
 			Defense:  defense,
 			Level:    source.Level,
-			Nature:   1.00,
+			Nature:   nature_mod,
 			Offset:   0,
 			Other:    1.00,
 			Power:    power,

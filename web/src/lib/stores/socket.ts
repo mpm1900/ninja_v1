@@ -19,11 +19,19 @@ type SocketState = {
   url: string | null
 }
 
+type SocketRequestType =
+  | 'add-actor'
+  | 'remove-actor'
+  | 'add-modifier'
+  | 'remove-modifier'
+  | 'push-action'
+
 type SocketRequest = {
-  type: string
+  type: SocketRequestType
+  action_ID?: string
   context: Context
-  clientID: string
-  modifierID?: string
+  client_ID: string
+  modifier_ID?: string
 }
 
 const DEFAULT_HOST = 'localhost:3005'

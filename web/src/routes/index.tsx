@@ -68,7 +68,7 @@ function App() {
             </div>
             <ActorsTable
               data={actors.data}
-              enabled={status === 'open'}
+              enabled={status === 'open' && game.status == 'idle'}
               rowSelection={Object.fromEntries(
                 game.actors.map((a) => [a.actor_ID, true])
               )}
@@ -81,7 +81,7 @@ function App() {
 
                 sendContextMessage({
                   type: checked ? 'add-actor' : 'remove-actor',
-                  clientID: client.ID,
+                  client_ID: client.ID,
                   context: {
                     source_player_ID: client.ID,
                     source_actor_ID: ID,
@@ -92,7 +92,7 @@ function App() {
                 })
               }}
               subRow={({ row }) => (
-                <ActorControl actor_ID={row.original.actor_ID} />
+                <ActorControl actor_ID={row.original.actor_ID} enabled={game.status == 'idle'} />
               )}
             />
             <ModifiersTable
@@ -102,8 +102,8 @@ function App() {
 
                 sendContextMessage({
                   type: 'remove-modifier',
-                  clientID: client.ID,
-                  modifierID: modifier.ID,
+                  client_ID: client.ID,
+                  modifier_ID: modifier.ID,
                   context: {
                     source_player_ID: null,
                     source_actor_ID: null,

@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"fmt"
 	"ninja_v1/internal/game"
 	mutations "ninja_v1/internal/game/data/game_mutations"
 
@@ -29,12 +28,12 @@ func MakeLeafJab() game.Action {
 				transactions := []GameTransaction{}
 
 				// accuracy checks
-				fmt.Print(config.Accuracy)
+				// fmt.Print(config.Accuracy)
 
 				transactions = append(
 					transactions,
 					game.MakeTransaction(
-						mutations.NewDamage(game.AttackTaijutsu, 50),
+						mutations.NewDamage(game.AttackTaijutsu, 50, config.Nature),
 						context,
 					),
 				)

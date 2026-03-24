@@ -12,7 +12,7 @@ import { useState } from 'react'
 import type { Context } from '#/lib/game/context'
 import { ActionControl } from './action-control'
 
-function ActorControl({ actor_ID }: { actor_ID: string }) {
+function ActorControl({ actor_ID, enabled }: { actor_ID: string, enabled: boolean }) {
   const actions = useSuspenseQuery(actionsQuery)
   const modifiers = useSuspenseQuery(modifiersQuery)
   const client = useStore(clientsStore, (c) => c[0] as Client)
@@ -33,11 +33,12 @@ function ActorControl({ actor_ID }: { actor_ID: string }) {
         {modifiers.data.map((m) => (
           <Button
             key={m.ID}
+            disabled={!enabled}
             onClick={() => {
               sendContextMessage({
                 type: 'add-modifier',
-                clientID: client.ID,
-                modifierID: m.ID,
+                client_ID: client.ID,
+                modifier_ID: m.ID,
                 context,
               })
             }}
@@ -57,6 +58,7 @@ function ActorControl({ actor_ID }: { actor_ID: string }) {
         </Tabs>
         <ActionControl
           action_ID={activeActionID}
+          enabled={enabled}
           context={context}
           onContextChange={setContext}
         />

@@ -5,7 +5,22 @@ import (
 	"slices"
 )
 
-func NewDamage(stat game.AttackStat, power int) *game.GameMutation {
+func ApplyDamage(g game.Game, target game.ResolvedActor, damage int) {
+	g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
+		a.Damage += damage
+		a.Alive = target.Stats[game.StatHP] > a.Damage
+		return a
+	})
+}
+
+func NewDamage(stat game.AttackStat, power int, nature *game.NatureSet) *game.GameMutation {
+	natures := []game.Nature{}
+	if nature != nil {
+		if mapped, ok := game.NATURES[*nature]; ok {
+			natures = mapped
+		}
+	}
+
 	return &game.GameMutation{
 		Delta: func(g game.Game, context *game.Context) game.Game {
 			ok, s := g.GetActor(func(a game.Actor) bool {
@@ -28,13 +43,11 @@ func NewDamage(stat game.AttackStat, power int) *game.GameMutation {
 					[]game.ResolvedActor{target},
 					stat,
 					power,
+					natures,
 				)
 
 				for _, damage := range damages {
-					g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
-						a.Damage += damage
-						return a
-					})
+					ApplyDamage(g, target, damage)
 				}
 			}
 

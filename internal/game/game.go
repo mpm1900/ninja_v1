@@ -2,6 +2,7 @@ package game
 
 import (
 	"encoding/json"
+	"fmt"
 	"slices"
 
 	"github.com/google/uuid"
@@ -9,13 +10,40 @@ import (
 
 type GameMutation = Mutation[Game, Game]
 
+type GameStatus = string
+
+const (
+	GameStatusRunning GameStatus = "running"
+	GameStatusIdle    GameStatus = "idle"
+)
+
+type Queue[T any] []T
+
+func (q *Queue[T]) Enqueue(value T) {
+	*q = append(*q, value)
+}
+
+func (q *Queue[T]) Dequeue() (T, error) {
+	if len(*q) == 0 {
+		var zero T
+		return zero, fmt.Errorf("queue is empty")
+	}
+
+	value := (*q)[0]
+	var zero T
+	(*q)[0] = zero
+	*q = (*q)[1:]
+	return value, nil
+}
+
 type Game struct {
+	Status    GameStatus              `json:"status"`
 	Actors    []Actor                 `json:"actors"`
 	Modifiers []Transaction[Modifier] `json:"modifiers"`
 
-	Transactions []Transaction[GameMutation] `json:"transactions"`
-	Actions      []Transaction[Action]       `json:"actions"`
-	Trigger      []Transaction[Action]       `json:"triggers"`
+	Transactions Queue[Transaction[GameMutation]] `json:"transactions"`
+	Actions      Queue[Transaction[Action]]       `json:"actions"`
+	Trigger      Queue[Transaction[Action]]       `json:"triggers"`
 }
 
 func (g Game) GetActor(predicate func(Actor) bool) (bool, Actor) {
@@ -75,6 +103,31 @@ func (g *Game) UpdateActor(actorID uuid.UUID, updater func(Actor) Actor) {
 	g.Actors[index] = updater(g.Actors[index])
 }
 
+func (g *Game) ResolveAction(transaction Transaction[Action]) {
+	transactions := ResolveAction(*g, transaction)
+	g.Transactions = append(g.Transactions, transactions...)
+}
+
+func (g *Game) Flush() {
+	for g.Next() {
+	}
+}
+
+func (g *Game) Next() bool {
+	transaction, err := g.Transactions.Dequeue()
+	if err != nil {
+		return false
+	}
+
+	n, ok := ResolveTransaction(*g, &transaction, *g)
+	if !ok {
+		return false
+	}
+
+	g = &n
+	return true
+}
+
 func (g Game) MarshalJSON() ([]byte, error) {
 	resolved := make([]ResolvedActor, 0, len(g.Actors))
 
@@ -84,6 +137,7 @@ func (g Game) MarshalJSON() ([]byte, error) {
 	}
 
 	type gameJSON struct {
+		Status GameStatus      `json:"status"`
 		Actors []ResolvedActor `json:"actors"`
 
 		Modifiers    []Transaction[Modifier]     `json:"modifiers"`
@@ -93,6 +147,7 @@ func (g Game) MarshalJSON() ([]byte, error) {
 	}
 
 	return json.Marshal(gameJSON{
+		Status:       g.Status,
 		Actors:       resolved,
 		Modifiers:    g.Modifiers,
 		Transactions: g.Transactions,

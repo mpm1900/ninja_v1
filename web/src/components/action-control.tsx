@@ -2,30 +2,33 @@ import type { Context } from '#/lib/game/context'
 import { useQuery } from '@tanstack/react-query'
 import { Button } from './ui/button'
 import { useStore } from '@tanstack/react-store'
-import { socketStore } from '#/lib/stores/socket'
+import { sendContextMessage, socketStore } from '#/lib/stores/socket'
 import { gameStore } from '#/lib/stores/game'
 import { actionTargetsQuery } from '#/lib/queries/action-targets'
 import { isActionContextValidQuery } from '#/lib/queries/is-action-context-valid'
 import { useEffect } from 'react'
 import type { Actor } from '#/lib/game/actor'
+import { clientsStore } from '#/lib/stores/clients'
 
 function TargetButton({
   actor,
   context,
   contextValid,
+  enabled,
   loading,
   onContextChange,
 }: {
   actor: Actor
   context: Context
   contextValid: boolean
+  enabled: boolean
   loading: boolean
   onContextChange: (context: Context) => void
 }) {
   const includes = context.target_actor_IDs.includes(actor.ID)
   return (
     <Button
-      disabled={loading || (contextValid && !includes)}
+      disabled={loading || (contextValid && !includes) || !enabled}
       variant={includes ? 'default' : 'ghost'}
       onClick={() => {
         onContextChange({
@@ -43,16 +46,19 @@ function TargetButton({
 
 function ActionControl({
   action_ID,
+  enabled,
   context,
   onContextChange,
 }: {
   action_ID: string
+  enabled: boolean
   context: Context
   onContextChange: (context: Context) => void
 }) {
   const instanceID = useStore(socketStore, (s) => s.instanceID!)
   const game = useStore(gameStore, (g) => g)
   const valid = useQuery(isActionContextValidQuery(action_ID, context))
+  const client = useStore(clientsStore, (c) => c[0])
   const actionTargets = useQuery(
     actionTargetsQuery(instanceID, action_ID, context)
   )
@@ -75,6 +81,7 @@ function ActionControl({
             <TargetButton
               key={a.ID}
               actor={a}
+              enabled={enabled}
               loading={loading}
               contextValid={!!valid.data}
               context={context}
@@ -82,7 +89,19 @@ function ActionControl({
             />
           ))}
       </div>
-      <Button disabled={loading || !valid.data}>Select</Button>
+      <Button
+        disabled={loading || !valid.data || !enabled}
+        onClick={() => {
+          sendContextMessage({
+            type: 'push-action',
+            client_ID: client.ID,
+            action_ID: action_ID,
+            context,
+          })
+        }}
+      >
+        Select
+      </Button>
     </div>
   )
 }
