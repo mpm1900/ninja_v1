@@ -137,7 +137,7 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int) Actor {
 func resolve(actor Actor, pre Actor) ResolvedActor {
 	return ResolvedActor{
 		Actor:            actor,
-		BaseStats:        pre.Stats,
+		BaseStats:        maps.Clone(pre.Stats),
 		AppliedModifiers: map[uuid.UUID]int{},
 	}
 }
@@ -185,7 +185,8 @@ func MapStagedStat(stat, stage, mod int) int {
 }
 
 func (actor *Actor) MapStaged(stat BaseStat, mod int) {
-	actor.Stats[stat] = MapStagedStat(actor.Stats[stat], actor.Stages[stat], 2)
+	actor.Stats[stat] = MapStagedStat(actor.Stats[stat], actor.Stages[stat], mod)
+
 }
 
 func MapStagedStats(actor Actor) Actor {
@@ -198,20 +199,9 @@ func MapStagedStats(actor Actor) Actor {
 	return actor
 }
 
-func GetActors(game Game, predicate func(Actor) bool) []Actor {
-	var actors []Actor
-	for _, actor := range game.Actors {
-		if predicate(actor) {
-			actors = append(actors, actor)
-		}
-	}
-
-	return actors
-}
-
 func GetActorModifiers(game Game) []Transaction[Modifier] {
 	var modifiers []Transaction[Modifier]
-	activeActors := GetActors(game, func(a Actor) bool {
+	activeActors := game.GetActors(func(a Actor) bool {
 		return a.Active
 	})
 
@@ -224,7 +214,7 @@ func GetActorModifiers(game Game) []Transaction[Modifier] {
 			TargetPositionIDs: []uuid.UUID{},
 		}
 		for _, modifier := range actor.InnateModifiers {
-			transaction := MakeModifierTransaction(&modifier, &context)
+			transaction := MakeModifierTransaction(modifier, context)
 			modifiers = append(modifiers, transaction)
 		}
 	}
@@ -237,7 +227,7 @@ var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
 		nil,
 		PriorityMapBaseStats,
 		AllFilter,
-		func(input Actor, context *Context) Actor {
+		func(input Actor, context Context) Actor {
 			return MapBaseStats(input)
 		},
 	),
@@ -245,7 +235,7 @@ var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
 		nil,
 		PriorityMapStagedStats,
 		AllFilter,
-		func(input Actor, context *Context) Actor {
+		func(input Actor, context Context) Actor {
 			return MapStagedStats(input)
 		},
 	),
@@ -304,21 +294,21 @@ func resolveActor(actor Actor, mtransactions []Transaction[Modifier], atransacti
 
 		if mutation.TransactionID != nil {
 			for _, transaction := range transactions {
-				if transaction.ID == *mutation.TransactionID && transaction.Context != nil {
-					context = *transaction.Context
+				if transaction.ID == *mutation.TransactionID {
+					context = transaction.Context
 					break
 				}
 			}
 		}
 
-		tx := MakeTransaction(&mutation.Mutation, &context)
-		a, apply := ResolveTransaction(mapped, &tx, mapped)
+		tx := MakeTransaction(mutation.Mutation, context)
+		a, apply := ResolveTransaction(mapped, tx, mapped)
 		if apply {
 			if mutation.ModifierGroupID != nil {
 				if count, ok := applied[*mutation.ModifierGroupID]; ok {
 					applied[*mutation.ModifierGroupID] = count + 1
 				} else {
-					applied[*mutation.ModifierGroupID] = 0
+					applied[*mutation.ModifierGroupID] = 1
 				}
 			}
 			mapped = a

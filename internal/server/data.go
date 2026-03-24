@@ -73,7 +73,7 @@ func (dh *DataHandler) HandleIsActionContextValid(w http.ResponseWriter, r *http
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	valid := action.ContextValidate(&context)
+	valid := action.ContextValidate(context)
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(valid)
 	if err != nil {

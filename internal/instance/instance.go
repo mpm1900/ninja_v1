@@ -111,7 +111,7 @@ func Reducer(instance *Instance, request Request) int {
 		}
 
 		if modifier, ok := data.MODIFIERS[*request.ModifierID]; ok {
-			transaction := game.MakeModifierTransaction(&modifier, &request.Context)
+			transaction := game.MakeModifierTransaction(modifier, request.Context)
 			instance.Game.AddModifier(transaction)
 			return state
 		}
@@ -135,8 +135,8 @@ func Reducer(instance *Instance, request Request) int {
 		go func() {
 			time.Sleep(time.Second)
 
-			transaction := game.MakeTransaction(&action, &request.Context)
-			instance.Game.ResolveAction(transaction)
+			transaction := game.MakeTransaction(action, request.Context)
+			instance.Game.ExecuteTransaction(transaction)
 
 			for instance.Game.Next() {
 				instance.BroadcastGame()

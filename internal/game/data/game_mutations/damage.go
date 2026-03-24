@@ -12,9 +12,9 @@ func ApplyDamage(g game.Game, target game.ResolvedActor, damage int) {
 	})
 }
 
-func NewDamage(stat game.AttackStat, power int, nature *game.NatureSet) *game.GameMutation {
-	return &game.GameMutation{
-		Delta: func(g game.Game, context *game.Context) game.Game {
+func NewDamage(stat game.AttackStat, power int, nature *game.NatureSet) game.GameMutation {
+	return game.GameMutation{
+		Delta: func(g game.Game, context game.Context) game.Game {
 			ok, s := g.GetActor(func(a game.Actor) bool {
 				return a.ID == *context.SourceActorID
 			})
@@ -23,7 +23,7 @@ func NewDamage(stat game.AttackStat, power int, nature *game.NatureSet) *game.Ga
 				return g
 			}
 
-			targets := game.GetTargets(g, *context)
+			targets := game.GetTargets(g, context)
 			source := game.ResolveActor(s, g)
 			for _, t := range targets {
 				target := game.ResolveActor(t, g)

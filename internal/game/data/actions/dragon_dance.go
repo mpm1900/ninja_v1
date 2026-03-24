@@ -22,7 +22,7 @@ func MakeDragonDance() game.Action {
 		ActionMutation: game.ActionMutation{
 			Priority: 0,
 			Filter:   game.AllGameFilter,
-			Delta: func(g game.Game, context *game.Context) []game.GameTransaction {
+			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
 				modifiers := []game.Modifier{

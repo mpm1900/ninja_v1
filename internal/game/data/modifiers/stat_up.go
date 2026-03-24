@@ -9,7 +9,7 @@ import (
 func NewStageDelta(
 	stat game.BaseStat,
 	groupID uuid.UUID,
-	filter func(input game.Actor, context *game.Context) bool,
+	filter func(input game.Actor, context game.Context) bool,
 	priority int,
 	delta int,
 ) game.Modifier {
@@ -17,7 +17,7 @@ func NewStageDelta(
 		&groupID,
 		priority,
 		filter,
-		func(actor game.Actor, context *game.Context) game.Actor {
+		func(actor game.Actor, context game.Context) game.Actor {
 			actor.Stages[stat] = actor.Stages[stat] + delta
 			return actor
 		},

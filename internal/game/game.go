@@ -11,7 +11,7 @@ import (
 type GameMutation = Mutation[Game, Game]
 type GameTransaction = Transaction[GameMutation]
 
-type GameStatus = string
+type GameStatus string
 
 const (
 	GameStatusRunning GameStatus = "running"
@@ -104,7 +104,7 @@ func (g *Game) UpdateActor(actorID uuid.UUID, updater func(Actor) Actor) {
 	g.Actors[index] = updater(g.Actors[index])
 }
 
-func (g *Game) ResolveAction(transaction Transaction[Action]) {
+func (g *Game) ExecuteTransaction(transaction Transaction[Action]) {
 	transactions := ResolveAction(*g, transaction)
 	g.Transactions = append(g.Transactions, transactions...)
 }
@@ -120,7 +120,7 @@ func (g *Game) Next() bool {
 		return false
 	}
 
-	n, ok := ResolveTransaction(*g, &transaction, *g)
+	n, ok := ResolveTransaction(*g, transaction, *g)
 	if !ok {
 		return false
 	}

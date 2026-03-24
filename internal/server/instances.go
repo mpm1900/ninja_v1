@@ -111,8 +111,8 @@ func (ih *InstancesHandler) HandleGetTargets(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	targets := game.GetActors(instance.Game, func(a game.Actor) bool {
-		return action.TargetPredicate(a, &context)
+	targets := instance.Game.GetActors(func(a game.Actor) bool {
+		return action.TargetPredicate(a, context)
 	})
 	targetIDs := make([]uuid.UUID, 0, len(targets))
 	for _, a := range targets {

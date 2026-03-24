@@ -28,8 +28,8 @@ type Modifier struct {
 func MakeModifierMutation(
 	modifierGroupID *uuid.UUID,
 	priority int,
-	filter func(input Actor, context *Context) bool,
-	delta func(input Actor, context *Context) Actor,
+	filter func(input Actor, context Context) bool,
+	delta func(input Actor, context Context) Actor,
 ) ModifierMutation {
 	return ModifierMutation{
 		ModifierGroupID: modifierGroupID,
@@ -41,6 +41,6 @@ func MakeModifierMutation(
 	}
 }
 
-func MakeModifierTransaction(modifier *Modifier, context *Context) Transaction[Modifier] {
+func MakeModifierTransaction(modifier Modifier, context Context) Transaction[Modifier] {
 	return MakeTransaction(modifier, context)
 }

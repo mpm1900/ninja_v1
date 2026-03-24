@@ -24,10 +24,10 @@ func DamageEquation(terms DamageTerms) int {
 	pow_ad := float64(terms.Power) * float64(terms.Attack) / float64(terms.Defense)
 	level_mod := float64(2*terms.Level)/5 + 2
 	base := (pow_ad*level_mod)/50 + 2
-	raw := (base * terms.Critical * terms.Nature * terms.Random * terms.Other)
+	raw := (base * terms.Critical * terms.Nature * terms.STAB * terms.Random * terms.Other)
 	fmt.Printf(
-		"(((%d * %d / %d) * ((2 * %d / 5) + 2) / 50 + 2) * (%f) = %f \n",
-		terms.Power, terms.Attack, terms.Defense, terms.Level, terms.Nature, raw,
+		"(((%d * %d / %d) * ((2 * %d / 5) + 2) / 50 + 2) * (%f) * (%f) = %f \n",
+		terms.Power, terms.Attack, terms.Defense, terms.Level, terms.Nature, terms.STAB, raw,
 	)
 	return int(math.Floor(raw)) + terms.Offset
 }

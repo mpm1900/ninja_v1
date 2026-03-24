@@ -20,7 +20,7 @@ func GetTargets(g Game, context Context) []Actor {
 	for _, targetID := range context.TargetActorIDs {
 		i := slices.IndexFunc(g.Actors, func(a Actor) bool { return a.ID == targetID })
 		if i == -1 {
-			break
+			continue
 		}
 
 		targets = append(targets, g.Actors[i])
