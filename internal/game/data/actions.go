@@ -8,7 +8,9 @@ import (
 )
 
 var LeafJab = actions.MakeLeafJab()
+var DragonDance = actions.MakeDragonDance()
 
 var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
-	LeafJab.ID: LeafJab,
+	LeafJab.ID:     LeafJab,
+	DragonDance.ID: DragonDance,
 }

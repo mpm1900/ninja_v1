@@ -9,6 +9,7 @@ import (
 )
 
 type GameMutation = Mutation[Game, Game]
+type GameTransaction = Transaction[GameMutation]
 
 type GameStatus = string
 
@@ -41,9 +42,9 @@ type Game struct {
 	Actors    []Actor                 `json:"actors"`
 	Modifiers []Transaction[Modifier] `json:"modifiers"`
 
-	Transactions Queue[Transaction[GameMutation]] `json:"transactions"`
-	Actions      Queue[Transaction[Action]]       `json:"actions"`
-	Trigger      Queue[Transaction[Action]]       `json:"triggers"`
+	Transactions Queue[GameTransaction]     `json:"transactions"`
+	Actions      Queue[Transaction[Action]] `json:"actions"`
+	Trigger      Queue[Transaction[Action]] `json:"triggers"`
 }
 
 func (g Game) GetActor(predicate func(Actor) bool) (bool, Actor) {
@@ -124,7 +125,7 @@ func (g *Game) Next() bool {
 		return false
 	}
 
-	g = &n
+	*g = n
 	return true
 }
 

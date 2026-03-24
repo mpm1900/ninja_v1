@@ -10,6 +10,8 @@ type ActionConfig struct {
 	Nature   *NatureSet `json:"nature"`
 }
 
+type ActionMutation Mutation[Game, []Transaction[GameMutation]]
+
 /** [This comment was not written by an LLM]
  * Action Function Members for Action "a"
  *
@@ -23,7 +25,7 @@ type ActionConfig struct {
  * -- this is used to check "is the number of targets correct?" and other checks.
  */
 type Action struct {
-	Mutation[Game, []Transaction[GameMutation]]
+	ActionMutation
 	ID              uuid.UUID                  `json:"ID"`
 	Config          ActionConfig               `json:"config"`
 	TargetPredicate func(Actor, *Context) bool `json:"-"`

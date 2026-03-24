@@ -7,9 +7,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type GameTransaction = game.Transaction[game.GameMutation]
-type ActionMutation = game.Mutation[game.Game, []GameTransaction]
-
 func MakeLeafJab() game.Action {
 	accuracy := 100
 	config := game.ActionConfig{
@@ -21,13 +18,13 @@ func MakeLeafJab() game.Action {
 		Config:          config,
 		TargetPredicate: game.OtherFilter,
 		ContextValidate: game.TargetLengthFilter(1),
-		Mutation: ActionMutation{
+		ActionMutation: game.ActionMutation{
 			Priority: 0,
 			Filter:   game.AllGameFilter,
-			Delta: func(g game.Game, context *game.Context) []GameTransaction {
-				transactions := []GameTransaction{}
+			Delta: func(g game.Game, context *game.Context) []game.GameTransaction {
+				transactions := []game.GameTransaction{}
 
-				// accuracy checks
+				// accuracy checks TODO
 				// fmt.Print(config.Accuracy)
 
 				transactions = append(

@@ -21,8 +21,8 @@ function getBaseStatColorClass(value: number) {
   if (value < 150) return 'text-teal-500'
   if (value < 165) return 'text-teal-300'
   if (value < 180) return 'text-cyan-400'
-  if (value < 200) return 'text-blue-400'
-  return 'text-fuchsia-400'
+  if (value < 200) return 'text-indigo-200'
+  return 'text-fuchsia-300'
 }
 
 
