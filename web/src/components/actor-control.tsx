@@ -17,6 +17,7 @@ import {
 import { sendContextMessage } from '#/lib/stores/socket'
 import { Button } from './ui/button'
 import { ButtonGroup } from './ui/button-group'
+import { PositionSelect } from './position-select'
 
 function ActorControl({
   actor_ID,
@@ -107,9 +108,7 @@ function ActorControl({
           </div>
         </CardHeader>
         <CardContent>
-          <div className='text-right'>
-            Position: {source.state.position_ID}
-          </div>
+          <PositionSelect actor={source} game={game} />
         </CardContent>
       </div>
     </Card>

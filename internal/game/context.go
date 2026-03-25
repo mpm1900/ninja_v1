@@ -35,9 +35,7 @@ func (g Game) GetSource(context Context) (bool, Actor) {
 		return false, Actor{}
 	}
 
-	return g.GetActor(func(a Actor) bool {
-		return a.ID == *context.SourceActorID
-	})
+	return g.GetActorByID(*context.SourceActorID)
 }
 
 func (g Game) GetParent(context Context) (bool, Actor) {
@@ -45,7 +43,5 @@ func (g Game) GetParent(context Context) (bool, Actor) {
 		return false, Actor{}
 	}
 
-	return g.GetActor(func(a Actor) bool {
-		return a.ID == *context.ParentActorID
-	})
+	return g.GetActorByID(*context.ParentActorID)
 }

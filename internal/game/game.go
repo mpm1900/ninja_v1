@@ -41,7 +41,7 @@ func NewGame() Game {
 	}
 }
 
-func (g Game) GetPlayer(ID uuid.UUID) (bool, Player) {
+func (g Game) GetPlayerByID(ID uuid.UUID) (bool, Player) {
 	for _, p := range g.Players {
 		if p.ID == ID {
 			return true, p
@@ -59,6 +59,12 @@ func (g Game) GetActor(predicate func(Actor) bool) (bool, Actor) {
 	}
 
 	return false, Actor{}
+}
+
+func (g Game) GetActorByID(actorID uuid.UUID) (bool, Actor) {
+	return g.GetActor(func(a Actor) bool {
+		return a.ID == actorID
+	})
 }
 
 func (g Game) GetActors(predicate func(Actor) bool) []Actor {
@@ -130,7 +136,7 @@ func (g *Game) UpdatePlayer(playerID uuid.UUID, updater func(Player) Player) {
 }
 
 func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
-	ok, player := g.GetPlayer(actor.PlayerID)
+	ok, player := g.GetPlayerByID(actor.PlayerID)
 	if !ok {
 		return
 	}
@@ -183,7 +189,7 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 	}
 }
 
-func (g *Game) SetActorPlayer(actor Actor, playerID uuid.UUID, positionID *uuid.UUID) {
+func (g *Game) SetActorPlayerPosition(actor Actor, playerID uuid.UUID, positionID *uuid.UUID) {
 	if actor.PlayerID != playerID {
 		g.SetPosition(actor, nil)
 		g.UpdateActor(actor.ID, func(a Actor) Actor {
@@ -191,9 +197,7 @@ func (g *Game) SetActorPlayer(actor Actor, playerID uuid.UUID, positionID *uuid.
 			return a
 		})
 
-		ok, updatedActor := g.GetActor(func(a Actor) bool {
-			return a.ID == actor.ID
-		})
+		ok, updatedActor := g.GetActorByID(actor.ID)
 		if !ok {
 			return
 		}
@@ -203,6 +207,29 @@ func (g *Game) SetActorPlayer(actor Actor, playerID uuid.UUID, positionID *uuid.
 	}
 
 	g.SetPosition(actor, positionID)
+}
+
+func (g *Game) SetActorPlayerIndex(actor Actor, playerID uuid.UUID, index int) {
+	ok, player := g.GetPlayerByID(playerID)
+	if !ok || index < 0 || index >= player.PositionsCapacity {
+		return
+	}
+
+	positionIDs := make([]uuid.UUID, 0, len(player.Positions))
+	for pid := range player.Positions {
+		positionIDs = append(positionIDs, pid)
+	}
+
+	for len(positionIDs) <= index {
+		id := uuid.New()
+		positionIDs = append(positionIDs, id)
+		g.UpdatePlayer(playerID, func(p Player) Player {
+			p.Positions[id] = nil
+			return p
+		})
+	}
+
+	g.SetActorPlayerPosition(actor, playerID, &positionIDs[index])
 }
 
 func (g *Game) AddModifier(modifier Transaction[Modifier]) {

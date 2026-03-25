@@ -26,6 +26,7 @@ type SocketRequestType =
   | 'remove-modifier'
   | 'push-action'
   | 'set-actor-player'
+  | 'set-actor-position'
 
 type SocketRequest = {
   type: SocketRequestType
@@ -33,6 +34,7 @@ type SocketRequest = {
   context: Context
   client_ID: string
   modifier_ID?: string
+  position_index?: number
 }
 
 const DEFAULT_HOST = 'localhost:3005'
@@ -181,7 +183,7 @@ function sendContextMessage(request: SocketRequest) {
   return sendSocketMessage(JSON.stringify(request))
 }
 
-export type {}
+export type { }
 export {
   socketStore,
   connectSocket,

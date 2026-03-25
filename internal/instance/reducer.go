@@ -16,7 +16,7 @@ func Reducer(instance *Instance, request Request) int {
 		}
 
 		actor := game.MakeActor(def, request.ClientID, 13824)
-		ok, player := instance.Game.GetPlayer(request.ClientID)
+		ok, player := instance.Game.GetPlayerByID(request.ClientID)
 		if !ok {
 			return none
 		}
@@ -88,7 +88,7 @@ func Reducer(instance *Instance, request Request) int {
 
 		target := targets[0]
 
-		ok, player := instance.Game.GetPlayer(*request.Context.SourcePlayerID)
+		ok, player := instance.Game.GetPlayerByID(*request.Context.SourcePlayerID)
 		if !ok {
 			return none
 		}
@@ -98,7 +98,7 @@ func Reducer(instance *Instance, request Request) int {
 			return none
 		}
 
-		instance.Game.SetActorPlayer(target, *request.Context.SourcePlayerID, id)
+		instance.Game.SetActorPlayerPosition(target, *request.Context.SourcePlayerID, id)
 		return state
 
 	default:
