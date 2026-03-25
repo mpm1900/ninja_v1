@@ -145,6 +145,7 @@ func (g *Game) UpdatePlayer(playerID uuid.UUID, updater func(Player) Player) {
 }
 
 func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
+	prev := actor.State.PositionID
 	ok, player := g.GetPlayerByID(actor.PlayerID)
 	if !ok {
 		return
@@ -163,43 +164,35 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 			p.SetPosition(*positionID, &actor.ID)
 			return p
 		})
-
 	}
 
 	g.UpdateActor(actor.ID, func(a Actor) Actor {
 		a.State.PositionID = positionID
 		return a
 	})
-}
 
-func (g *Game) SetActorPlayerPosition(actor Actor, playerID uuid.UUID, positionID *uuid.UUID) {
-	if actor.PlayerID != playerID {
-		g.SetPosition(actor, nil)
-		g.UpdateActor(actor.ID, func(a Actor) Actor {
-			a.PlayerID = playerID
-			return a
+	if prev != nil {
+		g.UpdatePlayer(actor.PlayerID, func(p Player) Player {
+			p.SetPosition(*prev, nil)
+			return p
 		})
-
-		ok, updatedActor := g.GetActorByID(actor.ID)
-		if !ok {
-			return
-		}
-
-		g.SetPosition(updatedActor, positionID)
-		return
 	}
-
-	g.SetPosition(actor, positionID)
 }
 
-func (g *Game) SetActorPlayerIndex(actor Actor, playerID uuid.UUID, index int) {
-	ok, player := g.GetPlayerByID(playerID)
-	if !ok || index >= len(player.Positions) {
+
+
+func (g *Game) SetActorPlayerIndex(actor Actor, index *int) {
+	if index == nil {
+		g.SetPosition(actor, nil)
+	}
+
+	ok, player := g.GetPlayerByID(actor.PlayerID)
+	if !ok || *index >= len(player.Positions) {
 		return
 	}
 
-	positionID := player.Positions[index]
-	g.SetActorPlayerPosition(actor, playerID, &positionID.ID)
+	positionID := player.Positions[*index]
+	g.SetPosition(actor, &positionID.ID)
 }
 
 func (g *Game) AddModifier(modifier Transaction[Modifier]) {
