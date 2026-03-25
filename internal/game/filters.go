@@ -55,12 +55,11 @@ func SourceFilter(actor Actor, context Context) bool {
 	}
 	return actor.ID == *context.SourceActorID
 }
-
 func TeamFilter(actor Actor, context Context) bool {
-	if !ActiveFilter(actor, context) {
-		return false
-	}
 	return actor.PlayerID == *context.SourcePlayerID
+}
+func OtherTeamFilter(actor Actor, context Context) bool {
+	return actor.PlayerID != *context.SourcePlayerID
 }
 
 type GameFilter func(Game, Context) bool

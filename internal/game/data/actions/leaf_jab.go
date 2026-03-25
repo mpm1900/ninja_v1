@@ -24,7 +24,7 @@ func MakeLeafJab() game.Action {
 	return game.Action{
 		ID:              uuid.New(),
 		Config:          config,
-		TargetPredicate: game.ComposeAF(game.OtherFilter, game.AliveFilter),
+		TargetPredicate: game.ComposeAF(game.OtherFilter, game.ActiveFilter, game.AliveFilter),
 		ContextValidate: game.TargetLengthFilter(1),
 		ActionMutation: game.ActionMutation{
 			Priority: 0,

@@ -16,13 +16,7 @@ func Reducer(instance *Instance, request Request) int {
 		}
 
 		actor := game.MakeActor(def, request.ClientID, 13824)
-		ok, player := instance.Game.GetPlayerByID(request.ClientID)
-		if !ok {
-			return none
-		}
-
 		instance.Game.AddActor(actor)
-		instance.Game.SetPosition(actor, player.EnsureOpenPositionID())
 		return state
 	case RemoveActor:
 		index := slices.IndexFunc(instance.Game.Actors, func(a game.Actor) bool {
@@ -99,6 +93,22 @@ func Reducer(instance *Instance, request Request) int {
 		}
 
 		instance.Game.SetActorPlayerPosition(target, *request.Context.SourcePlayerID, id)
+		return state
+
+	case SetActorPosition:
+		count, targets := instance.Game.GetTargets(request.Context)
+
+		if count == 0 || request.PositionIndex == nil {
+			return none
+		}
+
+		ok, player := instance.Game.GetPlayerByID(request.ClientID)
+		if !ok {
+			return none
+		}
+
+		target := targets[0]
+		instance.Game.SetActorPlayerIndex(target, player.ID, *request.PositionIndex)
 		return state
 
 	default:

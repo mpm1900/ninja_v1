@@ -49,6 +49,7 @@ function ActorControl({
                 key={a.ID}
                 className="rounded-none"
                 variant={a.ID === activeActionID ? 'default' : 'secondary'}
+                disabled={!source.state.position_ID}
                 onClick={() => {
                   setActiveActionID(a.ID)
                 }}

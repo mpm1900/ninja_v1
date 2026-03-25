@@ -77,6 +77,16 @@ func (g Game) GetActors(predicate func(Actor) bool) []Actor {
 	return actors
 }
 
+func (g Game) GetResolvedActors() map[uuid.UUID]ResolvedActor {
+	actors := make(map[uuid.UUID]ResolvedActor, len(g.Actors))
+	for _, a := range g.Actors {
+		resolvedActor := a.Resolve(g)
+		actors[a.ID] = resolvedActor
+	}
+
+	return actors
+}
+
 func (g Game) GetActorsFilters(filters ...ActorFilter) []Actor {
 	filter := ComposeAF(filters...)
 	return g.GetActors(func(a Actor) bool {
@@ -209,10 +219,10 @@ func (g *Game) SetActorPlayerPosition(actor Actor, playerID uuid.UUID, positionI
 	g.SetPosition(actor, positionID)
 }
 
-func (g *Game) SetActorPlayerIndex(actor Actor, playerID uuid.UUID, index int) {
+func (g *Game) EnsurePlayerPositionIDByIndex(playerID uuid.UUID, index int) *uuid.UUID {
 	ok, player := g.GetPlayerByID(playerID)
 	if !ok || index < 0 || index >= player.PositionsCapacity {
-		return
+		return nil
 	}
 
 	positionIDs := make([]uuid.UUID, 0, len(player.Positions))
@@ -221,15 +231,27 @@ func (g *Game) SetActorPlayerIndex(actor Actor, playerID uuid.UUID, index int) {
 	}
 
 	for len(positionIDs) <= index {
-		id := uuid.New()
-		positionIDs = append(positionIDs, id)
+		var id *uuid.UUID
 		g.UpdatePlayer(playerID, func(p Player) Player {
-			p.Positions[id] = nil
+			id = p.EnsureOpenPositionID()
 			return p
 		})
+		if id == nil {
+			return nil
+		}
+		positionIDs = append(positionIDs, *id)
 	}
 
-	g.SetActorPlayerPosition(actor, playerID, &positionIDs[index])
+	return &positionIDs[index]
+}
+
+func (g *Game) SetActorPlayerIndex(actor Actor, playerID uuid.UUID, index int) {
+	positionID := g.EnsurePlayerPositionIDByIndex(playerID, index)
+	if positionID == nil {
+		return
+	}
+
+	g.SetActorPlayerPosition(actor, playerID, positionID)
 }
 
 func (g *Game) AddModifier(modifier Transaction[Modifier]) {
@@ -256,6 +278,17 @@ func (g *Game) UpdateActor(actorID uuid.UUID, updater func(Actor) Actor) {
 	}
 
 	g.Actors[index] = updater(g.Actors[index])
+}
+
+func (g *Game) PushAction(transaction Transaction[Action]) {
+	g.Actions.Enqueue(transaction)
+	slices.SortFunc(g.Actions, func(a, b Transaction[Action]) int {
+		if a.Mutation.Priority != b.Mutation.Priority {
+			return a.Priority - b.Priority
+		}
+
+		return 0
+	})
 }
 
 func (g *Game) RunAction(transaction Transaction[Action]) {
@@ -341,11 +374,10 @@ func (g *Game) Next() bool {
 }
 
 func (g Game) MarshalJSON() ([]byte, error) {
+	resolvedMap := g.GetResolvedActors()
 	resolved := make([]ResolvedActor, 0, len(g.Actors))
-
 	for _, a := range g.Actors {
-		resolvedActor := a.Resolve(g)
-		resolved = append(resolved, resolvedActor)
+		resolved = append(resolved, resolvedMap[a.ID])
 	}
 
 	type gameJSON struct {
