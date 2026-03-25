@@ -40,11 +40,18 @@ func (p *Player) EnsureOpenPositionID() *uuid.UUID {
 func (p *Player) SetPosition(pid uuid.UUID, aid *uuid.UUID) error {
 	_, ok := p.Positions[pid]
 
-	// if this position is filled, just set it,
-	// this effectively means "swap"
+	// if this position exists, just set it,
+	// this effectively means "swap" or "clear"
 	if ok {
 		p.Positions[pid] = aid
 		return nil
+	}
+
+	for openPID, openAID := range p.Positions {
+		if openAID == nil {
+			p.Positions[openPID] = aid
+			return nil
+		}
 	}
 
 	if len(p.Positions) < p.PositionsCapacity {
