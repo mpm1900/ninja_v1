@@ -2,7 +2,7 @@ package data
 
 import (
 	"ninja_v1/internal/game"
-	actors "ninja_v1/internal/game/data/actors"
+	"ninja_v1/internal/game/data/actors"
 
 	"github.com/google/uuid"
 )

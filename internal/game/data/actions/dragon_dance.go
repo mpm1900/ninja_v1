@@ -8,6 +8,8 @@ import (
 	"github.com/google/uuid"
 )
 
+var DragonDance = MakeDragonDance()
+
 func MakeDragonDance() game.Action {
 	accuracy := 100
 	config := game.ActionConfig{

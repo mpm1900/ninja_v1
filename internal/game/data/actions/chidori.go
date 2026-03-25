@@ -7,6 +7,8 @@ import (
 	"github.com/google/uuid"
 )
 
+var Chidori = MakeChidori()
+
 func MakeChidori() game.Action {
 	accuracy := 80
 	power := 80

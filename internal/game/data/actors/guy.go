@@ -1,7 +1,8 @@
-package game
+package actors
 
 import (
 	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/actions"
 
 	"github.com/google/uuid"
 )
@@ -44,5 +45,7 @@ var Guy = game.ActorDef{
 		game.NsLightning,
 	}),
 	InnateModifiers: []game.Modifier{},
-	ActionIDs:       []uuid.UUID{},
+	ActionIDs:       []uuid.UUID{
+		actions.LeafJab.ID,
+	},
 }

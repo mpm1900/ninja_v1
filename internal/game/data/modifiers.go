@@ -2,7 +2,7 @@ package data
 
 import (
 	"ninja_v1/internal/game"
-	modifiers "ninja_v1/internal/game/data/modifiers"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )

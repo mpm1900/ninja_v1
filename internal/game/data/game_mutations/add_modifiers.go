@@ -1,7 +1,6 @@
 package mutations
 
 import (
-	"fmt"
 	"ninja_v1/internal/game"
 )
 
@@ -12,7 +11,6 @@ func AddModifiers(modifiers []game.Modifier) game.GameMutation {
 				g.Modifiers = append(g.Modifiers, game.MakeTransaction(modifier, context))
 			}
 
-			fmt.Println(len(g.Modifiers))
 			return g
 		},
 	}

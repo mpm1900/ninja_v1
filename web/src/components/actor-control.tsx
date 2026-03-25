@@ -29,7 +29,7 @@ function ActorControl({
   const client = useStore(clientsStore, (c) => c[0] as Client)
   const game = useStore(gameStore, (g) => g)
   const source = game.actors.find((a) => a.actor_ID === actor_ID)!
-  const [activeActionID, setActiveActionID] = useState(actions.data[0]?.ID)
+  const [activeActionID, setActiveActionID] = useState<string>()
   const [context, setContext] = useState<Context>({
     source_player_ID: client.ID,
     source_actor_ID: source.ID,

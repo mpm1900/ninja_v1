@@ -7,6 +7,8 @@ import (
 	"github.com/google/uuid"
 )
 
+var Fireball = MakeFireball()
+
 func MakeFireball() game.Action {
 	accuracy := 80
 	power := 50

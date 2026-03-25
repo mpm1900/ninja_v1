@@ -7,6 +7,8 @@ import (
 	"github.com/google/uuid"
 )
 
+var LeafJab = MakeLeafJab()
+
 func MakeLeafJab() game.Action {
 	accuracy := 100
 	power := 50

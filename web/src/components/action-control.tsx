@@ -63,6 +63,7 @@ function ActionControl({
     actionTargetsQuery(instanceID, action_ID, context)
   )
   const loading = valid.isFetching || actionTargets.isFetching
+  console.log('actionID', action_ID)
 
   useEffect(() => {
     actionTargets.refetch()
