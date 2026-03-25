@@ -8,6 +8,7 @@ import (
 )
 
 var MODIFIERS = map[uuid.UUID]game.Modifier{
+	modifiers.Rage.ID:             modifiers.Rage,
 	modifiers.GenjutsuUpSource.ID: modifiers.GenjutsuUpSource,
 	modifiers.SpeedUpSource.ID:    modifiers.SpeedUpSource,
 	modifiers.SpeedUpAll.ID:       modifiers.SpeedUpAll,

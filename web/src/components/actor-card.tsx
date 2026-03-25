@@ -73,7 +73,7 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
               ([ID, count]) => (
                 <span key={ID}>
                   {modifiers.find((m) => m.group_ID === ID)?.name}
-                  {count > 0 ? ` (${count})` : null}
+                  {count > 1 ? ` (${count})` : null}
                 </span>
               )
             )}

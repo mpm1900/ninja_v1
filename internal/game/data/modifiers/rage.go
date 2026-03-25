@@ -2,7 +2,8 @@ package modifiers
 
 import (
 	"ninja_v1/internal/game"
-	mutations "ninja_v1/internal/game/data/game_mutations"
+	actor_mutations "ninja_v1/internal/game/data/actor_mutations"
+	game_mutations "ninja_v1/internal/game/data/game_mutations"
 
 	"github.com/google/uuid"
 )
@@ -28,7 +29,7 @@ var RageTrigger game.Trigger = game.Trigger{
 				SourceActorID:  &target.ID,
 				ParentActorID:  &target.ID,
 			}
-			mutation := mutations.AddModifiers(TaijutsuUpSource)
+			mutation := game_mutations.AddModifiers(TaijutsuUpSource)
 			transaction := game.MakeTransaction(mutation, mut_ctx)
 			transactions = append(transactions, transaction)
 
@@ -37,12 +38,14 @@ var RageTrigger game.Trigger = game.Trigger{
 	},
 }
 
+var RageGroupId = uuid.New()
 var Rage game.Modifier = game.Modifier{
 	ID:      uuid.New(),
-	GroupID: uuid.New(),
+	GroupID: RageGroupId,
 	Name:    "Rage",
-
-	Mutations: []game.ModifierMutation{},
+	Mutations: []game.ModifierMutation{
+		actor_mutations.NewNoop(&RageGroupId),
+	},
 	Triggers: []game.Trigger{
 		RageTrigger,
 	},
