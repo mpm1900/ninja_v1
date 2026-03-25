@@ -1,10 +1,10 @@
 import type { Actor } from '#/lib/game/actor'
 import type { Game } from '#/lib/game/game'
-import { sendContextMessage } from '#/lib/stores/socket';
-import { useStore } from '@tanstack/react-store';
+import { sendContextMessage } from '#/lib/stores/socket'
+import { useStore } from '@tanstack/react-store'
 import { Button } from './ui/button'
 import { ButtonGroup } from './ui/button-group'
-import { clientsStore } from '#/lib/stores/clients';
+import { clientsStore } from '#/lib/stores/clients'
 
 function PositionSelect({ actor, game }: { actor: Actor; game: Game }) {
   const player = game.players.find((p) => p.ID == actor.player_ID)
@@ -12,9 +12,9 @@ function PositionSelect({ actor, game }: { actor: Actor; game: Game }) {
 
   const capacity = player?.positions_capacity ?? 0
   const options = Array.from({ length: capacity })
-  const positionIndex = Object.keys(player?.positions ?? {}).indexOf(
-    actor.state.position_ID
-  )
+  const positionIndex = player?.positions
+    .map((p) => p.ID)
+    .indexOf(actor.state.position_ID)
 
   return (
     <div className="flex items-center justify-end gap-2">
@@ -38,7 +38,7 @@ function PositionSelect({ actor, game }: { actor: Actor; game: Game }) {
                       source_player_ID: client.ID,
                       target_actor_IDs: [actor.ID],
                       target_position_IDs: [],
-                    }
+                    },
                   })
                 }}
               >

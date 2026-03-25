@@ -81,18 +81,16 @@ func Reducer(instance *Instance, request Request) int {
 		}
 
 		target := targets[0]
-
 		ok, player := instance.Game.GetPlayerByID(*request.Context.SourcePlayerID)
 		if !ok {
 			return none
 		}
 
-		id := player.EnsureOpenPositionID()
-		if id == nil {
-			return none
-		}
+		instance.Game.UpdatePlayer(player.ID, func(p game.Player) game.Player {
+			p.AddPosition(&target.ID)
+			return p
+		})
 
-		instance.Game.SetActorPlayerPosition(target, *request.Context.SourcePlayerID, id)
 		return state
 
 	case SetActorPosition:

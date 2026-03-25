@@ -17,8 +17,14 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
   const NinjutsuIcon = STAT_ICONS.ninjutsu
   const GenjutsuIcon = STAT_ICONS.genjutsu
   const Taijutsu = STAT_ICONS.taijutsu
-  const playerIndex = actor ? game.players.map(p => p.ID).indexOf(actor.player_ID) : -1
-  const positionIndex = actor ? Object.values(game.players[playerIndex]?.positions ?? {}).indexOf(actor.ID) : -1
+  const playerIndex = actor
+    ? game.players.map((p) => p.ID).indexOf(actor.player_ID)
+    : -1
+  const positionIndex = actor
+    ? game.players[playerIndex]?.positions
+        .map((p) => p.ID)
+        .indexOf(actor.state.position_ID)
+    : -1
   return (
     <Item variant="muted">
       <ItemContent>

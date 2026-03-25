@@ -6,62 +6,67 @@ import (
 	"github.com/google/uuid"
 )
 
+type PlayerPosition struct {
+	ID      uuid.UUID  `json:"ID"`
+	ActorID *uuid.UUID `json:"actor_ID"`
+}
+
 type Player struct {
-	ID                uuid.UUID                `json:"ID"`
-	PositionsCapacity int                      `json:"positions_capacity"`
-	Positions         map[uuid.UUID]*uuid.UUID `json:"positions"`
+	ID                uuid.UUID        `json:"ID"`
+	PositionsCapacity int              `json:"positions_capacity"`
+	Positions         []PlayerPosition `json:"positions"`
 }
 
-func NewPlayer(ID uuid.UUID) Player {
-	return Player{
-		ID:                ID,
-		PositionsCapacity: 2,
-		Positions:         make(map[uuid.UUID]*uuid.UUID),
-	}
-}
-
-func (p *Player) EnsureOpenPositionID() *uuid.UUID {
-	for pid, aid := range p.Positions {
-		if aid == nil {
-			id := pid
-			return &id
+func NewPlayer(ID uuid.UUID, capacity int) Player {
+	positions := make([]PlayerPosition, capacity)
+	for i := range capacity {
+		positions[i] = PlayerPosition{
+			ID:      uuid.New(),
+			ActorID: nil,
 		}
 	}
 
-	if len(p.Positions) >= p.PositionsCapacity {
-		return nil
+	return Player{
+		ID:                ID,
+		PositionsCapacity: 2,
+		Positions:         positions,
 	}
-
-	id := uuid.New()
-	p.Positions[id] = nil
-	return &id
 }
 
-func (p *Player) SetPosition(pid uuid.UUID, aid *uuid.UUID) error {
-	_, ok := p.Positions[pid]
-
-	// if this position exists, just set it,
-	// this effectively means "swap" or "clear"
-	if ok {
-		p.Positions[pid] = aid
-		return nil
+func (p Player) HasPosition(pid uuid.UUID) bool {
+	for _, position := range p.Positions {
+		if position.ID == pid {
+			return true
+		}
 	}
 
-	for openPID, openAID := range p.Positions {
-		if openAID == nil {
-			p.Positions[openPID] = aid
+	return false
+}
+
+func (p Player) GetActorAtPosition(pid uuid.UUID) *uuid.UUID {
+	for _, position := range p.Positions {
+		if position.ID == pid {
+			return position.ActorID
+		}
+	}
+	return nil
+}
+
+func (p *Player) SetPosition(pid uuid.UUID, aid *uuid.UUID) {
+	for i, pos := range p.Positions {
+		if pos.ID == pid {
+			p.Positions[i].ActorID = aid
+		}
+	}
+}
+
+func (p *Player) AddPosition(aid *uuid.UUID) error {
+	for i, pos := range p.Positions {
+		if pos.ActorID == nil {
+			p.Positions[i].ActorID = aid
 			return nil
 		}
 	}
 
-	if len(p.Positions) < p.PositionsCapacity {
-		p.Positions[pid] = aid
-		return nil
-	}
-
-	return fmt.Errorf("[SetPosition] pid didn't exist and there's no room.")
-}
-
-func (p *Player) AddPosition(aid *uuid.UUID) error {
-	return p.SetPosition(uuid.New(), aid)
+	return fmt.Errorf("no room in positions")
 }

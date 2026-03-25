@@ -85,7 +85,7 @@ func (i *Instance) Run() {
 			i.RegisterClient(client)
 			i.BroadcastClients()
 
-			i.Game.AddPlayer(game.NewPlayer(client.ID))
+			i.Game.AddPlayer(game.NewPlayer(client.ID, 2))
 			i.BroadcastGame()
 
 			i.PostRegister(client)
