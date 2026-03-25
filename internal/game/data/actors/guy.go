@@ -42,6 +42,7 @@ var Guy = game.ActorDef{
 		game.NatureYang:      1.00,
 	},
 	Natures: game.MapNatures([]game.NatureSet{
+		game.NsTai,
 		game.NsFire,
 		game.NsLightning,
 	}),

@@ -11,13 +11,15 @@ var LeafJab = MakeLeafJab()
 
 func MakeLeafJab() game.Action {
 	accuracy := 100
-	power := 50
+	power := 90
 	stat := game.AttackTaijutsu
+	nature := game.NsTai
 	config := game.ActionConfig{
 		Name:     "Leaf Jab",
 		Accuracy: &accuracy,
 		Power:    &power,
 		Stat:     &stat,
+		Nature:   &nature,
 	}
 	return game.Action{
 		ID:              uuid.New(),

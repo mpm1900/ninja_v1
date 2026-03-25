@@ -3,7 +3,6 @@ package game
 type Nature string
 
 const (
-	NaturePure      Nature = "pure"
 	NatureFire      Nature = "fire"
 	NatureWind      Nature = "wind"
 	NatureLightning Nature = "lightning"
@@ -16,7 +15,7 @@ const (
 type NatureSet string
 
 const (
-	NsPure      NatureSet = NatureSet(NaturePure)
+	NsTai       NatureSet = "tai"
 	NsFire      NatureSet = NatureSet(NatureFire)
 	NsWind      NatureSet = NatureSet(NatureWind)
 	NsLightning NatureSet = NatureSet(NatureLightning)
@@ -35,10 +34,12 @@ const (
 	NsWood      NatureSet = "wood"
 	NsYinYang   NatureSet = "yinyang"
 	NsDust      NatureSet = "dust"
+	NsPure      NatureSet = "pure"
 	NsJashin    NatureSet = "jashin"
 )
 
 var NATURES = map[NatureSet][]Nature{
+	NsTai:       {},
 	NsPure:      {},
 	NsFire:      {NatureFire},
 	NsWind:      {NatureWind},

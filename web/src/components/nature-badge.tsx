@@ -11,7 +11,8 @@ const variants = cva<t>(
     variants: {
       variant: {
         none: '',
-        pure: 'bg-slate-500',
+        tai: 'bg-neutral-500',
+        pure: 'bg-slate-500 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
         fire: 'bg-red-500',
         wind: 'bg-emerald-700',
         lightning: 'bg-yellow-400',

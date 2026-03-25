@@ -39,8 +39,8 @@ var Naruto = game.ActorDef{
 		game.NatureYang:      1.00,
 	},
 	Natures: game.MapNatures([]game.NatureSet{
+		game.NsPure,
 		game.NsWind,
-		game.NsYin,
 		game.NsYang,
 	}),
 

@@ -40,6 +40,7 @@ var Kisame = game.ActorDef{
 		game.NatureYang:      1.00,
 	},
 	Natures: game.MapNatures([]game.NatureSet{
+		game.NsPure,
 		game.NsWater,
 	}),
 

@@ -14,10 +14,10 @@ var Kaguya = game.ActorDef{
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       255,
 		game.StatStamina:  255,
-		game.StatNinjutsu: 125,
-		game.StatGenjutsu: 125,
+		game.StatNinjutsu: 135,
+		game.StatGenjutsu: 135,
 		game.StatTaijutsu: 115,
-		game.StatSpeed:    130,
+		game.StatSpeed:    125,
 		game.StatEvasion:  0,
 		game.StatAccuracy: 1,
 	},
