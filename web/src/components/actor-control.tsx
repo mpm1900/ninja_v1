@@ -1,6 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Card, CardContent, CardHeader } from './ui/card'
-import { Tabs, TabsList, TabsTrigger } from './ui/tabs'
 import { useStore } from '@tanstack/react-store'
 import { actionsQuery } from '#/lib/queries/actions'
 import { clientsStore, type Client } from '#/lib/stores/clients'

@@ -129,10 +129,10 @@ func Reducer(instance *Instance, request Request) int {
 
 		instance.Game.Status = game.GameStatusRunning
 		transaction := game.MakeTransaction(action, request.Context)
-		instance.Game.PushTransaction(transaction)
+		instance.Game.Actions.Enqueue(transaction)
 
 		go func() {
-			time.Sleep(time.Second)
+			time.Sleep(time.Second / 2)
 			for instance.Game.Next() {
 				instance.BroadcastGame()
 				time.Sleep(time.Second)
@@ -145,9 +145,9 @@ func Reducer(instance *Instance, request Request) int {
 		return state
 
 	case SetActorPlayer:
-		targets := instance.Game.GetTargets(request.Context)
+		count, targets := instance.Game.GetTargets(request.Context)
 
-		if len(targets) == 0 {
+		if count == 0 {
 			return none
 		}
 

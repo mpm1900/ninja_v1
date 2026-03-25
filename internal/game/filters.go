@@ -80,3 +80,19 @@ func ComposeGF(filters ...GameFilter) GameFilter {
 func AllGameFilter(game Game, context Context) bool {
 	return true
 }
+
+func MatchSourceActorIDTrigger(game Game, context Context, modifier_tx Transaction[Modifier]) bool {
+	if context.SourceActorID == nil || modifier_tx.Context.SourceActorID == nil {
+		return false
+	}
+
+	return *context.SourceActorID == *modifier_tx.Context.SourceActorID
+}
+
+func MatchTargetActorIDTrigger(game Game, context Context, modifier_tx Transaction[Modifier]) bool {
+	if len(context.TargetActorIDs) == 0 || modifier_tx.Context.SourceActorID == nil {
+		return false
+	}
+
+	return context.TargetActorIDs[0] == *modifier_tx.Context.SourceActorID
+}

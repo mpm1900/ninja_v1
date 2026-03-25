@@ -50,7 +50,7 @@ function ActionControl({
   context,
   onContextChange,
 }: {
-  action_ID: string
+  action_ID?: string
   enabled: boolean
   context: Context
   onContextChange: (context: Context) => void

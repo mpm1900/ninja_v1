@@ -26,9 +26,9 @@ type Game struct {
 	Actors    []Actor                 `json:"actors"`
 	Modifiers []Transaction[Modifier] `json:"modifiers"`
 
-	Transactions Queue[GameTransaction]     `json:"transactions"`
-	Actions      Queue[Transaction[Action]] `json:"actions"`
-	Triggers     Queue[Transaction[Action]] `json:"triggers"`
+	Transactions Queue[GameTransaction]      `json:"transactions"`
+	Actions      Queue[Transaction[Action]]  `json:"actions"`
+	Triggers     Queue[Transaction[Trigger]] `json:"triggers"`
 }
 
 func NewGame() Game {
@@ -39,7 +39,7 @@ func NewGame() Game {
 		Modifiers:    make([]Transaction[Modifier], 0),
 		Transactions: MakeQueue[GameTransaction](),
 		Actions:      MakeQueue[Transaction[Action]](),
-		Triggers:     MakeQueue[Transaction[Action]](),
+		Triggers:     MakeQueue[Transaction[Trigger]](),
 	}
 }
 
@@ -61,6 +61,24 @@ func (g Game) GetActors(predicate func(Actor) bool) []Actor {
 		}
 	}
 	return actors
+}
+
+func (g Game) GetTriggers(context Context) []Transaction[Trigger] {
+	triggers := make([]Transaction[Trigger], 0)
+	modifiers := make([]Transaction[Modifier], 0, len(g.Modifiers))
+	modifiers = append(modifiers, g.Modifiers...)
+	modifiers = append(modifiers, GetActorModifiers(g)...)
+
+	for _, mod := range modifiers {
+		for _, trig := range mod.Mutation.Triggers {
+			if trig.Check != nil && !trig.Check(g, context, mod) {
+				continue
+			}
+			triggers = append(triggers, MakeTransaction(trig, context))
+		}
+	}
+
+	return triggers
 }
 
 func (g *Game) FilterModifiers(predicate func(modifier Transaction[Modifier]) bool) {
@@ -108,9 +126,25 @@ func (g *Game) UpdateActor(actorID uuid.UUID, updater func(Actor) Actor) {
 	g.Actors[index] = updater(g.Actors[index])
 }
 
-func (g *Game) PushTransaction(transaction Transaction[Action]) {
+func (g *Game) RunAction(transaction Transaction[Action]) {
 	transactions := ResolveAction(*g, transaction)
 	g.Transactions = append(g.Transactions, transactions...)
+}
+
+func (g *Game) RunTrigger(transaction Transaction[Trigger]) {
+	transactions := ResolveTrigger(*g, transaction)
+	g.Transactions = append(g.Transactions, transactions...)
+}
+
+func (g *Game) On(on TriggerOn, context Context) {
+	triggers := make([]Transaction[Trigger], 0)
+	for _, trigger := range g.GetTriggers(context) {
+		if trigger.Mutation.On == on {
+			triggers = append(triggers, trigger)
+		}
+	}
+
+	g.Triggers = append(g.Triggers, triggers...)
 }
 
 func (g *Game) JumpTransaction(transaction Transaction[GameMutation]) {
@@ -119,11 +153,11 @@ func (g *Game) JumpTransaction(transaction Transaction[GameMutation]) {
 }
 
 func (g *Game) Flush() {
-	for g.Next() {
+	for g.NextTransaction() {
 	}
 }
 
-func (g *Game) Next() bool {
+func (g *Game) NextTransaction() bool {
 	transaction, err := g.Transactions.Dequeue()
 	if err != nil {
 		return false
@@ -138,11 +172,47 @@ func (g *Game) Next() bool {
 	return true
 }
 
+func (g *Game) NextAction() bool {
+	transaction, err := g.Actions.Dequeue()
+	if err != nil {
+		return false
+	}
+
+	g.RunAction(transaction)
+	return true
+}
+
+func (g *Game) NextTrigger() bool {
+	transaction, err := g.Triggers.Dequeue()
+	if err != nil {
+		return false
+	}
+
+	g.RunTrigger(transaction)
+	return true
+}
+
+func (g *Game) Next() bool {
+	if g.NextTransaction() {
+		return true
+	}
+
+	if g.NextTrigger() {
+		return true
+	}
+
+	if g.NextAction() {
+		return true
+	}
+
+	return false
+}
+
 func (g Game) MarshalJSON() ([]byte, error) {
 	resolved := make([]ResolvedActor, 0, len(g.Actors))
 
 	for _, a := range g.Actors {
-		resolvedActor := ResolveActor(a, g)
+		resolvedActor := a.Resolve(g)
 		resolved = append(resolved, resolvedActor)
 	}
 
@@ -154,7 +224,7 @@ func (g Game) MarshalJSON() ([]byte, error) {
 		Modifiers    []Transaction[Modifier]     `json:"modifiers"`
 		Transactions []Transaction[GameMutation] `json:"transactions"`
 		Actions      []Transaction[Action]       `json:"actions"`
-		Triggers     []Transaction[Action]       `json:"triggers"`
+		Triggers     []Transaction[Trigger]      `json:"triggers"`
 	}
 
 	return json.Marshal(gameJSON{

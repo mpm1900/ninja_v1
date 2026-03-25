@@ -30,11 +30,10 @@ func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) int {
 func PureDamage(damage int) game.GameMutation {
 	return game.GameMutation{
 		Delta: func(g game.Game, context game.Context) game.Game {
-			targets := g.GetTargets(context)
+			_, targets := g.GetTargets(context)
 			for _, t := range targets {
-				target := game.ResolveActor(t, g)
+				target := t.Resolve(g)
 				ApplyDamage(&g, target, damage)
-
 			}
 
 			return g
@@ -50,11 +49,11 @@ func NewDamage(config game.ActionConfig) game.GameMutation {
 				return g
 			}
 
-			targets := g.GetTargets(context)
-			source := game.ResolveActor(s, g)
+			_, targets := g.GetTargets(context)
+			source := s.Resolve(g)
 			total := 0
 			for _, t := range targets {
-				target := game.ResolveActor(t, g)
+				target := t.Resolve(g)
 				damages := game.GetDamage(
 					source,
 					[]game.ResolvedActor{target},
@@ -64,6 +63,7 @@ func NewDamage(config game.ActionConfig) game.GameMutation {
 				)
 
 				for _, damage := range damages {
+					g.On(game.OnDamageRecieve, context)
 					total += ApplyDamage(&g, target, damage)
 				}
 			}

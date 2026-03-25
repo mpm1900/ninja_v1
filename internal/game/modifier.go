@@ -4,9 +4,17 @@ import (
 	"github.com/google/uuid"
 )
 
+type TriggerOn string
+
+const (
+	OnDamageRecieve TriggerOn = "on-damage-recieve"
+)
+
 type Trigger struct {
-	Action
-	On string `json:"on"`
+	ActionMutation
+	ID    uuid.UUID                                       `json:"ID"`
+	On    TriggerOn                                       `json:"on"`
+	Check func(Game, Context, Transaction[Modifier]) bool `json:"-"`
 }
 
 type ModifierMutation struct {
@@ -23,6 +31,10 @@ type Modifier struct {
 
 	Mutations []ModifierMutation `json:"-"`
 	Triggers  []Trigger          `json:"triggers"`
+}
+
+func ResolveTrigger(game Game, transaction Transaction[Trigger]) []Transaction[GameMutation] {
+	return transaction.Mutation.Delta(game, transaction.Context)
 }
 
 func MakeModifierMutation(
