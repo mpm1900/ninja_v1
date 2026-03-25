@@ -56,6 +56,14 @@ func (dh *DataHandler) HandleGetModifiers(w http.ResponseWriter, r *http.Request
 	}
 }
 
+func (dh *DataHandler) HandleGetTriggerTypes(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(game.TRIGGERS); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+}
+
 func (dh *DataHandler) HandleIsActionContextValid(w http.ResponseWriter, r *http.Request) {
 	actionID, err := uuid.Parse(r.PathValue("actionID"))
 	if err != nil {

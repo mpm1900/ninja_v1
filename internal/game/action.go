@@ -19,7 +19,7 @@ type ActionMutation Mutation[Game, []Transaction[GameMutation]]
  * Action Function Members for Action "a"
  *
  * action.Filter(Game, *Context) => can this action be taken with this countext.
- * -- this is often done for a stamina or disabled check
+ * -- this is often done for a chakra or disabled check
  *
  * action.TargetPredicate(Actor, *Context) => is this actor a valid target for this action
  * -- this is effectively the "targets generator" for users to choose.

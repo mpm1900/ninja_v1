@@ -14,12 +14,12 @@ var Guy = game.ActorDef{
 	ActionCount: 6,
 
 	Stats: map[game.BaseStat]int{
-		game.StatHP:       70,
-		game.StatStamina:  120,
+		game.StatHP:       80,
+		game.StatChakra:   80,
 		game.StatNinjutsu: 100,
 		game.StatGenjutsu: 55,
-		game.StatTaijutsu: 140,
-		game.StatSpeed:    115,
+		game.StatTaijutsu: 145,
+		game.StatSpeed:    125,
 		game.StatEvasion:  0,
 		game.StatAccuracy: 1,
 	},

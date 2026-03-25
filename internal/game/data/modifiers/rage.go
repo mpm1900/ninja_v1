@@ -11,7 +11,7 @@ import (
 var RageTrigger game.Trigger = game.Trigger{
 	ID:    uuid.New(),
 	On:    game.OnDamageRecieve,
-	Check: game.MatchTargetActorIDTrigger,
+	Check: game.Match__TargetActor_SourceActor,
 	ActionMutation: game.ActionMutation{
 		Priority: 0,
 		Filter:   game.AllGameFilter,

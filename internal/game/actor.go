@@ -12,8 +12,8 @@ import (
 type Resource string
 
 const (
-	ResourceHP      Resource = "hp"
-	ResourceStamina Resource = "stamina"
+	ResourceHP     Resource = "hp"
+	ResourceChakra Resource = "chakra"
 )
 
 type AttackStat string
@@ -28,7 +28,7 @@ type BaseStat string
 
 const (
 	StatHP       BaseStat = BaseStat(ResourceHP)
-	StatStamina  BaseStat = BaseStat(ResourceStamina)
+	StatChakra   BaseStat = BaseStat(ResourceChakra)
 	StatNinjutsu BaseStat = BaseStat(AttackNinjutsu)
 	StatGenjutsu BaseStat = BaseStat(AttackGenjutsu)
 	StatTaijutsu BaseStat = BaseStat(AttackTaijutsu)
@@ -43,31 +43,38 @@ type ResourceValues struct {
 }
 
 type ActorDef struct {
-	ActorID          uuid.UUID              `json:"actor_ID"`
-	Name             string                 `json:"name"`
+	ActorID uuid.UUID `json:"actor_ID"`
+	Name    string    `json:"name"`
+
 	ActionCount      int                    `json:"action_count"`
 	Stats            map[BaseStat]int       `json:"stats"`
 	NatureDamage     map[Nature]float64     `json:"nature_damage"`
 	NatureResistance map[Nature]float64     `json:"nature_resistance"`
 	Natures          map[NatureSet][]Nature `json:"natures"`
-	InnateModifiers  []Modifier             `json:"innate_modifiers"`
-	ActionIDs        []uuid.UUID            `json:"action_IDs"`
+
+	InnateModifiers []Modifier  `json:"innate_modifiers"`
+	ActionIDs       []uuid.UUID `json:"action_IDs"`
+}
+
+type ActorState struct {
+	PositionID *uuid.UUID `json:"position_ID"`
+	Alive      bool       `json:"alive"`
+	Damage     int        `json:"damage"`
 }
 
 type Actor struct {
 	ActorDef
-	ID               uuid.UUID              `json:"ID"`
-	PlayerID         uuid.UUID              `json:"player_ID"`
-	Level            int                    `json:"level"`
-	Experience       int                    `json:"experience"`
-	PositionID       *uuid.UUID             `json:"position_ID"`
-	Active           bool                   `json:"active"`
-	Alive            bool                   `json:"alive"`
-	Damage           int                    `json:"damage"`
+	ID         uuid.UUID  `json:"ID"`
+	PlayerID   uuid.UUID  `json:"player_ID"`
+	Level      int        `json:"level"`
+	Experience int        `json:"experience"`
+	State      ActorState `json:"state"`
+
 	Stages           map[BaseStat]int       `json:"staged_stats"`
 	AttackModifiers  map[AttackStat]float64 `json:"attack_modifiers"`
 	DefenseModifiers map[AttackStat]float64 `json:"defense_modifiers"`
-	Actions          []Action               `json:"actions"`
+
+	Actions []Action `json:"actions"`
 }
 
 type ResolvedActor struct {
@@ -108,12 +115,14 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int) Actor {
 		PlayerID:   playerID,
 		Level:      GetLevel(experience),
 		Experience: experience,
-		Alive:      true,
-		Active:     true, // TODO set to false
-		Damage:     0,
+		State: ActorState{
+			Alive:      true,
+			Damage:     0,
+			PositionID: nil,
+		},
 		Stages: map[BaseStat]int{
 			StatHP:       0,
-			StatStamina:  0,
+			StatChakra:   0,
 			StatNinjutsu: 0,
 			StatGenjutsu: 0,
 			StatTaijutsu: 0,
@@ -163,7 +172,7 @@ func (actor *Actor) MapResource(stat BaseStat) {
 
 func MapBaseStats(actor Actor) Actor {
 	actor.MapResource(StatHP)
-	actor.MapResource(StatStamina)
+	actor.MapResource(StatChakra)
 
 	actor.MapBase(StatNinjutsu)
 	actor.MapBase(StatGenjutsu)
@@ -201,9 +210,9 @@ func MapStagedStats(actor Actor) Actor {
 
 func GetActorModifiers(game Game) []Transaction[Modifier] {
 	var modifiers []Transaction[Modifier]
-	activeActors := game.GetActors(func(a Actor) bool {
-		return a.Active
-	})
+	activeActors := game.GetActorsFilters(
+		ActiveFilter,
+	)
 
 	for _, actor := range activeActors {
 		context := Context{

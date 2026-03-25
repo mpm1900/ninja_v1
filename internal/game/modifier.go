@@ -10,6 +10,10 @@ const (
 	OnDamageRecieve TriggerOn = "on-damage-recieve"
 )
 
+var TRIGGERS []TriggerOn = []TriggerOn{
+	OnDamageRecieve,
+}
+
 type Trigger struct {
 	ActionMutation
 	ID    uuid.UUID                                       `json:"ID"`

@@ -33,7 +33,7 @@ const STAT_ICONS: Record<ActorBaseStat, IconType | null> = {
   hp: GiHearts,
   ninjutsu: GiMagicSwirl,
   speed: GiSprint,
-  stamina: MdEnergySavingsLeaf,
+  chakra: MdEnergySavingsLeaf,
   taijutsu: GiPunch,
 }
 

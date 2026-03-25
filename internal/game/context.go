@@ -19,10 +19,11 @@ func (g Game) GetTargets(context Context) (int, []Actor) {
 		return slices.Contains(context.TargetActorIDs, a.ID)
 	})
 	posTargets := g.GetActors(func(a Actor) bool {
-		if a.PositionID == nil {
+		if a.State.PositionID == nil {
 			return false
 		}
-		return slices.Contains(context.TargetPositionIDs, *a.PositionID)
+
+		return slices.Contains(context.TargetPositionIDs, *a.State.PositionID)
 	})
 
 	targets = append(targets, posTargets...)

@@ -19,8 +19,8 @@ func Clamp(value, min, max int) int {
 func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) int {
 	clamped := Clamp(damage, 0, damage)
 	g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
-		a.Damage += clamped
-		a.Alive = target.Stats[game.StatHP] > a.Damage
+		a.State.Damage += clamped
+		a.State.Alive = target.Stats[game.StatHP] > a.State.Damage
 		return a
 	})
 
@@ -41,7 +41,7 @@ func PureDamage(damage int) game.GameMutation {
 	}
 }
 
-func NewDamage(config game.ActionConfig) game.GameMutation {
+func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMutation {
 	return game.GameMutation{
 		Delta: func(g game.Game, context game.Context) game.Game {
 			ok, s := g.GetSource(context)
@@ -57,9 +57,11 @@ func NewDamage(config game.ActionConfig) game.GameMutation {
 				damages := game.GetDamage(
 					source,
 					[]game.ResolvedActor{target},
-					*config.Stat,
-					*config.Power,
-					config.Nature,
+					*action.Stat,
+					*action.Power,
+					config.Critical,
+					action.Nature,
+					config.Random,
 				)
 
 				for _, damage := range damages {
@@ -68,7 +70,7 @@ func NewDamage(config game.ActionConfig) game.GameMutation {
 				}
 			}
 
-			if config.Recoil != nil && *config.Recoil > 0 && context.SourceActorID != nil {
+			if action.Recoil != nil && *action.Recoil > 0 && context.SourceActorID != nil {
 				recoilContext := game.Context{
 					ParentActorID:  context.ParentActorID,
 					SourceActorID:  context.SourceActorID,
@@ -76,7 +78,7 @@ func NewDamage(config game.ActionConfig) game.GameMutation {
 					// Set the source as the target
 					TargetActorIDs: []uuid.UUID{*context.SourceActorID},
 				}
-				damageMut := PureDamage(int(*config.Recoil * float64(total)))
+				damageMut := PureDamage(int(*action.Recoil * float64(total)))
 				damageTx := game.MakeTransaction(damageMut, recoilContext)
 				g.JumpTransaction(damageTx)
 			}

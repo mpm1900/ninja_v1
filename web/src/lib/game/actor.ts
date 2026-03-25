@@ -8,7 +8,7 @@ type ActorBaseStat =
   | 'hp'
   | 'ninjutsu'
   | 'speed'
-  | 'stamina'
+  | 'chakra'
   | 'taijutsu'
 
 type ActorStats<T> = Record<ActorBaseStat, T>
@@ -29,12 +29,13 @@ type ActorDef = {
 type Actor = ActorDef & {
   ID: string
   player_ID: string
-  position_ID: string | null
   level: number
   experience: number
-  alive: boolean
-  active: boolean
-  damage: number
+  state: {
+    alive: boolean
+    damage: number
+    position_ID: string
+  },
   base_stats: ActorStats<number>
   staged_stats: ActorStats<number>
   pre_stats: ActorStats<number>

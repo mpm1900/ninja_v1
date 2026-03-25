@@ -8,11 +8,11 @@ import (
 
 var Naruto = game.ActorDef{
 	ActorID:     uuid.New(),
-	Name:        "Naruto Uzumaki",
+	Name:        "Naruto Uzumaki (Toad Sage)",
 	ActionCount: 6,
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       105,
-		game.StatStamina:  130,
+		game.StatChakra:   130,
 		game.StatNinjutsu: 105,
 		game.StatGenjutsu: 75,
 		game.StatTaijutsu: 100,

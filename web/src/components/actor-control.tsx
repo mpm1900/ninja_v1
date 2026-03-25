@@ -2,7 +2,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { Card, CardContent, CardHeader } from './ui/card'
 import { useStore } from '@tanstack/react-store'
 import { actionsQuery } from '#/lib/queries/actions'
-import { clientsStore, type Client } from '#/lib/stores/clients'
+import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
 import { useState } from 'react'
 import type { Context } from '#/lib/game/context'
@@ -16,6 +16,7 @@ import {
 } from './ui/select'
 import { sendContextMessage } from '#/lib/stores/socket'
 import { Button } from './ui/button'
+import { ButtonGroup } from './ui/button-group'
 
 function ActorControl({
   actor_ID,
@@ -25,7 +26,7 @@ function ActorControl({
   enabled: boolean
 }) {
   const actions = useSuspenseQuery(actionsQuery)
-  const client = useStore(clientsStore, (c) => c[0] as Client)
+  const client = useStore(clientsStore, (c) => c.me!)
   const game = useStore(gameStore, (g) => g)
   const source = game.actors.find((a) => a.actor_ID === actor_ID)!
   const [activeActionID, setActiveActionID] = useState<string>()
@@ -41,11 +42,12 @@ function ActorControl({
     <Card className="grid grid-cols-2 rounded-t-none border-t-0 mx-2 mb-2 py-2 gap-0">
       <div>
         <CardHeader className="px-2 flex justify-between">
-          <div className="w-full grid grid-cols-3">
+          <ButtonGroup className="w-full grid grid-cols-3">
             {actions.data.map((a) => (
               <Button
                 key={a.ID}
-                variant={a.ID === activeActionID ? 'default' : 'outline'}
+                className="rounded-none"
+                variant={a.ID === activeActionID ? 'default' : 'secondary'}
                 onClick={() => {
                   setActiveActionID(a.ID)
                 }}
@@ -53,7 +55,7 @@ function ActorControl({
                 {a.config.name}
               </Button>
             ))}
-          </div>
+          </ButtonGroup>
         </CardHeader>
         <CardContent className="px-2">
           <ActionControl
@@ -85,9 +87,9 @@ function ActorControl({
                 })
               }}
             >
-              <SelectTrigger className="">
+              <SelectTrigger>
                 <SelectValue>
-                  {game.players.includes(source.player_ID) ? (
+                  {game.players.map((p) => p.ID).includes(source.player_ID) ? (
                     source.player_ID
                   ) : (
                     <span className="text-red-300">{source.player_ID}</span>
@@ -96,14 +98,19 @@ function ActorControl({
               </SelectTrigger>
               <SelectContent>
                 {game.players.map((item) => (
-                  <SelectItem key={item} value={item}>
-                    {item}
+                  <SelectItem key={item.ID} value={item.ID}>
+                    {item.ID}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
         </CardHeader>
+        <CardContent>
+          <div className='text-right'>
+            Position: {source.state.position_ID}
+          </div>
+        </CardContent>
       </div>
     </Card>
   )

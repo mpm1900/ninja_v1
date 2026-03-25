@@ -20,6 +20,18 @@ type DamageTerms struct {
 	STAB     float64
 }
 
+type DamageConfig struct {
+	Critical float64
+	Random   float64
+}
+
+func NewDamageConfig() DamageConfig {
+	return DamageConfig{
+		Critical: 1,
+		Random:   1,
+	}
+}
+
 func DamageEquation(terms DamageTerms) int {
 	pow_ad := float64(terms.Power) * float64(terms.Attack) / float64(terms.Defense)
 	level_mod := float64(2*terms.Level)/5 + 2
@@ -32,15 +44,28 @@ func DamageEquation(terms DamageTerms) int {
 	return int(math.Floor(raw)) + terms.Offset
 }
 
-func GetNaturesModifier(source, target ResolvedActor, natures []Nature) float64 {
-	nature_mod := 1.0
-	for _, nature := range natures {
-		a_offset := (source.NatureDamage[nature] - 1)
-		d_offset := (target.NatureResistance[nature] - 1)
-		nature_mod += (a_offset - d_offset)
+func GetNaturesModifier(source, target ResolvedActor, moveNatures []Nature) float64 {
+	targetNatures := make(map[Nature]struct{})
+	for _, group := range target.Natures {
+		for _, nature := range group {
+			targetNatures[nature] = struct{}{}
+		}
 	}
 
-	return nature_mod
+	effectiveness := 1.0
+	for _, moveNature := range moveNatures {
+		for targetNature := range targetNatures {
+			effectiveness *= GetEffectiveness(moveNature, targetNature)
+		}
+	}
+
+	proficiency := 1.0
+	for _, nature := range moveNatures {
+		proficiency *= source.NatureDamage[nature]
+		proficiency /= target.NatureResistance[nature]
+	}
+
+	return proficiency * effectiveness
 }
 
 func GetStabModifier(source ResolvedActor, nature *NatureSet) float64 {
@@ -60,7 +85,15 @@ func GetStabModifier(source ResolvedActor, nature *NatureSet) float64 {
 	return 1.5
 }
 
-func GetDamage(source ResolvedActor, targets []ResolvedActor, stat AttackStat, power int, nature *NatureSet) []int {
+func GetDamage(
+	source ResolvedActor,
+	targets []ResolvedActor,
+	stat AttackStat,
+	power int,
+	critical float64,
+	nature *NatureSet,
+	random float64,
+) []int {
 	damages := make([]int, len(targets))
 	if power == 0 {
 		return damages
@@ -84,14 +117,14 @@ func GetDamage(source ResolvedActor, targets []ResolvedActor, stat AttackStat, p
 
 		damages[i] = DamageEquation(DamageTerms{
 			Attack:   attack,
-			Critical: 1.00,
+			Critical: critical,
 			Defense:  defense,
 			Level:    source.Level,
 			Nature:   nature_mod,
 			Offset:   0,
 			Other:    1.00,
 			Power:    power,
-			Random:   1.00,
+			Random:   random,
 			STAB:     stab_mod,
 		})
 	}

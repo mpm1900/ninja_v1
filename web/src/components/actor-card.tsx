@@ -12,12 +12,12 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
     .map((m) => m.mutation)
     .concat(actor?.innate_modifiers ?? [])
   const HpIcon = STAT_ICONS.hp
-  const StaminaIcon = STAT_ICONS.stamina
+  const ChakraIcon = STAT_ICONS.chakra
   const SpeedIcon = STAT_ICONS.speed
   const NinjutsuIcon = STAT_ICONS.ninjutsu
   const GenjutsuIcon = STAT_ICONS.genjutsu
   const Taijutsu = STAT_ICONS.taijutsu
-  const playerIndex = actor ? game.players.indexOf(actor.player_ID) : -1
+  const playerIndex = actor ? game.players.map(p => p.ID).indexOf(actor.player_ID) : -1
   return (
     <Item variant="muted">
       <ItemContent>
@@ -47,8 +47,8 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
                 <ActorStat actor={actor} stat="hp" showBase={false} />
               </div>
               <div className="flex items-center gap-2 justify-center">
-                {StaminaIcon && <StaminaIcon />}
-                <ActorStat actor={actor} stat="stamina" showBase={false} />
+                {ChakraIcon && <ChakraIcon />}
+                <ActorStat actor={actor} stat="chakra" showBase={false} />
               </div>
               <div className="flex items-center gap-2 justify-center">
                 {SpeedIcon && <SpeedIcon />}

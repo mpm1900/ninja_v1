@@ -58,12 +58,11 @@ function ActionControl({
   const instanceID = useStore(socketStore, (s) => s.instanceID!)
   const game = useStore(gameStore, (g) => g)
   const valid = useQuery(isActionContextValidQuery(action_ID, context))
-  const client = useStore(clientsStore, (c) => c[0])
+  const client = useStore(clientsStore, (c) => c.me!)
   const actionTargets = useQuery(
     actionTargetsQuery(instanceID, action_ID, context)
   )
   const loading = valid.isFetching || actionTargets.isFetching
-  console.log('actionID', action_ID)
 
   useEffect(() => {
     actionTargets.refetch()

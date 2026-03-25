@@ -44,10 +44,10 @@ func OtherFilter(actor Actor, context Context) bool {
 	return actor.ID != *context.SourceActorID
 }
 func AliveFilter(actor Actor, context Context) bool {
-	return actor.Alive
+	return actor.State.Alive
 }
 func ActiveFilter(actor Actor, context Context) bool {
-	return actor.Active
+	return actor.State.PositionID != nil
 }
 func SourceFilter(actor Actor, context Context) bool {
 	if !ActiveFilter(actor, context) {
@@ -89,7 +89,7 @@ func MatchSourceActorIDTrigger(game Game, context Context, modifier_tx Transacti
 	return *context.SourceActorID == *modifier_tx.Context.SourceActorID
 }
 
-func MatchTargetActorIDTrigger(game Game, context Context, modifier_tx Transaction[Modifier]) bool {
+func Match__TargetActor_SourceActor(game Game, context Context, modifier_tx Transaction[Modifier]) bool {
 	if len(context.TargetActorIDs) == 0 || modifier_tx.Context.SourceActorID == nil {
 		return false
 	}

@@ -2,7 +2,7 @@ package game
 
 import (
 	"encoding/json"
-	"maps"
+	"fmt"
 	"slices"
 
 	"github.com/google/uuid"
@@ -13,8 +13,6 @@ type GameTransaction = Transaction[GameMutation]
 
 type GameStatus string
 
-type Player = uuid.UUID
-
 const (
 	GameStatusRunning GameStatus = "running"
 	GameStatusIdle    GameStatus = "idle"
@@ -22,7 +20,7 @@ const (
 
 type Game struct {
 	Status    GameStatus              `json:"status"`
-	Players   map[Player]struct{}     `json:"players"`
+	Players   []Player                `json:"players"`
 	Actors    []Actor                 `json:"actors"`
 	Modifiers []Transaction[Modifier] `json:"modifiers"`
 
@@ -34,13 +32,23 @@ type Game struct {
 func NewGame() Game {
 	return Game{
 		Status:       GameStatusIdle,
-		Players:      make(map[Player]struct{}),
+		Players:      make([]Player, 0),
 		Actors:       make([]Actor, 0),
 		Modifiers:    make([]Transaction[Modifier], 0),
 		Transactions: MakeQueue[GameTransaction](),
 		Actions:      MakeQueue[Transaction[Action]](),
 		Triggers:     MakeQueue[Transaction[Trigger]](),
 	}
+}
+
+func (g Game) GetPlayer(ID uuid.UUID) (bool, Player) {
+	for _, p := range g.Players {
+		if p.ID == ID {
+			return true, p
+		}
+	}
+
+	return false, Player{}
 }
 
 func (g Game) GetActor(predicate func(Actor) bool) (bool, Actor) {
@@ -61,6 +69,13 @@ func (g Game) GetActors(predicate func(Actor) bool) []Actor {
 		}
 	}
 	return actors
+}
+
+func (g Game) GetActorsFilters(filters ...ActorFilter) []Actor {
+	filter := ComposeAF(filters...)
+	return g.GetActors(func(a Actor) bool {
+		return filter(a, Context{})
+	})
 }
 
 func (g Game) GetTriggers(context Context) []Transaction[Trigger] {
@@ -93,11 +108,101 @@ func (g *Game) FilterModifiers(predicate func(modifier Transaction[Modifier]) bo
 }
 
 func (g *Game) AddPlayer(player Player) {
-	g.Players[player] = struct{}{}
+	g.Players = append(g.Players, player)
 }
 
-func (g *Game) RemovePlayer(player Player) {
-	delete(g.Players, player)
+func (g *Game) RemovePlayer(playerID uuid.UUID) {
+	g.Players = slices.DeleteFunc(g.Players, func(p Player) bool {
+		return p.ID == playerID
+	})
+}
+
+func (g *Game) UpdatePlayer(playerID uuid.UUID, updater func(Player) Player) {
+	index := slices.IndexFunc(g.Players, func(p Player) bool {
+		return p.ID == playerID
+	})
+
+	if index == -1 {
+		return
+	}
+
+	g.Players[index] = updater(g.Players[index])
+}
+
+func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
+	ok, player := g.GetPlayer(actor.PlayerID)
+	if !ok {
+		return
+	}
+
+	prevPos := actor.State.PositionID
+	if (prevPos == nil && positionID == nil) || (prevPos != nil && positionID != nil && *prevPos == *positionID) {
+		return
+	}
+
+	var (
+		nextPos      uuid.UUID
+		hasNextPos   = positionID != nil
+		currOccupant *uuid.UUID
+		err          error
+	)
+
+	if hasNextPos {
+		nextPos = *positionID
+		currOccupant = player.Positions[nextPos]
+	}
+
+	g.UpdatePlayer(player.ID, func(p Player) Player {
+		if prevPos != nil {
+			err = p.SetPosition(*prevPos, nil)
+		}
+		if err == nil && hasNextPos {
+			err = p.SetPosition(nextPos, &actor.ID)
+		}
+		return p
+	})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	g.UpdateActor(actor.ID, func(a Actor) Actor {
+		if hasNextPos {
+			a.State.PositionID = &nextPos
+		} else {
+			a.State.PositionID = nil
+		}
+		return a
+	})
+
+	if hasNextPos && currOccupant != nil && *currOccupant != actor.ID {
+		g.UpdateActor(*currOccupant, func(a Actor) Actor {
+			a.State.PositionID = nil
+			return a
+		})
+	}
+}
+
+func (g *Game) SetActorPlayer(actor Actor, playerID uuid.UUID, positionID *uuid.UUID) {
+	if actor.PlayerID != playerID {
+		g.SetPosition(actor, nil)
+		g.UpdateActor(actor.ID, func(a Actor) Actor {
+			a.PlayerID = playerID
+			return a
+		})
+
+		ok, updatedActor := g.GetActor(func(a Actor) bool {
+			return a.ID == actor.ID
+		})
+		if !ok {
+			return
+		}
+
+		g.SetPosition(updatedActor, positionID)
+		return
+	}
+
+	g.SetPosition(actor, positionID)
 }
 
 func (g *Game) AddModifier(modifier Transaction[Modifier]) {
@@ -229,7 +334,7 @@ func (g Game) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(gameJSON{
 		Status:       g.Status,
-		Players:      slices.Collect(maps.Keys(g.Players)),
+		Players:      g.Players,
 		Actors:       resolved,
 		Modifiers:    g.Modifiers,
 		Transactions: g.Transactions,

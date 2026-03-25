@@ -19,7 +19,7 @@ type NatureSet =
   | 'storm'
   | 'wood'
   | 'yinyang'
-  | 'dust'
+  | 'particle'
   | 'jashin'
 
 const natureNames: Partial<Record<NatureSet, string>> = {
@@ -55,7 +55,7 @@ const natureIndexes: Record<NatureSet, number> = {
   storm: 15,
   wood: 16,
   yinyang: 17,
-  dust: 18,
+  particle: 18,
   pure: 19,
   jashin: 20,
 }

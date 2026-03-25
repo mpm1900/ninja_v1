@@ -13,7 +13,7 @@ var Yamato = game.ActorDef{
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       90,
-		game.StatStamina:  101,
+		game.StatChakra:   101,
 		game.StatNinjutsu: 120,
 		game.StatGenjutsu: 70,
 		game.StatTaijutsu: 91,

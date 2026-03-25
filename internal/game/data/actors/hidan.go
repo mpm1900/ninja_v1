@@ -13,7 +13,7 @@ var Hidan = game.ActorDef{
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       190,
-		game.StatStamina:  60,
+		game.StatChakra:   60,
 		game.StatNinjutsu: 58,
 		game.StatGenjutsu: 58,
 		game.StatTaijutsu: 80,

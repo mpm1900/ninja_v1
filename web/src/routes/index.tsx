@@ -12,12 +12,14 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { ClientOnly, createFileRoute } from '@tanstack/react-router'
 import { Loader, Signal, Unplug } from 'lucide-react'
 import { gameStore } from '#/lib/stores/game'
-import { clientsStore, type Client } from '#/lib/stores/clients'
+import { clientsStore } from '#/lib/stores/clients'
 import { ActorCard } from '#/components/actor-card'
 import { modifiersQuery } from '#/lib/queries/modifiers'
 import { ModifiersTable } from '#/components/modifiers-table'
 import { actionsQuery } from '#/lib/queries/actions'
 import { ActorControl } from '#/components/actor-control'
+import { triggersQuery } from '#/lib/queries/trigger-types'
+import { Button } from '#/components/ui/button'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -25,15 +27,17 @@ export const Route = createFileRoute('/')({
     await context.queryClient.ensureQueryData(actionsQuery)
     await context.queryClient.ensureQueryData(actorsQuery)
     await context.queryClient.ensureQueryData(modifiersQuery)
+    await context.queryClient.ensureQueryData(triggersQuery)
     await context.queryClient.ensureQueryData(instancesQuery)
   },
 })
 
 function App() {
   const actors = useSuspenseQuery(actorsQuery)
+  const triggers = useSuspenseQuery(triggersQuery)
   const instanceID = useStore(socketStore, (s) => s.instanceID)
   const status = useStore(socketStore, (s) => s.status)
-  const client = useStore(clientsStore, (c) => c[0] as Client | undefined)
+  const client = useStore(clientsStore, (c) => c.me)
   const game = useStore(gameStore, (g) => g)
 
   return (
@@ -54,9 +58,14 @@ function App() {
               onValueChange={connectSocket}
             />
           </div>
-          <div></div>
+          <div>ME: {client?.ID}</div>
         </header>
         <div className="space-y-6">
+          <div>
+            {triggers.data.map((trigger) => (
+              <Button key={trigger}>{trigger}</Button>
+            ))}
+          </div>
           <div>
             <div className="grid grid-cols-3 gap-2 p-2">
               <ActorCard actor={game.actors[0]} game={game} />
@@ -91,12 +100,14 @@ function App() {
                   },
                 })
               }}
-              subRow={({ row }) => (
-                <ActorControl
-                  actor_ID={row.original.actor_ID}
-                  enabled={game.status == 'idle'}
-                />
-              )}
+              subRow={({ row }) =>
+                client && (
+                  <ActorControl
+                    actor_ID={row.original.actor_ID}
+                    enabled={game.status == 'idle'}
+                  />
+                )
+              }
             />
             <ModifiersTable
               data={game.modifiers ?? []}

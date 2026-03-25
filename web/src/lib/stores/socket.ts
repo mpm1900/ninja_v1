@@ -106,10 +106,17 @@ function connectSocket(instanceID: string) {
         gameStore.setState(() => message.state!)
       }
       if (message.type === 'clients') {
-        clientsStore.setState(() => message.clients!)
+        clientsStore.setState((c) => ({
+          ...c,
+          clients: message.clients!,
+        }))
       }
       if (message.type === 'join-success') {
         gameStore.setState(() => message.state!)
+        clientsStore.setState((c) => ({
+          ...c,
+          me: message.clients![0],
+        }))
       }
     } catch {
       // Ignore non-JSON websocket payloads

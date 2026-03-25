@@ -35,7 +35,7 @@ func MakeLeafJab() game.Action {
 				// accuracy checks TODO
 				// fmt.Print(config.Accuracy)
 
-				damages := mutations.NewDamage(config)
+				damages := mutations.NewDamage(config, game.NewDamageConfig())
 				transactions = append(
 					transactions,
 					mutations.MakeDamageTransactions(context, damages)...,

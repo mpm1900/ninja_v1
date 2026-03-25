@@ -76,18 +76,18 @@ const columns = [
     cell: (props) => <ActorStatBase actor={props.row.original} stat="hp" />,
     sortingFn: 'alphanumeric',
   }),
-  helper.accessor('stats.stamina', {
+  helper.accessor('stats.chakra', {
     header: ({ column }) => (
       <Button
         className="-ml-4"
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        stamina
+        chakra
       </Button>
     ),
     cell: (props) => (
-      <ActorStatBase actor={props.row.original} stat="stamina" />
+      <ActorStatBase actor={props.row.original} stat="chakra" />
     ),
   }),
   helper.accessor('stats.speed', {

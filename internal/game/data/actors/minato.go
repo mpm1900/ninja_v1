@@ -13,7 +13,7 @@ var Minato = game.ActorDef{
 	ActionCount: 6,
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       60,
-		game.StatStamina:  60,
+		game.StatChakra:   60,
 		game.StatNinjutsu: 120,
 		game.StatGenjutsu: 80,
 		game.StatTaijutsu: 100,

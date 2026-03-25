@@ -33,7 +33,7 @@ const (
 	NsStorm     NatureSet = "storm"
 	NsWood      NatureSet = "wood"
 	NsYinYang   NatureSet = "yinyang"
-	NsDust      NatureSet = "dust"
+	NsParticle  NatureSet = "particle"
 	NsPure      NatureSet = "pure"
 	NsJashin    NatureSet = "jashin"
 )
@@ -60,8 +60,26 @@ var NATURES = map[NatureSet][]Nature{
 	NsStorm:     {NatureLightning, NatureWater},
 	NsWood:      {NatureEarth, NatureWater},
 	NsYinYang:   {NatureYin, NatureYang},
-	NsDust:      {NatureFire, NatureEarth, NatureWind},
+	NsParticle:  {NatureFire, NatureEarth, NatureWind},
 	NsJashin:    {},
+}
+
+var ElementalCycle = map[Nature]Nature{
+	NatureFire:      NatureWind,
+	NatureWind:      NatureLightning,
+	NatureLightning: NatureEarth,
+	NatureEarth:     NatureWater,
+	NatureWater:     NatureFire,
+}
+
+func GetEffectiveness(moveNature Nature, targetNature Nature) float64 {
+	if ElementalCycle[moveNature] == targetNature {
+		return 2.0
+	}
+	if ElementalCycle[targetNature] == moveNature {
+		return 0.5
+	}
+	return 1.0
 }
 
 func MapNatures(keys []NatureSet) map[NatureSet][]Nature {
