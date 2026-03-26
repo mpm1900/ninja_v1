@@ -4,7 +4,6 @@ import (
 	"ninja_v1/internal/game"
 	data "ninja_v1/internal/game/data"
 	"slices"
-	"time"
 )
 
 func Reducer(instance *Instance, request Request) int {
@@ -56,21 +55,17 @@ func Reducer(instance *Instance, request Request) int {
 			return none
 		}
 
-		instance.Game.Status = game.GameStatusRunning
 		transaction := game.MakeTransaction(action, request.Context)
-		instance.Game.Actions.Enqueue(transaction)
+		instance.Game.PushAction(transaction)
 
-		go func() {
-			time.Sleep(time.Second / 2)
-			for instance.Game.Next() {
-				instance.BroadcastGame()
-				time.Sleep(time.Second)
-			}
+		return state
+	case RunGameActions:
+		if instance.Game.Status == game.GameStatusRunning {
+			return none
+		}
 
-			instance.Game.Status = game.GameStatusIdle
-			instance.BroadcastGame()
-		}()
-
+		instance.Game.Status = game.GameStatusRunning
+		instance.RunGameActions()
 		return state
 
 	case SetActorPlayer:

@@ -17,15 +17,36 @@ const (
 	GameStatusIdle    GameStatus = "idle"
 )
 
+/**
+ * Game is the main state container state for a game instance
+ */
 type Game struct {
 	Status    GameStatus              `json:"status"`
 	Players   []Player                `json:"players"`
 	Actors    []Actor                 `json:"actors"`
 	Modifiers []Transaction[Modifier] `json:"modifiers"`
 
-	Transactions Queue[GameTransaction]      `json:"transactions"`
-	Actions      Queue[Transaction[Action]]  `json:"actions"`
-	Triggers     Queue[Transaction[Trigger]] `json:"triggers"`
+	/*
+	 * [Transactions] are the quable/storable change in state
+	 * 	- mostly to animate and modify state changes while running
+	 *  - so one aciton can do multiple things, in order
+	 */
+	Transactions Queue[GameTransaction] `json:"transactions"`
+	/*
+	 * [Triggers] are basically Actions that do not need input to resolve
+	 *  - triggers are to delay, repeat, or statically/conditionally respond to events
+	 */
+	Triggers Queue[Transaction[Trigger]] `json:"triggers"`
+	/*
+	 * [Actions] are a sorted list of actions to be resolved
+	 *  - actions resolve down to reansactions
+	 *
+	 * [Prompts] are special actions that pause Action resolution loops.
+	 *  - can stop actions from resolving while waiting for user input
+	 *  - switch ins will be a common Prompt
+	 */
+	Actions Queue[Transaction[Action]] `json:"actions"`
+	Prompts Queue[Transaction[Action]] `json:"prompts"`
 }
 
 func NewGame() Game {
@@ -40,16 +61,27 @@ func NewGame() Game {
 	}
 }
 
-func (g Game) GetPlayerByID(ID uuid.UUID) (bool, Player) {
-	for _, p := range g.Players {
-		if p.ID == ID {
-			return true, p
+/**
+ * Getters
+ */
+
+// Player
+func (g Game) GetPlayer(predicate func(Player) bool) (bool, Player) {
+	for _, a := range g.Players {
+		if predicate(a) {
+			return true, a
 		}
 	}
 
 	return false, Player{}
 }
+func (g Game) GetPlayerByID(ID uuid.UUID) (bool, Player) {
+	return g.GetPlayer(func(p Player) bool {
+		return p.ID == ID
+	})
+}
 
+// Actor
 func (g Game) GetActor(predicate func(Actor) bool) (bool, Actor) {
 	for _, a := range g.Actors {
 		if predicate(a) {
@@ -59,13 +91,11 @@ func (g Game) GetActor(predicate func(Actor) bool) (bool, Actor) {
 
 	return false, Actor{}
 }
-
-func (g Game) GetActorByID(actorID uuid.UUID) (bool, Actor) {
+func (g Game) GetActorByID(ID uuid.UUID) (bool, Actor) {
 	return g.GetActor(func(a Actor) bool {
-		return a.ID == actorID
+		return a.ID == ID
 	})
 }
-
 func (g Game) GetActors(predicate func(Actor) bool) []Actor {
 	actors := make([]Actor, 0)
 	for _, a := range g.Actors {
@@ -74,6 +104,12 @@ func (g Game) GetActors(predicate func(Actor) bool) []Actor {
 		}
 	}
 	return actors
+}
+func (g Game) GetActorsFilters(filters ...ActorFilter) []Actor {
+	filter := ComposeAF(filters...)
+	return g.GetActors(func(a Actor) bool {
+		return filter(a, Context{})
+	})
 }
 
 func (g Game) GetResolvedActors() map[uuid.UUID]ResolvedActor {
@@ -84,13 +120,6 @@ func (g Game) GetResolvedActors() map[uuid.UUID]ResolvedActor {
 	}
 
 	return actors
-}
-
-func (g Game) GetActorsFilters(filters ...ActorFilter) []Actor {
-	filter := ComposeAF(filters...)
-	return g.GetActors(func(a Actor) bool {
-		return filter(a, Context{})
-	})
 }
 
 func (g Game) GetTriggers(context Context) []Transaction[Trigger] {
@@ -179,8 +208,6 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 	}
 }
 
-
-
 func (g *Game) SetActorPlayerIndex(actor Actor, index *int) {
 	if index == nil {
 		g.SetPosition(actor, nil)
@@ -222,13 +249,30 @@ func (g *Game) UpdateActor(actorID uuid.UUID, updater func(Actor) Actor) {
 }
 
 func (g *Game) PushAction(transaction Transaction[Action]) {
+	for _, t := range g.Actions {
+		if *t.Context.SourceActorID == *transaction.Context.SourceActorID {
+			return
+		}
+	}
+
 	g.Actions.Enqueue(transaction)
 	slices.SortFunc(g.Actions, func(a, b Transaction[Action]) int {
 		if a.Mutation.Priority != b.Mutation.Priority {
-			return a.Priority - b.Priority
+			return b.Priority - a.Priority
 		}
 
-		return 0
+		ok, a_source := g.GetActorByID(*a.Context.SourceActorID)
+		if !ok {
+			return 1
+		}
+		ok, b_source := g.GetActorByID(*b.Context.SourceActorID)
+		if !ok {
+			return -1
+		}
+
+		a_res := a_source.Resolve(*g)
+		b_res := b_source.Resolve(*g)
+		return b_res.Stats[StatSpeed] - a_res.Stats[StatSpeed]
 	})
 }
 
@@ -256,11 +300,6 @@ func (g *Game) On(on TriggerOn, context Context) {
 func (g *Game) JumpTransaction(transaction Transaction[GameMutation]) {
 	next := Queue[GameTransaction]{transaction}
 	g.Transactions = append(next, g.Transactions...)
-}
-
-func (g *Game) Flush() {
-	for g.NextTransaction() {
-	}
 }
 
 func (g *Game) NextTransaction() bool {
@@ -312,6 +351,11 @@ func (g *Game) Next() bool {
 	}
 
 	return false
+}
+
+func (g *Game) Flush() {
+	for g.NextTransaction() {
+	}
 }
 
 func (g Game) MarshalJSON() ([]byte, error) {

@@ -108,7 +108,7 @@ function ActorControl({
             </Select>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-2">
           <PositionSelect actor={source} game={game} />
         </CardContent>
       </div>

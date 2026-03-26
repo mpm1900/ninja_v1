@@ -16,6 +16,7 @@ const (
 	PushAction       RequestType = "push-action"
 	SetActorPlayer   RequestType = "set-actor-player"   // TEMP
 	SetActorPosition RequestType = "set-actor-position" // TEMP
+	RunGameActions   RequestType = "run-game-actions"   // TEMP
 )
 
 type Request struct {

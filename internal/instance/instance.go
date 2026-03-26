@@ -4,6 +4,7 @@ import (
 	"context"
 	"maps"
 	"slices"
+	"time"
 
 	"ninja_v1/internal/game"
 
@@ -105,4 +106,18 @@ func (i *Instance) Run() {
 			}
 		}
 	}
+}
+
+func (i *Instance) RunGameActions() {
+	go func() {
+		i.Game.Status = game.GameStatusRunning
+		time.Sleep(time.Second / 2)
+		for i.Game.Next() {
+			i.BroadcastGame()
+			time.Sleep(time.Second)
+		}
+
+		i.Game.Status = game.GameStatusIdle
+		i.BroadcastGame()
+	}()
 }

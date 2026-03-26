@@ -1,3 +1,4 @@
+import type { ActionTransaction } from './action'
 import type { Actor } from './actor'
 import type { ModifierTransaction } from './modifier'
 import type { Player } from './player'
@@ -8,7 +9,7 @@ type Game = {
   modifiers: ModifierTransaction[]
   players: Player[]
 
-  // TODO
+  actions: ActionTransaction[]
 }
 
 export type { Game }

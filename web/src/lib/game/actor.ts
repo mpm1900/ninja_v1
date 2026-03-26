@@ -1,15 +1,16 @@
+import type { Action } from './action'
 import type { Modifier } from './modifier'
 import type { Nature, NatureSet } from './nature'
 
+type ActorAttackStat = 'genjutsu' | 'ninjutsu' | 'taijutsu'
+
 type ActorBaseStat =
+  | ActorAttackStat
   | 'accuracy'
   | 'evasion'
-  | 'genjutsu'
   | 'hp'
-  | 'ninjutsu'
   | 'speed'
   | 'chakra'
-  | 'taijutsu'
 
 type ActorStats<T> = Record<ActorBaseStat, T>
 type NatureStats<T> = Record<Nature, T>
@@ -35,7 +36,7 @@ type Actor = ActorDef & {
     alive: boolean
     damage: number
     position_ID: string
-  },
+  }
   base_stats: ActorStats<number>
   staged_stats: ActorStats<number>
   pre_stats: ActorStats<number>
@@ -58,5 +59,5 @@ function getTotalBaseStats(actor: ActorDef) {
   return Object.values(stats).reduce((p, c) => p + c, 0)
 }
 
-export type { ActorDef, Actor, ActorBaseStat }
+export type { ActorDef, Actor, ActorAttackStat, ActorBaseStat }
 export { checkActorStat, getTotalBaseStats }

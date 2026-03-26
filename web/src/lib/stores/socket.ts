@@ -27,6 +27,7 @@ type SocketRequestType =
   | 'push-action'
   | 'set-actor-player'
   | 'set-actor-position'
+  | 'run-game-actions'
 
 type SocketRequest = {
   type: SocketRequestType
