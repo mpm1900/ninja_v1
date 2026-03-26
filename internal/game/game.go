@@ -2,6 +2,7 @@ package game
 
 import (
 	"encoding/json"
+	"fmt"
 	"slices"
 
 	"github.com/google/uuid"
@@ -46,7 +47,7 @@ type Game struct {
 	 *  - switch ins will be a common Prompt
 	 */
 	Actions Queue[Transaction[Action]] `json:"actions"`
-	Prompts Queue[Transaction[Action]] `json:"prompts"`
+	Prompt  *Transaction[Action]       `json:"prompt"`
 }
 
 func NewGame() Game {
@@ -57,6 +58,7 @@ func NewGame() Game {
 		Modifiers:    make([]Transaction[Modifier], 0),
 		Transactions: MakeQueue[GameTransaction](),
 		Actions:      MakeQueue[Transaction[Action]](),
+		Prompt:       nil,
 		Triggers:     MakeQueue[Transaction[Trigger]](),
 	}
 }
@@ -159,6 +161,10 @@ func (g *Game) RemovePlayer(playerID uuid.UUID) {
 	g.Players = slices.DeleteFunc(g.Players, func(p Player) bool {
 		return p.ID == playerID
 	})
+
+	for i, _ := range g.Actors {
+		g.Actors[i].State.PositionID = nil
+	}
 }
 
 func (g *Game) UpdatePlayer(playerID uuid.UUID, updater func(Player) Player) {
@@ -276,6 +282,10 @@ func (g *Game) PushAction(transaction Transaction[Action]) {
 	})
 }
 
+func (g *Game) SetPrompt(transaction *Transaction[Action]) {
+	g.Prompt = transaction
+}
+
 func (g *Game) RunAction(transaction Transaction[Action]) {
 	transactions := ResolveAction(*g, transaction)
 	g.Transactions = append(g.Transactions, transactions...)
@@ -300,6 +310,51 @@ func (g *Game) On(on TriggerOn, context Context) {
 func (g *Game) JumpTransaction(transaction Transaction[GameMutation]) {
 	next := Queue[GameTransaction]{transaction}
 	g.Transactions = append(next, g.Transactions...)
+}
+
+func (g *Game) Validate() bool {
+	for _, player := range g.Players {
+		missing_pos := make([]uuid.UUID, 0)
+		for _, pos := range player.Positions {
+			if pos.ActorID == nil {
+				missing_pos = append(missing_pos, pos.ID)
+				continue
+			}
+
+			ok, actor := g.GetActorByID(*pos.ActorID)
+			if !ok {
+				missing_pos = append(missing_pos, pos.ID)
+				continue
+			}
+
+			if !actor.State.Alive {
+				missing_pos = append(missing_pos, pos.ID)
+				g.SetPosition(actor, nil)
+			}
+		}
+
+		if len(missing_pos) > 0 {
+			fmt.Printf("%s needs %d\n", player.ID, missing_pos)
+			action := SwitchIn(len(missing_pos))
+			context := NewContext()
+			context.SourcePlayerID = &player.ID
+			context.TargetPositionIDs = missing_pos
+
+			possible_targets := g.GetActors(func(a Actor) bool {
+				return action.TargetPredicate(a, context)
+			})
+
+			if len(possible_targets) == 0 {
+				return false
+			}
+
+			transaction := MakeTransaction(action, context)
+			g.Prompt = &transaction
+			return false
+		}
+	}
+
+	return true
 }
 
 func (g *Game) NextTransaction() bool {
@@ -373,6 +428,7 @@ func (g Game) MarshalJSON() ([]byte, error) {
 		Modifiers    []Transaction[Modifier]     `json:"modifiers"`
 		Transactions []Transaction[GameMutation] `json:"transactions"`
 		Actions      []Transaction[Action]       `json:"actions"`
+		Prompt       *Transaction[Action]        `json:"prompt"`
 		Triggers     []Transaction[Trigger]      `json:"triggers"`
 	}
 
@@ -383,6 +439,7 @@ func (g Game) MarshalJSON() ([]byte, error) {
 		Modifiers:    g.Modifiers,
 		Transactions: g.Transactions,
 		Actions:      g.Actions,
+		Prompt:       g.Prompt,
 		Triggers:     g.Triggers,
 	})
 }

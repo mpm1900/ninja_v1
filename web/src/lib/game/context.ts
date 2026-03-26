@@ -16,5 +16,13 @@ function contextToString(c: Context): string {
   return `${c.parent_actor_ID}.${c.source_actor_ID}.${c.source_player_ID}.${c.target_actor_IDs.join('+')}.${c.target_position_IDs.join('+')}`
 }
 
-export { ContextSchema, contextToString }
+const NULL_CONTEXT: Context = {
+  parent_actor_ID: null,
+  source_actor_ID: null,
+  source_player_ID: null,
+  target_actor_IDs: [],
+  target_position_IDs: [],
+}
+
+export { ContextSchema, contextToString, NULL_CONTEXT }
 export type { Context }

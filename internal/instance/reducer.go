@@ -59,6 +59,19 @@ func Reducer(instance *Instance, request Request) int {
 		instance.Game.PushAction(transaction)
 
 		return state
+	case ResolvePrompt:
+		action, ok := data.ACTIONS[*request.ActionID]
+		if !ok {
+			return none
+		}
+
+		transaction := game.MakeTransaction(action, request.Context)
+		instance.Game.Prompt = nil
+		instance.Game.RunAction(transaction)
+		instance.RunGameActions()
+
+		return state
+
 	case RunGameActions:
 		if instance.Game.Status == game.GameStatusRunning {
 			return none
@@ -67,6 +80,12 @@ func Reducer(instance *Instance, request Request) int {
 		instance.Game.Status = game.GameStatusRunning
 		instance.RunGameActions()
 		return state
+
+	case ValidateState:
+		if !instance.Game.Validate() {
+			return state
+		}
+		return none
 
 	case SetActorPlayer:
 		count, targets := instance.Game.GetTargets(request.Context)

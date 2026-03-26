@@ -21,6 +21,7 @@ import { ActorControl } from '#/components/actor-control'
 import { triggersQuery } from '#/lib/queries/trigger-types'
 import { Button } from '#/components/ui/button'
 import { ActionQueue } from '#/components/action-queue'
+import { PromptController } from '#/components/prompt-controller'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -43,6 +44,7 @@ function App() {
 
   return (
     <ClientOnly>
+      <PromptController />
       <main className="">
         <header className="flex justify-between p-2">
           <div>
@@ -65,14 +67,38 @@ function App() {
           <ActionQueue />
 
           <div className="grid grid-cols-3 gap-2 p-2">
-            <ActorCard actor={game.actors[0]} game={game} />
-            <ActorCard actor={game.actors[1]} game={game} />
-            <ActorCard actor={game.actors[2]} game={game} />
-            <ActorCard actor={game.actors[3]} game={game} />
-            <ActorCard actor={game.actors[4]} game={game} />
-            <ActorCard actor={game.actors[5]} game={game} />
+            <ActorCard
+              actor={game.actors[0]}
+              clientID={client?.ID}
+              game={game}
+            />
+            <ActorCard
+              actor={game.actors[1]}
+              clientID={client?.ID}
+              game={game}
+            />
+            <ActorCard
+              actor={game.actors[2]}
+              clientID={client?.ID}
+              game={game}
+            />
+            <ActorCard
+              actor={game.actors[3]}
+              clientID={client?.ID}
+              game={game}
+            />
+            <ActorCard
+              actor={game.actors[4]}
+              clientID={client?.ID}
+              game={game}
+            />
+            <ActorCard
+              actor={game.actors[5]}
+              clientID={client?.ID}
+              game={game}
+            />
           </div>
-          <div>
+          <div className='p-2'>
             {triggers.data.map((trigger) => (
               <Button key={trigger}>{trigger}</Button>
             ))}
@@ -103,7 +129,11 @@ function App() {
             subRow={({ row }) =>
               client && (
                 <ActorControl
-                  actor_ID={row.original.actor_ID}
+                  actor={
+                    game.actors.find(
+                      (a) => a.actor_ID === row.original.actor_ID
+                    )!
+                  }
                   enabled={game.status == 'idle'}
                 />
               )

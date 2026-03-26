@@ -18,23 +18,18 @@ import { sendContextMessage } from '#/lib/stores/socket'
 import { Button } from './ui/button'
 import { ButtonGroup } from './ui/button-group'
 import { PositionSelect } from './position-select'
+import type { Actor } from '#/lib/game/actor'
 
-function ActorControl({
-  actor_ID,
-  enabled,
-}: {
-  actor_ID: string
-  enabled: boolean
-}) {
+function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
   const actions = useSuspenseQuery(actionsQuery)
   const client = useStore(clientsStore, (c) => c.me!)
   const game = useStore(gameStore, (g) => g)
-  const source = game.actors.find((a) => a.actor_ID === actor_ID)!
+  const player = game.players.find((p) => p.ID == actor.player_ID)
   const [activeActionID, setActiveActionID] = useState<string>()
   const [context, setContext] = useState<Context>({
     source_player_ID: client.ID,
-    source_actor_ID: source.ID,
-    parent_actor_ID: source.ID,
+    source_actor_ID: actor.ID,
+    parent_actor_ID: actor.ID,
     target_actor_IDs: [],
     target_position_IDs: [],
   })
@@ -49,7 +44,7 @@ function ActorControl({
                 key={a.ID}
                 className="rounded-none"
                 variant={a.ID === activeActionID ? 'default' : 'secondary'}
-                disabled={!source.state.position_ID}
+                disabled={!actor.state.position_ID}
                 onClick={() => {
                   setActiveActionID(a.ID)
                 }}
@@ -62,7 +57,7 @@ function ActorControl({
         <CardContent className="px-2">
           <ActionControl
             action_ID={activeActionID}
-            enabled={enabled}
+            enabled={enabled && !!player && !!actor.state.position_ID}
             context={context}
             onContextChange={setContext}
           />
@@ -74,7 +69,7 @@ function ActorControl({
             <div>Player:</div>
             <Select
               disabled={!enabled}
-              value={source.player_ID}
+              value={actor.player_ID}
               onValueChange={(playerID) => {
                 sendContextMessage({
                   type: 'set-actor-player',
@@ -83,7 +78,7 @@ function ActorControl({
                     source_player_ID: playerID,
                     source_actor_ID: null,
                     parent_actor_ID: null,
-                    target_actor_IDs: [source.ID],
+                    target_actor_IDs: [actor.ID],
                     target_position_IDs: [],
                   },
                 })
@@ -91,10 +86,10 @@ function ActorControl({
             >
               <SelectTrigger>
                 <SelectValue>
-                  {game.players.map((p) => p.ID).includes(source.player_ID) ? (
-                    source.player_ID
+                  {game.players.map((p) => p.ID).includes(actor.player_ID) ? (
+                    actor.player_ID
                   ) : (
-                    <span className="text-red-300">{source.player_ID}</span>
+                    <span className="text-red-300">{actor.player_ID}</span>
                   )}
                 </SelectValue>
               </SelectTrigger>
@@ -109,7 +104,7 @@ function ActorControl({
           </div>
         </CardHeader>
         <CardContent className="px-2">
-          <PositionSelect actor={source} game={game} />
+          <PositionSelect actor={actor} game={game} />
         </CardContent>
       </div>
     </Card>

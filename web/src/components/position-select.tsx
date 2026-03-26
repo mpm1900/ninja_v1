@@ -26,6 +26,7 @@ function PositionSelect({ actor, game }: { actor: Actor; game: Game }) {
               <Button
                 key={i}
                 size="icon"
+                disabled={game.status == 'running'}
                 variant={i === positionIndex ? 'default' : 'outline'}
                 onClick={() => {
                   sendContextMessage({

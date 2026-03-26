@@ -49,6 +49,9 @@ func AliveFilter(actor Actor, context Context) bool {
 func ActiveFilter(actor Actor, context Context) bool {
 	return actor.State.PositionID != nil
 }
+func InactiveFilter(actor Actor, context Context) bool {
+	return actor.State.PositionID == nil
+}
 func SourceFilter(actor Actor, context Context) bool {
 	if !ActiveFilter(actor, context) {
 		return false

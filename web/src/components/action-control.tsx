@@ -7,42 +7,8 @@ import { gameStore } from '#/lib/stores/game'
 import { actionTargetsQuery } from '#/lib/queries/action-targets'
 import { isActionContextValidQuery } from '#/lib/queries/is-action-context-valid'
 import { useEffect } from 'react'
-import type { Actor } from '#/lib/game/actor'
 import { clientsStore } from '#/lib/stores/clients'
-
-function TargetButton({
-  actor,
-  context,
-  contextValid,
-  enabled,
-  loading,
-  onContextChange,
-}: {
-  actor: Actor
-  context: Context
-  contextValid: boolean
-  enabled: boolean
-  loading: boolean
-  onContextChange: (context: Context) => void
-}) {
-  const includes = context.target_actor_IDs.includes(actor.ID)
-  return (
-    <Button
-      disabled={loading || (contextValid && !includes) || !enabled}
-      variant={includes ? 'default' : 'ghost'}
-      onClick={() => {
-        onContextChange({
-          ...context,
-          target_actor_IDs: includes
-            ? context.target_actor_IDs.filter((id) => id !== actor.ID)
-            : [...context.target_actor_IDs, actor.ID],
-        })
-      }}
-    >
-      {actor.name}
-    </Button>
-  )
-}
+import { TargetButton } from './target-button'
 
 function ActionControl({
   action_ID,

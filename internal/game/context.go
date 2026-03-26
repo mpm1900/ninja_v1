@@ -14,6 +14,13 @@ type Context struct {
 	TargetPositionIDs []uuid.UUID `json:"target_position_IDs"`
 }
 
+func NewContext() Context {
+	return Context{
+		TargetActorIDs:    []uuid.UUID{},
+		TargetPositionIDs: []uuid.UUID{},
+	}
+}
+
 func (g Game) GetTargets(context Context) (int, []Actor) {
 	targets := g.GetActors(func(a Actor) bool {
 		return slices.Contains(context.TargetActorIDs, a.ID)

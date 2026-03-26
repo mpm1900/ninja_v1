@@ -2,12 +2,21 @@ import { STAT_ICONS } from '#/data/icons'
 import type { Actor } from '#/lib/game/actor'
 import type { Game } from '#/lib/game/game'
 import { natureIndexes, type NatureSet } from '#/lib/game/nature'
+import { cn } from '#/lib/utils'
 import { ActorStat } from './actor-stat'
 import { HealthBar } from './health-bar'
 import { NatureBadge } from './nature-badge'
 import { Item, ItemActions, ItemContent, ItemTitle } from './ui/item'
 
-function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
+function ActorCard({
+  actor,
+  clientID,
+  game,
+}: {
+  actor: Actor | undefined
+  clientID?: string
+  game: Game
+}) {
   const modifiers = (game.modifiers ?? [])
     .map((m) => m.mutation)
     .concat(actor?.innate_modifiers ?? [])
@@ -34,7 +43,15 @@ function ActorCard({ actor, game }: { actor: Actor | undefined; game: Game }) {
               <span className="text-muted-foreground text-sm">
                 Lv.{actor.level}
               </span>{' '}
-              {actor.name} ({playerIndex}-{positionIndex})
+              <span
+                className={cn({
+                  'text-blue-300': actor.player_ID === clientID,
+                  'text-red-300': actor.player_ID !== clientID,
+                })}
+              >
+                {actor.name}
+              </span>{' '}
+              ({positionIndex})
             </ItemTitle>
             <ItemActions className="gap-0">
               {(Object.keys(actor.natures) as Array<NatureSet>)

@@ -10,6 +10,7 @@ type Game = {
   players: Player[]
 
   actions: ActionTransaction[]
+  prompt: ActionTransaction | null
 }
 
 export type { Game }

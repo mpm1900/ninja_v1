@@ -28,6 +28,8 @@ type SocketRequestType =
   | 'set-actor-player'
   | 'set-actor-position'
   | 'run-game-actions'
+  | 'validate-state'
+  | 'resolve-prompt'
 
 type SocketRequest = {
   type: SocketRequestType
