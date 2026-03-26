@@ -163,7 +163,7 @@ func (g *Game) RemovePlayer(playerID uuid.UUID) {
 	})
 
 	for i, _ := range g.Actors {
-		g.Actors[i].State.PositionID = nil
+		g.Actors[i].PositionID = nil
 	}
 }
 
@@ -180,7 +180,7 @@ func (g *Game) UpdatePlayer(playerID uuid.UUID, updater func(Player) Player) {
 }
 
 func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
-	prev := actor.State.PositionID
+	prev := actor.PositionID
 	ok, player := g.GetPlayerByID(actor.PlayerID)
 	if !ok {
 		return
@@ -190,7 +190,7 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 		curr := player.GetActorAtPosition(*positionID)
 		if curr != nil {
 			g.UpdateActor(*curr, func(a Actor) Actor {
-				a.State.PositionID = nil
+				a.PositionID = nil
 				return a
 			})
 		}
@@ -202,7 +202,7 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 	}
 
 	g.UpdateActor(actor.ID, func(a Actor) Actor {
-		a.State.PositionID = positionID
+		a.PositionID = positionID
 		return a
 	})
 
@@ -327,7 +327,7 @@ func (g *Game) Validate() bool {
 				continue
 			}
 
-			if !actor.State.Alive {
+			if !actor.Alive {
 				missing_pos = append(missing_pos, pos.ID)
 				g.SetPosition(actor, nil)
 			}

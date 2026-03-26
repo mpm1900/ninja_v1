@@ -44,13 +44,13 @@ func OtherFilter(actor Actor, context Context) bool {
 	return actor.ID != *context.SourceActorID
 }
 func AliveFilter(actor Actor, context Context) bool {
-	return actor.State.Alive
+	return actor.Alive
 }
 func ActiveFilter(actor Actor, context Context) bool {
-	return actor.State.PositionID != nil
+	return actor.PositionID != nil
 }
 func InactiveFilter(actor Actor, context Context) bool {
-	return actor.State.PositionID == nil
+	return actor.PositionID == nil
 }
 func SourceFilter(actor Actor, context Context) bool {
 	if !ActiveFilter(actor, context) {

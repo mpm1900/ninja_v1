@@ -14,7 +14,7 @@ function PositionSelect({ actor, game }: { actor: Actor; game: Game }) {
   const options = Array.from({ length: capacity })
   const positionIndex = player?.positions
     .map((p) => p.ID)
-    .indexOf(actor.state.position_ID)
+    .indexOf(actor.position_ID)
 
   return (
     <div className="flex items-center justify-end gap-2">

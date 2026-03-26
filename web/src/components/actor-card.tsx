@@ -31,8 +31,8 @@ function ActorCard({
     : -1
   const positionIndex = actor
     ? game.players[playerIndex]?.positions
-        .map((p) => p.ID)
-        .indexOf(actor.state.position_ID)
+      .map((p) => p.ID)
+      .indexOf(actor.position_ID)
     : -1
   return (
     <Item variant="muted">

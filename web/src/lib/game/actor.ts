@@ -27,16 +27,17 @@ type ActorDef = {
   action_IDs: Array<string>
 }
 
-type Actor = ActorDef & {
+type ActorState = {
+  alive: boolean
+  damage: number
+  position_ID: string
+}
+
+type Actor = ActorDef & ActorState & {
   ID: string
   player_ID: string
   level: number
   experience: number
-  state: {
-    alive: boolean
-    damage: number
-    position_ID: string
-  }
   base_stats: ActorStats<number>
   staged_stats: ActorStats<number>
   pre_stats: ActorStats<number>

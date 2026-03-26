@@ -7,7 +7,7 @@ import (
 var SwitchPositions = GameMutation{
 	Delta: func(g Game, context Context) Game {
 		ok, source := g.GetSource(context)
-		if !ok || source.State.PositionID == nil {
+		if !ok || source.PositionID == nil {
 			return g
 		}
 
@@ -16,7 +16,7 @@ var SwitchPositions = GameMutation{
 			return g
 		}
 
-		g.SetPosition(targets[0], source.State.PositionID)
+		g.SetPosition(targets[0], source.PositionID)
 		return g
 	},
 }

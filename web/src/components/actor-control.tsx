@@ -44,7 +44,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
                 key={a.ID}
                 className="rounded-none"
                 variant={a.ID === activeActionID ? 'default' : 'secondary'}
-                disabled={!actor.state.position_ID}
+                disabled={!actor.position_ID}
                 onClick={() => {
                   setActiveActionID(a.ID)
                 }}
@@ -57,7 +57,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
         <CardContent className="px-2">
           <ActionControl
             action_ID={activeActionID}
-            enabled={enabled && !!player && !!actor.state.position_ID}
+            enabled={enabled && !!player && !!actor.position_ID}
             context={context}
             onContextChange={setContext}
           />

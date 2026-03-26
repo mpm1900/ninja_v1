@@ -57,18 +57,19 @@ type ActorDef struct {
 }
 
 type ActorState struct {
-	PositionID *uuid.UUID `json:"position_ID"`
 	Alive      bool       `json:"alive"`
 	Damage     int        `json:"damage"`
+	PositionID *uuid.UUID `json:"position_ID"`
+	Reflect    float64    `json:"reflect"`
 }
 
 type Actor struct {
 	ActorDef
-	ID         uuid.UUID  `json:"ID"`
-	PlayerID   uuid.UUID  `json:"player_ID"`
-	Level      int        `json:"level"`
-	Experience int        `json:"experience"`
-	State      ActorState `json:"state"`
+	ActorState
+	ID         uuid.UUID `json:"ID"`
+	PlayerID   uuid.UUID `json:"player_ID"`
+	Level      int       `json:"level"`
+	Experience int       `json:"experience"`
 
 	Stages           map[BaseStat]int       `json:"staged_stats"`
 	AttackModifiers  map[AttackStat]float64 `json:"attack_modifiers"`
@@ -123,10 +124,11 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uui
 		PlayerID:   playerID,
 		Level:      GetLevel(experience),
 		Experience: experience,
-		State: ActorState{
+		ActorState: ActorState{
 			Alive:      true,
 			Damage:     0,
 			PositionID: nil,
+			Reflect:    0.0,
 		},
 		Stages: map[BaseStat]int{
 			StatHP:       0,
