@@ -33,13 +33,13 @@ func NewStageDelta(
 }
 
 func MakeStatUpSource(stat game.BaseStat, name string, groupID uuid.UUID) game.Modifier {
-	modifier := NewStageDelta(stat, groupID, game.SourceFilter, game.PriorityDefault, 1)
+	modifier := NewStageDelta(stat, groupID, game.ComposeAF(game.ActiveFilter, game.SourceFilter), game.MutPriorityDefault, 1)
 	modifier.Name = name
 	return modifier
 }
 
 func MakeStatUpAll(stat game.BaseStat, name string, groupID uuid.UUID) game.Modifier {
-	modifier := NewStageDelta(stat, groupID, game.AllFilter, game.PriorityDefault, 1)
+	modifier := NewStageDelta(stat, groupID, game.ActiveFilter, game.MutPriorityDefault, 1)
 	modifier.Name = name
 	return modifier
 }

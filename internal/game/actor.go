@@ -85,15 +85,15 @@ type ResolvedActor struct {
 }
 
 const (
-	PriorityPreBaseStats    = -11
-	PriorityMapBaseStats    = -10
-	PriorityPostBaseStats   = -9
-	PriorityDefault         = 0
-	PriorityPreStagedStats  = 9
-	PriorityMapStagedStats  = 10
-	PriorityPostStagedStats = 11
-	PriorityZero            = 19
-	PrioritySet             = 20
+	MutPriorityPreBaseStats    = -11
+	MutPriorityMapBaseStats    = -10
+	MutPriorityPostBaseStats   = -9
+	MutPriorityDefault         = 0
+	MutPriorityPreStagedStats  = 9
+	MutPriorityMapStagedStats  = 10
+	MutPriorityPostStagedStats = 11
+	MutPriorityZero            = 19
+	MutPrioritySet             = 20
 )
 
 func GetLevel(experience int) int {
@@ -234,7 +234,7 @@ func GetActorModifiers(game Game) []Transaction[Modifier] {
 var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
 	MakeModifierMutation(
 		nil,
-		PriorityMapBaseStats,
+		MutPriorityMapBaseStats,
 		AllFilter,
 		func(input Actor, context Context) Actor {
 			return MapBaseStats(input)
@@ -242,7 +242,7 @@ var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
 	),
 	MakeModifierMutation(
 		nil,
-		PriorityMapStagedStats,
+		MutPriorityMapStagedStats,
 		AllFilter,
 		func(input Actor, context Context) Actor {
 			return MapStagedStats(input)

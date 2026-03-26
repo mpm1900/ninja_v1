@@ -29,7 +29,7 @@ func MakeChidori() game.Action {
 		TargetPredicate: game.ComposeAF(game.OtherTeamFilter, game.ActiveFilter, game.AliveFilter),
 		ContextValidate: game.TargetLengthFilter(1),
 		ActionMutation: game.ActionMutation{
-			Priority: 0,
+			Priority: game.ActionPriorityDefault,
 			Filter:   game.AllGameFilter,
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}

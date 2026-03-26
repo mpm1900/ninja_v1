@@ -47,7 +47,7 @@ var Switch = Action{
 	TargetPredicate: ComposeAF(TeamFilter, InactiveFilter),
 	ContextValidate: TargetLengthFilter(1),
 	ActionMutation: ActionMutation{
-		Priority: -1,
+		Priority: ActionPrioritySwitch,
 		Filter:   AllGameFilter,
 		Delta: func(input Game, context Context) []Transaction[GameMutation] {
 			transactions := []GameTransaction{
@@ -75,7 +75,7 @@ func SwitchIn(count int) Action {
 		TargetPredicate: ComposeAF(TeamFilter, InactiveFilter),
 		ContextValidate: TargetLengthFilter(count),
 		ActionMutation: ActionMutation{
-			Priority: -1,
+			Priority: ActionPrioritySwitch,
 			Filter:   AllGameFilter,
 			Delta: func(input Game, context Context) []Transaction[GameMutation] {
 				transactions := []GameTransaction{}

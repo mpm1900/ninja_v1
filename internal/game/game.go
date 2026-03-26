@@ -264,7 +264,7 @@ func (g *Game) PushAction(transaction Transaction[Action]) {
 	g.Actions.Enqueue(transaction)
 	slices.SortFunc(g.Actions, func(a, b Transaction[Action]) int {
 		if a.Mutation.Priority != b.Mutation.Priority {
-			return b.Priority - a.Priority
+			return a.Mutation.Priority - b.Mutation.Priority
 		}
 
 		ok, a_source := g.GetActorByID(*a.Context.SourceActorID)

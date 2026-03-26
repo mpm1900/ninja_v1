@@ -4,6 +4,13 @@ import (
 	"github.com/google/uuid"
 )
 
+const (
+	ActionPrioritySwitch  = -10
+	ActionPriorityFast    = -1
+	ActionPriorityDefault = 0
+	ActionPrioritySlow    = 1
+)
+
 type ActionConfig struct {
 	Name     string      `json:"name"`
 	Nature   *NatureSet  `json:"nature"`

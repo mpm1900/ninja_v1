@@ -22,7 +22,7 @@ func MakeDragonDance() game.Action {
 		TargetPredicate: game.NoneFilter,
 		ContextValidate: game.TargetLengthFilter(0),
 		ActionMutation: game.ActionMutation{
-			Priority: 0,
+			Priority: game.ActionPriorityDefault,
 			Filter:   game.AllGameFilter,
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
