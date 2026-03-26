@@ -108,7 +108,15 @@ func GetExperienceToNextLevel(level, exp int) int {
 	return GetBaseExperience(level+1) - (GetBaseExperience(level) + exp)
 }
 
-func MakeActor(def ActorDef, playerID uuid.UUID, experience int) Actor {
+func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uuid.UUID]Action) Actor {
+	actions := make([]Action, 0)
+	for _, id := range def.ActionIDs {
+		a, ok := ACTIONS[id]
+		if !ok {
+			continue
+		}
+		actions = append(actions, a)
+	}
 	return Actor{
 		ActorDef:   def,
 		ID:         uuid.New(),
@@ -140,6 +148,7 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int) Actor {
 			AttackNinjutsu: 1,
 			AttackTaijutsu: 1,
 		},
+		Actions: actions,
 	}
 }
 

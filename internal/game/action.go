@@ -5,10 +5,10 @@ import (
 )
 
 const (
-	ActionPrioritySwitch  = -10
-	ActionPriorityFast    = -1
+	ActionPrioritySwitch  = 10
+	ActionPriorityFast    = 1
 	ActionPriorityDefault = 0
-	ActionPrioritySlow    = 1
+	ActionPrioritySlow    = -1
 )
 
 type ActionConfig struct {

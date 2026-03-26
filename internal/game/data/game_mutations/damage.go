@@ -70,9 +70,9 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 				}
 			}
 
-			if action.Recoil != nil && *action.Recoil > 0 && context.SourceActorID != nil {
+			if total > 0 && action.Recoil != nil && *action.Recoil > 0 && context.SourceActorID != nil {
 				recoilContext := game.Context{
-					ParentActorID:  context.ParentActorID,
+					ParentActorID:  context.SourceActorID,
 					SourceActorID:  context.SourceActorID,
 					SourcePlayerID: context.SourcePlayerID,
 					// Set the source as the target

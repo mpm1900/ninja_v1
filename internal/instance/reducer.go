@@ -14,7 +14,7 @@ func Reducer(instance *Instance, request Request) int {
 			return none
 		}
 
-		actor := game.MakeActor(def, request.ClientID, 13824)
+		actor := game.MakeActor(def, request.ClientID, 13824, data.ACTIONS)
 		instance.Game.AddActor(actor)
 		return state
 	case RemoveActor:
