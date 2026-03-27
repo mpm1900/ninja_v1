@@ -12,6 +12,7 @@ type GameMutation = Mutation[Game, Game]
 type GameTransaction = Transaction[GameMutation]
 
 type GameStatus string
+type GameLog = string
 
 const (
 	GameStatusRunning GameStatus = "running"
@@ -48,6 +49,8 @@ type Game struct {
 	 */
 	Actions Queue[Transaction[Action]] `json:"actions"`
 	Prompt  *Transaction[Action]       `json:"prompt"`
+
+	Log []GameLog `json:"log"`
 }
 
 func NewGame() Game {
@@ -60,6 +63,7 @@ func NewGame() Game {
 		Actions:      MakeQueue[Transaction[Action]](),
 		Prompt:       nil,
 		Triggers:     MakeQueue[Transaction[Trigger]](),
+		Log:          []string{},
 	}
 }
 
@@ -313,6 +317,7 @@ func (g *Game) JumpTransaction(transaction Transaction[GameMutation]) {
 }
 
 func (g *Game) Validate() bool {
+	valid := true
 	for _, player := range g.Players {
 		missing_pos := make([]uuid.UUID, 0)
 		for _, pos := range player.Positions {
@@ -336,25 +341,29 @@ func (g *Game) Validate() bool {
 		if len(missing_pos) > 0 {
 			fmt.Printf("%s needs %d\n", player.ID, missing_pos)
 			action := SwitchIn(len(missing_pos))
+
 			context := NewContext()
 			context.SourcePlayerID = &player.ID
 			context.TargetPositionIDs = missing_pos
-
 			possible_targets := g.GetActors(func(a Actor) bool {
 				return action.TargetPredicate(a, context)
 			})
 
 			if len(possible_targets) == 0 {
-				return false
+				valid = false
+				continue
 			}
 
+			switch_count := min(len(missing_pos), len(possible_targets))
+			action = SwitchIn(switch_count)
 			transaction := MakeTransaction(action, context)
+
 			g.Prompt = &transaction
-			return false
+			valid = false
 		}
 	}
 
-	return true
+	return valid
 }
 
 func (g *Game) NextTransaction() bool {
@@ -413,6 +422,10 @@ func (g *Game) Flush() {
 	}
 }
 
+func (g *Game) PushLog(log GameLog) {
+	g.Log = append(g.Log, log)
+}
+
 func (g Game) MarshalJSON() ([]byte, error) {
 	resolvedMap := g.GetResolvedActors()
 	resolved := make([]ResolvedActor, 0, len(g.Actors))
@@ -430,6 +443,8 @@ func (g Game) MarshalJSON() ([]byte, error) {
 		Actions      []Transaction[Action]       `json:"actions"`
 		Prompt       *Transaction[Action]        `json:"prompt"`
 		Triggers     []Transaction[Trigger]      `json:"triggers"`
+
+		Log []GameLog `json:"log"`
 	}
 
 	return json.Marshal(gameJSON{
@@ -441,5 +456,6 @@ func (g Game) MarshalJSON() ([]byte, error) {
 		Actions:      g.Actions,
 		Prompt:       g.Prompt,
 		Triggers:     g.Triggers,
+		Log:          g.Log,
 	})
 }

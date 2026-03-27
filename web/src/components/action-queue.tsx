@@ -39,7 +39,7 @@ function ActionQueue() {
     <div className="flex justify-between p-2">
       <div className="flex gap-6">
         {game.actions.map((t) => (
-          <ActionItem game={game} transaction={t} />
+          <ActionItem key={t.ID} game={game} transaction={t} />
         ))}
       </div>
       <div className="flex gap-2">

@@ -11,6 +11,7 @@ type Game = {
 
   actions: ActionTransaction[]
   prompt: ActionTransaction | null
+  log: string[]
 }
 
 export type { Game }

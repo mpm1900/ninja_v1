@@ -7,9 +7,10 @@ import (
 )
 
 var Kakuzu = game.ActorDef{
-	ActorID:     uuid.New(),
-	Name:        "Kakuzu",
-	ActionCount: 6,
+	ActorID:      uuid.New(),
+	Name:         "Kakuzu",
+	Affiliations: []string{game.AffAkatsuki},
+
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       90,
 		game.StatChakra:   110,
@@ -18,26 +19,10 @@ var Kakuzu = game.ActorDef{
 		game.StatTaijutsu: 110,
 		game.StatSpeed:    86,
 		game.StatEvasion:  0,
-		game.StatAccuracy: 1,
+		game.StatAccuracy: 100,
 	},
-	NatureDamage: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
-	NatureResistance: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
+	NatureDamage:     game.NewNatureSetValues(),
+	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsFire,
 		game.NsWind,
@@ -45,5 +30,6 @@ var Kakuzu = game.ActorDef{
 	}),
 
 	InnateModifiers: []game.Modifier{},
+	ActionCount:     6,
 	ActionIDs:       []uuid.UUID{},
 }

@@ -7,9 +7,9 @@ import (
 )
 
 var Raikage = game.ActorDef{
-	ActorID:     uuid.New(),
-	Name:        "A (4th Raikage)",
-	ActionCount: 6,
+	ActorID:      uuid.New(),
+	Name:         "A (4th Raikage)",
+	Affiliations: []string{},
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       90,
@@ -19,30 +19,16 @@ var Raikage = game.ActorDef{
 		game.StatTaijutsu: 105,
 		game.StatSpeed:    180,
 		game.StatEvasion:  0,
-		game.StatAccuracy: 1,
+		game.StatAccuracy: 100,
 	},
-	NatureDamage: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
-	NatureResistance: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
+	NatureDamage:     game.NewNatureSetValues(),
+	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsLightning,
 		game.NsEarth,
 	}),
+
 	InnateModifiers: []game.Modifier{},
+	ActionCount:     6,
 	ActionIDs:       []uuid.UUID{},
 }

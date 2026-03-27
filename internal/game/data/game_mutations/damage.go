@@ -92,7 +92,7 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 
 			if total > 0 && context.SourceActorID != nil {
 				for _, target := range resolved {
-					if target.Reflect > 0.0 {
+					if target.Reflect > 0.0 && *context.SourceActorID != target.ID {
 						reflectContext := game.Context{
 							ParentActorID:  context.SourceActorID,
 							SourceActorID:  context.SourceActorID,

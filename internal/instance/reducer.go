@@ -1,6 +1,7 @@
 package instance
 
 import (
+	"fmt"
 	"ninja_v1/internal/game"
 	data "ninja_v1/internal/game/data"
 	"slices"
@@ -16,6 +17,7 @@ func Reducer(instance *Instance, request Request) int {
 
 		actor := game.MakeActor(def, request.ClientID, 13824, data.ACTIONS)
 		instance.Game.AddActor(actor)
+		instance.Game.PushLog(fmt.Sprintf("Actor joined: %s", actor.Name))
 		return state
 	case RemoveActor:
 		index := slices.IndexFunc(instance.Game.Actors, func(a game.Actor) bool {

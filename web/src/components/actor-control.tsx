@@ -19,6 +19,7 @@ import { Button } from './ui/button'
 import { ButtonGroup } from './ui/button-group'
 import { PositionSelect } from './position-select'
 import type { Actor } from '#/lib/game/actor'
+import { ActionsTable } from './actions-table'
 
 function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
   const actions = useSuspenseQuery(actionsQuery)
@@ -37,24 +38,13 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
   return (
     <Card className="grid grid-cols-2 rounded-t-none border-t-0 mx-2 mb-2 py-2 gap-0">
       <div>
-        <CardHeader className="px-2 flex justify-between">
-          <ButtonGroup className="w-full grid grid-cols-3">
-            {actions.data.map((a) => (
-              <Button
-                key={a.ID}
-                className="rounded-none"
-                variant={a.ID === activeActionID ? 'default' : 'secondary'}
-                disabled={!actor.position_ID}
-                onClick={() => {
-                  setActiveActionID(a.ID)
-                }}
-              >
-                {a.config.name}
-              </Button>
-            ))}
-          </ButtonGroup>
-        </CardHeader>
         <CardContent className="px-2">
+          <ActionsTable
+            data={actions.data}
+            enabled={enabled && !!player && !!actor.position_ID}
+            selected={activeActionID}
+            onSelectedChange={setActiveActionID}
+          />
           <ActionControl
             action_ID={activeActionID}
             enabled={enabled && !!player && !!actor.position_ID}

@@ -7,9 +7,9 @@ import (
 )
 
 var Kisame = game.ActorDef{
-	ActorID:     uuid.New(),
-	Name:        "Kisame Hoshigaki",
-	ActionCount: 6,
+	ActorID:      uuid.New(),
+	Name:         "Kisame Hoshigaki",
+	Affiliations: []string{game.AffAkatsuki},
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       110,
@@ -19,31 +19,16 @@ var Kisame = game.ActorDef{
 		game.StatTaijutsu: 110,
 		game.StatSpeed:    105,
 		game.StatEvasion:  0,
-		game.StatAccuracy: 1,
+		game.StatAccuracy: 100,
 	},
-	NatureDamage: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
-	NatureResistance: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
+	NatureDamage:     game.NewNatureSetValues(),
+	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsPure,
 		game.NsWater,
 	}),
 
 	InnateModifiers: []game.Modifier{},
+	ActionCount:     6,
 	ActionIDs:       []uuid.UUID{},
 }

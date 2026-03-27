@@ -7,9 +7,9 @@ import (
 )
 
 var Kaguya = game.ActorDef{
-	ActorID:     uuid.New(),
-	Name:        "Kaguya Ōtsutsuki",
-	ActionCount: 6,
+	ActorID:      uuid.New(),
+	Name:         "Kaguya Ōtsutsuki",
+	Affiliations: []string{},
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       255,
@@ -19,32 +19,17 @@ var Kaguya = game.ActorDef{
 		game.StatTaijutsu: 115,
 		game.StatSpeed:    125,
 		game.StatEvasion:  0,
-		game.StatAccuracy: 1,
+		game.StatAccuracy: 100,
 	},
-	NatureDamage: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
-	NatureResistance: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
-
+	NatureDamage:     game.NewNatureSetValues(),
+	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsYin,
 		game.NsYang,
 		game.NsYinYang,
 	}),
+
 	InnateModifiers: []game.Modifier{},
+	ActionCount:     6,
 	ActionIDs:       []uuid.UUID{},
 }

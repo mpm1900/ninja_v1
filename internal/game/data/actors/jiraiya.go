@@ -7,38 +7,22 @@ import (
 )
 
 var Jiraiya = game.ActorDef{
-	ActorID:     uuid.New(),
-	Name:        "Jiraiya",
-	ActionCount: 6,
+	ActorID:      uuid.New(),
+	Name:         "Jiraiya",
+	Affiliations: []string{game.AffKonoha},
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       95,
-		game.StatChakra:   108,
+		game.StatChakra:   90,
 		game.StatNinjutsu: 140,
 		game.StatGenjutsu: 109,
 		game.StatTaijutsu: 100,
 		game.StatSpeed:    88,
 		game.StatEvasion:  0,
-		game.StatAccuracy: 1,
+		game.StatAccuracy: 100,
 	},
-	NatureDamage: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
-	NatureResistance: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
+	NatureDamage:     game.NewNatureSetValues(),
+	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsFire,
 		game.NsEarth,
@@ -46,5 +30,6 @@ var Jiraiya = game.ActorDef{
 	}),
 
 	InnateModifiers: []game.Modifier{},
+	ActionCount:     6,
 	ActionIDs:       []uuid.UUID{},
 }

@@ -9,13 +9,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type Resource string
-
-const (
-	ResourceHP     Resource = "hp"
-	ResourceChakra Resource = "chakra"
-)
-
 type AttackStat string
 
 const (
@@ -27,8 +20,8 @@ const (
 type BaseStat string
 
 const (
-	StatHP       BaseStat = BaseStat(ResourceHP)
-	StatChakra   BaseStat = BaseStat(ResourceChakra)
+	StatHP       BaseStat = "hp"
+	StatChakra   BaseStat = "chakra"
 	StatNinjutsu BaseStat = BaseStat(AttackNinjutsu)
 	StatGenjutsu BaseStat = BaseStat(AttackGenjutsu)
 	StatTaijutsu BaseStat = BaseStat(AttackTaijutsu)
@@ -37,16 +30,25 @@ const (
 	StatAccuracy BaseStat = "accuracy"
 )
 
+const (
+	AffAkatsuki = "akatsuki"
+	AffKonoha   = "konoha"
+	ClanHatake  = "hatake"
+	ClanUchiha  = "uchiha"
+	ClanUzumaki = "uzumaki"
+)
+
 type ResourceValues struct {
 	Max    int
 	Offset int
 }
 
 type ActorDef struct {
-	ActorID uuid.UUID `json:"actor_ID"`
-	Name    string    `json:"name"`
+	ActorID      uuid.UUID `json:"actor_ID"`
+	Name         string    `json:"name"`
+	Clan         string    `json:"clan"`
+	Affiliations []string  `json:"affiliations"`
 
-	ActionCount      int                    `json:"action_count"`
 	Stats            map[BaseStat]int       `json:"stats"`
 	NatureDamage     map[Nature]float64     `json:"nature_damage"`
 	NatureResistance map[Nature]float64     `json:"nature_resistance"`
@@ -54,13 +56,19 @@ type ActorDef struct {
 
 	InnateModifiers []Modifier  `json:"innate_modifiers"`
 	ActionIDs       []uuid.UUID `json:"action_IDs"`
+	ActionCount     int         `json:"action_count"`
 }
 
 type ActorState struct {
-	Alive      bool       `json:"alive"`
-	Damage     int        `json:"damage"`
+	// [Alive] whether or not the actor is alive, could
+	// - could be computed, but this is here to not have to call .Resolve() on filters
+	Alive bool `json:"alive"`
+	// [Damage] how much damage this actor has recieved
+	Damage int `json:"damage"`
+	// [PositionID] current position, nil if not active
 	PositionID *uuid.UUID `json:"position_ID"`
-	Reflect    float64    `json:"reflect"`
+	// [Reflect] how much damage is reflected (PureDamage not affected)
+	Reflect float64 `json:"reflect"`
 }
 
 type Actor struct {
@@ -109,6 +117,7 @@ func GetExperienceToNextLevel(level, exp int) int {
 	return GetBaseExperience(level+1) - (GetBaseExperience(level) + exp)
 }
 
+// TODO make actions selectable
 func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uuid.UUID]Action) Actor {
 	actions := make([]Action, 0)
 	for _, id := range def.ActionIDs {

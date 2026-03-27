@@ -1,6 +1,9 @@
 package game
 
 import (
+	"math"
+	"math/rand"
+
 	"github.com/google/uuid"
 )
 
@@ -48,4 +51,41 @@ type Action struct {
 
 func ResolveAction(game Game, transaction Transaction[Action]) []Transaction[GameMutation] {
 	return transaction.Mutation.Delta(game, transaction.Context)
+}
+
+func GetAccuracy(game Game, sourceID uuid.UUID, actionAccuracy *int, modifier float64) int {
+	if actionAccuracy == nil {
+		return 100
+	}
+
+	ok, s := game.GetActorByID(sourceID)
+	if !ok {
+		return 0
+	}
+	source := s.Resolve(game)
+	base_acc := float64(source.Stats[StatAccuracy]) / 100.0
+	move_acc := float64(*actionAccuracy) / 100.0
+	accuracy := int(math.Floor(base_acc * move_acc * 100.0 * modifier))
+
+	return accuracy
+}
+
+func MakeActionRoll() int {
+	return rand.Intn(100)
+}
+
+type AccuracyResult struct {
+	Accuracy int
+	Roll     int
+	Success  bool
+}
+
+func GetAccuracyResult(game Game, actorID uuid.UUID, move *int) AccuracyResult {
+	accuracy := GetAccuracy(game, actorID, move, 1.0)
+	roll := MakeActionRoll()
+	return AccuracyResult{
+		Accuracy: accuracy,
+		Roll:     roll,
+		Success:  accuracy >= roll,
+	}
 }

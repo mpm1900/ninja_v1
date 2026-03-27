@@ -8,6 +8,7 @@ const gameStore = new Store<Game>({
   modifiers: [],
   players: [],
   prompt: null,
+  log: [],
 })
 
 export { gameStore }

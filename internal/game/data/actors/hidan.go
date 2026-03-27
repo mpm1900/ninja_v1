@@ -7,9 +7,9 @@ import (
 )
 
 var Hidan = game.ActorDef{
-	ActorID:     uuid.New(),
-	Name:        "Hidan",
-	ActionCount: 6,
+	ActorID:      uuid.New(),
+	Name:         "Hidan",
+	Affiliations: []string{game.AffAkatsuki},
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       190,
@@ -19,30 +19,15 @@ var Hidan = game.ActorDef{
 		game.StatTaijutsu: 70,
 		game.StatSpeed:    60,
 		game.StatEvasion:  0,
-		game.StatAccuracy: 1,
+		game.StatAccuracy: 100,
 	},
-	NatureDamage: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
-	NatureResistance: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
+	NatureDamage:     game.NewNatureSetValues(),
+	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsJashin,
 	}),
 
 	InnateModifiers: []game.Modifier{},
+	ActionCount:     6,
 	ActionIDs:       []uuid.UUID{},
 }

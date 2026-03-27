@@ -7,9 +7,10 @@ import (
 )
 
 var Kakashi = game.ActorDef{
-	ActorID:     uuid.New(),
-	Name:        "Kakashi Hatake",
-	ActionCount: 6,
+	ActorID:      uuid.New(),
+	Name:         "Kakashi Hatake",
+	Clan:         game.ClanHatake,
+	Affiliations: []string{game.AffKonoha},
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       90,
@@ -19,31 +20,17 @@ var Kakashi = game.ActorDef{
 		game.StatTaijutsu: 130,
 		game.StatSpeed:    120,
 		game.StatEvasion:  0,
-		game.StatAccuracy: 1,
+		game.StatAccuracy: 100,
 	},
-	NatureDamage: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
-	NatureResistance: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
+	NatureDamage:     game.NewNatureSetValues(),
+	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsLightning,
 		game.NsEarth,
 		game.NsYin,
 	}),
+
 	InnateModifiers: []game.Modifier{},
+	ActionCount:     6,
 	ActionIDs:       []uuid.UUID{},
 }

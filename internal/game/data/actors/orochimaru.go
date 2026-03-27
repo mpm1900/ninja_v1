@@ -7,43 +7,29 @@ import (
 )
 
 var Orochimaru = game.ActorDef{
-	ActorID:     uuid.New(),
-	Name:        "Orochimaru",
-	ActionCount: 6,
+	ActorID:      uuid.New(),
+	Name:         "Orochimaru",
+	Affiliations: []string{game.AffAkatsuki},
 
 	Stats: map[game.BaseStat]int{
-		game.StatHP:       115,
+		game.StatHP:       100,
 		game.StatChakra:   100,
-		game.StatNinjutsu: 134,
+		game.StatNinjutsu: 135,
 		game.StatGenjutsu: 100,
 		game.StatTaijutsu: 90,
 		game.StatSpeed:    101,
 		game.StatEvasion:  0,
-		game.StatAccuracy: 1,
+		game.StatAccuracy: 100,
 	},
-	NatureDamage: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
-	NatureResistance: map[game.Nature]float64{
-		game.NatureFire:      1.00,
-		game.NatureWind:      1.00,
-		game.NatureLightning: 1.00,
-		game.NatureEarth:     1.00,
-		game.NatureWater:     1.00,
-		game.NatureYin:       1.00,
-		game.NatureYang:      1.00,
-	},
+	NatureDamage:     game.NewNatureSetValues(),
+	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsWind,
 		game.NsEarth,
 		game.NsYin,
 	}),
+
 	InnateModifiers: []game.Modifier{},
+	ActionCount:     6,
 	ActionIDs:       []uuid.UUID{},
 }

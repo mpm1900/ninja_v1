@@ -18,12 +18,14 @@ type NatureStats<T> = Record<Nature, T>
 type ActorDef = {
   actor_ID: string
   name: string
-  action_count: number
+  clan: string
+  affiliations: Array<string>
   stats: ActorStats<number>
   natures: Partial<Record<NatureSet, Array<Nature>>>
   nature_damage: NatureStats<number>
   nature_resistance: NatureStats<number>
   innate_modifiers: Array<Modifier>
+  action_count: number
   action_IDs: Array<string>
 }
 

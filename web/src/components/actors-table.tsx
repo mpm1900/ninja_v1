@@ -10,7 +10,6 @@ import {
   type Row,
   type RowSelectionState,
   type SortingState,
-  type Table as TableDef,
 } from '@tanstack/react-table'
 import {
   Table,
@@ -27,36 +26,42 @@ import { ChevronDown, ChevronLeft } from 'lucide-react'
 import { Fragment, useState, type ReactNode } from 'react'
 import { natureIndexes, type NatureSet } from '#/lib/game/nature'
 import { NatureBadge } from './nature-badge'
-
-type ActorsTableMeta = {
-  onRowCheckedChange?: (actor: ActorDef, selected: boolean) => void
-}
-
-function getActorsTableMeta(
-  table: TableDef<ActorDef>
-): ActorsTableMeta | undefined {
-  return table.options.meta as ActorsTableMeta | undefined
-}
+import { SHINOBI_ICONS } from '#/data/icons'
 
 const helper = createColumnHelper<ActorDef>()
 const columns = [
   helper.display({
     id: 'select',
-    cell: ({ row, table }) => (
+    cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
         disabled={!row.getCanSelect()}
-        onCheckedChange={(checked) => {
-          row.toggleSelected(!!checked)
-          getActorsTableMeta(table)?.onRowCheckedChange?.(
-            row.original,
-            !!checked
-          )
-        }}
       />
     ),
   }),
   helper.accessor('name', {}),
+  helper.accessor('clan', {
+    header: '',
+    cell: ({ row }) => (
+      <div className='flex'>
+        {[row.original.clan].map(a => {
+          const C = SHINOBI_ICONS[a]
+          return C ? <C key={a} className='h-6 text-white' /> : null
+        })}
+      </div>
+    )
+  }),
+  helper.accessor('affiliations', {
+    header: '',
+    cell: ({ row }) => (
+      <div className='flex gap-2'>
+        {row.original.affiliations?.map(a => {
+          const C = SHINOBI_ICONS[a]
+          return C ? <C key={a} className='h-6' /> : null
+        })}
+      </div>
+    )
+  }),
   helper.accessor('natures', {
     cell: ({ row }) =>
       (Object.keys(row.getValue('natures')) as Array<NatureSet>)
@@ -208,9 +213,6 @@ function ActorsTable({
       rowSelection,
       sorting,
     },
-    meta: {
-      onRowCheckedChange,
-    } as const,
   })
 
   return (
@@ -232,7 +234,10 @@ function ActorsTable({
       <TableBody>
         {table.getRowModel().rows.map((row) => (
           <Fragment key={row.id}>
-            <TableRow>
+            <TableRow onClick={() => {
+              if (!row.getCanSelect()) return
+              onRowCheckedChange?.(row.original, !row.getIsSelected())
+            }}>
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
