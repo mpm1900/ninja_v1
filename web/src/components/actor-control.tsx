@@ -1,7 +1,5 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { Card, CardContent, CardHeader } from './ui/card'
+import { Card, CardContent } from './ui/card'
 import { useStore } from '@tanstack/react-store'
-import { actionsQuery } from '#/lib/queries/actions'
 import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
 import { useState } from 'react'
@@ -15,14 +13,11 @@ import {
   SelectValue,
 } from './ui/select'
 import { sendContextMessage } from '#/lib/stores/socket'
-import { Button } from './ui/button'
-import { ButtonGroup } from './ui/button-group'
 import { PositionSelect } from './position-select'
 import type { Actor } from '#/lib/game/actor'
 import { ActionsTable } from './actions-table'
 
 function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
-  const actions = useSuspenseQuery(actionsQuery)
   const client = useStore(clientsStore, (c) => c.me!)
   const game = useStore(gameStore, (g) => g)
   const player = game.players.find((p) => p.ID == actor.player_ID)
@@ -92,13 +87,13 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
       <div>
         <CardContent className="px-2">
           <ActionsTable
-            data={actions.data}
+            data={actor.actions}
             enabled={enabled && !!player && !!actor.position_ID}
             selected={activeActionID}
             onSelectedChange={setActiveActionID}
           />
           <ActionControl
-            action={actions.data.find((a) => a.ID === activeActionID)}
+            action={actor.actions.find((a) => a.ID === activeActionID)}
             enabled={enabled && !!player && !!actor.position_ID}
             context={context}
             onContextChange={setContext}
