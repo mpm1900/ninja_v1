@@ -22,6 +22,7 @@ import { triggersQuery } from '#/lib/queries/trigger-types'
 import { Button } from '#/components/ui/button'
 import { ActionQueue } from '#/components/action-queue'
 import { PromptController } from '#/components/prompt-controller'
+import { Badge } from '#/components/ui/badge'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -67,37 +68,33 @@ function App() {
           <div className="space-y-2 flex-1 overflow-auto">
             <ActionQueue />
 
+            <div>
+              {game.players.map((player) => (
+                <div key={player.ID} className="flex gap-2 px-4">
+                  {game.actors
+                    .filter((a) => a.player_ID === player.ID)
+                    .map((a) => (
+                      <Badge
+                        key={a.ID}
+                        variant={!!a.position_ID ? 'default' : 'secondary'}
+                      >
+                        {a.name}
+                      </Badge>
+                    ))}
+                </div>
+              ))}
+            </div>
             <div className="grid grid-cols-3 gap-2 p-2">
-              <ActorCard
-                actor={game.actors[0]}
-                clientID={client?.ID}
-                game={game}
-              />
-              <ActorCard
-                actor={game.actors[1]}
-                clientID={client?.ID}
-                game={game}
-              />
-              <ActorCard
-                actor={game.actors[2]}
-                clientID={client?.ID}
-                game={game}
-              />
-              <ActorCard
-                actor={game.actors[3]}
-                clientID={client?.ID}
-                game={game}
-              />
-              <ActorCard
-                actor={game.actors[4]}
-                clientID={client?.ID}
-                game={game}
-              />
-              <ActorCard
-                actor={game.actors[5]}
-                clientID={client?.ID}
-                game={game}
-              />
+              {game.actors
+                .filter((a) => !!a.position_ID)
+                .map((a) => (
+                  <ActorCard
+                    key={a.ID}
+                    actor={a}
+                    clientID={client?.ID}
+                    game={game}
+                  />
+                ))}
             </div>
             <ActorsTable
               data={actors.data}

@@ -42,13 +42,18 @@ const columns = (selected: string | undefined) => [
         '-'
       ),
   }),
+  helper.accessor('config.stat', {
+    header: 'stat',
+    cell: ({ row }) => row.original.config.stat ?? '-',
+  }),
   helper.accessor('config.power', {
     header: 'power',
     cell: ({ row }) => row.original.config.power ?? '-',
   }),
-  helper.accessor('config.stat', {
-    header: 'stat',
-    cell: ({ row }) => row.original.config.stat ?? '-',
+  helper.accessor('config.accuracy', {
+    header: 'accuracy',
+    cell: ({ row }) =>
+      row.original.config.accuracy ? `${row.original.config.accuracy}%` : '-',
   }),
 ]
 

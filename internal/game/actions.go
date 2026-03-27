@@ -39,6 +39,17 @@ var SetPositions = GameMutation{
 	},
 }
 
+var RemovePositions = GameMutation{
+	Delta: func(g Game, context Context) Game {
+		_, targets := g.GetTargets(context)
+		for i := range len(targets) {
+			g.SetPosition(targets[i], nil)
+		}
+
+		return g
+	},
+}
+
 var Switch = Action{
 	ID: uuid.New(),
 	Config: ActionConfig{

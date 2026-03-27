@@ -11,10 +11,8 @@ import (
 var DragonDance = MakeDragonDance()
 
 func MakeDragonDance() game.Action {
-	accuracy := 100
 	config := game.ActionConfig{
 		Name:     "Dragon Dance",
-		Accuracy: &accuracy,
 	}
 	return game.Action{
 		ID:              uuid.New(),

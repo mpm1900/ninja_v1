@@ -26,14 +26,7 @@ function ActorCard({
   const NinjutsuIcon = STAT_ICONS.ninjutsu
   const GenjutsuIcon = STAT_ICONS.genjutsu
   const Taijutsu = STAT_ICONS.taijutsu
-  const playerIndex = actor
-    ? game.players.map((p) => p.ID).indexOf(actor.player_ID)
-    : -1
-  const positionIndex = actor
-    ? game.players[playerIndex]?.positions
-      .map((p) => p.ID)
-      .indexOf(actor.position_ID)
-    : -1
+
   return (
     <Item variant="muted">
       <ItemContent>
@@ -50,8 +43,7 @@ function ActorCard({
                 })}
               >
                 {actor.name}
-              </span>{' '}
-              ({positionIndex})
+              </span>
             </ItemTitle>
             <ItemActions className="gap-0">
               {(Object.keys(actor.natures) as Array<NatureSet>)

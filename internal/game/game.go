@@ -338,7 +338,11 @@ func (g *Game) Validate() bool {
 
 			if !actor.Alive {
 				missing_pos = append(missing_pos, pos.ID)
-				g.SetPosition(actor, nil)
+				// g.SetPosition(actor, nil)
+				transaction := MakeTransaction(RemovePositions, Context{
+					TargetActorIDs: []uuid.UUID{actor.ID},
+				})
+				g.JumpTransaction(transaction)
 			}
 		}
 
@@ -412,6 +416,10 @@ func (g *Game) Next() bool {
 
 	if g.NextTrigger() {
 		return true
+	}
+
+	if !g.Validate() {
+		return false
 	}
 
 	if g.NextAction() {

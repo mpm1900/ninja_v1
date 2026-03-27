@@ -38,35 +38,39 @@ function PromptControl({
   )
   const loading = valid.isFetching || actionTargets.isFetching
 
-
   return (
     <>
-      {action && <div className="p-2 flex gap-2">
-        {game.actors
-          .filter((a) => actionTargets.data?.includes(a.ID))
-          .map((a) => (
-            <TargetButton
-              key={a.ID}
-              actor={a}
-              enabled
-              loading={loading}
-              contextValid={!!valid.data}
-              context={context}
-              onContextChange={onContextChange}
-              targetType={action.target_type}
-            />
-          ))}
-      </div>}
+      {action && (
+        <div className="p-2 flex gap-2">
+          {game.actors
+            .filter((a) => actionTargets.data?.includes(a.ID))
+            .map((a) => (
+              <TargetButton
+                key={a.ID}
+                actor={a}
+                enabled
+                loading={loading}
+                contextValid={!!valid.data}
+                context={context}
+                onContextChange={onContextChange}
+                targetType={action.target_type}
+              />
+            ))}
+        </div>
+      )}
       <AlertDialogFooter>
         <AlertDialogAction asChild>
-          <Button disabled={loading || !valid.data} onClick={() => {
-            sendContextMessage({
-              type: 'resolve-prompt',
-              client_ID: client.ID,
-              action_ID: action?.ID,
-              context,
-            })
-          }}>
+          <Button
+            disabled={loading || !valid.data}
+            onClick={() => {
+              sendContextMessage({
+                type: 'resolve-prompt',
+                client_ID: client.ID,
+                action_ID: action?.ID,
+                context,
+              })
+            }}
+          >
             Select
           </Button>
         </AlertDialogAction>
@@ -86,12 +90,14 @@ function PromptController() {
   }, [prompt?.ID])
 
   return (
-    <AlertDialog open={!!prompt}>
+    <AlertDialog open={!!prompt && game.status === 'idle'}>
       {prompt && context && (
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{prompt.mutation.config.name}</AlertDialogTitle>
-            <AlertDialogDescription>Select Shinobi to switch in.</AlertDialogDescription>
+            <AlertDialogDescription>
+              Select Shinobi to switch in.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <PromptControl
             action={prompt.mutation}

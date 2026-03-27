@@ -79,15 +79,18 @@ func Reducer(instance *Instance, request Request) int {
 			return none
 		}
 
-		instance.Game.Status = game.GameStatusRunning
+		// instance.Game.Status = game.GameStatusRunning
 		instance.RunGameActions()
 		return state
 
 	case ValidateState:
-		if !instance.Game.Validate() {
-			return state
+		if instance.Game.Status == game.GameStatusRunning {
+			return none
 		}
-		return none
+
+		// instance.Game.Status = game.GameStatusRunning
+		instance.RunGameActions()
+		return state
 
 	case SetActorPlayer:
 		count, targets := instance.Game.GetTargets(request.Context)
