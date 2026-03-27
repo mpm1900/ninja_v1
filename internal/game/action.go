@@ -23,6 +23,13 @@ type ActionConfig struct {
 	Recoil   *float64    `json:"recoil"`
 }
 
+type ActionTargetType string
+
+const (
+	TargetActorID    ActionTargetType = "target-actor-id"
+	TargetPositionID ActionTargetType = "target-position-type"
+)
+
 type ActionMutation Mutation[Game, []Transaction[GameMutation]]
 
 /** [This comment was not written by an LLM]
@@ -45,6 +52,7 @@ type Action struct {
 	ActionMutation
 	ID              uuid.UUID                 `json:"ID"`
 	Config          ActionConfig              `json:"config"`
+	TargetType      ActionTargetType          `json:"target_type"`
 	TargetPredicate func(Actor, Context) bool `json:"-"`
 	ContextValidate func(Context) bool        `json:"-"`
 }

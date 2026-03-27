@@ -9,7 +9,7 @@ import (
 var Hidan = game.ActorDef{
 	ActorID:      uuid.New(),
 	Name:         "Hidan",
-	Affiliations: []string{game.AffAkatsuki},
+	Affiliations: []string{game.AffAkatsuki, game.AffYuga},
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       190,

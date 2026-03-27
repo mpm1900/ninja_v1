@@ -63,7 +63,7 @@ function App() {
           </div>
           <div>ME: {client?.ID}</div>
         </header>
-        <div className="flex overflow-hidden h-screen">
+        <div className="flex">
           <div className="space-y-2 flex-1 overflow-auto">
             <ActionQueue />
 
@@ -98,11 +98,6 @@ function App() {
                 clientID={client?.ID}
                 game={game}
               />
-            </div>
-            <div className="p-2">
-              {triggers.data.map((trigger) => (
-                <Button key={trigger}>{trigger}</Button>
-              ))}
             </div>
             <ActorsTable
               data={actors.data}
@@ -162,7 +157,7 @@ function App() {
               }}
             />
           </div>
-          <div className="w-md">
+          <div className="w-sm">
             {game.log?.map((log, i) => (
               <div key={i}>{log}</div>
             ))}

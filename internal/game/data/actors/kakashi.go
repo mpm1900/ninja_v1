@@ -15,9 +15,9 @@ var Kakashi = game.ActorDef{
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       90,
 		game.StatChakra:   70,
-		game.StatNinjutsu: 130,
+		game.StatNinjutsu: 135,
 		game.StatGenjutsu: 100,
-		game.StatTaijutsu: 130,
+		game.StatTaijutsu: 115,
 		game.StatSpeed:    120,
 		game.StatEvasion:  0,
 		game.StatAccuracy: 100,

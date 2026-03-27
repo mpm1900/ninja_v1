@@ -291,6 +291,10 @@ func (g *Game) SetPrompt(transaction *Transaction[Action]) {
 }
 
 func (g *Game) RunAction(transaction Transaction[Action]) {
+	if transaction.Context.SourceActorID != nil {
+		_, source := g.GetActorByID(*transaction.Context.SourceActorID)
+		g.PushLog(fmt.Sprintf("%s used %s.", source.Name, transaction.Mutation.Config.Name))
+	}
 	transactions := ResolveAction(*g, transaction)
 	g.Transactions = append(g.Transactions, transactions...)
 }

@@ -9,7 +9,7 @@ import (
 var Kisame = game.ActorDef{
 	ActorID:      uuid.New(),
 	Name:         "Kisame Hoshigaki",
-	Affiliations: []string{game.AffAkatsuki},
+	Affiliations: []string{game.AffAkatsuki, game.AffKuri},
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       110,

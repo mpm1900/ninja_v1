@@ -19,6 +19,11 @@ func TargetLengthFilter(length int) func(Context) bool {
 		return len(context.TargetActorIDs) == length
 	}
 }
+func PositionsLengthFilter(length int) func(Context) bool {
+	return func(context Context) bool {
+		return len(context.TargetPositionIDs) == length
+	}
+}
 
 type ActorFilter func(Actor, Context) bool
 

@@ -46,7 +46,7 @@ const columns = [
       <div className='flex'>
         {[row.original.clan].map(a => {
           const C = SHINOBI_ICONS[a]
-          return C ? <C key={a} className='h-6 text-white' /> : null
+          return C ? <C key={a} className='w-5 text-white' /> : null
         })}
       </div>
     )
@@ -54,10 +54,10 @@ const columns = [
   helper.accessor('affiliations', {
     header: '',
     cell: ({ row }) => (
-      <div className='flex gap-2'>
+      <div className='flex gap-2 justify-end'>
         {row.original.affiliations?.map(a => {
           const C = SHINOBI_ICONS[a]
-          return C ? <C key={a} className='h-6' /> : null
+          return C ? <C key={a} className='w-5' /> : null
         })}
       </div>
     )

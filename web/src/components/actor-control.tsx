@@ -46,7 +46,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
             onSelectedChange={setActiveActionID}
           />
           <ActionControl
-            action_ID={activeActionID}
+            action={actions.data.find(a => a.ID === activeActionID)}
             enabled={enabled && !!player && !!actor.position_ID}
             context={context}
             onContextChange={setContext}

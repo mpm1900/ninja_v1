@@ -18,29 +18,30 @@ import { actionTargetsQuery } from '#/lib/queries/action-targets'
 import { TargetButton } from './target-button'
 import { Button } from './ui/button'
 import { useEffect, useState } from 'react'
+import type { Action } from '#/lib/game/action'
 
 function PromptControl({
-  action_ID,
+  action,
   context,
   onContextChange,
 }: {
-  action_ID?: string
+  action?: Action
   context: Context
   onContextChange: (context: Context) => void
 }) {
   const instanceID = useStore(socketStore, (s) => s.instanceID!)
   const game = useStore(gameStore, (g) => g)
-  const valid = useQuery(isActionContextValidQuery(action_ID, context))
+  const valid = useQuery(isActionContextValidQuery(action?.ID, context))
   const client = useStore(clientsStore, (c) => c.me!)
   const actionTargets = useQuery(
-    actionTargetsQuery(instanceID, action_ID, context)
+    actionTargetsQuery(instanceID, action?.ID, context)
   )
   const loading = valid.isFetching || actionTargets.isFetching
 
 
   return (
     <>
-      <div className="p-2 flex gap-2">
+      {action && <div className="p-2 flex gap-2">
         {game.actors
           .filter((a) => actionTargets.data?.includes(a.ID))
           .map((a) => (
@@ -52,16 +53,17 @@ function PromptControl({
               contextValid={!!valid.data}
               context={context}
               onContextChange={onContextChange}
+              targetType={action.target_type}
             />
           ))}
-      </div>
+      </div>}
       <AlertDialogFooter>
         <AlertDialogAction asChild>
           <Button disabled={loading || !valid.data} onClick={() => {
             sendContextMessage({
               type: 'resolve-prompt',
               client_ID: client.ID,
-              action_ID: action_ID,
+              action_ID: action?.ID,
               context,
             })
           }}>
@@ -92,7 +94,7 @@ function PromptController() {
             <AlertDialogDescription>Select Shinobi to switch in.</AlertDialogDescription>
           </AlertDialogHeader>
           <PromptControl
-            action_ID={prompt.mutation.ID}
+            action={prompt.mutation}
             context={context}
             onContextChange={setContext}
           />

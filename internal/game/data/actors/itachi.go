@@ -17,7 +17,7 @@ var Itachi = game.ActorDef{
 		game.StatChakra:   80,
 		game.StatNinjutsu: 120,
 		game.StatGenjutsu: 155,
-		game.StatTaijutsu: 80,
+		game.StatTaijutsu: 90,
 		game.StatSpeed:    135,
 		game.StatEvasion:  0,
 		game.StatAccuracy: 100,

@@ -13,6 +13,7 @@ type Action = {
     recoil: number | null
   }
   priority: number
+  target_type: 'target-actor-id' | 'target-position-type'
 }
 
 type ActionTransaction = {

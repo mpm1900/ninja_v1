@@ -44,6 +44,7 @@ var Switch = Action{
 	Config: ActionConfig{
 		Name: "Switch",
 	},
+	TargetType:      TargetActorID,
 	TargetPredicate: ComposeAF(TeamFilter, InactiveFilter),
 	ContextValidate: TargetLengthFilter(1),
 	ActionMutation: ActionMutation{
@@ -72,6 +73,7 @@ func SwitchIn(count int) Action {
 		Config: ActionConfig{
 			Name: "Switch In",
 		},
+		TargetType:      TargetActorID,
 		TargetPredicate: ComposeAF(TeamFilter, InactiveFilter),
 		ContextValidate: TargetLengthFilter(count),
 		ActionMutation: ActionMutation{

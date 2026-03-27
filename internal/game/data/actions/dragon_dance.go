@@ -19,6 +19,7 @@ func MakeDragonDance() game.Action {
 	return game.Action{
 		ID:              uuid.New(),
 		Config:          config,
+		TargetType:      game.TargetActorID,
 		TargetPredicate: game.NoneFilter,
 		ContextValidate: game.TargetLengthFilter(0),
 		ActionMutation: game.ActionMutation{

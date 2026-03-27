@@ -9,7 +9,7 @@ import (
 var Raikage = game.ActorDef{
 	ActorID:      uuid.New(),
 	Name:         "A (4th Raikage)",
-	Affiliations: []string{},
+	Affiliations: []string{game.AffKumo},
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       90,

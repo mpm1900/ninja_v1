@@ -15,7 +15,7 @@ var Yamato = game.ActorDef{
 		game.StatHP:       90,
 		game.StatChakra:   101,
 		game.StatNinjutsu: 120,
-		game.StatGenjutsu: 70,
+		game.StatGenjutsu: 80,
 		game.StatTaijutsu: 91,
 		game.StatSpeed:    84,
 		game.StatEvasion:  0,

@@ -9,7 +9,7 @@ import (
 var Orochimaru = game.ActorDef{
 	ActorID:      uuid.New(),
 	Name:         "Orochimaru",
-	Affiliations: []string{game.AffAkatsuki},
+	Affiliations: []string{game.AffAkatsuki, game.AffOto},
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       100,

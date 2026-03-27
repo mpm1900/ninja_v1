@@ -6,18 +6,19 @@ import (
 	"github.com/google/uuid"
 )
 
-var Minato = game.ActorDef{
+var Madara = game.ActorDef{
 	ActorID:      uuid.New(),
-	Name:         "Minato Namikaze",
-	Affiliations: []string{game.AffKonoha},
+	Name:         "Madara Uchiha",
+	Clan:         game.ClanUchiha,
+	Affiliations: []string{game.AffAkatsuki, game.AffKonoha},
 
 	Stats: map[game.BaseStat]int{
-		game.StatHP:       60,
-		game.StatChakra:   60,
-		game.StatNinjutsu: 120,
-		game.StatGenjutsu: 80,
+		game.StatHP:       80,
+		game.StatChakra:   110,
+		game.StatNinjutsu: 150,
+		game.StatGenjutsu: 130,
 		game.StatTaijutsu: 110,
-		game.StatSpeed:    200,
+		game.StatSpeed:    130,
 		game.StatEvasion:  0,
 		game.StatAccuracy: 100,
 	},
@@ -25,8 +26,8 @@ var Minato = game.ActorDef{
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsFire,
-		game.NsWind,
-		game.NsLightning,
+		game.NsStorm,
+		game.NsYin,
 	}),
 
 	InnateModifiers: []game.Modifier{},

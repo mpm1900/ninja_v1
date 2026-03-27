@@ -6,27 +6,28 @@ import (
 	"github.com/google/uuid"
 )
 
-var Minato = game.ActorDef{
+var Hashirama = game.ActorDef{
 	ActorID:      uuid.New(),
-	Name:         "Minato Namikaze",
+	Name:         "Hashirama Senju",
+	Clan:         game.ClanSenju,
 	Affiliations: []string{game.AffKonoha},
 
 	Stats: map[game.BaseStat]int{
-		game.StatHP:       60,
-		game.StatChakra:   60,
+		game.StatHP:       120,
+		game.StatChakra:   120,
 		game.StatNinjutsu: 120,
-		game.StatGenjutsu: 80,
-		game.StatTaijutsu: 110,
-		game.StatSpeed:    200,
+		game.StatGenjutsu: 110,
+		game.StatTaijutsu: 120,
+		game.StatSpeed:    110,
 		game.StatEvasion:  0,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsFire,
 		game.NsWind,
-		game.NsLightning,
+		game.NsYang,
+		game.NsWood,
 	}),
 
 	InnateModifiers: []game.Modifier{},

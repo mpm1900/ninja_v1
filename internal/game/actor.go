@@ -31,9 +31,17 @@ const (
 )
 
 const (
+	AffAme      = "ame"
 	AffAkatsuki = "akatsuki"
 	AffKonoha   = "konoha"
+	AffKumo     = "kumo"
+	AffKuri     = "kuri"
+	AffOto      = "oto"
+	AffTaki     = "taki"
+	AffYuga     = "yuga"
+
 	ClanHatake  = "hatake"
+	ClanSenju   = "senju"
 	ClanUchiha  = "uchiha"
 	ClanUzumaki = "uzumaki"
 )
@@ -137,7 +145,7 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uui
 			Alive:      true,
 			Damage:     0,
 			PositionID: nil,
-			Reflect:    0.0,
+			Reflect:    1.0,
 		},
 		Stages: map[BaseStat]int{
 			StatHP:       0,

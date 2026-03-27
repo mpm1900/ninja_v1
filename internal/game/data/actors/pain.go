@@ -6,27 +6,27 @@ import (
 	"github.com/google/uuid"
 )
 
-var Minato = game.ActorDef{
+var Pain = game.ActorDef{
 	ActorID:      uuid.New(),
-	Name:         "Minato Namikaze",
-	Affiliations: []string{game.AffKonoha},
+	Name:         "Pain",
+	Clan:         game.ClanUzumaki,
+	Affiliations: []string{game.AffAkatsuki, game.AffAme},
 
 	Stats: map[game.BaseStat]int{
-		game.StatHP:       60,
-		game.StatChakra:   60,
-		game.StatNinjutsu: 120,
-		game.StatGenjutsu: 80,
-		game.StatTaijutsu: 110,
-		game.StatSpeed:    200,
+		game.StatHP:       90,
+		game.StatChakra:   120,
+		game.StatNinjutsu: 144,
+		game.StatGenjutsu: 130,
+		game.StatTaijutsu: 100,
+		game.StatSpeed:    106,
 		game.StatEvasion:  0,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsFire,
-		game.NsWind,
-		game.NsLightning,
+		game.NsYin,
+		game.NsYang,
 	}),
 
 	InnateModifiers: []game.Modifier{},

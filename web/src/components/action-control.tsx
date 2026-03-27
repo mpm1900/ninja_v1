@@ -9,24 +9,25 @@ import { isActionContextValidQuery } from '#/lib/queries/is-action-context-valid
 import { useEffect } from 'react'
 import { clientsStore } from '#/lib/stores/clients'
 import { TargetButton } from './target-button'
+import type { Action } from '#/lib/game/action'
 
 function ActionControl({
-  action_ID,
+  action,
   enabled,
   context,
   onContextChange,
 }: {
-  action_ID?: string
+  action?: Action
   enabled: boolean
   context: Context
   onContextChange: (context: Context) => void
 }) {
   const instanceID = useStore(socketStore, (s) => s.instanceID!)
   const game = useStore(gameStore, (g) => g)
-  const valid = useQuery(isActionContextValidQuery(action_ID, context))
+  const valid = useQuery(isActionContextValidQuery(action?.ID, context))
   const client = useStore(clientsStore, (c) => c.me!)
   const actionTargets = useQuery(
-    actionTargetsQuery(instanceID, action_ID, context)
+    actionTargetsQuery(instanceID, action?.ID, context)
   )
   const loading = valid.isFetching || actionTargets.isFetching
 
@@ -35,33 +36,37 @@ function ActionControl({
     onContextChange({
       ...context,
       target_actor_IDs: [],
+      target_position_IDs: [],
     })
   }, [game])
 
   return (
     <div>
-      <div className="p-2 flex gap-2">
-        {game.actors
-          .filter((a) => actionTargets.data?.includes(a.ID))
-          .map((a) => (
-            <TargetButton
-              key={a.ID}
-              actor={a}
-              enabled={enabled}
-              loading={loading}
-              contextValid={!!valid.data}
-              context={context}
-              onContextChange={onContextChange}
-            />
-          ))}
-      </div>
+      {action && (
+        <div className="p-2 flex gap-2">
+          {game.actors
+            .filter((a) => actionTargets.data?.includes(a.ID))
+            .map((a) => (
+              <TargetButton
+                key={a.ID}
+                actor={a}
+                enabled={enabled}
+                loading={loading}
+                contextValid={!!valid.data}
+                targetType={action.target_type}
+                context={context}
+                onContextChange={onContextChange}
+              />
+            ))}
+        </div>
+      )}
       <Button
         disabled={loading || !valid.data || !enabled}
         onClick={() => {
           sendContextMessage({
             type: 'push-action',
             client_ID: client.ID,
-            action_ID: action_ID,
+            action_ID: action?.ID,
             context,
           })
         }}

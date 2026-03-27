@@ -24,8 +24,9 @@ func MakeFireball() game.Action {
 	return game.Action{
 		ID:              uuid.New(),
 		Config:          config,
+		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.ActiveFilter, game.AliveFilter),
-		ContextValidate: game.TargetLengthFilter(1),
+		ContextValidate: game.PositionsLengthFilter(1),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter:   game.AllGameFilter,
@@ -39,6 +40,9 @@ func MakeFireball() game.Action {
 						transactions,
 						mutations.MakeDamageTransactions(context, damages)...,
 					)
+				} else {
+					transaction := game.MakeTransaction(mutations.AddLogs("Attack missed."), context)
+					transactions = append(transactions, transaction)
 				}
 
 				return transactions
