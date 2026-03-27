@@ -8,6 +8,7 @@ import (
 
 var Orochimaru = game.ActorDef{
 	ActorID:      uuid.New(),
+	SpriteURL:    "/sprites/orochimaru_64.png",
 	Name:         "Orochimaru",
 	Affiliations: []string{game.AffAkatsuki, game.AffOto},
 

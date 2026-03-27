@@ -47,7 +47,7 @@ func (i *Instance) BroadcastGame() {
 	// fmt.Printf("BROADCAST STATE %#v\n", game)
 	for _, client := range i.Clients {
 		select {
-		case client.inbox <- NewStateMessage(&i.Game):
+		case client.inbox <- NewStateMessage(client, &i.Game):
 		// if a client is unable to handle the state update,
 		//   unregister them so they don't the loop
 		default:
@@ -111,6 +111,8 @@ func (i *Instance) Run() {
 func (i *Instance) RunGameActions() {
 	go func() {
 		i.Game.Status = game.GameStatusRunning
+		i.BroadcastGame()
+
 		time.Sleep(time.Second / 2)
 		for i.Game.Next() {
 			i.BroadcastGame()

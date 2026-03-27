@@ -8,6 +8,7 @@ import (
 
 var Pain = game.ActorDef{
 	ActorID:      uuid.New(),
+	SpriteURL:    "/sprites/pain_64.png",
 	Name:         "Pain",
 	Clan:         game.ClanUzumaki,
 	Affiliations: []string{game.AffAkatsuki, game.AffAme},

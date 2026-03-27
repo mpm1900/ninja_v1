@@ -9,8 +9,9 @@ import (
 )
 
 var Guy = game.ActorDef{
-	ActorID: uuid.New(),
-	Name:    "Might Guy",
+	ActorID:   uuid.New(),
+	SpriteURL: "/sprites/guy_64.png",
+	Name:      "Might Guy",
 	Affiliations: []string{
 		game.AffKonoha,
 	},

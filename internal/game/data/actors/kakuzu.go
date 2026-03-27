@@ -8,6 +8,7 @@ import (
 
 var Kakuzu = game.ActorDef{
 	ActorID:      uuid.New(),
+	SpriteURL:    "/sprites/kakuzu_64.png",
 	Name:         "Kakuzu",
 	Affiliations: []string{game.AffAkatsuki, game.AffTaki},
 
@@ -15,7 +16,7 @@ var Kakuzu = game.ActorDef{
 		game.StatHP:       90,
 		game.StatChakra:   110,
 		game.StatNinjutsu: 128,
-		game.StatGenjutsu: 85,
+		game.StatGenjutsu: 80,
 		game.StatTaijutsu: 116,
 		game.StatSpeed:    86,
 		game.StatEvasion:  0,

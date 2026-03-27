@@ -8,6 +8,7 @@ import (
 
 var Madara = game.ActorDef{
 	ActorID:      uuid.New(),
+	SpriteURL:    "/sprites/madara_64.png",
 	Name:         "Madara Uchiha",
 	Clan:         game.ClanUchiha,
 	Affiliations: []string{game.AffAkatsuki, game.AffKonoha},

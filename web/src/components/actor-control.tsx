@@ -38,6 +38,58 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
   return (
     <Card className="grid grid-cols-2 rounded-t-none border-t-0 mx-2 mb-2 py-2 gap-0">
       <div>
+        <CardContent className="px-2 flex flex-col gap-2">
+          <div className="flex gap-2">
+            <div className="h-[64px] w-[64px] overflow-hidden">
+              <img
+                src={actor.sprite_url}
+                className="h-full w-full object-cover"
+                width={64}
+                height={64}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <div>Player:</div>
+              <Select
+                disabled={!enabled}
+                value={actor.player_ID}
+                onValueChange={(playerID) => {
+                  sendContextMessage({
+                    type: 'set-actor-player',
+                    client_ID: client.ID,
+                    context: {
+                      source_player_ID: playerID,
+                      source_actor_ID: null,
+                      parent_actor_ID: null,
+                      target_actor_IDs: [actor.ID],
+                      target_position_IDs: [],
+                    },
+                  })
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue>
+                    {game.players.map((p) => p.ID).includes(actor.player_ID) ? (
+                      actor.player_ID
+                    ) : (
+                      <span className="text-red-300">{actor.player_ID}</span>
+                    )}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {game.players.map((item) => (
+                    <SelectItem key={item.ID} value={item.ID}>
+                      {item.ID}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <PositionSelect actor={actor} game={game} />
+        </CardContent>
+      </div>
+      <div>
         <CardContent className="px-2">
           <ActionsTable
             data={actions.data}
@@ -46,55 +98,11 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
             onSelectedChange={setActiveActionID}
           />
           <ActionControl
-            action={actions.data.find(a => a.ID === activeActionID)}
+            action={actions.data.find((a) => a.ID === activeActionID)}
             enabled={enabled && !!player && !!actor.position_ID}
             context={context}
             onContextChange={setContext}
           />
-        </CardContent>
-      </div>
-      <div>
-        <CardHeader className="px-2">
-          <div className="flex items-center justify-end gap-2">
-            <div>Player:</div>
-            <Select
-              disabled={!enabled}
-              value={actor.player_ID}
-              onValueChange={(playerID) => {
-                sendContextMessage({
-                  type: 'set-actor-player',
-                  client_ID: client.ID,
-                  context: {
-                    source_player_ID: playerID,
-                    source_actor_ID: null,
-                    parent_actor_ID: null,
-                    target_actor_IDs: [actor.ID],
-                    target_position_IDs: [],
-                  },
-                })
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue>
-                  {game.players.map((p) => p.ID).includes(actor.player_ID) ? (
-                    actor.player_ID
-                  ) : (
-                    <span className="text-red-300">{actor.player_ID}</span>
-                  )}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {game.players.map((item) => (
-                  <SelectItem key={item.ID} value={item.ID}>
-                    {item.ID}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </CardHeader>
-        <CardContent className="px-2">
-          <PositionSelect actor={actor} game={game} />
         </CardContent>
       </div>
     </Card>

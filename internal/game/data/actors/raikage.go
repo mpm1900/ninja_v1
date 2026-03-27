@@ -8,6 +8,7 @@ import (
 
 var Raikage = game.ActorDef{
 	ActorID:      uuid.New(),
+	SpriteURL:    "/sprites/4_raikage_64.png",
 	Name:         "A (4th Raikage)",
 	Affiliations: []string{game.AffKumo},
 

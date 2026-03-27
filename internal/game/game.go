@@ -17,6 +17,7 @@ type GameLog = string
 const (
 	GameStatusRunning GameStatus = "running"
 	GameStatusIdle    GameStatus = "idle"
+	GameStatusWaiting GameStatus = "waiting"
 )
 
 /**
@@ -48,7 +49,7 @@ type Game struct {
 	 *  - switch ins will be a common Prompt
 	 */
 	Actions Queue[Transaction[Action]] `json:"actions"`
-	Prompt  *Transaction[Action]       `json:"prompt"`
+	Prompts Queue[Transaction[Action]]
 
 	Log []GameLog `json:"log"`
 }
@@ -61,7 +62,7 @@ func NewGame() Game {
 		Modifiers:    make([]Transaction[Modifier], 0),
 		Transactions: MakeQueue[GameTransaction](),
 		Actions:      MakeQueue[Transaction[Action]](),
-		Prompt:       nil,
+		Prompts:      MakeQueue[Transaction[Action]](),
 		Triggers:     MakeQueue[Transaction[Trigger]](),
 		Log:          []string{},
 	}
@@ -286,8 +287,53 @@ func (g *Game) PushAction(transaction Transaction[Action]) {
 	})
 }
 
-func (g *Game) SetPrompt(transaction *Transaction[Action]) {
-	g.Prompt = transaction
+func (g Game) HasPlayerPrompt(playerID uuid.UUID) bool {
+	for _, prompt := range g.Prompts {
+		if *prompt.Context.SourcePlayerID == playerID {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (g Game) AllPromptsReady() bool {
+	if len(g.Prompts) == 0 {
+		return false
+	}
+
+	for _, prompt := range g.Prompts {
+		if !prompt.Ready {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (g *Game) AddPrompt(transaction Transaction[Action]) {
+	g.Prompts = append(g.Prompts, transaction)
+}
+
+func (g *Game) RemovePrompt(ID uuid.UUID) {
+	g.Prompts = slices.DeleteFunc(g.Prompts, func(t Transaction[Action]) bool {
+		return t.ID == ID
+	})
+}
+
+func (g *Game) ReadyPrompt(ID uuid.UUID, context Context) {
+	for i, prompt := range g.Prompts {
+		if prompt.ID == ID {
+			g.Prompts[i].Context = context
+			g.Prompts[i].Ready = true
+			return
+		}
+	}
+}
+
+func (g *Game) RunPrompt(transaction Transaction[Action]) {
+	transactions := ResolveAction(*g, transaction)
+	g.Transactions = append(g.Transactions, transactions...)
 }
 
 func (g *Game) RunAction(transaction Transaction[Action]) {
@@ -365,8 +411,10 @@ func (g *Game) Validate() bool {
 			switch_count := min(len(missing_pos), len(possible_targets))
 			action = SwitchIn(switch_count)
 			transaction := MakeTransaction(action, context)
-
-			g.Prompt = &transaction
+			transaction.Ready = false
+			if !g.HasPlayerPrompt(player.ID) {
+				g.AddPrompt(transaction)
+			}
 			valid = false
 		}
 	}
@@ -399,6 +447,16 @@ func (g *Game) NextAction() bool {
 	return true
 }
 
+func (g *Game) NextPrompt() bool {
+	transaction, err := g.Prompts.Dequeue()
+	if err != nil {
+		return false
+	}
+
+	g.RunPrompt(transaction)
+	return true
+}
+
 func (g *Game) NextTrigger() bool {
 	transaction, err := g.Triggers.Dequeue()
 	if err != nil {
@@ -416,6 +474,12 @@ func (g *Game) Next() bool {
 
 	if g.NextTrigger() {
 		return true
+	}
+
+	if g.AllPromptsReady() {
+		if g.NextPrompt() {
+			return true
+		}
 	}
 
 	if !g.Validate() {
@@ -438,36 +502,55 @@ func (g *Game) PushLog(log GameLog) {
 	g.Log = append(g.Log, log)
 }
 
-func (g Game) MarshalJSON() ([]byte, error) {
+type GameJSON struct {
+	Status  GameStatus      `json:"status"`
+	Players []Player        `json:"players"`
+	Actors  []ResolvedActor `json:"actors"`
+
+	Modifiers    []Transaction[Modifier]     `json:"modifiers"`
+	Transactions []Transaction[GameMutation] `json:"transactions"`
+	Actions      []Transaction[Action]       `json:"actions"`
+	Prompt       *Transaction[Action]        `json:"prompt"`
+	Triggers     []Transaction[Trigger]      `json:"triggers"`
+
+	Log []GameLog `json:"log"`
+}
+
+func (g Game) ToJSON(playerID *uuid.UUID) GameJSON {
 	resolvedMap := g.GetResolvedActors()
 	resolved := make([]ResolvedActor, 0, len(g.Actors))
 	for _, a := range g.Actors {
 		resolved = append(resolved, resolvedMap[a.ID])
 	}
 
-	type gameJSON struct {
-		Status  GameStatus      `json:"status"`
-		Players []Player        `json:"players"`
-		Actors  []ResolvedActor `json:"actors"`
-
-		Modifiers    []Transaction[Modifier]     `json:"modifiers"`
-		Transactions []Transaction[GameMutation] `json:"transactions"`
-		Actions      []Transaction[Action]       `json:"actions"`
-		Prompt       *Transaction[Action]        `json:"prompt"`
-		Triggers     []Transaction[Trigger]      `json:"triggers"`
-
-		Log []GameLog `json:"log"`
+	var prompt *Transaction[Action]
+	if playerID != nil {
+		for _, p := range g.Prompts {
+			if *p.Context.SourcePlayerID == *playerID && p.Ready == false {
+				prompt = &p
+				break
+			}
+		}
 	}
 
-	return json.Marshal(gameJSON{
-		Status:       g.Status,
+	status := g.Status
+	if status == GameStatusIdle && len(g.Prompts) > 0 && prompt == nil {
+		status = GameStatusWaiting
+	}
+
+	return GameJSON{
+		Status:       status,
 		Players:      g.Players,
 		Actors:       resolved,
 		Modifiers:    g.Modifiers,
 		Transactions: g.Transactions,
 		Actions:      g.Actions,
-		Prompt:       g.Prompt,
+		Prompt:       prompt,
 		Triggers:     g.Triggers,
 		Log:          g.Log,
-	})
+	}
+}
+
+func (g Game) MarshalJSON() ([]byte, error) {
+	return json.Marshal(g.ToJSON(nil))
 }

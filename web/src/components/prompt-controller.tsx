@@ -18,17 +18,18 @@ import { actionTargetsQuery } from '#/lib/queries/action-targets'
 import { TargetButton } from './target-button'
 import { Button } from './ui/button'
 import { useEffect, useState } from 'react'
-import type { Action } from '#/lib/game/action'
+import type { ActionTransaction } from '#/lib/game/action'
 
 function PromptControl({
-  action,
+  prompt,
   context,
   onContextChange,
 }: {
-  action?: Action
+  prompt?: ActionTransaction
   context: Context
   onContextChange: (context: Context) => void
 }) {
+  const action = prompt?.mutation
   const instanceID = useStore(socketStore, (s) => s.instanceID!)
   const game = useStore(gameStore, (g) => g)
   const valid = useQuery(isActionContextValidQuery(action?.ID, context))
@@ -41,7 +42,7 @@ function PromptControl({
   return (
     <>
       {action && (
-        <div className="p-2 flex gap-2">
+        <div className="p-2 flex flex-wrap gap-2">
           {game.actors
             .filter((a) => actionTargets.data?.includes(a.ID))
             .map((a) => (
@@ -66,6 +67,7 @@ function PromptControl({
               sendContextMessage({
                 type: 'resolve-prompt',
                 client_ID: client.ID,
+                prompt_ID: prompt?.ID,
                 action_ID: action?.ID,
                 context,
               })
@@ -89,24 +91,39 @@ function PromptController() {
     setContext(prompt?.context)
   }, [prompt?.ID])
 
+  console.log(prompt, !prompt && game.status === 'waiting')
+
   return (
-    <AlertDialog open={!!prompt && game.status === 'idle'}>
-      {prompt && context && (
+    <>
+      <AlertDialog open={!!prompt && game.status === 'idle'}>
+        {prompt && context && (
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{prompt.mutation.config.name}</AlertDialogTitle>
+              <AlertDialogDescription>
+                Select Shinobi to switch in.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <PromptControl
+              prompt={prompt}
+              context={context}
+              onContextChange={setContext}
+            />
+          </AlertDialogContent>
+        )}
+      </AlertDialog>
+      <AlertDialog open={!prompt && game.status === 'waiting'}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{prompt.mutation.config.name}</AlertDialogTitle>
+            <AlertDialogTitle>Waiting on other players...</AlertDialogTitle>
             <AlertDialogDescription>
-              Select Shinobi to switch in.
+              Another player is thinking...
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <PromptControl
-            action={prompt.mutation}
-            context={context}
-            onContextChange={setContext}
-          />
         </AlertDialogContent>
-      )}
-    </AlertDialog>
+
+      </AlertDialog>
+    </>
   )
 }
 

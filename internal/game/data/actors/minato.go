@@ -8,6 +8,7 @@ import (
 
 var Minato = game.ActorDef{
 	ActorID:      uuid.New(),
+	SpriteURL:    "/sprites/minato_64.png",
 	Name:         "Minato Namikaze",
 	Affiliations: []string{game.AffKonoha},
 

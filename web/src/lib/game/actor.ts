@@ -17,6 +17,7 @@ type NatureStats<T> = Record<Nature, T>
 
 type ActorDef = {
   actor_ID: string
+  sprite_url: string
   name: string
   clan: string
   affiliations: Array<string>

@@ -8,6 +8,7 @@ import (
 
 var Yamato = game.ActorDef{
 	ActorID:      uuid.New(),
+	SpriteURL:    "/sprites/yamato_64.png",
 	Name:         "Yamato",
 	Affiliations: []string{game.AffKonoha},
 

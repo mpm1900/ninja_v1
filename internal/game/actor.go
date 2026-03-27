@@ -33,6 +33,7 @@ const (
 const (
 	AffAme      = "ame"
 	AffAkatsuki = "akatsuki"
+	AffIwa      = "iwa"
 	AffKonoha   = "konoha"
 	AffKumo     = "kumo"
 	AffKuri     = "kuri"
@@ -53,6 +54,7 @@ type ResourceValues struct {
 
 type ActorDef struct {
 	ActorID      uuid.UUID `json:"actor_ID"`
+	SpriteURL    string    `json:"sprite_url"`
 	Name         string    `json:"name"`
 	Clan         string    `json:"clan"`
 	Affiliations []string  `json:"affiliations"`

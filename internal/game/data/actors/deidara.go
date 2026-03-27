@@ -6,26 +6,28 @@ import (
 	"github.com/google/uuid"
 )
 
-var Hidan = game.ActorDef{
+var Deidara = game.ActorDef{
 	ActorID:      uuid.New(),
-	SpriteURL:    "/sprites/hidan_64.png",
-	Name:         "Hidan",
-	Affiliations: []string{game.AffAkatsuki, game.AffYuga},
+	SpriteURL:    "/sprites/deidara_64.png",
+	Name:         "Deidara",
+	Affiliations: []string{game.AffAkatsuki, game.AffIwa},
 
 	Stats: map[game.BaseStat]int{
-		game.StatHP:       190,
-		game.StatChakra:   50,
-		game.StatNinjutsu: 60,
-		game.StatGenjutsu: 60,
-		game.StatTaijutsu: 70,
-		game.StatSpeed:    60,
+		game.StatHP:       85,
+		game.StatChakra:   110,
+		game.StatNinjutsu: 140,
+		game.StatGenjutsu: 80,
+		game.StatTaijutsu: 80,
+		game.StatSpeed:    110,
 		game.StatEvasion:  0,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsJashin,
+		game.NsLightning,
+		game.NsEarth,
+		game.NsExplosion,
 	}),
 
 	InnateModifiers: []game.Modifier{},

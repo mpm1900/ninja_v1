@@ -17,7 +17,7 @@ function PositionSelect({ actor, game }: { actor: Actor; game: Game }) {
     .indexOf(actor.position_ID)
 
   return (
-    <div className="flex items-center justify-end gap-2">
+    <div className="flex items-center gap-2">
       {player ? (
         <>
           Position Index:

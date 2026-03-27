@@ -49,7 +49,7 @@ function App() {
       <main className="">
         <header className="flex justify-between p-2">
           <div>
-            <code className="px-4">{status}</code>
+            <code className="px-4">{status}/{game.status}</code>
             <InstanceCombobox
               icon={
                 <>
@@ -76,7 +76,7 @@ function App() {
                     .map((a) => (
                       <Badge
                         key={a.ID}
-                        variant={!!a.position_ID ? 'default' : 'secondary'}
+                        variant={!!a.position_ID ? a.player_ID === client?.ID ? 'link' : 'destructive' : 'secondary'}
                       >
                         {a.name}
                       </Badge>
@@ -154,7 +154,7 @@ function App() {
               }}
             />
           </div>
-          <div className="w-sm">
+          <div className="w-sm hidden">
             {game.log?.map((log, i) => (
               <div key={i}>{log}</div>
             ))}
@@ -163,6 +163,6 @@ function App() {
 
         <pre>{JSON.stringify(game, null, 2)}</pre>
       </main>
-    </ClientOnly>
+    </ClientOnly >
   )
 }

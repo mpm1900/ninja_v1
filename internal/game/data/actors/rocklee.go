@@ -8,6 +8,7 @@ import (
 
 var RockLee = game.ActorDef{
 	ActorID:      uuid.New(),
+	SpriteURL:    "/sprites/rocklee_64.png",
 	Name:         "Rock Lee",
 	Affiliations: []string{game.AffKonoha},
 

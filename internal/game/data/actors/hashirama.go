@@ -8,6 +8,7 @@ import (
 
 var Hashirama = game.ActorDef{
 	ActorID:      uuid.New(),
+	SpriteURL:    "/sprites/hashirama_64.png",
 	Name:         "Hashirama Senju",
 	Clan:         game.ClanSenju,
 	Affiliations: []string{game.AffKonoha},

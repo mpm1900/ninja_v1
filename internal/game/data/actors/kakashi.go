@@ -8,6 +8,7 @@ import (
 
 var Kakashi = game.ActorDef{
 	ActorID:      uuid.New(),
+	SpriteURL:    "/sprites/kakashi_64.png",
 	Name:         "Kakashi Hatake",
 	Clan:         game.ClanHatake,
 	Affiliations: []string{game.AffKonoha},

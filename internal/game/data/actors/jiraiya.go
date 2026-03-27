@@ -8,13 +8,14 @@ import (
 
 var Jiraiya = game.ActorDef{
 	ActorID:      uuid.New(),
+	SpriteURL:    "/sprites/jiraiya_64.png",
 	Name:         "Jiraiya",
 	Affiliations: []string{game.AffKonoha},
 
 	Stats: map[game.BaseStat]int{
-		game.StatHP:       95,
+		game.StatHP:       105,
 		game.StatChakra:   90,
-		game.StatNinjutsu: 140,
+		game.StatNinjutsu: 125,
 		game.StatGenjutsu: 109,
 		game.StatTaijutsu: 100,
 		game.StatSpeed:    88,

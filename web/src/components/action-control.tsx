@@ -60,8 +60,8 @@ function ActionControl({
             ))}
         </div>
       )}
-      <Button
-        disabled={loading || !valid.data || !enabled}
+      {valid.data && <Button
+        disabled={loading || !enabled}
         onClick={() => {
           sendContextMessage({
             type: 'push-action',
@@ -72,7 +72,7 @@ function ActionControl({
         }}
       >
         Select
-      </Button>
+      </Button>}
     </div>
   )
 }

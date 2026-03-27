@@ -8,6 +8,7 @@ import (
 
 var Itachi = game.ActorDef{
 	ActorID:      uuid.New(),
+	SpriteURL:    "/sprites/itachi_64.png",
 	Name:         "Itachi Uchiha",
 	Clan:         game.ClanUchiha,
 	Affiliations: []string{game.AffAkatsuki, game.AffKonoha},

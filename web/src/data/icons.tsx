@@ -13,6 +13,9 @@ const Akatsuki: IconType = (props) => (
 const Hatake: IconType = (props) => (
   <img src="/icons/hatake.svg" alt="Hatake" {...(props as any)} />
 )
+const Iwa: IconType = (props) => (
+  <img src="/icons/iwa.svg" alt="Iwa" {...(props as any)} />
+)
 const Konoha: IconType = (props) => (
   <img src="/icons/konoha.svg" alt="Konoha" {...(props as any)} />
 )
@@ -78,6 +81,7 @@ const SHINOBI_ICONS: Record<string, IconType | undefined> = {
   ame: Ame,
   akatsuki: Akatsuki,
   hatake: Hatake,
+  iwa: Iwa,
   konoha: Konoha,
   kumo: Kumo,
   kuri: Kuri,

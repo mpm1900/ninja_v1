@@ -9,6 +9,7 @@ import (
 var Sasuke = game.ActorDef{
 	ActorID:      uuid.New(),
 	Name:         "Sasuke Uchiha",
+	SpriteURL:    "/sprites/sasuke_64.png",
 	Clan:         game.ClanUchiha,
 	Affiliations: []string{game.AffAkatsuki, game.AffKonoha},
 
