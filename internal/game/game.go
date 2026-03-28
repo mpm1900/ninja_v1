@@ -206,13 +206,17 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 		return
 	}
 
+	if positionID == nil {
+		g.FilterParentModifiers(actor.ID)
+	}
+
 	if positionID != nil {
 		curr := player.GetActorAtPosition(*positionID)
 		if curr != nil {
-			g.UpdateActor(*curr, func(a Actor) Actor {
-				a.PositionID = nil
-				return a
-			})
+			ok, displaced := g.GetActorByID(*curr)
+			if ok {
+				g.SetPosition(displaced, nil)
+			}
 		}
 
 		g.UpdatePlayer(actor.PlayerID, func(p Player) Player {
