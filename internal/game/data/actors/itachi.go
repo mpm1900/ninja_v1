@@ -39,5 +39,6 @@ var Itachi = game.ActorDef{
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,
+		actions.Recover.ID,
 	},
 }

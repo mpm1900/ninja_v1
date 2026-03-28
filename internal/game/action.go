@@ -17,6 +17,7 @@ const (
 type ActionConfig struct {
 	Accuracy    *int        `json:"accuracy"`
 	Cost        *int        `json:"cost"`
+	LifeSteal   *float64    `json:"life_steal"`
 	Name        string      `json:"name"`
 	Nature      *NatureSet  `json:"nature"`
 	Power       *int        `json:"power"`

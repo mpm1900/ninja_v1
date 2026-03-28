@@ -396,7 +396,6 @@ func (g *Game) Validate() bool {
 
 			if !actor.Alive {
 				missing_pos = append(missing_pos, pos.ID)
-				// g.SetPosition(actor, nil)
 				transaction := MakeTransaction(RemovePositions, Context{
 					TargetActorIDs: []uuid.UUID{actor.ID},
 				})
@@ -405,7 +404,7 @@ func (g *Game) Validate() bool {
 		}
 
 		if len(missing_pos) > 0 {
-			fmt.Printf("%s needs %d\n", player.ID, missing_pos)
+			fmt.Printf("%s needs %v\n", player.ID, missing_pos)
 			action := SwitchIn(len(missing_pos))
 
 			context := NewContext()
@@ -416,7 +415,7 @@ func (g *Game) Validate() bool {
 			})
 
 			if len(possible_targets) == 0 {
-				valid = false
+				valid = true
 				continue
 			}
 
