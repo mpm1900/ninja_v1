@@ -321,7 +321,6 @@ func (g *Game) PushAction(transaction Transaction[Action]) bool {
 		return b_res.Stats[StatSpeed] - a_res.Stats[StatSpeed]
 	})
 
-	fmt.Printf("%d == %d \n", len(g.Actions), len(g.GetActionableActors()))
 	if len(g.Actions) == len(g.GetActionableActors()) {
 		return true
 	}

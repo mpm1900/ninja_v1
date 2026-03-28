@@ -27,10 +27,12 @@ func MakeDragonDance() game.Action {
 			Filter:   game.AllGameFilter,
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
+				tju := modifiers.TaijutsuUpSource
+				su := modifiers.SpeedUpSource
 
 				modifiers := []game.Modifier{
-					modifiers.TaijutsuUpSource,
-					modifiers.SpeedUpSource,
+					tju,
+					su,
 				}
 				mutation := mutations.AddModifiers(modifiers...)
 				transaction := game.MakeTransaction(mutation, context)

@@ -1,12 +1,16 @@
 package game
 
-import "github.com/google/uuid"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 type TriggerOn string
 
 const (
 	OnDamageRecieve TriggerOn = "on-damage-recieve"
-	OnTurnEnd TriggerOn = "on-turn-end"
+	OnTurnEnd       TriggerOn = "on-turn-end"
 )
 
 var TRIGGERS []TriggerOn = []TriggerOn{
@@ -22,11 +26,12 @@ type Trigger struct {
 }
 
 var END_OF_TURN_TRIGGER Trigger = Trigger{
-	ID: uuid.New(),
-	On: OnTurnEnd,
-	Check: func(g Game, context Context, tx Transaction[Modifier]) bool {return true},
+	ID:    uuid.New(),
+	On:    OnTurnEnd,
+	Check: func(g Game, context Context, tx Transaction[Modifier]) bool { return true },
 	ActionMutation: ActionMutation{
 		Delta: func(input Game, context Context) []Transaction[GameMutation] {
+			fmt.Println("ON TURN END")
 			var transactions []Transaction[GameMutation]
 			mut := GameMutation{
 				Delta: func(g Game, c Context) Game {
@@ -42,7 +47,7 @@ var END_OF_TURN_TRIGGER Trigger = Trigger{
 
 					g.FilterModifiers(func(mod Transaction[Modifier]) bool {
 						if mod.Mutation.Duration != nil {
-							return *mod.Mutation.Duration <= 0
+							return *mod.Mutation.Duration > 0
 						}
 						return true
 					})
