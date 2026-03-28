@@ -19,11 +19,10 @@ import { ModifiersTable } from '#/components/modifiers-table'
 import { actionsQuery } from '#/lib/queries/actions'
 import { ActorControl } from '#/components/actor-control'
 import { triggersQuery } from '#/lib/queries/trigger-types'
-import { Button } from '#/components/ui/button'
 import { ActionQueue } from '#/components/action-queue'
 import { PromptController } from '#/components/prompt-controller'
-import { Badge } from '#/components/ui/badge'
 import { ActorThumbnail } from '#/components/actor-thumbnail'
+import { cn } from '#/lib/utils'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -70,8 +69,10 @@ function App() {
             <ActionQueue />
 
             <div>
-              {game.players.map((player) => (
-                <div>
+              {game.players.map((player, i) => (
+                <div className={cn({
+                  'border-b pb-4 mb-4': i != game.players.length + 1
+                })}>
                   <div key={player.ID} className="flex gap-2 px-4">
                     {game.actors
                       .filter((a) => a.player_ID === player.ID)
@@ -153,7 +154,7 @@ function App() {
               }}
             />
           </div>
-          <div className="w-sm hidden">
+          <div className="w-sm">
             {game.log?.map((log, i) => (
               <div key={i}>{log}</div>
             ))}

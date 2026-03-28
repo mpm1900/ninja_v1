@@ -21,7 +21,7 @@ var Naruto = game.ActorDef{
 		game.StatGenjutsu: 75,
 		game.StatTaijutsu: 100,
 		game.StatSpeed:    105,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

@@ -33,6 +33,7 @@ type ActorDef = {
 type ActorState = {
   alive: boolean
   damage: number
+  chakra_damage: number
   position_ID: string
 }
 

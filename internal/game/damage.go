@@ -21,7 +21,6 @@ type DamageTerms struct {
 }
 
 type DamageConfig struct {
-	Accuracy float64
 	Critical float64
 	Random   float64
 }

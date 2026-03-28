@@ -20,7 +20,7 @@ var Raikage = game.ActorDef{
 		game.StatGenjutsu: 80,
 		game.StatTaijutsu: 105,
 		game.StatSpeed:    180,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

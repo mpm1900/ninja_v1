@@ -21,7 +21,7 @@ var Madara = game.ActorDef{
 		game.StatGenjutsu: 130,
 		game.StatTaijutsu: 110,
 		game.StatSpeed:    130,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

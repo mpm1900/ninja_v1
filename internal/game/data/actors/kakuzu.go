@@ -20,7 +20,7 @@ var Kakuzu = game.ActorDef{
 		game.StatGenjutsu: 80,
 		game.StatTaijutsu: 116,
 		game.StatSpeed:    86,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

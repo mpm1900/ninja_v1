@@ -20,7 +20,7 @@ var Kisame = game.ActorDef{
 		game.StatGenjutsu: 60,
 		game.StatTaijutsu: 110,
 		game.StatSpeed:    105,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

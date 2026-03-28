@@ -1,6 +1,8 @@
 package mutations
 
 import (
+	"fmt"
+	"math"
 	"ninja_v1/internal/game"
 
 	"github.com/google/uuid"
@@ -81,6 +83,22 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 			}
 
 			for t_index, target := range resolved {
+				base_accuracy := game.GetAccuracy(g, source, target)
+
+				if action.Accuracy != nil {
+					accuracy := int(math.Floor(base_accuracy * float64(*action.Accuracy)))
+					roll := game.MakeActionRoll()
+					if roll > accuracy {
+						/*
+						 * Maybe don't return here? maybe an on-failure callback?
+						 */
+
+						g.PushLog(fmt.Sprintf("%s's %s missed!", source.Name, action.Name))
+						g.PushLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy))
+						return g
+					}
+				}
+
 				damages := game.GetDamage(
 					source,
 					[]game.ResolvedActor{target},

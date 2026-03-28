@@ -21,7 +21,7 @@ var Pain = game.ActorDef{
 		game.StatGenjutsu: 130,
 		game.StatTaijutsu: 100,
 		game.StatSpeed:    106,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

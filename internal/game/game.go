@@ -345,6 +345,12 @@ func (g *Game) RunAction(transaction Transaction[Action]) {
 	if transaction.Context.SourceActorID != nil {
 		_, source := g.GetActorByID(*transaction.Context.SourceActorID)
 		g.PushLog(fmt.Sprintf("%s used %s.", source.Name, transaction.Mutation.Config.Name))
+
+		cost := transaction.Mutation.Cost
+		if cost.Delta != nil {
+			costTx := MakeTransaction(cost, transaction.Context)
+			g.Transactions = append(g.Transactions, costTx)
+		}
 	}
 
 	transactions := ResolveAction(*g, transaction)

@@ -20,7 +20,7 @@ var Deidara = game.ActorDef{
 		game.StatGenjutsu: 80,
 		game.StatTaijutsu: 80,
 		game.StatSpeed:    110,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

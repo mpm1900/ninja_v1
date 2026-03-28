@@ -7,6 +7,7 @@ type Action = {
   config: {
     name: string
     nature: NatureSet | null
+    cost: number | null
     accuracy: number | null
     stat: ActorAttackStat | null
     power: number | null

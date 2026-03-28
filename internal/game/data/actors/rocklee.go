@@ -20,7 +20,7 @@ var RockLee = game.ActorDef{
 		game.StatGenjutsu: 50,
 		game.StatTaijutsu: 165,
 		game.StatSpeed:    90,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

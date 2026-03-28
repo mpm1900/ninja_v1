@@ -21,7 +21,7 @@ var Sasuke = game.ActorDef{
 		game.StatGenjutsu: 120,
 		game.StatTaijutsu: 100,
 		game.StatSpeed:    132,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

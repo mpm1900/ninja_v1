@@ -21,7 +21,7 @@ var Hashirama = game.ActorDef{
 		game.StatGenjutsu: 120,
 		game.StatTaijutsu: 120,
 		game.StatSpeed:    120,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

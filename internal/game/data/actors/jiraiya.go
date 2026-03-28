@@ -20,7 +20,7 @@ var Jiraiya = game.ActorDef{
 		game.StatGenjutsu: 109,
 		game.StatTaijutsu: 100,
 		game.StatSpeed:    88,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

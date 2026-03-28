@@ -74,7 +74,8 @@ type ActorState struct {
 	// - could be computed, but this is here to not have to call .Resolve() on filters
 	Alive bool `json:"alive"`
 	// [Damage] how much damage this actor has recieved
-	Damage int `json:"damage"`
+	Damage       int `json:"damage"`
+	ChakraDamage int `json:"chakra_damage"`
 	// [PositionID] current position, nil if not active
 	PositionID *uuid.UUID `json:"position_ID"`
 	// [Reflect] how much damage is reflected (PureDamage not affected)
@@ -366,4 +367,8 @@ func (a Actor) Resolve(game Game) ResolvedActor {
 	resolved.PreStats = maps.Clone(pre.Stats)
 
 	return resolved
+}
+
+func (r ResolvedActor) HasChakra(amount int) bool {
+	return (r.Stats[StatChakra] - r.ChakraDamage) >= amount
 }

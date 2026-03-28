@@ -20,7 +20,7 @@ var Yamato = game.ActorDef{
 		game.StatGenjutsu: 80,
 		game.StatTaijutsu: 91,
 		game.StatSpeed:    84,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

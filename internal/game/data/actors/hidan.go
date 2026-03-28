@@ -20,7 +20,7 @@ var Hidan = game.ActorDef{
 		game.StatGenjutsu: 70,
 		game.StatTaijutsu: 70,
 		game.StatSpeed:    60,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

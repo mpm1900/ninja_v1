@@ -23,7 +23,7 @@ var Guy = game.ActorDef{
 		game.StatGenjutsu: 55,
 		game.StatTaijutsu: 145,
 		game.StatSpeed:    125,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

@@ -70,6 +70,14 @@ func OtherTeamFilter(actor Actor, context Context) bool {
 	return actor.PlayerID != *context.SourcePlayerID
 }
 
+// RESOLVED FILTERS
+func HasChakraFilter(game Game, amount int) func(Actor, Context) bool {
+	return func(actor Actor, context Context) bool {
+		resolved := actor.Resolve(game)
+		return resolved.HasChakra(amount)
+	}
+}
+
 type GameFilter func(Game, Context) bool
 
 func ComposeGF(filters ...GameFilter) GameFilter {

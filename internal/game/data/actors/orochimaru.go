@@ -20,7 +20,7 @@ var Orochimaru = game.ActorDef{
 		game.StatGenjutsu: 100,
 		game.StatTaijutsu: 90,
 		game.StatSpeed:    101,
-		game.StatEvasion:  0,
+		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),

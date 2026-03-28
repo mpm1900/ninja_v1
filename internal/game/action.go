@@ -2,7 +2,6 @@ package game
 
 import (
 	"fmt"
-	"math"
 	"math/rand"
 
 	"github.com/google/uuid"
@@ -16,12 +15,14 @@ const (
 )
 
 type ActionConfig struct {
-	Name     string      `json:"name"`
-	Nature   *NatureSet  `json:"nature"`
-	Accuracy *int        `json:"accuracy"`
-	Stat     *AttackStat `json:"stat"`
-	Power    *int        `json:"power"`
-	Recoil   *float64    `json:"recoil"`
+	Accuracy    *int        `json:"accuracy"`
+	Cost        *int        `json:"cost"`
+	Name        string      `json:"name"`
+	Nature      *NatureSet  `json:"nature"`
+	Power       *int        `json:"power"`
+	Recoil      *float64    `json:"recoil"`
+	Stat        *AttackStat `json:"stat"`
+	TargetCount *int        `json:"target_count"`
 }
 
 type ActionTargetType string
@@ -56,6 +57,7 @@ type Action struct {
 	TargetType      ActionTargetType          `json:"target_type"`
 	TargetPredicate func(Actor, Context) bool `json:"-"`
 	ContextValidate func(Context) bool        `json:"-"`
+	Cost            GameMutation              `json:"-"`
 }
 
 func ResolveAction(game Game, transaction Transaction[Action]) []Transaction[GameMutation] {
@@ -67,22 +69,9 @@ func ResolveAction(game Game, transaction Transaction[Action]) []Transaction[Gam
 	return transaction.Mutation.Delta(game, transaction.Context)
 }
 
-func GetAccuracy(game Game, sourceID uuid.UUID, actionAccuracy *int, modifier float64) int {
-	if actionAccuracy == nil {
-		return 100
-	}
-
-	ok, s := game.GetActorByID(sourceID)
-	if !ok {
-		return 0
-	}
-
-	source := s.Resolve(game)
-	base_acc := float64(source.Stats[StatAccuracy]) / 100.0
-	move_acc := float64(*actionAccuracy) / 100.0
-	accuracy := int(math.Floor(base_acc * move_acc * 100.0 * modifier))
-
-	return accuracy
+func GetAccuracy(game Game, source ResolvedActor, target ResolvedActor) float64 {
+	ratio := float64(source.Stats[StatAccuracy]) / float64(target.Stats[StatEvasion])
+	return ratio
 }
 
 func MakeActionRoll() int {
@@ -93,14 +82,4 @@ type AccuracyResult struct {
 	Accuracy int
 	Roll     int
 	Success  bool
-}
-
-func GetAccuracyResult(game Game, actorID uuid.UUID, move *int) AccuracyResult {
-	accuracy := GetAccuracy(game, actorID, move, 1.0)
-	roll := MakeActionRoll()
-	return AccuracyResult{
-		Accuracy: accuracy,
-		Roll:     roll,
-		Success:  accuracy >= roll,
-	}
 }
