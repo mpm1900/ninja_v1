@@ -2,6 +2,7 @@ import { cva } from 'class-variance-authority'
 import type { ClassValue } from 'class-variance-authority/types'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 import { natureNames, type NatureSet } from '#/lib/game/nature'
+import { cn } from '#/lib/utils'
 
 type t = Record<string, Partial<Record<NatureSet | 'none', ClassValue>>>
 
@@ -20,12 +21,15 @@ const variants = cva<t>(
         water: 'bg-blue-500',
         yang: 'bg-neutral-300',
         yin: 'bg-indigo-900',
-        explosion: 'bg-rose-900 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
-        storm: 'bg-blue-900 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
+        explosion:
+          'bg-rose-900 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
+        storm:
+          'bg-blue-900 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
         wood: 'bg-olive-600 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
         yinyang:
           'bg-[linear-gradient(135deg,theme(colors.indigo.900)_0%,theme(colors.indigo.900)_50%,theme(colors.neutral.300)_50%,theme(colors.neutral.300)_100%)] text-amber-300! shadow-[inset_0_0_0_1px_theme(colors.amber.300)]',
-        jashin: 'bg-mauve-950 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
+        jashin:
+          'bg-mauve-950 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
       },
     },
     defaultVariants: {
@@ -44,7 +48,7 @@ function NatureBadge({
       <TooltipTrigger asChild>
         <span
           data-role="nature"
-          className={variants({ variant: nature })}
+          className={cn(variants({ variant: nature }), className)}
           {...props}
         >
           {natureNames[nature] ?? nature}

@@ -25,6 +25,7 @@ const (
  */
 type Game struct {
 	Status    GameStatus              `json:"status"`
+	Turn      Turn                    `json:"turn"`
 	Players   []Player                `json:"players"`
 	Actors    []Actor                 `json:"actors"`
 	Modifiers []Transaction[Modifier] `json:"modifiers"`
@@ -117,6 +118,12 @@ func (g Game) GetActorsByPlayer(playerID uuid.UUID) []Actor {
 		return a.PlayerID == playerID
 	})
 }
+func (g Game) GetActionableActors() []Actor {
+	return g.GetActors(func(a Actor) bool {
+		active := a.PositionID != nil
+		return active && a.Alive && !a.Stunned
+	})
+}
 func (g Game) GetActorsFilters(filters ...ActorFilter) []Actor {
 	filter := ComposeAF(filters...)
 	return g.GetActors(func(a Actor) bool {
@@ -135,7 +142,9 @@ func (g Game) GetResolvedActors() map[uuid.UUID]ResolvedActor {
 }
 
 func (g Game) GetTriggers(context Context) []Transaction[Trigger] {
-	triggers := make([]Transaction[Trigger], 0)
+	triggers := []Transaction[Trigger]{
+		MakeTransaction(END_OF_TURN_TRIGGER, context),
+	}
 	modifiers := make([]Transaction[Modifier], 0, len(g.Modifiers))
 	modifiers = append(modifiers, g.Modifiers...)
 	modifiers = append(modifiers, GetActorModifiers(g)...)
@@ -285,10 +294,10 @@ func (g *Game) SetActionCooldown(actorID uuid.UUID, actionID uuid.UUID, cooldown
 	})
 }
 
-func (g *Game) PushAction(transaction Transaction[Action]) {
+func (g *Game) PushAction(transaction Transaction[Action]) bool {
 	for _, t := range g.Actions {
 		if *t.Context.SourceActorID == *transaction.Context.SourceActorID {
-			return
+			return false
 		}
 	}
 
@@ -311,6 +320,13 @@ func (g *Game) PushAction(transaction Transaction[Action]) {
 		b_res := b_source.Resolve(*g)
 		return b_res.Stats[StatSpeed] - a_res.Stats[StatSpeed]
 	})
+
+	fmt.Printf("%d == %d \n", len(g.Actions), len(g.GetActionableActors()))
+	if len(g.Actions) == len(g.GetActionableActors()) {
+		return true
+	}
+
+	return false
 }
 
 func (g Game) HasPlayerPrompt(playerID uuid.UUID) bool {
@@ -400,140 +416,12 @@ func (g *Game) JumpTransaction(transaction Transaction[GameMutation]) {
 	g.Transactions = append(next, g.Transactions...)
 }
 
-func (g *Game) Validate() bool {
-	valid := true
-	for _, player := range g.Players {
-		missing_pos := make([]uuid.UUID, 0)
-		for _, pos := range player.Positions {
-			if pos.ActorID == nil {
-				missing_pos = append(missing_pos, pos.ID)
-				continue
-			}
-
-			ok, actor := g.GetActorByID(*pos.ActorID)
-			if !ok {
-				missing_pos = append(missing_pos, pos.ID)
-				continue
-			}
-
-			if !actor.Alive {
-				missing_pos = append(missing_pos, pos.ID)
-				transaction := MakeTransaction(RemovePositions, Context{
-					TargetActorIDs: []uuid.UUID{actor.ID},
-				})
-				g.JumpTransaction(transaction)
-			}
-		}
-
-		if len(missing_pos) > 0 {
-			fmt.Printf("%s needs %v\n", player.ID, missing_pos)
-			action := SwitchIn(len(missing_pos))
-
-			context := NewContext()
-			context.SourcePlayerID = &player.ID
-			context.TargetPositionIDs = missing_pos
-			possible_targets := g.GetActors(func(a Actor) bool {
-				return action.TargetPredicate(a, context)
-			})
-
-			if len(possible_targets) == 0 {
-				valid = true
-				fmt.Printf("Invalid state, but no possible targets, likely game-over. \n")
-				continue
-			}
-
-			switch_count := min(len(missing_pos), len(possible_targets))
-			action = SwitchIn(switch_count)
-			transaction := MakeTransaction(action, context)
-			transaction.Ready = false
-			if !g.HasPlayerPrompt(player.ID) {
-				g.AddPrompt(transaction)
-			}
-			valid = false
-		}
-	}
-
-	return valid
-}
-
-func (g *Game) NextTransaction() bool {
-	transaction, err := g.Transactions.Dequeue()
-	if err != nil {
-		return false
-	}
-
-	n, ok := ResolveTransaction(*g, transaction, *g)
-	if !ok {
-		return false
-	}
-
-	*g = n
-	return true
-}
-
-func (g *Game) NextAction() bool {
-	transaction, err := g.Actions.Dequeue()
-	if err != nil {
-		return false
-	}
-
-	g.RunAction(transaction)
-	return true
-}
-
-func (g *Game) NextPrompt() bool {
-	transaction, err := g.Prompts.Dequeue()
-	if err != nil {
-		return false
-	}
-
-	g.RunPrompt(transaction)
-	return true
-}
-
-func (g *Game) NextTrigger() bool {
-	transaction, err := g.Triggers.Dequeue()
-	if err != nil {
-		return false
-	}
-
-	g.RunTrigger(transaction)
-	return true
-}
-
-func (g *Game) Next() bool {
-	if g.NextTransaction() {
-		return true
-	}
-
-	if g.NextTrigger() {
-		return true
-	}
-
-	if g.AllPromptsReady() {
-		if g.NextPrompt() {
-			return true
-		}
-	}
-
-	if !g.Validate() {
-		return false
-	}
-
-	if g.NextAction() {
-		return true
-	}
-
-	return false
-}
-
-func (g *Game) Flush() {
-	for g.NextTransaction() {
-	}
-}
-
 func (g *Game) PushLog(log GameLog) {
 	g.Log = append(g.Log, log)
+}
+
+func (g *Game) NextTurn() {
+	g.Turn.Count++
 }
 
 type GameJSON struct {

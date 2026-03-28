@@ -4,22 +4,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type TriggerOn string
 
-const (
-	OnDamageRecieve TriggerOn = "on-damage-recieve"
-)
-
-var TRIGGERS []TriggerOn = []TriggerOn{
-	OnDamageRecieve,
-}
-
-type Trigger struct {
-	ActionMutation
-	ID    uuid.UUID                                       `json:"ID"`
-	On    TriggerOn                                       `json:"on"`
-	Check func(Game, Context, Transaction[Modifier]) bool `json:"-"`
-}
 
 type ModifierMutation struct {
 	Mutation[Actor, Actor]

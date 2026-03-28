@@ -19,9 +19,13 @@ import { NatureBadge } from './nature-badge'
 import { Circle, CircleCheck, CircleX } from 'lucide-react'
 import type { ReactNode } from 'react'
 import type { Actor } from '#/lib/game/actor'
+import { StatBadge } from './stat-badge'
 
 const helper = createColumnHelper<Action>()
-const columns = (selected: string | undefined, cooldowns: Actor['action_cooldowns']) => [
+const columns = (
+  selected: string | undefined,
+  cooldowns: Actor['action_cooldowns']
+) => [
   helper.display({
     id: 'select',
     cell: ({ row }) =>
@@ -47,7 +51,15 @@ const columns = (selected: string | undefined, cooldowns: Actor['action_cooldown
   }),
   helper.accessor('config.stat', {
     header: 'stat',
-    cell: ({ row }) => row.original.config.stat ?? '-',
+    cell: ({ row }) =>
+      row.original.config.stat ? (
+        <StatBadge
+          stat={row.original.config.stat}
+          contentProps={{ side: 'right' }}
+        />
+      ) : (
+        '-'
+      ),
   }),
   helper.accessor('config.power', {
     header: 'power',
@@ -64,8 +76,8 @@ const columns = (selected: string | undefined, cooldowns: Actor['action_cooldown
   }),
   helper.display({
     header: 'active cooldown',
-    cell: ({ row }) => cooldowns[row.original.ID] ?? '-'
-  })
+    cell: ({ row }) => cooldowns[row.original.ID] ?? '-',
+  }),
 ]
 
 function ActionsTable({

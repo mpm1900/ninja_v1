@@ -23,6 +23,7 @@ import { ActionQueue } from '#/components/action-queue'
 import { PromptController } from '#/components/prompt-controller'
 import { ActorThumbnail } from '#/components/actor-thumbnail'
 import { cn } from '#/lib/utils'
+import { Button } from '#/components/ui/button'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -49,7 +50,9 @@ function App() {
       <main className="">
         <header className="flex justify-between p-2">
           <div>
-            <code className="px-4">{status}/{game.status}</code>
+            <code className="px-4">
+              {status}/{game.status}
+            </code>
             <InstanceCombobox
               icon={
                 <>
@@ -62,17 +65,24 @@ function App() {
               onValueChange={connectSocket}
             />
           </div>
-          <div className='font-mono text-sm'>ME: {client?.ID}</div>
+          <div className="font-mono text-sm">ME: {client?.ID}</div>
         </header>
         <div className="flex">
           <div className="space-y-2 flex-1 overflow-auto">
             <ActionQueue />
+            <div>
+              {triggers.data.map((t) => (
+                <Button key={t}>{t}</Button>
+              ))}
+            </div>
 
             <div>
               {game.players.map((player, i) => (
-                <div className={cn({
-                  'border-b pb-4 mb-4': i != game.players.length + 1
-                })}>
+                <div
+                  className={cn({
+                    'border-b pb-4 mb-4': i != game.players.length + 1,
+                  })}
+                >
                   <div key={player.ID} className="flex gap-2 px-4">
                     {game.actors
                       .filter((a) => a.player_ID === player.ID)
@@ -82,7 +92,9 @@ function App() {
                   </div>
                   <div className="grid grid-cols-3 gap-2 p-2">
                     {game.actors
-                      .filter((a) => !!a.position_ID && a.player_ID == player.ID)
+                      .filter(
+                        (a) => !!a.position_ID && a.player_ID == player.ID
+                      )
                       .map((a) => (
                         <ActorCard
                           key={a.ID}
@@ -163,6 +175,6 @@ function App() {
 
         <pre>{JSON.stringify(game, null, 2)}</pre>
       </main>
-    </ClientOnly >
+    </ClientOnly>
   )
 }

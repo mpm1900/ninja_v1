@@ -35,20 +35,22 @@ type ActorState = {
   damage: number
   chakra_damage: number
   position_ID: string
+  stunned: boolean
 }
 
-type Actor = ActorDef & ActorState & {
-  ID: string
-  player_ID: string
-  level: number
-  experience: number
-  base_stats: ActorStats<number>
-  staged_stats: ActorStats<number>
-  pre_stats: ActorStats<number>
-  applied_modifiers: Record<string, number>
-  actions: Array<Action>
-  action_cooldowns: Record<string, number>
-}
+type Actor = ActorDef &
+  ActorState & {
+    ID: string
+    player_ID: string
+    level: number
+    experience: number
+    base_stats: ActorStats<number>
+    staged_stats: ActorStats<number>
+    pre_stats: ActorStats<number>
+    applied_modifiers: Record<string, number>
+    actions: Array<Action>
+    action_cooldowns: Record<string, number>
+  }
 
 function checkActorStat(actor: Actor, key: ActorBaseStat) {
   const stat = actor.stats[key]

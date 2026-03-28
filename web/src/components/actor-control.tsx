@@ -99,7 +99,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
                   enabled &&
                   !!player &&
                   !!actor.position_ID &&
-                  !actor.action_cooldowns[row.original.ID]
+                  actor.action_cooldowns[row.original.ID] == undefined
                 }
                 context={context}
                 onContextChange={setContext}

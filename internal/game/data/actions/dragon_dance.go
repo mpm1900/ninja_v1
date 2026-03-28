@@ -11,8 +11,10 @@ import (
 var DragonDance = MakeDragonDance()
 
 func MakeDragonDance() game.Action {
+	stat := game.AttackGenjutsu
 	config := game.ActionConfig{
-		Name:     "Dragon Dance",
+		Name: "Dragon Dance",
+		Stat: &stat,
 	}
 	return game.Action{
 		ID:              uuid.New(),

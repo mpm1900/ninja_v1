@@ -74,7 +74,9 @@ func Reducer(instance *Instance, request Request) int {
 		}
 
 		transaction := game.MakeTransaction(action, request.Context)
-		instance.Game.PushAction(transaction)
+		if instance.Game.PushAction(transaction) {
+			instance.RunGameActions()
+		}
 
 		return state
 	case ResolvePrompt:
@@ -94,7 +96,6 @@ func Reducer(instance *Instance, request Request) int {
 			return none
 		}
 
-		// instance.Game.Status = game.GameStatusRunning
 		instance.RunGameActions()
 		return state
 
@@ -103,7 +104,6 @@ func Reducer(instance *Instance, request Request) int {
 			return none
 		}
 
-		// instance.Game.Status = game.GameStatusRunning
 		instance.RunGameActions()
 		return state
 

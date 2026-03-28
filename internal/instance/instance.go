@@ -116,9 +116,17 @@ func (i *Instance) RunGameActions() {
 		time.Sleep(time.Second / 2)
 		for i.Game.Next() {
 			i.BroadcastGame()
-			time.Sleep(time.Second)
+			time.Sleep(time.Second / 2)
 		}
 
+		i.Game.On(game.OnTurnEnd, game.NewContext())
+
+		for i.Game.Next() {
+			i.BroadcastGame()
+			time.Sleep(time.Second / 2)
+		}
+
+		i.Game.NextTurn()
 		i.Game.Status = game.GameStatusIdle
 		i.BroadcastGame()
 	}()

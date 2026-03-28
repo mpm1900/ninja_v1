@@ -27,40 +27,38 @@ import { Fragment, useState, type ReactNode } from 'react'
 import { natureIndexes, type NatureSet } from '#/lib/game/nature'
 import { NatureBadge } from './nature-badge'
 import { SHINOBI_ICONS } from '#/data/icons'
+import { StatBadge } from './stat-badge'
 
 const helper = createColumnHelper<ActorDef>()
 const columns = [
   helper.display({
     id: 'select',
     cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        disabled={!row.getCanSelect()}
-      />
+      <Checkbox checked={row.getIsSelected()} disabled={!row.getCanSelect()} />
     ),
   }),
   helper.accessor('name', {}),
   helper.accessor('clan', {
     header: '',
     cell: ({ row }) => (
-      <div className='flex'>
-        {[row.original.clan].map(a => {
+      <div className="flex">
+        {[row.original.clan].map((a) => {
           const C = SHINOBI_ICONS[a]
-          return C ? <C key={a} className='w-5 text-white' /> : null
+          return C ? <C key={a} className="w-5 text-white" /> : null
         })}
       </div>
-    )
+    ),
   }),
   helper.accessor('affiliations', {
     header: '',
     cell: ({ row }) => (
-      <div className='flex gap-2 justify-end'>
-        {row.original.affiliations?.map(a => {
+      <div className="flex gap-2 justify-end">
+        {row.original.affiliations?.map((a) => {
           const C = SHINOBI_ICONS[a]
-          return C ? <C key={a} className='w-5' /> : null
+          return C ? <C key={a} className="w-5" /> : null
         })}
       </div>
-    )
+    ),
   }),
   helper.accessor('natures', {
     cell: ({ row }) =>
@@ -91,9 +89,7 @@ const columns = [
         chakra
       </Button>
     ),
-    cell: (props) => (
-      <ActorStatBase actor={props.row.original} stat="chakra" />
-    ),
+    cell: (props) => <ActorStatBase actor={props.row.original} stat="chakra" />,
   }),
   helper.accessor('stats.speed', {
     header: ({ column }) => (
@@ -114,7 +110,7 @@ const columns = [
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        ninjutsu
+        <StatBadge stat="ninjutsu" />
       </Button>
     ),
     cell: (props) => (
@@ -128,7 +124,7 @@ const columns = [
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        genjutsu
+        <StatBadge stat="genjutsu" />
       </Button>
     ),
     cell: (props) => (
@@ -142,7 +138,7 @@ const columns = [
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        taijutsu
+        <StatBadge stat="taijutsu" />
       </Button>
     ),
     cell: (props) => (
@@ -234,10 +230,12 @@ function ActorsTable({
       <TableBody>
         {table.getRowModel().rows.map((row) => (
           <Fragment key={row.id}>
-            <TableRow onClick={() => {
-              if (!row.getCanSelect()) return
-              onRowCheckedChange?.(row.original, !row.getIsSelected())
-            }}>
+            <TableRow
+              onClick={() => {
+                if (!row.getCanSelect()) return
+                onRowCheckedChange?.(row.original, !row.getIsSelected())
+              }}
+            >
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
