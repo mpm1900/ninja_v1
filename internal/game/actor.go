@@ -95,7 +95,8 @@ type Actor struct {
 	AttackModifiers  map[AttackStat]float64 `json:"attack_modifiers"`
 	DefenseModifiers map[AttackStat]float64 `json:"defense_modifiers"`
 
-	Actions []Action `json:"actions"`
+	Actions         []Action          `json:"actions"`
+	ActionCooldowns map[uuid.UUID]int `json:"action_cooldowns"`
 }
 
 type ResolvedActor struct {
@@ -172,7 +173,21 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uui
 			AttackNinjutsu: 1,
 			AttackTaijutsu: 1,
 		},
-		Actions: actions,
+		Actions:         actions,
+		ActionCooldowns: map[uuid.UUID]int{},
+	}
+}
+
+func (a *Actor) SetActionCooldown(actionID uuid.UUID, cooldown int) {
+	a.ActionCooldowns[actionID] = cooldown
+}
+func (a *Actor) DecrementCooldowns() {
+	for actionID, cooldown := range a.ActionCooldowns {
+		if cooldown <= 0 {
+			delete(a.ActionCooldowns, actionID)
+			continue
+		}
+		a.ActionCooldowns[actionID] = cooldown - 1
 	}
 }
 

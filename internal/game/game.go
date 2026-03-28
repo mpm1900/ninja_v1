@@ -264,6 +264,13 @@ func (g *Game) UpdateActor(actorID uuid.UUID, updater func(Actor) Actor) {
 	g.Actors[index] = updater(g.Actors[index])
 }
 
+func (g *Game) SetActionCooldown(actorID uuid.UUID, actionID uuid.UUID, cooldown int) {
+	g.UpdateActor(actorID, func(a Actor) Actor {
+		a.SetActionCooldown(actionID, cooldown)
+		return a
+	})
+}
+
 func (g *Game) PushAction(transaction Transaction[Action]) {
 	for _, t := range g.Actions {
 		if *t.Context.SourceActorID == *transaction.Context.SourceActorID {
@@ -337,7 +344,7 @@ func (g *Game) ReadyPrompt(ID uuid.UUID, context Context) {
 }
 
 func (g *Game) RunPrompt(transaction Transaction[Action]) {
-	transactions := ResolveAction(*g, transaction)
+	transactions := ResolveAction(g, transaction)
 	g.Transactions = append(g.Transactions, transactions...)
 }
 
@@ -351,9 +358,10 @@ func (g *Game) RunAction(transaction Transaction[Action]) {
 			costTx := MakeTransaction(cost, transaction.Context)
 			g.Transactions = append(g.Transactions, costTx)
 		}
+
 	}
 
-	transactions := ResolveAction(*g, transaction)
+	transactions := ResolveAction(g, transaction)
 	g.Transactions = append(g.Transactions, transactions...)
 }
 
@@ -416,6 +424,7 @@ func (g *Game) Validate() bool {
 
 			if len(possible_targets) == 0 {
 				valid = true
+				fmt.Printf("Invalid state, but no possible targets, likely game-over. \n")
 				continue
 			}
 

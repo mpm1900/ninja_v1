@@ -1,6 +1,10 @@
 package game
 
-import "github.com/google/uuid"
+import (
+	"slices"
+
+	"github.com/google/uuid"
+)
 
 type Mutation[I any, O any] struct {
 	Delta    func(input I, context Context) O    `json:"-"`
@@ -56,4 +60,43 @@ func ResolveTransactionFn[I any, O any](
 	fallback func(I) O,
 ) (O, bool) {
 	return ResolveTransaction(input, transaction, fallback(input))
+}
+
+func NewGameMutation() GameMutation {
+	return GameMutation{
+		Delta:    func(input Game, context Context) Game { return input },
+		Filter:   func(input Game, context Context) bool { return true },
+		Priority: 0,
+	}
+}
+
+func ComposeMutations(mutations ...GameMutation) GameMutation {
+	if len(mutations) == 0 {
+		return NewGameMutation()
+	}
+
+	slices.SortFunc(mutations, func(a, b GameMutation) int {
+		return b.Priority - a.Priority
+	})
+
+	return GameMutation{
+		Delta: func(input Game, context Context) Game {
+			for _, mut := range mutations {
+				if mut.Delta != nil {
+					input = mut.Delta(input, context)
+				}
+			}
+
+			return input
+		},
+		Filter: func(input Game, context Context) bool {
+			for _, mut := range mutations {
+				if mut.Filter != nil && !mut.Filter(input, context) {
+					return false
+				}
+			}
+			return true
+		},
+		Priority: mutations[0].Priority,
+	}
 }

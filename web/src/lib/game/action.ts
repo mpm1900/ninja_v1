@@ -8,6 +8,7 @@ type Action = {
     name: string
     nature: NatureSet | null
     cost: number | null
+    cooldown: number | null
     accuracy: number | null
     stat: ActorAttackStat | null
     power: number | null

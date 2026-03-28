@@ -87,18 +87,24 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
       <div>
         <CardContent className="px-2">
           <ActionsTable
+            cooldowns={actor.action_cooldowns}
             data={actor.actions}
             enabled={enabled && !!player && !!actor.position_ID}
             selected={activeActionID}
             onSelectedChange={setActiveActionID}
-            subRow={
+            subRow={({ row }) => (
               <ActionControl
                 action={actor.actions.find((a) => a.ID === activeActionID)}
-                enabled={enabled && !!player && !!actor.position_ID}
+                enabled={
+                  enabled &&
+                  !!player &&
+                  !!actor.position_ID &&
+                  !actor.action_cooldowns[row.original.ID]
+                }
                 context={context}
                 onContextChange={setContext}
               />
-            }
+            )}
           />
         </CardContent>
       </div>

@@ -16,6 +16,7 @@ const (
 
 type ActionConfig struct {
 	Accuracy    *int        `json:"accuracy"`
+	Cooldown    *int        `json:"cooldown"`
 	Cost        *int        `json:"cost"`
 	LifeSteal   *float64    `json:"life_steal"`
 	Name        string      `json:"name"`
@@ -61,13 +62,21 @@ type Action struct {
 	Cost            GameMutation              `json:"-"`
 }
 
-func ResolveAction(game Game, transaction Transaction[Action]) []Transaction[GameMutation] {
-	if !transaction.Mutation.Filter(game, transaction.Context) {
+func ResolveAction(game *Game, transaction Transaction[Action]) []Transaction[GameMutation] {
+	if !transaction.Mutation.Filter(*game, transaction.Context) {
 		fmt.Printf("Action Failed: %s +%v\n", transaction.Mutation.Config.Name, transaction.Context)
 		return []Transaction[GameMutation]{}
 	}
 
-	return transaction.Mutation.Delta(game, transaction.Context)
+	if transaction.Mutation.Config.Cooldown != nil {
+		game.SetActionCooldown(
+			*transaction.Context.SourceActorID,
+			transaction.Mutation.ID,
+			*transaction.Mutation.Config.Cooldown,
+		)
+	}
+
+	return transaction.Mutation.Delta(*game, transaction.Context)
 }
 
 func GetAccuracy(game Game, source ResolvedActor, target ResolvedActor) float64 {

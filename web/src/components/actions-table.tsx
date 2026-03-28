@@ -4,6 +4,7 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
+  type Row,
 } from '@tanstack/react-table'
 import {
   Table,
@@ -17,9 +18,10 @@ import { Fragment } from 'react/jsx-runtime'
 import { NatureBadge } from './nature-badge'
 import { Circle, CircleCheck, CircleX } from 'lucide-react'
 import type { ReactNode } from 'react'
+import type { Actor } from '#/lib/game/actor'
 
 const helper = createColumnHelper<Action>()
-const columns = (selected: string | undefined) => [
+const columns = (selected: string | undefined, cooldowns: Actor['action_cooldowns']) => [
   helper.display({
     id: 'select',
     cell: ({ row }) =>
@@ -56,24 +58,34 @@ const columns = (selected: string | undefined) => [
     cell: ({ row }) =>
       row.original.config.accuracy ? `${row.original.config.accuracy}%` : '-',
   }),
+  helper.accessor('config.cooldown', {
+    header: 'cooldown',
+    cell: ({ row }) => row.original.config.cooldown ?? '-',
+  }),
+  helper.display({
+    header: 'active cooldown',
+    cell: ({ row }) => cooldowns[row.original.ID] ?? '-'
+  })
 ]
 
 function ActionsTable({
+  cooldowns,
   data,
   enabled,
   selected,
   onSelectedChange,
   subRow,
 }: {
+  cooldowns: Actor['action_cooldowns']
   data: Action[]
   enabled: boolean
   selected: string | undefined
   onSelectedChange: (selected: string) => void
-  subRow?: ReactNode
+  subRow?: (props: { row: Row<Action> }) => ReactNode
 }) {
   const table = useReactTable({
     data,
-    columns: columns(selected),
+    columns: columns(selected, cooldowns),
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: enabled,
     getRowId: (a) => a.ID,
@@ -112,7 +124,7 @@ function ActionsTable({
             </TableRow>
             {subRow && row.getCanSelect() && row.original.ID === selected && (
               <tr>
-                <td colSpan={row.getAllCells().length}>{subRow}</td>
+                <td colSpan={row.getAllCells().length}>{subRow({ row })}</td>
               </tr>
             )}
           </Fragment>

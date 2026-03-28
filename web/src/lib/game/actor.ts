@@ -47,6 +47,7 @@ type Actor = ActorDef & ActorState & {
   pre_stats: ActorStats<number>
   applied_modifiers: Record<string, number>
   actions: Array<Action>
+  action_cooldowns: Record<string, number>
 }
 
 function checkActorStat(actor: Actor, key: ActorBaseStat) {

@@ -10,12 +10,15 @@ import (
 var Fireball = MakeFireball()
 
 func MakeFireball() game.Action {
+	ID := uuid.New()
 	accuracy := 50
 	power := 50
 	nature := game.NsFire
 	stat := game.AttackNinjutsu
 	targetCount := 1
 	chakraCost := 30
+	cooldown := 1
+
 	config := game.ActionConfig{
 		Name:        "火遁: Fireball",
 		Nature:      &nature,
@@ -23,10 +26,11 @@ func MakeFireball() game.Action {
 		Power:       &power,
 		Stat:        &stat,
 		TargetCount: &targetCount,
+		Cooldown:    &cooldown,
 	}
 
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              ID,
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.ActiveFilter),
@@ -34,7 +38,10 @@ func MakeFireball() game.Action {
 		Cost:            mutations.UseChakra(chakraCost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
-			Filter:   game.SourceIsAlive,
+			Filter: game.ComposeGF(
+				game.SourceIsAlive,
+				game.SourceIsActionOnCooldown(ID),
+			),
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
