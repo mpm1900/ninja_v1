@@ -11,6 +11,7 @@ var ACTORS map[uuid.UUID]game.ActorDef = map[uuid.UUID]game.ActorDef{
 	actors.Madara.ActorID:     actors.Madara,
 	actors.Itachi.ActorID:     actors.Itachi,
 	actors.Sasuke.ActorID:     actors.Sasuke,
+	actors.Shisui.ActorID:     actors.Shisui,
 	actors.Kisame.ActorID:     actors.Kisame,
 	actors.Kakuzu.ActorID:     actors.Kakuzu,
 	actors.Hidan.ActorID:      actors.Hidan,

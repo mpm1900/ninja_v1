@@ -163,6 +163,16 @@ func (g *Game) FilterModifiers(predicate func(modifier Transaction[Modifier]) bo
 	g.Modifiers = filtered
 }
 
+func (g *Game) FilterParentModifiers(actorID uuid.UUID) {
+	g.FilterModifiers(func(modifier Transaction[Modifier]) bool {
+		if modifier.Context.ParentActorID != nil {
+			return *modifier.Context.ParentActorID != actorID
+		}
+
+		return true
+	})
+}
+
 func (g *Game) AddPlayer(player Player) {
 	g.Players = append(g.Players, player)
 }
