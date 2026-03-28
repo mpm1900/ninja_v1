@@ -112,6 +112,11 @@ func (g Game) GetActors(predicate func(Actor) bool) []Actor {
 	}
 	return actors
 }
+func (g Game) GetActorsByPlayer(playerID uuid.UUID) []Actor {
+	return g.GetActors(func(a Actor) bool {
+		return a.PlayerID == playerID
+	})
+}
 func (g Game) GetActorsFilters(filters ...ActorFilter) []Actor {
 	filter := ComposeAF(filters...)
 	return g.GetActors(func(a Actor) bool {
@@ -341,6 +346,7 @@ func (g *Game) RunAction(transaction Transaction[Action]) {
 		_, source := g.GetActorByID(*transaction.Context.SourceActorID)
 		g.PushLog(fmt.Sprintf("%s used %s.", source.Name, transaction.Mutation.Config.Name))
 	}
+
 	transactions := ResolveAction(*g, transaction)
 	g.Transactions = append(g.Transactions, transactions...)
 }

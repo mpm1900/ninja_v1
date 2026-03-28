@@ -11,7 +11,7 @@ var SwitchPositions = GameMutation{
 			return g
 		}
 
-		_, targets := g.GetTargets(context)
+		targets := g.GetTargets(context)
 		if len(targets) == 0 {
 			return g
 		}
@@ -23,7 +23,7 @@ var SwitchPositions = GameMutation{
 
 var SetPositions = GameMutation{
 	Delta: func(g Game, context Context) Game {
-		_, targets := g.GetTargets(context)
+		targets := g.GetTargets(context)
 		positionCount := len(context.TargetPositionIDs)
 		if len(targets) == 0 || positionCount == 0 {
 			return g
@@ -41,7 +41,7 @@ var SetPositions = GameMutation{
 
 var RemovePositions = GameMutation{
 	Delta: func(g Game, context Context) Game {
-		_, targets := g.GetTargets(context)
+		targets := g.GetTargets(context)
 		for i := range len(targets) {
 			g.SetPosition(targets[i], nil)
 		}
@@ -85,7 +85,7 @@ func SwitchIn(count int) Action {
 			Name: "Switch In",
 		},
 		TargetType:      TargetActorID,
-		TargetPredicate: ComposeAF(TeamFilter, InactiveFilter),
+		TargetPredicate: ComposeAF(TeamFilter, InactiveFilter, AliveFilter),
 		ContextValidate: TargetLengthFilter(count),
 		ActionMutation: ActionMutation{
 			Priority: ActionPrioritySwitch,

@@ -15,6 +15,7 @@ type Player struct {
 	ID                uuid.UUID        `json:"ID"`
 	PositionsCapacity int              `json:"positions_capacity"`
 	Positions         []PlayerPosition `json:"positions"`
+	TeamCapacity      int              `json:"team_capacity"`
 }
 
 func NewPlayer(ID uuid.UUID, capacity int) Player {
@@ -30,6 +31,7 @@ func NewPlayer(ID uuid.UUID, capacity int) Player {
 		ID:                ID,
 		PositionsCapacity: 2,
 		Positions:         positions,
+		TeamCapacity:      6,
 	}
 }
 

@@ -1,6 +1,7 @@
 package game
 
 import (
+	"fmt"
 	"math"
 	"math/rand"
 
@@ -58,6 +59,11 @@ type Action struct {
 }
 
 func ResolveAction(game Game, transaction Transaction[Action]) []Transaction[GameMutation] {
+	if !transaction.Mutation.Filter(game, transaction.Context) {
+		fmt.Printf("Action Failed: %s +%v\n", transaction.Mutation.Config.Name, transaction.Context)
+		return []Transaction[GameMutation]{}
+	}
+
 	return transaction.Mutation.Delta(game, transaction.Context)
 }
 
@@ -70,6 +76,7 @@ func GetAccuracy(game Game, sourceID uuid.UUID, actionAccuracy *int, modifier fl
 	if !ok {
 		return 0
 	}
+
 	source := s.Resolve(game)
 	base_acc := float64(source.Stats[StatAccuracy]) / 100.0
 	move_acc := float64(*actionAccuracy) / 100.0

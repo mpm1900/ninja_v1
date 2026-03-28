@@ -25,11 +25,11 @@ func MakeFireball() game.Action {
 		ID:              uuid.New(),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
-		TargetPredicate: game.ComposeAF(game.OtherFilter, game.ActiveFilter, game.AliveFilter),
+		TargetPredicate: game.ComposeAF(game.OtherFilter, game.ActiveFilter),
 		ContextValidate: game.PositionsLengthFilter(1),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
-			Filter:   game.AllGameFilter,
+			Filter:   game.SourceIsAlive,
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 

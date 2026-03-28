@@ -23,7 +23,6 @@ var ACTORS map[uuid.UUID]game.ActorDef = map[uuid.UUID]game.ActorDef{
 	actors.Orochimaru.ActorID: actors.Orochimaru,
 	actors.Yamato.ActorID:     actors.Yamato,
 	actors.Raikage.ActorID:    actors.Raikage,
-	actors.Kaguya.ActorID:     actors.Kaguya,
 	actors.Guy.ActorID:        actors.Guy,
 	actors.RockLee.ActorID:    actors.RockLee,
 	actors.Kakashi.ActorID:    actors.Kakashi,

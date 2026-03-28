@@ -23,6 +23,7 @@ import { Button } from '#/components/ui/button'
 import { ActionQueue } from '#/components/action-queue'
 import { PromptController } from '#/components/prompt-controller'
 import { Badge } from '#/components/ui/badge'
+import { ActorThumbnail } from '#/components/actor-thumbnail'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -62,7 +63,7 @@ function App() {
               onValueChange={connectSocket}
             />
           </div>
-          <div>ME: {client?.ID}</div>
+          <div className='font-mono text-sm'>ME: {client?.ID}</div>
         </header>
         <div className="flex">
           <div className="space-y-2 flex-1 overflow-auto">
@@ -70,32 +71,30 @@ function App() {
 
             <div>
               {game.players.map((player) => (
-                <div key={player.ID} className="flex gap-2 px-4">
-                  {game.actors
-                    .filter((a) => a.player_ID === player.ID)
-                    .map((a) => (
-                      <Badge
-                        key={a.ID}
-                        variant={!!a.position_ID ? a.player_ID === client?.ID ? 'link' : 'destructive' : 'secondary'}
-                      >
-                        {a.name}
-                      </Badge>
-                    ))}
+                <div>
+                  <div key={player.ID} className="flex gap-2 px-4">
+                    {game.actors
+                      .filter((a) => a.player_ID === player.ID)
+                      .map((a, i) => (
+                        <ActorThumbnail key={a.ID} actor={a} index={i} />
+                      ))}
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 p-2">
+                    {game.actors
+                      .filter((a) => !!a.position_ID && a.player_ID == player.ID)
+                      .map((a) => (
+                        <ActorCard
+                          key={a.ID}
+                          actor={a}
+                          clientID={client?.ID}
+                          game={game}
+                        />
+                      ))}
+                  </div>
                 </div>
               ))}
             </div>
-            <div className="grid grid-cols-3 gap-2 p-2">
-              {game.actors
-                .filter((a) => !!a.position_ID)
-                .map((a) => (
-                  <ActorCard
-                    key={a.ID}
-                    actor={a}
-                    clientID={client?.ID}
-                    game={game}
-                  />
-                ))}
-            </div>
+
             <ActorsTable
               data={actors.data}
               enabled={status === 'open' && game.status == 'idle'}

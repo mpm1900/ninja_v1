@@ -87,6 +87,14 @@ func ComposeGF(filters ...GameFilter) GameFilter {
 func AllGameFilter(game Game, context Context) bool {
 	return true
 }
+func SourceIsAlive(game Game, context Context) bool {
+	ok, source := game.GetSource(context)
+	if !ok {
+		return false
+	}
+
+	return source.Alive
+}
 
 func MatchSourceActorIDTrigger(game Game, context Context, modifier_tx Transaction[Modifier]) bool {
 	if context.SourceActorID == nil || modifier_tx.Context.SourceActorID == nil {

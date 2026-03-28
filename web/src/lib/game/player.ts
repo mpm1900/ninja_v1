@@ -7,6 +7,7 @@ type Player = {
   ID: string
   positions_capacity: number,
   positions: Array<PlayerPosition>
+  team_capacity: number
 }
 
 

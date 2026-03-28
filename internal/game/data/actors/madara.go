@@ -15,7 +15,7 @@ var Madara = game.ActorDef{
 	Affiliations: []string{game.AffAkatsuki, game.AffKonoha},
 
 	Stats: map[game.BaseStat]int{
-		game.StatHP:       80,
+		game.StatHP:       90,
 		game.StatChakra:   110,
 		game.StatNinjutsu: 150,
 		game.StatGenjutsu: 130,

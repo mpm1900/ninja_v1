@@ -21,14 +21,15 @@ type DamageTerms struct {
 }
 
 type DamageConfig struct {
+	Accuracy float64
 	Critical float64
 	Random   float64
 }
 
 func NewDamageConfig() DamageConfig {
 	return DamageConfig{
-		Critical: 1,
-		Random:   1,
+		Critical: 1.0,
+		Random:   1.0,
 	}
 }
 

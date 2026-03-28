@@ -21,7 +21,13 @@ func NewContext() Context {
 	}
 }
 
-func (g Game) GetTargets(context Context) (int, []Actor) {
+func WithTargetIDs(context Context, targetActorIDs []uuid.UUID) Context {
+	c := context
+	c.TargetActorIDs = targetActorIDs
+	return c
+}
+
+func (g Game) GetTargets(context Context) []Actor {
 	targets := g.GetActors(func(a Actor) bool {
 		return slices.Contains(context.TargetActorIDs, a.ID)
 	})
@@ -34,7 +40,7 @@ func (g Game) GetTargets(context Context) (int, []Actor) {
 	})
 
 	targets = append(targets, posTargets...)
-	return len(targets), targets
+	return targets
 }
 
 func (g Game) GetSource(context Context) (bool, Actor) {

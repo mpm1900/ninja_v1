@@ -14,10 +14,10 @@ var Hidan = game.ActorDef{
 	Affiliations: []string{game.AffAkatsuki, game.AffYuga},
 
 	Stats: map[game.BaseStat]int{
-		game.StatHP:       190,
-		game.StatChakra:   50,
-		game.StatNinjutsu: 60,
-		game.StatGenjutsu: 60,
+		game.StatHP:       200,
+		game.StatChakra:   30,
+		game.StatNinjutsu: 70,
+		game.StatGenjutsu: 70,
 		game.StatTaijutsu: 70,
 		game.StatSpeed:    60,
 		game.StatEvasion:  0,
@@ -37,5 +37,6 @@ var Hidan = game.ActorDef{
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,
+		actions.Curse.ID,
 	},
 }

@@ -16,6 +16,7 @@ import {
 import { Fragment } from 'react/jsx-runtime'
 import { NatureBadge } from './nature-badge'
 import { Circle, CircleCheck, CircleX } from 'lucide-react'
+import type { ReactNode } from 'react'
 
 const helper = createColumnHelper<Action>()
 const columns = (selected: string | undefined) => [
@@ -62,11 +63,13 @@ function ActionsTable({
   enabled,
   selected,
   onSelectedChange,
+  subRow,
 }: {
   data: Action[]
   enabled: boolean
   selected: string | undefined
   onSelectedChange: (selected: string) => void
+  subRow?: ReactNode
 }) {
   const table = useReactTable({
     data,
@@ -107,6 +110,11 @@ function ActionsTable({
                 </TableCell>
               ))}
             </TableRow>
+            {subRow && row.getCanSelect() && row.original.ID === selected && (
+              <tr>
+                <td colSpan={row.getAllCells().length}>{subRow}</td>
+              </tr>
+            )}
           </Fragment>
         ))}
       </TableBody>

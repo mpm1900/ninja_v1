@@ -79,6 +79,7 @@ type ActorState struct {
 	PositionID *uuid.UUID `json:"position_ID"`
 	// [Reflect] how much damage is reflected (PureDamage not affected)
 	Reflect float64 `json:"reflect"`
+	Stunned bool    `json:"stunned"`
 }
 
 type Actor struct {
@@ -104,6 +105,7 @@ type ResolvedActor struct {
 }
 
 const (
+	MutPriorityStateChanges    = -20
 	MutPriorityPreBaseStats    = -11
 	MutPriorityMapBaseStats    = -10
 	MutPriorityPostBaseStats   = -9

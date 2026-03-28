@@ -18,8 +18,8 @@ var RageTrigger game.Trigger = game.Trigger{
 		Delta: func(g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
 			transactions := []game.GameTransaction{}
 
-			count, targets := g.GetTargets(context)
-			if count == 0 {
+			targets := g.GetTargets(context)
+			if len(targets) == 0 {
 				return transactions
 			}
 

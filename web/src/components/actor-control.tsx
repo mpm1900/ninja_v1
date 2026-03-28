@@ -35,7 +35,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
       <div>
         <CardContent className="px-2 flex flex-col gap-2">
           <div className="flex gap-2">
-            <div className="h-[64px] w-[64px] overflow-hidden">
+            <div className="h-16 w-16 overflow-hidden">
               <img
                 src={actor.sprite_url}
                 className="h-full w-full object-cover"
@@ -91,12 +91,14 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
             enabled={enabled && !!player && !!actor.position_ID}
             selected={activeActionID}
             onSelectedChange={setActiveActionID}
-          />
-          <ActionControl
-            action={actor.actions.find((a) => a.ID === activeActionID)}
-            enabled={enabled && !!player && !!actor.position_ID}
-            context={context}
-            onContextChange={setContext}
+            subRow={
+              <ActionControl
+                action={actor.actions.find((a) => a.ID === activeActionID)}
+                enabled={enabled && !!player && !!actor.position_ID}
+                context={context}
+                onContextChange={setContext}
+              />
+            }
           />
         </CardContent>
       </div>

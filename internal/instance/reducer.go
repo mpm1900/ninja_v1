@@ -12,9 +12,21 @@ func Reducer(instance *Instance, request Request) int {
 	case AddActor:
 		def, ok := data.ACTORS[*request.Context.SourceActorID]
 		if !ok {
+			fmt.Println("[AddActor] Unknown Actor")
 			return none
 		}
 
+		ok, player := instance.Game.GetPlayerByID(request.ClientID)
+		if !ok {
+			fmt.Println("[AddActor] Unknown Player")
+			return none
+		}
+
+		actors := instance.Game.GetActorsByPlayer(player.ID)
+		if len(actors) >= player.TeamCapacity {
+			fmt.Println("[AddActor] Team Full")
+			return none
+		}
 		actor := game.MakeActor(def, request.ClientID, 13824, data.ACTIONS)
 		instance.Game.AddActor(actor)
 		instance.Game.PushLog(fmt.Sprintf("Actor joined: %s", actor.Name))
@@ -96,9 +108,9 @@ func Reducer(instance *Instance, request Request) int {
 		return state
 
 	case SetActorPlayer:
-		count, targets := instance.Game.GetTargets(request.Context)
+		targets := instance.Game.GetTargets(request.Context)
 
-		if count == 0 {
+		if len(targets) == 0 {
 			return none
 		}
 
@@ -121,9 +133,9 @@ func Reducer(instance *Instance, request Request) int {
 		return state
 
 	case SetActorPosition:
-		count, targets := instance.Game.GetTargets(request.Context)
+		targets := instance.Game.GetTargets(request.Context)
 
-		if count == 0 || request.PositionIndex == nil {
+		if len(targets) == 0 || request.PositionIndex == nil {
 			return none
 		}
 

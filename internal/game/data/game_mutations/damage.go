@@ -16,29 +16,51 @@ func Clamp(value, min, max int) int {
 	return value
 }
 
-func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) int {
+func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, updater *func(game.Actor) game.Actor) int {
 	clamped := Clamp(damage, 0, damage)
+	hp, ok := target.Stats[game.StatHP]
+	if !ok {
+		hp = 0
+	}
+
 	g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
 		a.Damage += clamped
-		a.Alive = target.Stats[game.StatHP] > a.Damage
-		return a
+		a.Alive = hp > a.Damage
+		if updater == nil || *updater == nil {
+			return a
+		}
+
+		u := *updater
+		return u(a)
 	})
 
 	return clamped
 }
 
-func PureDamage(damage int) game.GameMutation {
+func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) int {
+	return ApplyDamageWith(g, target, damage, nil)
+}
+
+func pureDamageWith(damage int, updater *func(game.Actor) game.Actor) game.GameMutation {
 	return game.GameMutation{
 		Delta: func(g game.Game, context game.Context) game.Game {
-			_, targets := g.GetTargets(context)
+			targets := g.GetTargets(context)
 			for _, t := range targets {
 				target := t.Resolve(g)
-				ApplyDamage(&g, target, damage)
+				ApplyDamageWith(&g, target, damage, updater)
 			}
 
 			return g
 		},
 	}
+}
+
+func PureDamageWith(damage int, updater func(game.Actor) game.Actor) game.GameMutation {
+	return pureDamageWith(damage, &updater)
+}
+
+func PureDamage(damage int) game.GameMutation {
+	return PureDamageWith(damage, nil)
 }
 
 func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMutation {
@@ -49,7 +71,7 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 				return g
 			}
 
-			_, targets := g.GetTargets(context)
+			targets := g.GetTargets(context)
 			source := s.Resolve(g)
 			total := 0
 			totals := make([]int, len(targets))
