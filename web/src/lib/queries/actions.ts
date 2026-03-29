@@ -1,5 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { queryOptions } from '@tanstack/react-query'
+import type { Action } from '../game/action'
 
 const getActions = createServerFn().handler(async () => {
   const response = await fetch(`${process.env.API_URL}/api/actions`)

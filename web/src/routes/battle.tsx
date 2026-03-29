@@ -5,11 +5,16 @@ import { PlayerPositions } from '#/components/player-positions'
 import { PromptController } from '#/components/prompt-controller'
 import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useStore } from '@tanstack/react-store'
 import { useState } from 'react'
 
 export const Route = createFileRoute('/battle')({
+  beforeLoad: ({ context }) => {
+    if (!context.auth.user) {
+      throw redirect({ to: '/login' })
+    }
+  },
   component: RouteComponent,
 })
 

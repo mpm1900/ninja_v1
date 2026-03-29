@@ -11,6 +11,9 @@ export function getRouter() {
 
     context: {
       ...queryContext,
+      auth: {
+        user: null,
+      },
     },
 
     scrollRestoration: true,

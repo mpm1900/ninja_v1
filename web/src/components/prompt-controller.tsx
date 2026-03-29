@@ -91,8 +91,6 @@ function PromptController() {
     setContext(prompt?.context)
   }, [prompt?.ID])
 
-  console.log(prompt, !prompt && game.status === 'waiting')
-
   return (
     <>
       <AlertDialog open={!!prompt && game.status === 'idle'}>
@@ -121,7 +119,6 @@ function PromptController() {
             </AlertDialogDescription>
           </AlertDialogHeader>
         </AlertDialogContent>
-
       </AlertDialog>
     </>
   )

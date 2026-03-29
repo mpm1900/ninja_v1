@@ -8,6 +8,7 @@ import (
 	"syscall"
 	"time"
 
+	"ninja_v1/internal/db"
 	"ninja_v1/internal/server"
 )
 
@@ -16,7 +17,15 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	s := server.NewServer(ctx)
+	pool, err := db.Connect(ctx)
+	if err != nil {
+		logger.Error("Error connecting to database", "err", err)
+		os.Exit(1)
+	}
+	defer pool.Close()
+	queries := db.New(pool)
+
+	s := server.NewServer(ctx, queries)
 	go run(s, logger)
 	logger.Info("Server is running...")
 

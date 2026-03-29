@@ -4,6 +4,9 @@ import (
 	"context"
 	"log/slog"
 	"net/http"
+
+	"ninja_v1/internal/auth"
+	"ninja_v1/internal/db"
 )
 
 type Server struct {
@@ -11,7 +14,7 @@ type Server struct {
 	logger *slog.Logger
 }
 
-func NewServer(ctx context.Context) *Server {
+func NewServer(ctx context.Context, queries *db.Queries) *Server {
 	logger := slog.Default()
 
 	dataHandler := NewDataHandler(ctx)
@@ -19,6 +22,11 @@ func NewServer(ctx context.Context) *Server {
 
 	mux := http.NewServeMux()
 	api := http.NewServeMux()
+
+	api.HandleFunc("POST /auth/signup", handleSignUp(ctx, queries))
+	api.HandleFunc("POST /auth/login", handleLogin(ctx, queries))
+	api.HandleFunc("POST /auth/logout", auth.WithSession(handleLogout(ctx, queries), queries))
+	api.HandleFunc("GET  /auth/me", auth.WithSession(handleMe(), queries))
 
 	api.HandleFunc("GET /actions", dataHandler.HandleGetActions)
 	api.HandleFunc("GET /actors", dataHandler.HandleGetActors)

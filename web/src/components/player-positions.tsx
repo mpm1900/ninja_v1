@@ -2,6 +2,7 @@ import { gameStore } from '#/lib/stores/game'
 import { useStore } from '@tanstack/react-store'
 import { ActorCard } from './actor-card'
 import { clientsStore } from '#/lib/stores/clients'
+import { Fragment } from 'react/jsx-runtime'
 
 function PlayerPositions({
   player_ID,
@@ -20,9 +21,9 @@ function PlayerPositions({
 
   return (
     <div className="flex gap-2 py-2">
-      {player.positions.map((pos) =>
-        pos.actor_ID ? (
-          <>
+      {player.positions.map((pos) => (
+        <Fragment key={pos.ID}>
+          {pos.actor_ID ? (
             <ActorCard
               key={pos.ID}
               actor={game.actors.find((a) => a.ID === pos.actor_ID)}
@@ -31,11 +32,11 @@ function PlayerPositions({
               selected={selected === pos.actor_ID}
               onClick={() => onSelectedChange?.(pos.actor_ID ?? '')}
             />
-          </>
-        ) : (
-          <div>placeholder</div>
-        )
-      )}
+          ) : (
+            <div>placeholder</div>
+          )}
+        </Fragment>
+      ))}
     </div>
   )
 }

@@ -7,13 +7,18 @@ import {
 } from '#/lib/stores/socket'
 import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
-import { Loader, Signal, Unplug } from 'lucide-react'
+import { Loader, LogOut, Signal, Unplug } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { NULL_CONTEXT } from '#/lib/game/context'
 import { Button } from './ui/button'
+import { GiNinjaHead } from 'react-icons/gi'
+import { useLogout } from '#/lib/mutations/logout'
+import { useUser } from '#/lib/queries/auth'
 
 function AppHeader() {
+  const { data: user } = useUser()
+  const logout = useLogout()
   const instanceID = useStore(socketStore, (s) => s.instanceID)
   const status = useStore(socketStore, (s) => s.status)
   const client = useStore(clientsStore, (c) => c.me)
@@ -25,6 +30,9 @@ function AppHeader() {
   return (
     <header className="flex justify-between p-2">
       <div className="flex items-center gap-2">
+        <Link to="/">
+          <GiNinjaHead />
+        </Link>
         <code className="px-4">
           {status}/{game.status}
         </code>
@@ -42,7 +50,7 @@ function AppHeader() {
         <Tabs value={activeTab}>
           <TabsList>
             <TabsTrigger value="setup" asChild>
-              <Link to="/">Setup</Link>
+              <Link to="/setup">Setup</Link>
             </TabsTrigger>
             <TabsTrigger value="battle" asChild>
               <Link to="/battle">Battle</Link>
@@ -78,7 +86,25 @@ function AppHeader() {
           </div>
         )}
       </div>
-      <div className="font-mono text-sm">ME: {client?.ID}</div>
+      <div className="flex items-center gap-4 px-2">
+        <div className="font-mono text-sm flex items-center">
+          ME: {client?.ID},
+          {user && (
+            <div className="flex items-center gap-2">
+              <span>{user.email}</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-8"
+                onClick={() => logout.mutate()}
+                title="Logout"
+              >
+                <LogOut className="size-4" />
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
     </header>
   )
 }
