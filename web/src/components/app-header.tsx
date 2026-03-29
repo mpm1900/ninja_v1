@@ -15,6 +15,7 @@ import { Button } from './ui/button'
 import { GiNinjaHead } from 'react-icons/gi'
 import { useLogout } from '#/lib/mutations/logout'
 import { useUser } from '#/lib/queries/auth'
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 function AppHeader() {
   const { data: user } = useUser()
@@ -36,17 +37,19 @@ function AppHeader() {
         <code className="px-4">
           {status}/{game.status}
         </code>
-        <InstanceCombobox
-          icon={
-            <>
-              {status === 'idle' && <Unplug />}
-              {status === 'connecting' && <Loader />}
-              {status === 'open' && <Signal />}
-            </>
-          }
-          value={instanceID}
-          onValueChange={connectSocket}
-        />
+        {user && (
+          <InstanceCombobox
+            icon={
+              <>
+                {status === 'idle' && <Unplug />}
+                {status === 'connecting' && <Loader />}
+                {status === 'open' && <Signal />}
+              </>
+            }
+            value={instanceID}
+            onValueChange={(instanceID) => connectSocket(instanceID)}
+          />
+        )}
         <Tabs value={activeTab}>
           <TabsList>
             <TabsTrigger value="setup" asChild>
@@ -88,10 +91,14 @@ function AppHeader() {
       </div>
       <div className="flex items-center gap-4 px-2">
         <div className="font-mono text-sm flex items-center">
-          ME: {client?.ID},
           {user && (
             <div className="flex items-center gap-2">
-              <span>{user.email}</span>
+              <Tooltip>
+                <TooltipTrigger>
+                  <span>{user.email}</span>
+                </TooltipTrigger>
+                <TooltipContent>{user.id}</TooltipContent>
+              </Tooltip>
               <Button
                 variant="ghost"
                 size="icon"

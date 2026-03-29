@@ -27,7 +27,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     const user = await context.queryClient.fetchQuery(meQuery)
     return {
       auth: {
-        user: user ?? null,
+        user,
       },
     }
   },
@@ -59,7 +59,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        {/*<script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />*/}
         <HeadContent />
       </head>
       <body className="font-sans antialiased wrap-anywhere overflow-x-hidden">

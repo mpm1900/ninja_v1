@@ -13,12 +13,13 @@ type PlayerPosition struct {
 
 type Player struct {
 	ID                uuid.UUID        `json:"ID"`
+	User              User             `json:"user,omitempty"`
 	PositionsCapacity int              `json:"positions_capacity"`
 	Positions         []PlayerPosition `json:"positions"`
 	TeamCapacity      int              `json:"team_capacity"`
 }
 
-func NewPlayer(ID uuid.UUID, capacity int) Player {
+func NewPlayer(ID uuid.UUID, capacity int, user User) Player {
 	positions := make([]PlayerPosition, capacity)
 	for i := range capacity {
 		positions[i] = PlayerPosition{
@@ -29,6 +30,7 @@ func NewPlayer(ID uuid.UUID, capacity int) Player {
 
 	return Player{
 		ID:                ID,
+		User:              user,
 		PositionsCapacity: 2,
 		Positions:         positions,
 		TeamCapacity:      6,

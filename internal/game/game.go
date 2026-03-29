@@ -210,6 +210,10 @@ func (g *Game) UpdatePlayer(playerID uuid.UUID, updater func(Player) Player) {
 
 func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 	prev := actor.PositionID
+	if (prev == nil && positionID == nil) || (prev != nil && positionID != nil && *prev == *positionID) {
+		return
+	}
+
 	ok, player := g.GetPlayerByID(actor.PlayerID)
 	if !ok {
 		return

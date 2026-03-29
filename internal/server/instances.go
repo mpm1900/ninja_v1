@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"sync"
 
+	"ninja_v1/internal/auth"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data"
 	"ninja_v1/internal/instance"
@@ -129,6 +130,12 @@ func (ih *InstancesHandler) HandleGetTargets(w http.ResponseWriter, r *http.Requ
 
 func (ih *InstancesHandler) handleGameConnection(ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		user, ok := auth.AuthenticatedUserFromContext(r.Context())
+		if !ok {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
 		instanceID, err := uuid.Parse(r.PathValue("instanceID"))
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
@@ -141,12 +148,16 @@ func (ih *InstancesHandler) handleGameConnection(ctx context.Context) http.Handl
 		}
 
 		client := instance.NewClient(i)
+		client.AttachUser(&game.User{
+			ID:       user.ID,
+			Username: user.Username,
+			Email:    user.Email,
+		})
 		if err := client.Connect(w, r); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
 		client.Run()
-
 	}
 }

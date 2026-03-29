@@ -30,6 +30,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
     target_position_IDs: [],
   })
 
+
   return (
     <Card className="grid grid-cols-2 rounded-t-none border-t-0 mx-2 mb-2 py-2 gap-0">
       <div>
@@ -44,7 +45,6 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
               />
             </div>
             <div className="flex items-center gap-2">
-              <div>Player:</div>
               <Select
                 disabled={!enabled}
                 value={actor.player_ID}
@@ -64,9 +64,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
               >
                 <SelectTrigger>
                   <SelectValue>
-                    {game.players.map((p) => p.ID).includes(actor.player_ID) ? (
-                      actor.player_ID
-                    ) : (
+                    {game.players.find((p) => p.ID == actor.player_ID)?.user.email ?? (
                       <span className="text-red-300">{actor.player_ID}</span>
                     )}
                   </SelectValue>
@@ -74,7 +72,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
                 <SelectContent>
                   {game.players.map((item) => (
                     <SelectItem key={item.ID} value={item.ID}>
-                      {item.ID}
+                      {item.user.username || item.user.email}
                     </SelectItem>
                   ))}
                 </SelectContent>

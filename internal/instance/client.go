@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"ninja_v1/internal/game"
 	"time"
 
 	"github.com/google/uuid"
@@ -26,11 +27,19 @@ var upgrader = websocket.Upgrader{
 
 type Client struct {
 	ID       uuid.UUID          `json:"ID"`
+	User     *game.User         `json:"user,omitempty"`
 	conn     *websocket.Conn    `json:"-"`
 	ctx      context.Context    `json:"-"`
 	cancel   context.CancelFunc `json:"-"`
 	instance *Instance          `json:"-"`
 	inbox    chan Response      `json:"-"`
+}
+
+func (c *Client) AttachUser(user *game.User) {
+	c.User = user
+	if user != nil {
+		c.ID = user.ID
+	}
 }
 
 func NewClient(instance *Instance) *Client {
@@ -54,6 +63,9 @@ func (c *Client) Connect(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	c.conn = conn
+	if c.User != nil {
+		c.ID = c.User.ID
+	}
 	c.instance.Register <- c
 	return nil
 }

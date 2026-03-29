@@ -16,6 +16,19 @@ import (
 const COOKIE_NAME = "session_id"
 const SESSION_DURATION = 24 * time.Hour
 
+type authContextKey string
+
+const userContextKey authContextKey = "auth.user"
+
+func WithAuthenticatedUser(ctx context.Context, user db.User) context.Context {
+	return context.WithValue(ctx, userContextKey, user)
+}
+
+func AuthenticatedUserFromContext(ctx context.Context) (db.User, bool) {
+	user, ok := ctx.Value(userContextKey).(db.User)
+	return user, ok
+}
+
 func HashPassword(password string) (string, string, error) {
 	salt := uuid.New().String()
 	salted := fmt.Sprintf("%s$%s", password, salt)
@@ -51,7 +64,8 @@ func WithSession(next http.HandlerFunc, queries *db.Queries) http.HandlerFunc {
 			return
 		}
 
-		ctxWithUser := context.WithValue(r.Context(), "user", user)
+		ctxWithUser := WithAuthenticatedUser(r.Context(), user)
+		ctxWithUser = context.WithValue(ctxWithUser, "user", user)
 		next(w, r.Clone(ctxWithUser))
 	}
 }

@@ -19,6 +19,7 @@ func NewServer(ctx context.Context, queries *db.Queries) *Server {
 
 	dataHandler := NewDataHandler(ctx)
 	instancesHandler := NewInstancesHandler(ctx)
+	authenticatedInstancesHandler := auth.WithSession(instancesHandler.ServeHTTP, queries)
 
 	mux := http.NewServeMux()
 	api := http.NewServeMux()
@@ -38,7 +39,7 @@ func NewServer(ctx context.Context, queries *db.Queries) *Server {
 	api.HandleFunc("POST /{instanceID}/{actionID}/targets", instancesHandler.HandleGetTargets)
 
 	mux.Handle("/api/", http.StripPrefix("/api", api))
-	mux.Handle("/socket/", http.StripPrefix("/socket", instancesHandler))
+	mux.Handle("/socket/", http.StripPrefix("/socket", authenticatedInstancesHandler))
 
 	return &Server{
 		Server: &http.Server{

@@ -21,7 +21,6 @@ import { AppHeader } from '#/components/app-header'
 
 export const Route = createFileRoute('/setup')({
   beforeLoad: ({ context }) => {
-    console.log('LOADING sETUP', context)
     if (!context.auth.user) {
       throw redirect({ to: '/login' })
     }
@@ -54,11 +53,12 @@ function App() {
             <div>
               {game.players.map((player, i) => (
                 <div
+                  key={player.ID}
                   className={cn({
-                    'border-b pb-4 mb-4': i != game.players.length + 1,
+                    'border-b pb-4 mb-4': i !== game.players.length - 1,
                   })}
                 >
-                  <div key={player.ID} className="flex gap-2 px-4">
+                  <div className="flex gap-2 px-4">
                     {game.actors
                       .filter((a) => a.player_ID === player.ID)
                       .map((a, i) => (

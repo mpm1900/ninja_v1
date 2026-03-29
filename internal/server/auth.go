@@ -158,7 +158,7 @@ func handleLogout(ctx context.Context, queries *db.Queries) http.HandlerFunc {
 // GET /auth/me
 func handleMe() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		user, ok := r.Context().Value("user").(db.User)
+		user, ok := auth.AuthenticatedUserFromContext(r.Context())
 		if !ok {
 			w.WriteHeader(http.StatusUnauthorized)
 			return

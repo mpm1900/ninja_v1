@@ -3,10 +3,9 @@ package instance
 import (
 	"context"
 	"maps"
+	"ninja_v1/internal/game"
 	"slices"
 	"time"
-
-	"ninja_v1/internal/game"
 
 	"github.com/google/uuid"
 )
@@ -36,11 +35,20 @@ func NewInstance(ctx context.Context, id uuid.UUID) *Instance {
 }
 
 func (i *Instance) RegisterClient(client *Client) {
+	if existing, ok := i.Clients[client.ID]; ok && existing != client {
+		existing.cancel()
+	}
 	i.Clients[client.ID] = client
 }
 
-func (i *Instance) UnregisterClient(client *Client) {
+func (i *Instance) UnregisterClient(client *Client) bool {
+	existing, ok := i.Clients[client.ID]
+	if !ok || existing != client {
+		return false
+	}
+
 	delete(i.Clients, client.ID)
+	return true
 }
 
 func (i *Instance) BroadcastGame() {
@@ -86,16 +94,19 @@ func (i *Instance) Run() {
 			i.RegisterClient(client)
 			i.BroadcastClients()
 
-			i.Game.AddPlayer(game.NewPlayer(client.ID, 2))
-			i.BroadcastGame()
+			if ok, _ := i.Game.GetPlayerByID(client.ID); !ok {
+				i.Game.AddPlayer(game.NewPlayer(client.ID, 2, *client.User))
+				i.BroadcastGame()
+			}
 
 			i.PostRegister(client)
 		case client := <-i.Unregister:
-			i.UnregisterClient(client)
-			i.BroadcastClients()
+			removed := i.UnregisterClient(client)
+			if !removed {
+				continue
+			}
 
-			i.Game.RemovePlayer(client.ID)
-			i.BroadcastGame()
+			i.BroadcastClients()
 		case request := <-i.ReadRequest:
 			switch Reducer(i, request) {
 			case state:
