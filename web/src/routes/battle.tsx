@@ -52,7 +52,7 @@ function RouteComponent() {
               {game.players
                 .filter((p) => p.ID !== client?.ID)
                 .map((player) => (
-                  <PlayerPositions key={player.ID} player_ID={player.ID} />
+                  <PlayerPositions key={player.ID} flip={true} player_ID={player.ID} />
                 ))}
             </div>
           </div>
@@ -66,6 +66,7 @@ function RouteComponent() {
                 .map((player) => (
                   <PlayerPositions
                     key={player.ID}
+                    flip={false}
                     player_ID={player.ID}
                     selected={game.status === 'idle' ? selected : ''}
                     onSelectedChange={setSelected}

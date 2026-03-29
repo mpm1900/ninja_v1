@@ -2,14 +2,16 @@ import { gameStore } from '#/lib/stores/game'
 import { useStore } from '@tanstack/react-store'
 import { ActorCard } from './actor-card'
 import { clientsStore } from '#/lib/stores/clients'
-import { Fragment } from 'react/jsx-runtime'
 import { Item } from './ui/item'
+import { cn } from '#/lib/utils'
 
 function PlayerPositions({
+  flip,
   player_ID,
   selected,
   onSelectedChange,
 }: {
+  flip: boolean
   player_ID: string
   selected?: string
   onSelectedChange?: (selected: string) => void
@@ -23,7 +25,7 @@ function PlayerPositions({
   return (
     <div className="flex gap-2 py-2">
       {player.positions.map((pos) => (
-        <div key={pos.ID} className='flex items-end'>
+        <div key={pos.ID} className={cn('flex items-end', flip && 'items-start')}>
           {pos.actor_ID ? (
             <ActorCard
               key={pos.ID}
@@ -32,6 +34,7 @@ function PlayerPositions({
               game={game}
               selected={selected === pos.actor_ID}
               onClick={() => onSelectedChange?.(pos.actor_ID ?? '')}
+              className={flip ? 'flex-col-reverse' : ''}
             />
           ) : (
             <Item variant='muted' className='p-6 w-72'>

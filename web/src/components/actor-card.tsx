@@ -32,7 +32,7 @@ function ActorCard({
   const Taijutsu = STAT_ICONS.taijutsu
 
   return (
-    <div className={className}>
+    <div className={cn('flex flex-col', className)}>
       <div className="flex flex-wrap gap-3">
         {Object.entries(actor?.applied_modifiers ?? {}).map(
           ([ID, count]) => (
