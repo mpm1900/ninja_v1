@@ -22,7 +22,7 @@ function PlayerPositions({
   return (
     <div className="flex gap-2 py-2">
       {player.positions.map((pos) => (
-        <Fragment key={pos.ID}>
+        <div key={pos.ID} className='flex items-end'>
           {pos.actor_ID ? (
             <ActorCard
               key={pos.ID}
@@ -35,7 +35,7 @@ function PlayerPositions({
           ) : (
             <div>placeholder</div>
           )}
-        </Fragment>
+        </div>
       ))}
     </div>
   )

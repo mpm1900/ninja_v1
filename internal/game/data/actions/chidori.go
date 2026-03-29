@@ -16,7 +16,7 @@ func MakeChidori() game.Action {
 	nature := game.NsLightning
 	stat := game.AttackNinjutsu
 	config := game.ActionConfig{
-		Name:     "雷遁: Chidori",
+		Name:     "Chidori",
 		Nature:   &nature,
 		Accuracy: &accuracy,
 		Power:    &power,

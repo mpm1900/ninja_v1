@@ -52,6 +52,12 @@ type Actor = ActorDef &
     action_cooldowns: Record<string, number>
   }
 
+const statNames: Record<ActorAttackStat, string> = {
+  genjutsu: '幻術',
+  ninjutsu: '忍術',
+  taijutsu: '体術',
+}
+
 function checkActorStat(actor: Actor, key: ActorBaseStat) {
   const stat = actor.stats[key]
   const pre = actor.pre_stats[key]
@@ -68,4 +74,4 @@ function getTotalBaseStats(actor: ActorDef) {
 }
 
 export type { ActorDef, Actor, ActorAttackStat, ActorBaseStat }
-export { checkActorStat, getTotalBaseStats }
+export { checkActorStat, getTotalBaseStats, statNames }

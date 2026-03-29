@@ -44,7 +44,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
                 height={64}
               />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-2">
               <Select
                 disabled={!enabled}
                 value={actor.player_ID}
@@ -77,9 +77,10 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
                   ))}
                 </SelectContent>
               </Select>
+              <PositionSelect actor={actor} game={game} />
             </div>
           </div>
-          <PositionSelect actor={actor} game={game} />
+
         </CardContent>
       </div>
       <div>

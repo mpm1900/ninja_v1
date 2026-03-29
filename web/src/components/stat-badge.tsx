@@ -1,4 +1,4 @@
-import type { ActorAttackStat } from '#/lib/game/actor'
+import { statNames, type ActorAttackStat } from '#/lib/game/actor'
 import { cn } from '#/lib/utils'
 import { cva } from 'class-variance-authority'
 import type { ClassValue } from 'class-variance-authority/types'
@@ -16,12 +16,6 @@ const variants = cva<t>('py-0.5 px-1 mx-px border border-lback rounded', {
     },
   },
 })
-
-const statNames: Record<ActorAttackStat, string> = {
-  genjutsu: '幻術',
-  ninjutsu: '忍術',
-  taijutsu: '体術',
-}
 
 function StatBadge({
   className,

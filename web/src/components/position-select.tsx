@@ -20,7 +20,6 @@ function PositionSelect({ actor, game }: { actor: Actor; game: Game }) {
     <div className="flex items-center gap-2">
       {player ? (
         <>
-          Position Index:
           <ButtonGroup>
             {options.map((_, i) => (
               <Button

@@ -1,3 +1,4 @@
+import { ActionCard } from '#/components/action-card'
 import { ActorThumbnail } from '#/components/actor-thumbnail'
 import { AppHeader } from '#/components/app-header'
 import { BattleActions } from '#/components/battle-actions'
@@ -58,7 +59,7 @@ function RouteComponent() {
           <div className="flex-1 grid place-items-center">
             {actor && game.status === 'idle' && <BattleActions actor={actor} />}
           </div>
-          <div className="flex items-end justify-between px-2">
+          <div className="flex items-end justify-between px-2 z-10">
             <div>
               {game.players
                 .filter((p) => p.ID === client?.ID)

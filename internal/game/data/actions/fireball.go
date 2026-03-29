@@ -20,7 +20,7 @@ func MakeFireball() game.Action {
 	cooldown := 1
 
 	config := game.ActionConfig{
-		Name:        "火遁: Fireball",
+		Name:        "Fireball",
 		Nature:      &nature,
 		Accuracy:    &accuracy,
 		Power:       &power,

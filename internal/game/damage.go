@@ -88,7 +88,8 @@ func GetStabModifier(source ResolvedActor, nature *NatureSet) float64 {
 func GetDamage(
 	source ResolvedActor,
 	targets []ResolvedActor,
-	stat AttackStat,
+	attack AttackStat,
+	defense AttackStat,
 	power int,
 	critical float64,
 	nature *NatureSet,
@@ -99,14 +100,14 @@ func GetDamage(
 		return damages
 	}
 
-	a_base := float64(source.Stats[BaseStat(stat)])
-	a_mod := source.AttackModifiers[stat]
-	attack := int(math.Floor(a_base * a_mod))
+	a_base := float64(source.Stats[BaseStat(attack)])
+	a_mod := source.AttackModifiers[attack]
+	attack_value := int(math.Floor(a_base * a_mod))
 
 	for i, target := range targets {
-		d_base := float64(target.Stats[BaseStat(stat)])
-		d_mod := target.DefenseModifiers[stat]
-		defense := int(math.Floor(d_base * d_mod))
+		d_base := float64(target.Stats[BaseStat(defense)])
+		d_mod := target.DefenseModifiers[defense]
+		defense_value := int(math.Floor(d_base * d_mod))
 
 		var natures []Nature
 		if nature != nil {
@@ -116,9 +117,9 @@ func GetDamage(
 		stab_mod := GetStabModifier(source, nature)
 
 		damages[i] = DamageEquation(DamageTerms{
-			Attack:   attack,
+			Attack:   attack_value,
 			Critical: critical,
-			Defense:  defense,
+			Defense:  defense_value,
 			Level:    source.Level,
 			Nature:   nature_mod,
 			Offset:   0,

@@ -10,7 +10,7 @@ import (
 var Naruto = game.ActorDef{
 	ActorID:      uuid.New(),
 	SpriteURL:    "/sprites/naruto_64.png",
-	Name:         "Naruto Uzumaki (Toad Sage)",
+	Name:         "Naruto Uzumaki",
 	Clan:         game.ClanUzumaki,
 	Affiliations: []string{game.AffKonoha},
 

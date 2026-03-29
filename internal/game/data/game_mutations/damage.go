@@ -103,10 +103,6 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 					accuracy := int(math.Floor(base_accuracy * float64(*action.Accuracy)))
 					roll := game.MakeActionRoll()
 					if roll > accuracy {
-						/*
-						 * Maybe don't return here? maybe an on-failure callback?
-						 */
-
 						g.PushLog(fmt.Sprintf("%s's %s missed!", source.Name, action.Name))
 						g.PushLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy))
 						continue
@@ -117,6 +113,7 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 					source,
 					[]game.ResolvedActor{target},
 					*action.Stat,
+					*action.Stat, // TODO defense stat
 					*action.Power,
 					config.Critical,
 					action.Nature,
