@@ -56,7 +56,7 @@ function RouteComponent() {
                 ))}
             </div>
           </div>
-          <div className="flex-1 grid place-items-center">
+          <div className="flex-1 grid place-items-center overflow-hidden">
             {actor && game.status === 'idle' && <BattleActions actor={actor} />}
           </div>
           <div className="flex items-end justify-between px-2 z-10">

@@ -15,10 +15,10 @@ var Kakashi = game.ActorDef{
 	Affiliations: []string{game.AffKonoha},
 
 	Stats: map[game.BaseStat]int{
-		game.StatHP:       85,
+		game.StatHP:       80,
 		game.StatChakra:   60,
-		game.StatNinjutsu: 135,
-		game.StatGenjutsu: 105,
+		game.StatNinjutsu: 140,
+		game.StatGenjutsu: 100,
 		game.StatTaijutsu: 120,
 		game.StatSpeed:    120,
 		game.StatEvasion:  100,

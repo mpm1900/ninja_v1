@@ -16,7 +16,7 @@ var Sasuke = game.ActorDef{
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       88,
-		game.StatChakra:   80,
+		game.StatChakra:   70,
 		game.StatNinjutsu: 120,
 		game.StatGenjutsu: 120,
 		game.StatTaijutsu: 100,

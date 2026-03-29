@@ -14,12 +14,14 @@ func MakeLeafJab() game.Action {
 	power := 90
 	stat := game.AttackTaijutsu
 	nature := game.NsTai
+	chakraCost := 30
 	config := game.ActionConfig{
 		Name:     "Leaf Jab",
 		Accuracy: &accuracy,
 		Power:    &power,
 		Stat:     &stat,
 		Nature:   &nature,
+		Cost:     &chakraCost,
 	}
 	return game.Action{
 		ID:              uuid.New(),
@@ -27,6 +29,7 @@ func MakeLeafJab() game.Action {
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.ActiveFilter, game.AliveFilter),
 		ContextValidate: game.PositionsLengthFilter(1),
+		Cost:            mutations.UseChakraSource(chakraCost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityFast,
 			Filter:   game.AllGameFilter,

@@ -53,9 +53,9 @@ type Actor = ActorDef &
   }
 
 const statNames: Record<ActorAttackStat, string> = {
-  genjutsu: '幻術',
-  ninjutsu: '忍術',
-  taijutsu: '体術',
+  genjutsu: '幻',
+  ninjutsu: '忍',
+  taijutsu: '体',
 }
 
 function checkActorStat(actor: Actor, key: ActorBaseStat) {

@@ -190,6 +190,11 @@ func (a *Actor) DecrementCooldowns() {
 		a.ActionCooldowns[actionID] = cooldown - 1
 	}
 }
+func (a *Actor) RecoverChakra(g Game, ratio float64) {
+	resolved := a.Resolve(g)
+	amount := int(math.Floor(float64(resolved.Stats[StatChakra]) * ratio))
+	a.ChakraDamage = max(a.ChakraDamage - amount, 0)
+}
 
 func resolve(actor Actor, pre Actor) ResolvedActor {
 	return ResolvedActor{

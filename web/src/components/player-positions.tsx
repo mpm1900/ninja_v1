@@ -3,6 +3,7 @@ import { useStore } from '@tanstack/react-store'
 import { ActorCard } from './actor-card'
 import { clientsStore } from '#/lib/stores/clients'
 import { Fragment } from 'react/jsx-runtime'
+import { Item } from './ui/item'
 
 function PlayerPositions({
   player_ID,
@@ -33,7 +34,9 @@ function PlayerPositions({
               onClick={() => onSelectedChange?.(pos.actor_ID ?? '')}
             />
           ) : (
-            <div>placeholder</div>
+            <Item variant='muted' className='p-6 w-72'>
+              <span className='text-center w-full text-muted-foreground'>Empty</span>
+            </Item>
           )}
         </div>
       ))}

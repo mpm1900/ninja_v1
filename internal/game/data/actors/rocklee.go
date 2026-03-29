@@ -14,12 +14,12 @@ var RockLee = game.ActorDef{
 	Affiliations: []string{game.AffKonoha},
 
 	Stats: map[game.BaseStat]int{
-		game.StatHP:       65,
+		game.StatHP:       70,
 		game.StatChakra:   80,
 		game.StatNinjutsu: 50,
 		game.StatGenjutsu: 50,
-		game.StatTaijutsu: 165,
-		game.StatSpeed:    90,
+		game.StatTaijutsu: 145,
+		game.StatSpeed:    105,
 		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},

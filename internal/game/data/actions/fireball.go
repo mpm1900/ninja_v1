@@ -26,6 +26,7 @@ func MakeFireball() game.Action {
 		Power:       &power,
 		Stat:        &stat,
 		TargetCount: &targetCount,
+		Cost:        &chakraCost,
 		Cooldown:    &cooldown,
 	}
 
@@ -35,7 +36,7 @@ func MakeFireball() game.Action {
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.ActiveFilter),
 		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseChakra(chakraCost),
+		Cost:            mutations.UseChakraSource(chakraCost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter: game.ComposeGF(

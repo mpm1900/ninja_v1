@@ -37,6 +37,7 @@ var END_OF_TURN_TRIGGER Trigger = Trigger{
 				Delta: func(g Game, c Context) Game {
 					for i, _ := range g.Actors {
 						g.Actors[i].DecrementCooldowns()
+						g.Actors[i].RecoverChakra(g, 0.08)
 					}
 
 					for i, mod := range g.Modifiers {

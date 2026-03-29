@@ -16,7 +16,7 @@ var Orochimaru = game.ActorDef{
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       100,
 		game.StatChakra:   100,
-		game.StatNinjutsu: 135,
+		game.StatNinjutsu: 130,
 		game.StatGenjutsu: 100,
 		game.StatTaijutsu: 90,
 		game.StatSpeed:    101,

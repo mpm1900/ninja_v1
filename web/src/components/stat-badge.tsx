@@ -34,7 +34,7 @@ function StatBadge({
           className={cn(variants({ variant: stat }), className)}
           {...props}
         >
-          {statNames[stat]}
+          {statNames[stat]}術
         </span>
       </TooltipTrigger>
       <TooltipContent {...contentProps}>{stat}</TooltipContent>

@@ -15,10 +15,10 @@ var Raikage = game.ActorDef{
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       90,
-		game.StatChakra:   60,
-		game.StatNinjutsu: 95,
-		game.StatGenjutsu: 80,
-		game.StatTaijutsu: 105,
+		game.StatChakra:   80,
+		game.StatNinjutsu: 105,
+		game.StatGenjutsu: 70,
+		game.StatTaijutsu: 120,
 		game.StatSpeed:    180,
 		game.StatEvasion:  100,
 		game.StatAccuracy: 100,

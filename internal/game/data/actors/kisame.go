@@ -19,7 +19,7 @@ var Kisame = game.ActorDef{
 		game.StatNinjutsu: 110,
 		game.StatGenjutsu: 60,
 		game.StatTaijutsu: 110,
-		game.StatSpeed:    105,
+		game.StatSpeed:    100,
 		game.StatEvasion:  100,
 		game.StatAccuracy: 100,
 	},

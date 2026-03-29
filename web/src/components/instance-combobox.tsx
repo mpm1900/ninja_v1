@@ -43,7 +43,7 @@ function InstanceCombobox({
         render={
           <Button
             variant="outline"
-            className="min-w-80 justify-start font-normal"
+            className="min-w-80 justify-start font-normal font-mono"
           >
             {icon}
             <ComboboxValue placeholder="NOT_CONNECTED" />
