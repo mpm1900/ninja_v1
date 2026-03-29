@@ -379,7 +379,14 @@ func (g *Game) RunPrompt(transaction Transaction[Action]) {
 
 func (g *Game) RunAction(transaction Transaction[Action]) {
 	if transaction.Context.SourceActorID != nil {
-		_, source := g.GetActorByID(*transaction.Context.SourceActorID)
+		_, s := g.GetActorByID(*transaction.Context.SourceActorID)
+		source := s.Resolve(*g)
+
+		if source.Stunned {
+			g.PushLog(fmt.Sprintf("%s was stunned", source.Name))
+			return
+		}
+
 		g.PushLog(fmt.Sprintf("%s used %s.", source.Name, transaction.Mutation.Config.Name))
 
 		cost := transaction.Mutation.Cost

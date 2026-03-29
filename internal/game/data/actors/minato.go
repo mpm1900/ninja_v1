@@ -15,7 +15,7 @@ var Minato = game.ActorDef{
 
 	Stats: map[game.BaseStat]int{
 		game.StatHP:       60,
-		game.StatChakra:   60,
+		game.StatChakra:   80,
 		game.StatNinjutsu: 120,
 		game.StatGenjutsu: 80,
 		game.StatTaijutsu: 110,

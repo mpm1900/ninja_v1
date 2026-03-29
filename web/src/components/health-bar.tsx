@@ -8,8 +8,11 @@ function HealthBar({ actor }: { actor: Actor }) {
 
   return (
     <div className="relative">
-      <Progress className="absolute top-1" value={hp_ratio * 100} />
-      <Progress className="h-4 opacity-40" value={chakra_ratio * 100} />
+      <Progress
+        className="absolute top-0.5 z-10 [&_[data-slot=progress]]:bg-red-300/20 [&_[data-slot=progress-indicator]]:bg-rose-800"
+        value={hp_ratio * 100}
+      />
+      <Progress className="h-3" value={chakra_ratio * 100} />
     </div>
   )
 }

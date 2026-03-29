@@ -12,10 +12,14 @@ function ActorCard({
   actor,
   clientID,
   game,
-}: {
+  selected,
+  className,
+  ...props
+}: React.ComponentProps<typeof Item> & {
   actor: Actor | undefined
   clientID?: string
   game: Game
+  selected: boolean
 }) {
   const modifiers = (game.modifiers ?? [])
     .map((m) => m.mutation)
@@ -28,7 +32,11 @@ function ActorCard({
   const Taijutsu = STAT_ICONS.taijutsu
 
   return (
-    <Item variant="muted">
+    <Item
+      variant={selected ? 'active' : 'muted'}
+      className={cn('pb-0', className)}
+      {...props}
+    >
       <ItemContent>
         {actor && (
           <div className="flex justify-between">
@@ -38,8 +46,8 @@ function ActorCard({
               </span>{' '}
               <span
                 className={cn({
-                  'text-blue-300': actor.player_ID === clientID,
-                  'text-red-300': actor.player_ID !== clientID,
+                  'text-blue-400': actor.player_ID === clientID,
+                  'text-red-400': actor.player_ID !== clientID,
                 })}
               >
                 {actor.name}

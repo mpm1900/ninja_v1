@@ -1,16 +1,10 @@
 import { ActorsTable } from '#/components/actors-table'
-import { InstanceCombobox } from '#/components/instance-combobox'
 import { actorsQuery } from '#/lib/queries/actors'
 import { instancesQuery } from '#/lib/queries/instances'
-import {
-  connectSocket,
-  sendContextMessage,
-  socketStore,
-} from '#/lib/stores/socket'
+import { sendContextMessage, socketStore } from '#/lib/stores/socket'
 import { useStore } from '@tanstack/react-store'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { ClientOnly, createFileRoute } from '@tanstack/react-router'
-import { Loader, Signal, Unplug } from 'lucide-react'
 import { gameStore } from '#/lib/stores/game'
 import { clientsStore } from '#/lib/stores/clients'
 import { ActorCard } from '#/components/actor-card'
@@ -23,7 +17,7 @@ import { ActionQueue } from '#/components/action-queue'
 import { PromptController } from '#/components/prompt-controller'
 import { ActorThumbnail } from '#/components/actor-thumbnail'
 import { cn } from '#/lib/utils'
-import { Button } from '#/components/ui/button'
+import { AppHeader } from '#/components/app-header'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -39,42 +33,19 @@ export const Route = createFileRoute('/')({
 function App() {
   const actors = useSuspenseQuery(actorsQuery)
   const triggers = useSuspenseQuery(triggersQuery)
-  const instanceID = useStore(socketStore, (s) => s.instanceID)
   const status = useStore(socketStore, (s) => s.status)
   const client = useStore(clientsStore, (c) => c.me)
   const game = useStore(gameStore, (g) => g)
+  
 
   return (
     <ClientOnly>
       <PromptController />
-      <main className="">
-        <header className="flex justify-between p-2">
-          <div>
-            <code className="px-4">
-              {status}/{game.status}
-            </code>
-            <InstanceCombobox
-              icon={
-                <>
-                  {status === 'idle' && <Unplug />}
-                  {status === 'connecting' && <Loader />}
-                  {status === 'open' && <Signal />}
-                </>
-              }
-              value={instanceID}
-              onValueChange={connectSocket}
-            />
-          </div>
-          <div className="font-mono text-sm">ME: {client?.ID}</div>
-        </header>
-        <div className="flex">
-          <div className="space-y-2 flex-1 overflow-auto">
+      <main className="min-w-0 overflow-x-hidden">
+        <AppHeader />
+        <div className="flex min-w-0">
+          <div className="min-w-0 space-y-2 flex-1 overflow-auto">
             <ActionQueue />
-            <div>
-              {triggers.data.map((t) => (
-                <Button key={t}>{t}</Button>
-              ))}
-            </div>
 
             <div>
               {game.players.map((player, i) => (
@@ -101,6 +72,7 @@ function App() {
                           actor={a}
                           clientID={client?.ID}
                           game={game}
+                          selected={false}
                         />
                       ))}
                   </div>
@@ -166,14 +138,18 @@ function App() {
               }}
             />
           </div>
-          <div className="w-sm">
+          <div className="w-sm max-w-[200px] shrink-0 overflow-x-auto">
             {game.log?.map((log, i) => (
-              <div key={i}>{log}</div>
+              <div key={i} className="break-words">
+                {log}
+              </div>
             ))}
           </div>
         </div>
 
-        <pre>{JSON.stringify(game, null, 2)}</pre>
+        <pre className="max-w-full overflow-x-auto whitespace-pre-wrap break-words">
+          {JSON.stringify(game, null, 2)}
+        </pre>
       </main>
     </ClientOnly>
   )
