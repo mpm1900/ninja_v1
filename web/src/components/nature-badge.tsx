@@ -7,7 +7,7 @@ import { cn } from '#/lib/utils'
 type t = Record<string, Partial<Record<NatureSet | 'none', ClassValue>>>
 
 const variants = cva<t>(
-  'text-white px-1 py-0.5 rounded text-shadow-[1px_1px_0px_#000000] mx-px border-background text-nowrap',
+  'text-white px-1 py-0.5 rounded text-shadow-[1px_1px_0px_#000000] shadow-[1px_1px_0_rgba(0,0,0,1)] mx-px text-nowrap',
   {
     variants: {
       variant: {

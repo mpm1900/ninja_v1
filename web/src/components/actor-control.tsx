@@ -2,8 +2,6 @@ import { Card, CardContent } from './ui/card'
 import { useStore } from '@tanstack/react-store'
 import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
-import { useState } from 'react'
-import type { Context } from '#/lib/game/context'
 import { ActionControl } from './action-control'
 import {
   Select,
@@ -16,20 +14,13 @@ import { sendContextMessage } from '#/lib/stores/socket'
 import { PositionSelect } from './position-select'
 import type { Actor } from '#/lib/game/actor'
 import { ActionsTable } from './actions-table'
+import { useGameContext } from '#/hooks/use-game-context'
 
 function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
   const client = useStore(clientsStore, (c) => c.me!)
   const game = useStore(gameStore, (g) => g)
   const player = game.players.find((p) => p.ID == actor.player_ID)
-  const [activeActionID, setActiveActionID] = useState<string>()
-  const [context, setContext] = useState<Context>({
-    source_player_ID: client.ID,
-    source_actor_ID: actor.ID,
-    parent_actor_ID: actor.ID,
-    target_actor_IDs: [],
-    target_position_IDs: [],
-  })
-
+  const { context, onContextChange } = useGameContext(actor, undefined, [game])
 
   return (
     <Card className="grid grid-cols-2 rounded-t-none border-t-0 mx-2 mb-2 py-2 gap-0">
@@ -53,6 +44,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
                     type: 'set-actor-player',
                     client_ID: client.ID,
                     context: {
+                      action_ID: null,
                       source_player_ID: playerID,
                       source_actor_ID: null,
                       parent_actor_ID: null,
@@ -64,9 +56,10 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
               >
                 <SelectTrigger>
                   <SelectValue>
-                    {game.players.find((p) => p.ID == actor.player_ID)?.user.email ?? (
-                      <span className="text-red-300">{actor.player_ID}</span>
-                    )}
+                    {game.players.find((p) => p.ID == actor.player_ID)?.user
+                      .email ?? (
+                        <span className="text-red-300">{actor.player_ID}</span>
+                      )}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -80,7 +73,6 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
               <PositionSelect actor={actor} game={game} />
             </div>
           </div>
-
         </CardContent>
       </div>
       <div>
@@ -89,11 +81,14 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
             cooldowns={actor.action_cooldowns}
             data={actor.actions}
             enabled={enabled && !!player && !!actor.position_ID}
-            selected={activeActionID}
-            onSelectedChange={setActiveActionID}
+            selected={context.action_ID ?? undefined}
+            onSelectedChange={aid => onContextChange({
+              ...context,
+              action_ID: aid
+            })}
             subRow={({ row }) => (
               <ActionControl
-                action={actor.actions.find((a) => a.ID === activeActionID)}
+                action={actor.actions.find((a) => a.ID === context.action_ID)}
                 enabled={
                   enabled &&
                   !!player &&
@@ -101,7 +96,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
                   actor.action_cooldowns[row.original.ID] == undefined
                 }
                 context={context}
-                onContextChange={setContext}
+                onContextChange={onContextChange}
               />
             )}
           />

@@ -33,6 +33,7 @@ function PositionSelect({ actor, game }: { actor: Actor; game: Game }) {
                     client_ID: client.ID,
                     position_index: i,
                     context: {
+                      action_ID: null,
                       parent_actor_ID: null,
                       source_actor_ID: null,
                       source_player_ID: client.ID,

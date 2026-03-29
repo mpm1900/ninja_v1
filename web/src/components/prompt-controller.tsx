@@ -32,10 +32,10 @@ function PromptControl({
   const action = prompt?.mutation
   const instanceID = useStore(socketStore, (s) => s.instanceID!)
   const game = useStore(gameStore, (g) => g)
-  const valid = useQuery(isActionContextValidQuery(action?.ID, context))
+  const valid = useQuery(isActionContextValidQuery(context))
   const client = useStore(clientsStore, (c) => c.me!)
   const actionTargets = useQuery(
-    actionTargetsQuery(instanceID, action?.ID, context)
+    actionTargetsQuery(instanceID, context)
   )
   const loading = valid.isFetching || actionTargets.isFetching
 
@@ -68,7 +68,6 @@ function PromptControl({
                 type: 'resolve-prompt',
                 client_ID: client.ID,
                 prompt_ID: prompt?.ID,
-                action_ID: action?.ID,
                 context,
               })
             }}

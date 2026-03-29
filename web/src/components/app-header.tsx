@@ -7,7 +7,7 @@ import {
 } from '#/lib/stores/socket'
 import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
-import { Check, Loader, Loader2, LogOut, Signal, Unplug, X } from 'lucide-react'
+import { Check, Loader, Loader2, LogOut, Signal, TriangleAlert, Unplug, X } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { NULL_CONTEXT } from '#/lib/game/context'
@@ -35,10 +35,6 @@ function AppHeader() {
           <GiNinjaHead />
         </Link>
         <div className="flex items-center">
-          {status === 'closed' && <X />}
-          {status === 'connecting' && <Loader2 className="animate-spin" />}
-          {status === 'open' && <Check />}
-          {' | '}
           {game.status === 'running' && <Loader2 className="animate-spin" />}
           {game.status === 'idle' && <Check />}
           {game.status === 'waiting' && <Loader2 className="animate-spin" />}
@@ -50,6 +46,7 @@ function AppHeader() {
                 {status === 'idle' && <Unplug />}
                 {status === 'connecting' && <Loader />}
                 {status === 'open' && <Signal />}
+                {status === 'closed' && <TriangleAlert />}
               </>
             }
             value={instanceID}

@@ -87,15 +87,15 @@ func (ih *InstancesHandler) HandleGetTargets(w http.ResponseWriter, r *http.Requ
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	actionID, err := uuid.Parse(r.PathValue("actionID"))
+
+	var context game.Context
+	err = json.NewDecoder(r.Body).Decode(&context)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	var context game.Context
-	err = json.NewDecoder(r.Body).Decode(&context)
-	if err != nil {
+	if context.ActionID == nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -106,7 +106,7 @@ func (ih *InstancesHandler) HandleGetTargets(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	action, ok := data.ACTIONS[actionID]
+	action, ok := data.ACTIONS[*context.ActionID]
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		return

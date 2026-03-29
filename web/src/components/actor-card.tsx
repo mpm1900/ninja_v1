@@ -3,10 +3,27 @@ import type { Actor } from '#/lib/game/actor'
 import type { Game } from '#/lib/game/game'
 import { natureIndexes, type NatureSet } from '#/lib/game/nature'
 import { cn } from '#/lib/utils'
+import { cva } from 'class-variance-authority'
 import { ActorStat } from './actor-stat'
 import { HealthBar } from './health-bar'
 import { NatureBadge } from './nature-badge'
 import { Item, ItemActions, ItemContent, ItemTitle } from './ui/item'
+
+const actorVariants = cva(
+  cn(
+    'group/item flex flex-wrap items-center rounded-md border text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50',
+    'px-2 pb-0 pt-2 w-80 border-transparent cursor-pointer'
+  ),
+  {
+    variants: {
+      player: {
+        player: 'bg-gray-700',
+        enemy: '',
+      },
+    },
+    defaultVariants: {},
+  }
+)
 
 function ActorCard({
   actor,
@@ -34,23 +51,22 @@ function ActorCard({
   return (
     <div className={cn('flex flex-col', className)}>
       <div className="flex flex-wrap gap-3">
-        {Object.entries(actor?.applied_modifiers ?? {}).map(
-          ([ID, count]) => (
-            <span key={ID}>
-              {modifiers.find((m) => m.group_ID === ID)?.name}
-              {count > 1 ? ` (${count})` : null}
-            </span>
-          )
-        )}
+        {Object.entries(actor?.applied_modifiers ?? {}).map(([ID, count]) => (
+          <span key={ID}>
+            {modifiers.find((m) => m.group_ID === ID)?.name}
+            {count > 1 ? ` (${count})` : null}
+          </span>
+        ))}
       </div>
-      <Item
-        variant={selected ? 'active' : 'muted'}
-        className={cn('pb-0 pt-2 w-80')}
+      <div
+        className={actorVariants({
+          player: actor?.player_ID === clientID ? 'player' : 'enemy',
+        })}
         {...props}
       >
         <ItemContent>
           {actor && (
-            <div className="flex justify-between gap-4">
+            <div className="flex justify-between items-end gap-4">
               <ItemTitle>
                 <span className="text-muted-foreground text-sm">
                   Lv.{actor.level}
@@ -106,7 +122,7 @@ function ActorCard({
             )}
           </div>
         </ItemContent>
-      </Item>
+      </div>
     </div>
   )
 }

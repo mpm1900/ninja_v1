@@ -25,7 +25,6 @@ type Request struct {
 	Type          RequestType  `json:"type"`
 	ClientID      uuid.UUID    `json:"client_ID"`
 	PromptID      *uuid.UUID   `json:"prompt_ID"`
-	ActionID      *uuid.UUID   `json:"action_ID"`
 	ModifierID    *uuid.UUID   `json:"modifier_ID"`
 	PositionIndex *int         `json:"position_index"`
 	Context       game.Context `json:"context"`

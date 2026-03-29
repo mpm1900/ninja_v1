@@ -1,6 +1,7 @@
 import z from 'zod'
 
 const ContextSchema = z.object({
+  action_ID: z.string().nullable(),
   source_player_ID: z.string().nullable(),
 
   parent_actor_ID: z.string().nullable(),
@@ -13,10 +14,11 @@ const ContextSchema = z.object({
 type Context = z.output<typeof ContextSchema>
 
 function contextToString(c: Context): string {
-  return `${c.parent_actor_ID}.${c.source_actor_ID}.${c.source_player_ID}.${c.target_actor_IDs.join('+')}.${c.target_position_IDs.join('+')}`
+  return `${c.action_ID}.${c.parent_actor_ID}.${c.source_actor_ID}.${c.source_player_ID}.${c.target_actor_IDs.join('+')}.${c.target_position_IDs.join('+')}`
 }
 
 const NULL_CONTEXT: Context = {
+  action_ID: null,
   parent_actor_ID: null,
   source_actor_ID: null,
   source_player_ID: null,

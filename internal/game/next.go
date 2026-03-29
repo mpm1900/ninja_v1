@@ -50,6 +50,7 @@ func (g *Game) Validate() bool {
 
 			switch_count := min(len(missing_pos), len(possible_targets))
 			action = SwitchIn(switch_count)
+			context.ActionID = &action.ID
 			transaction := MakeTransaction(action, context)
 			transaction.Ready = false
 			if !g.HasPlayerPrompt(player.ID) {

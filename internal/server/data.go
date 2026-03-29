@@ -9,8 +9,6 @@ import (
 
 	"ninja_v1/internal/game"
 	data "ninja_v1/internal/game/data"
-
-	"github.com/google/uuid"
 )
 
 type DataHandler struct {
@@ -65,18 +63,17 @@ func (dh *DataHandler) HandleGetTriggerTypes(w http.ResponseWriter, r *http.Requ
 }
 
 func (dh *DataHandler) HandleIsActionContextValid(w http.ResponseWriter, r *http.Request) {
-	actionID, err := uuid.Parse(r.PathValue("actionID"))
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
 	var context game.Context
-	err = json.NewDecoder(r.Body).Decode(&context)
+	err := json.NewDecoder(r.Body).Decode(&context)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	action, ok := data.ACTIONS[actionID]
+	if context.ActionID == nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	action, ok := data.ACTIONS[*context.ActionID]
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		return

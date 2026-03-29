@@ -41,7 +41,7 @@ func MakeFireball() game.Action {
 			Priority: game.ActionPriorityDefault,
 			Filter: game.ComposeGF(
 				game.SourceIsAlive,
-				game.SourceIsActionOnCooldown(ID),
+				game.SourceIsActionOnCooldown,
 			),
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}

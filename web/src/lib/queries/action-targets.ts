@@ -5,7 +5,6 @@ import { queryOptions } from '@tanstack/react-query'
 
 const requestSchema = z.object({
   instanceID: z.string(),
-  actionID: z.string(),
   context: ContextSchema,
 })
 
@@ -13,7 +12,7 @@ const getActionTargets = createServerFn()
   .inputValidator(requestSchema)
   .handler(async ({ data }) => {
     const response = await fetch(
-      `${process.env.API_URL}/api/${data.instanceID}/${data.actionID}/targets`,
+      `${process.env.API_URL}/api/${data.instanceID}/targets`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -27,21 +26,19 @@ const getActionTargets = createServerFn()
 
 function actionTargetsQuery(
   instanceID: string,
-  actionID: string | undefined,
   context: Context
 ) {
   return queryOptions({
-    queryKey: ['action-targets', instanceID, actionID, context.source_actor_ID],
+    queryKey: ['action-targets', instanceID, context.action_ID, context.source_actor_ID],
     queryFn: async () => {
       return await getActionTargets({
         data: {
           instanceID,
-          actionID: actionID!,
           context,
         },
       })
     },
-    enabled: !!actionID,
+    enabled: !!context.action_ID,
   })
 }
 

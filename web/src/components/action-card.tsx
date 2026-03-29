@@ -1,9 +1,8 @@
 import type { Action } from '#/lib/game/action'
-import { statNames, type ActorAttackStat } from '#/lib/game/actor'
+import { statNames } from '#/lib/game/actor'
 import { cn } from '#/lib/utils'
 import type { ComponentProps } from 'react'
 import { NatureBadge } from './nature-badge'
-import { TbYinYangFilled } from 'react-icons/tb'
 
 function StatBar({ action }: { action: Action }) {
   const stat = action.config.stat!
@@ -47,7 +46,9 @@ function ActionCard({
           <div>{action.config.name}</div>
         </div>
         <div>
-          <div className="bg-sky-300/40 size-7 font-black grid place-items-center text-xs rounded-full border border-black shadow-[inset_0_0_0_1px_theme(colors.neutral.400)] ">{action.config.cost ?? 0}</div>
+          <div className="bg-sky-300/40 size-7 font-black grid place-items-center text-xs rounded-full border border-black shadow-[inset_0_0_0_1px_theme(colors.neutral.400)] ">
+            {action.config.cost ?? 0}
+          </div>
         </div>
       </div>
       <div className="h-20"></div>

@@ -7,6 +7,7 @@ import (
 )
 
 type Context struct {
+	ActionID          *uuid.UUID  `json:"action_ID"`
 	SourcePlayerID    *uuid.UUID  `json:"source_player_ID"`
 	ParentActorID     *uuid.UUID  `json:"parent_actor_ID"`
 	SourceActorID     *uuid.UUID  `json:"source_actor_ID"`

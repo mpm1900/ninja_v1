@@ -33,10 +33,10 @@ func NewServer(ctx context.Context, queries *db.Queries) *Server {
 	api.HandleFunc("GET /actors", dataHandler.HandleGetActors)
 	api.HandleFunc("GET /modifiers", dataHandler.HandleGetModifiers)
 	api.HandleFunc("GET /triggers", dataHandler.HandleGetTriggerTypes)
-	api.HandleFunc("POST /{actionID}/validate", dataHandler.HandleIsActionContextValid)
+	api.HandleFunc("POST /validate", dataHandler.HandleIsActionContextValid)
 
 	api.HandleFunc("GET /instances", instancesHandler.HandleGetGames)
-	api.HandleFunc("POST /{instanceID}/{actionID}/targets", instancesHandler.HandleGetTargets)
+	api.HandleFunc("POST /{instanceID}/targets", instancesHandler.HandleGetTargets)
 
 	mux.Handle("/api/", http.StripPrefix("/api", api))
 	mux.Handle("/socket/", http.StripPrefix("/socket", authenticatedInstancesHandler))

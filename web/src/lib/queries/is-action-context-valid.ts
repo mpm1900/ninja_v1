@@ -4,7 +4,6 @@ import { ContextSchema, contextToString, type Context } from '../game/context'
 import { queryOptions } from '@tanstack/react-query'
 
 const requestSchema = z.object({
-  actionID: z.string(),
   context: ContextSchema,
 })
 
@@ -12,7 +11,7 @@ const getIsActionContextValid = createServerFn()
   .inputValidator(requestSchema)
   .handler(async ({ data }) => {
     const response = await fetch(
-      `${process.env.API_URL}/api/${data.actionID}/validate`,
+      `${process.env.API_URL}/api/validate`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -25,20 +24,18 @@ const getIsActionContextValid = createServerFn()
   })
 
 function isActionContextValidQuery(
-  actionID: string | undefined,
   context: Context
 ) {
   return queryOptions({
-    queryKey: ['action-targets', actionID, contextToString(context)],
+    queryKey: ['action-targets', contextToString(context)],
     queryFn: async () => {
       return await getIsActionContextValid({
         data: {
-          actionID: actionID!,
           context,
         },
       })
     },
-    enabled: !!actionID,
+    enabled: !!context.action_ID,
   })
 }
 

@@ -6,7 +6,6 @@ import { sendContextMessage, socketStore } from '#/lib/stores/socket'
 import { gameStore } from '#/lib/stores/game'
 import { actionTargetsQuery } from '#/lib/queries/action-targets'
 import { isActionContextValidQuery } from '#/lib/queries/is-action-context-valid'
-import { useEffect } from 'react'
 import { clientsStore } from '#/lib/stores/clients'
 import { TargetButton } from './target-button'
 import type { Action } from '#/lib/game/action'
@@ -24,21 +23,12 @@ function ActionControl({
 }) {
   const instanceID = useStore(socketStore, (s) => s.instanceID!)
   const game = useStore(gameStore, (g) => g)
-  const valid = useQuery(isActionContextValidQuery(action?.ID, context))
+  const valid = useQuery(isActionContextValidQuery(context))
   const client = useStore(clientsStore, (c) => c.me!)
   const actionTargets = useQuery(
-    actionTargetsQuery(instanceID, action?.ID, context)
+    actionTargetsQuery(instanceID, context)
   )
   const loading = valid.isFetching || actionTargets.isFetching
-
-  useEffect(() => {
-    actionTargets.refetch()
-    onContextChange({
-      ...context,
-      target_actor_IDs: [],
-      target_position_IDs: [],
-    })
-  }, [game])
 
   return (
     <div>
@@ -60,19 +50,21 @@ function ActionControl({
             ))}
         </div>
       )}
-      {valid.data && <Button
-        disabled={loading || !enabled}
-        onClick={() => {
-          sendContextMessage({
-            type: 'push-action',
-            client_ID: client.ID,
-            action_ID: action?.ID,
-            context,
-          })
-        }}
-      >
-        Select
-      </Button>}
+      {valid.data && (
+        <Button
+          disabled={loading || !enabled}
+          onClick={() => {
+            console.log(context)
+            sendContextMessage({
+              type: 'push-action',
+              client_ID: client.ID,
+              context,
+            })
+          }}
+        >
+          Select
+        </Button>
+      )}
     </div>
   )
 }

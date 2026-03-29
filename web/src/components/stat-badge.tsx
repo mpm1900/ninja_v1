@@ -6,7 +6,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 import type { ComponentProps } from 'react'
 
 type t = Record<string, Partial<Record<ActorAttackStat | 'none', ClassValue>>>
-const variants = cva<t>('py-0.5 px-1 mx-px border border-lback rounded', {
+const variants = cva<t>('py-0.5 px-1 mx-px border border-black rounded', {
   variants: {
     variant: {
       genjutsu: 'shadow-[inset_0_0_0_1px_theme(colors.rose.900)] text-rose-400',

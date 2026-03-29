@@ -33,7 +33,6 @@ type SocketRequestType =
 
 type SocketRequest = {
   type: SocketRequestType
-  action_ID?: string
   prompt_ID?: string
   context: Context
   client_ID: string
@@ -187,7 +186,7 @@ function sendContextMessage(request: SocketRequest) {
   return sendSocketMessage(JSON.stringify(request))
 }
 
-export type {}
+export type { }
 export {
   socketStore,
   connectSocket,

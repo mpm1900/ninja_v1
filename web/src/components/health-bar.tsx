@@ -38,7 +38,7 @@ function HealthBar({
   )
 
   const hpGhostWidth = useTransform(
-    useSpring(hpGhostTarget, { stiffness: 110, damping: 26, mass: 1.2 }),
+    useSpring(hpGhostTarget, { stiffness: 50, damping: 26, mass: 1.2 }),
     (v) => `${v}%`
   )
 
@@ -84,7 +84,7 @@ function HealthBar({
 
           {/* delayed damage ghost */}
           <motion.div
-            className="absolute inset-y-0 left-0 bg-white/20"
+            className="absolute inset-y-0 left-0 bg-white/40"
             style={{ width: hpGhostWidth }}
           />
 

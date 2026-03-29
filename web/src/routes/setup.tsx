@@ -101,6 +101,7 @@ function App() {
                   type: checked ? 'add-actor' : 'remove-actor',
                   client_ID: client.ID,
                   context: {
+                    action_ID: null,
                     source_player_ID: client.ID,
                     source_actor_ID: ID,
                     parent_actor_ID: ID,
@@ -132,6 +133,7 @@ function App() {
                   client_ID: client.ID,
                   modifier_ID: modifier.ID,
                   context: {
+                    action_ID: null,
                     source_player_ID: null,
                     source_actor_ID: null,
                     parent_actor_ID: null,

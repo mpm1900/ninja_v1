@@ -64,12 +64,14 @@ func Reducer(instance *Instance, request Request) int {
 		return state
 
 	case PushAction:
-		if request.ActionID == nil {
+		if request.Context.ActionID == nil {
+			fmt.Println("no context action_ID")
 			return none
 		}
 
-		action, ok := data.ACTIONS[*request.ActionID]
+		action, ok := data.ACTIONS[*request.Context.ActionID]
 		if !ok {
+			fmt.Println("action not found")
 			return none
 		}
 

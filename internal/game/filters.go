@@ -1,9 +1,5 @@
 package game
 
-import (
-	"github.com/google/uuid"
-)
-
 type ContextFilter func(Context) bool
 
 func ComposeCF(filters ...ContextFilter) ContextFilter {
@@ -107,20 +103,22 @@ func SourceIsAlive(game Game, context Context) bool {
 
 	return source.Alive
 }
-func SourceIsActionOnCooldown(actionID uuid.UUID) func(Game, Context) bool {
-	return func(g Game, context Context) bool {
-		ok, source := g.GetSource(context)
-		if !ok {
-			return false
-		}
-
-		cooldown, ok := source.ActionCooldowns[actionID]
-		if !ok {
-			return true
-		}
-
-		return cooldown == 0
+func SourceIsActionOnCooldown(g Game, context Context) bool {
+	if context.ActionID == nil {
+		return false
 	}
+
+	ok, source := g.GetSource(context)
+	if !ok {
+		return false
+	}
+
+	cooldown, ok := source.ActionCooldowns[*context.ActionID]
+	if !ok {
+		return true
+	}
+
+	return cooldown == 0
 }
 
 func MatchSourceActorIDTrigger(game Game, context Context, modifier_tx Transaction[Modifier]) bool {
