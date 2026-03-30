@@ -1,4 +1,3 @@
-import { STAT_ICONS } from '#/data/icons'
 import type { Actor } from '#/lib/game/actor'
 import type { Game } from '#/lib/game/game'
 import { natureIndexes, type NatureSet } from '#/lib/game/nature'
@@ -21,7 +20,10 @@ const actorVariants = cva(
         enemy: '',
       },
       selected: {
-        selected: 'scale-110 bg-gray-700!',
+        selected: 'scale-110 bg-gray-700! border-gray-400',
+        source: 'scale-105 bg-blue-900! border-blue-300/40',
+        targeted_damage: 'scale-105 bg-red-900! border-red-300/40',
+        targeted_buff: 'scale-105 bg-yellow-900! border-yellow-300/40',
       },
     },
     defaultVariants: {},
@@ -33,17 +35,21 @@ function ActorCard({
   clientID,
   game,
   selected,
+  targeted,
   className,
   ...props
 }: React.ComponentProps<typeof Item> & {
   actor: Actor | undefined
   clientID?: string
   game: Game
-  selected: boolean
+  selected?: boolean
+  targeted?: boolean
 }) {
   const modifiers = (game.modifiers ?? [])
     .map((m) => m.mutation)
     .concat(actor?.innate_modifiers ?? [])
+
+  const is_player = actor?.player_ID === clientID
 
   return (
     <div className={cn('flex flex-col', className)}>
@@ -57,8 +63,8 @@ function ActorCard({
       </div>
       <div
         className={actorVariants({
-          player: actor?.player_ID === clientID ? 'player' : 'enemy',
-          selected: selected ? 'selected' : undefined,
+          player: is_player ? 'player' : 'enemy',
+          selected: selected ? 'selected' : targeted ? 'targeted_damage' : undefined,
         })}
         {...props}
       >
@@ -66,12 +72,12 @@ function ActorCard({
           {actor && (
             <div className="flex justify-between items-end gap-4">
               <ItemTitle>
-                <span className="text-muted-foreground text-sm">
+                <span className="text-foreground/50 text-sm">
                   Lv.{actor.level}
                 </span>{' '}
                 <span
                   className={cn({
-                    'text-blue-400': actor.player_ID === clientID,
+                    'text-blue-300': actor.player_ID === clientID,
                     'text-red-400': actor.player_ID !== clientID,
                     'text-foregroud': selected,
                   })}

@@ -46,6 +46,9 @@ func NoneFilter(actor Actor, context Context) bool {
 	return false
 }
 func OtherFilter(actor Actor, context Context) bool {
+	if context.SourceActorID == nil {
+		return false
+	}
 	return actor.ID != *context.SourceActorID
 }
 func AliveFilter(actor Actor, context Context) bool {
@@ -58,15 +61,24 @@ func InactiveFilter(actor Actor, context Context) bool {
 	return actor.PositionID == nil
 }
 func SourceFilter(actor Actor, context Context) bool {
+	if context.SourceActorID == nil {
+		return false
+	}
 	if !ActiveFilter(actor, context) {
 		return false
 	}
 	return actor.ID == *context.SourceActorID
 }
 func TeamFilter(actor Actor, context Context) bool {
+	if context.SourcePlayerID == nil {
+		return false
+	}
 	return actor.PlayerID == *context.SourcePlayerID
 }
 func OtherTeamFilter(actor Actor, context Context) bool {
+	if context.SourcePlayerID == nil {
+		return false
+	}
 	return actor.PlayerID != *context.SourcePlayerID
 }
 

@@ -41,8 +41,6 @@ function App() {
   const client = useStore(clientsStore, (c) => c.me)
   const game = useStore(gameStore, (g) => g)
 
-  console.log(game)
-
   return (
     <ClientOnly>
       <PromptController />

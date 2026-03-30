@@ -3,6 +3,7 @@ import { clientsStore, type Client } from './clients'
 import { gameStore } from './game'
 import type { Game } from '../game/game'
 import type { Context } from '../game/context'
+import { battleContext, setContextPlayer } from './battle-context'
 
 type SocketStatus =
   | 'idle'
@@ -122,6 +123,7 @@ function connectSocket(instanceID: string) {
           ...c,
           me: message.clients![0],
         }))
+        setContextPlayer(message.clients![0].ID)
       }
     } catch {
       // Ignore non-JSON websocket payloads
@@ -186,7 +188,7 @@ function sendContextMessage(request: SocketRequest) {
   return sendSocketMessage(JSON.stringify(request))
 }
 
-export type { }
+export type {}
 export {
   socketStore,
   connectSocket,

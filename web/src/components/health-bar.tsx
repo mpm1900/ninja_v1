@@ -73,7 +73,7 @@ function HealthBar({
         {/* CHAKRA LAYER (behind, border-like energy shell) */}
         <div className="absolute inset-0 bg-slate-800" />
         <motion.div
-          className={`absolute inset-y-0 left-0 rounded-sm bg-gradient-to-r from-sky-300 via-sky-200 to-indigo-300 ${selected ? 'shadow-lg ring-2 ring-sky-300/40' : ''}`}
+          className={`absolute inset-y-0 left-0 rounded-sm bg-gradient-to-r from-sky-300 via-sky-200 to-blue-300 ${selected ? 'shadow-lg ring-2 ring-sky-300/40' : ''}`}
           style={{ width: chakraWidth }}
         />
 
@@ -110,7 +110,7 @@ function HealthBar({
         {/* text + values */}
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-end px-2">
           <div className="flex flex-row-reverse items-center gap-2">
-            <span className="text-sm font-black tabular-nums text-white drop-shadow">
+            <span className="text-sm font-black tabular-nums text-white drop-shadow text-shadow-[0px_1px_0px_#000000]">
               {Math.round(hpRatio * 100)}%
             </span>
           </div>

@@ -1,15 +1,14 @@
-import { ActionCard } from '#/components/action-card'
 import { ActorThumbnail } from '#/components/actor-thumbnail'
 import { AppHeader } from '#/components/app-header'
 import { BattleActions } from '#/components/battle-actions'
 import { PlayerPositions } from '#/components/player-positions'
 import { PromptController } from '#/components/prompt-controller'
+import { battleContext, setContextSource } from '#/lib/stores/battle-context'
 import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
 import { cn } from '#/lib/utils'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useStore } from '@tanstack/react-store'
-import { useState } from 'react'
 
 export const Route = createFileRoute('/battle')({
   beforeLoad: ({ context }) => {
@@ -23,23 +22,16 @@ export const Route = createFileRoute('/battle')({
 function RouteComponent() {
   const game = useStore(gameStore, (g) => g)
   const client = useStore(clientsStore, (c) => c.me)
-  const actors = game.actors.filter(
-    (a) =>
-      a.player_ID === client?.ID &&
-      !!a.position_ID &&
-      !game.actions.find((t) => t.context.source_actor_ID === a.ID)
-  )
-
-  const [selected, setSelected] = useState<string>(actors[0]?.ID)
-  const actor = game.actors.find((a) => a.ID === selected)
+  const context = useStore(battleContext, (c) => c)
+  const actor = game.actors.find((a) => a.ID === context.source_actor_ID)
 
   return (
     <>
       <PromptController />
       <main className="flex flex-col h-screen">
         <AppHeader />
-        <div className="flex flex-col flex-1">
-          <div className="flex justify-between px-2">
+        <div className="flex flex-col flex-1 relative overflow-auto">
+          <div className="fixed top-10 w-full flex px-4 justify-between z-10">
             <div>
               {game.players
                 .filter((p) => p.ID !== client?.ID)
@@ -75,7 +67,7 @@ function RouteComponent() {
           <div className="flex-1 grid place-items-center overflow-hidden">
             {actor && game.status === 'idle' && <BattleActions actor={actor} />}
           </div>
-          <div className="flex items-end justify-between px-2 z-10">
+          <div className="fixed bottom-0 w-full px-4 flex items-end justify-between z-10">
             <div>
               {game.players
                 .filter((p) => p.ID === client?.ID)
@@ -84,8 +76,12 @@ function RouteComponent() {
                     key={player.ID}
                     flip={false}
                     player_ID={player.ID}
-                    selected={game.status === 'idle' ? selected : ''}
-                    onSelectedChange={setSelected}
+                    selected={
+                      game.status === 'idle'
+                        ? (context.source_actor_ID ?? '')
+                        : ''
+                    }
+                    onSelectedChange={(actor_ID) => setContextSource(actor_ID)}
                   />
                 ))}
             </div>
