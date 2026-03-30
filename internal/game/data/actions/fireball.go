@@ -2,7 +2,7 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
-	mutations "ninja_v1/internal/game/data/game_mutations"
+	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )

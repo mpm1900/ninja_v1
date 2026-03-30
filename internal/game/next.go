@@ -80,7 +80,10 @@ func (g *Game) NextTransaction() bool {
 
 func (g *Game) NextAction() bool {
 	transaction, err := g.Actions.Dequeue()
+	g.ActiveContext = &transaction.Context
+
 	if err != nil {
+		g.ActiveContext = nil
 		return false
 	}
 

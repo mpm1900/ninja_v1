@@ -8,7 +8,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type GameMutation = Mutation[Game, Game]
 type GameTransaction = Transaction[GameMutation]
 
 type GameStatus string
@@ -24,11 +23,12 @@ const (
  * Game is the main state container state for a game instance
  */
 type Game struct {
-	Status    GameStatus              `json:"status"`
-	Turn      Turn                    `json:"turn"`
-	Players   []Player                `json:"players"`
-	Actors    []Actor                 `json:"actors"`
-	Modifiers []Transaction[Modifier] `json:"modifiers"`
+	Status        GameStatus              `json:"status"`
+	Turn          Turn                    `json:"turn"`
+	ActiveContext *Context                `json:"active_context"`
+	Players       []Player                `json:"players"`
+	Actors        []Actor                 `json:"actors"`
+	Modifiers     []Transaction[Modifier] `json:"modifiers"`
 
 	/*
 	 * [Transactions] are the quable/storable change in state
@@ -57,15 +57,20 @@ type Game struct {
 
 func NewGame() Game {
 	return Game{
-		Status:       GameStatusIdle,
-		Players:      make([]Player, 0),
-		Actors:       make([]Actor, 0),
-		Modifiers:    make([]Transaction[Modifier], 0),
-		Transactions: MakeQueue[GameTransaction](),
-		Actions:      MakeQueue[Transaction[Action]](),
-		Prompts:      MakeQueue[Transaction[Action]](),
-		Triggers:     MakeQueue[Transaction[Trigger]](),
-		Log:          []string{},
+		Status: GameStatusIdle,
+		Turn: Turn{
+			Count: 0,
+			Phase: TurnInit,
+		},
+		ActiveContext: nil,
+		Players:       make([]Player, 0),
+		Actors:        make([]Actor, 0),
+		Modifiers:     make([]Transaction[Modifier], 0),
+		Transactions:  MakeQueue[GameTransaction](),
+		Actions:       MakeQueue[Transaction[Action]](),
+		Prompts:       MakeQueue[Transaction[Action]](),
+		Triggers:      MakeQueue[Transaction[Trigger]](),
+		Log:           []string{},
 	}
 }
 
@@ -435,10 +440,11 @@ func (g *Game) NextTurn() {
 }
 
 type GameJSON struct {
-	Status  GameStatus      `json:"status"`
-	Turn    Turn            `json:"turn"`
-	Players []Player        `json:"players"`
-	Actors  []ResolvedActor `json:"actors"`
+	Status        GameStatus      `json:"status"`
+	Turn          Turn            `json:"turn"`
+	ActiveContext *Context        `json:"active_context"`
+	Players       []Player        `json:"players"`
+	Actors        []ResolvedActor `json:"actors"`
 
 	Modifiers    []Transaction[Modifier]     `json:"modifiers"`
 	Transactions []Transaction[GameMutation] `json:"transactions"`
@@ -472,16 +478,17 @@ func (g Game) ToJSON(playerID *uuid.UUID) GameJSON {
 	}
 
 	return GameJSON{
-		Status:       status,
-		Turn:         g.Turn,
-		Players:      g.Players,
-		Actors:       resolved,
-		Modifiers:    g.Modifiers,
-		Transactions: g.Transactions,
-		Actions:      g.Actions,
-		Prompt:       prompt,
-		Triggers:     g.Triggers,
-		Log:          g.Log,
+		Status:        status,
+		Turn:          g.Turn,
+		ActiveContext: g.ActiveContext,
+		Players:       g.Players,
+		Actors:        resolved,
+		Modifiers:     g.Modifiers,
+		Transactions:  g.Transactions,
+		Actions:       g.Actions,
+		Prompt:        prompt,
+		Triggers:      g.Triggers,
+		Log:           g.Log,
 	}
 }
 

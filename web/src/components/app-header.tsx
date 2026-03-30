@@ -28,6 +28,7 @@ function AppHeader() {
     select: (state) => state.location.pathname,
   })
   const activeTab = pathname === '/battle' ? 'battle' : 'setup'
+  console.log(game.active_context)
   return (
     <header className="flex justify-between p-2">
       <div className="flex items-center gap-2">

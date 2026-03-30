@@ -2,7 +2,7 @@ package modifiers
 
 import (
 	"ninja_v1/internal/game"
-	game_mutations "ninja_v1/internal/game/data/game_mutations"
+	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -28,7 +28,7 @@ var RageTrigger game.Trigger = game.Trigger{
 				SourceActorID:  &target.ID,
 				ParentActorID:  &target.ID,
 			}
-			mutation := game_mutations.AddModifiers(AttackUpSource)
+			mutation := mutations.AddModifiers(AttackUpSource)
 			transaction := game.MakeTransaction(mutation, mut_ctx)
 			transactions = append(transactions, transaction)
 
