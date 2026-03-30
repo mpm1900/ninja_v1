@@ -12,13 +12,17 @@ import { Item, ItemActions, ItemContent, ItemTitle } from './ui/item'
 const actorVariants = cva(
   cn(
     'group/item flex flex-wrap items-center rounded-md border text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50',
-    'px-2 pb-0 pt-2 w-80 border-transparent cursor-pointer'
+    'px-2 pb-0 pt-2 w-80 border-transparent cursor-pointer',
+    ''
   ),
   {
     variants: {
       player: {
-        player: 'bg-gray-700',
+        player: 'bg-gray-800',
         enemy: '',
+      },
+      selected: {
+        selected: 'scale-110 bg-gray-700!',
       },
     },
     defaultVariants: {},
@@ -61,6 +65,7 @@ function ActorCard({
       <div
         className={actorVariants({
           player: actor?.player_ID === clientID ? 'player' : 'enemy',
+          selected: selected ? 'selected' : undefined,
         })}
         {...props}
       >

@@ -25,9 +25,7 @@ function ActionControl({
   const game = useStore(gameStore, (g) => g)
   const valid = useQuery(isActionContextValidQuery(context))
   const client = useStore(clientsStore, (c) => c.me!)
-  const actionTargets = useQuery(
-    actionTargetsQuery(instanceID, context)
-  )
+  const actionTargets = useQuery(actionTargetsQuery(instanceID, context))
   const loading = valid.isFetching || actionTargets.isFetching
 
   return (
@@ -54,7 +52,6 @@ function ActionControl({
         <Button
           disabled={loading || !enabled}
           onClick={() => {
-            console.log(context)
             sendContextMessage({
               type: 'push-action',
               client_ID: client.ID,

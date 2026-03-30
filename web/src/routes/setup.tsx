@@ -54,7 +54,7 @@ function App() {
               {game.players.map((player, i) => (
                 <div
                   key={player.ID}
-                  className={cn({
+                  className={cn('space-y-2', {
                     'border-b pb-4 mb-4': i !== game.players.length - 1,
                   })}
                 >
@@ -65,7 +65,7 @@ function App() {
                         <ActorThumbnail key={a.ID} actor={a} index={i} />
                       ))}
                   </div>
-                  <div className="grid grid-cols-3 gap-2 p-2">
+                  <div className="flex items-end gap-2">
                     {game.actors
                       .filter(
                         (a) => !!a.position_ID && a.player_ID == player.ID
@@ -86,29 +86,45 @@ function App() {
 
             <ActorsTable
               data={actors.data}
-              enabled={status === 'open' && game.status == 'idle'}
+              enabled={!!client && status === 'open' && game.status == 'idle'}
               rowSelection={Object.fromEntries(
-                game.actors.map((a) => [a.actor_ID, true])
+                game.actors
+                  .filter((a) => a.player_ID === client?.ID)
+                  .map((a) => [a.actor_ID, true])
               )}
               onRowCheckedChange={(a, checked) => {
                 if (!client) return
-                const actor = game.actors.find(
-                  (ga) => ga.actor_ID === a.actor_ID
-                )
-                const ID = checked ? a.actor_ID : actor!.ID
-
-                sendContextMessage({
-                  type: checked ? 'add-actor' : 'remove-actor',
-                  client_ID: client.ID,
-                  context: {
-                    action_ID: null,
-                    source_player_ID: client.ID,
-                    source_actor_ID: ID,
-                    parent_actor_ID: ID,
-                    target_actor_IDs: [],
-                    target_position_IDs: [],
-                  },
-                })
+                if (checked) {
+                  sendContextMessage({
+                    type: 'add-actor',
+                    client_ID: client.ID,
+                    context: {
+                      action_ID: null,
+                      source_player_ID: client.ID,
+                      source_actor_ID: a.actor_ID,
+                      parent_actor_ID: a.actor_ID,
+                      target_actor_IDs: [],
+                      target_position_IDs: [],
+                    },
+                  })
+                } else {
+                  const actor = game.actors.find(
+                    (ga) =>
+                      ga.player_ID === client.ID && ga.actor_ID === a.actor_ID
+                  )!
+                  sendContextMessage({
+                    type: 'remove-actor',
+                    client_ID: client.ID,
+                    context: {
+                      action_ID: null,
+                      source_player_ID: client.ID,
+                      source_actor_ID: actor.ID,
+                      parent_actor_ID: actor.ID,
+                      target_actor_IDs: [],
+                      target_position_IDs: [],
+                    },
+                  })
+                }
               }}
               subRow={({ row }) =>
                 client && (
@@ -144,7 +160,7 @@ function App() {
               }}
             />
           </div>
-          <div className="w-sm max-w-[200px] shrink-0 overflow-x-auto">
+          <div className="w-sm hidden max-w-[200px] shrink-0 overflow-x-auto">
             {game.log?.map((log, i) => (
               <div key={i} className="break-words">
                 {log}

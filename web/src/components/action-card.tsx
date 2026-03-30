@@ -31,7 +31,7 @@ function ActionCard({
   return (
     <div
       className={cn(
-        'p-1 border border-foreground/40 bg-input/40 rounded w-[240px] h-[360px]',
+        'p-2 border border-foreground/20 bg-input/40 rounded-lg w-[240px] h-[360px]',
         className
       )}
       {...props}

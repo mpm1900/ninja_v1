@@ -23,9 +23,13 @@ function RouteComponent() {
   const game = useStore(gameStore, (g) => g)
   const client = useStore(clientsStore, (c) => c.me)
   const actors = game.actors.filter(
-    (a) => a.player_ID === client?.ID && !!a.position_ID
+    (a) =>
+      a.player_ID === client?.ID &&
+      !!a.position_ID &&
+      !game.actions.find((t) => t.context.source_actor_ID === a.ID)
   )
-  const [selected, setSelected] = useState<string>(actors[0]?.ID ?? '')
+
+  const [selected, setSelected] = useState<string>(actors[0]?.ID)
   const actor = game.actors.find((a) => a.ID === selected)
 
   return (
@@ -52,7 +56,11 @@ function RouteComponent() {
               {game.players
                 .filter((p) => p.ID !== client?.ID)
                 .map((player) => (
-                  <PlayerPositions key={player.ID} flip={true} player_ID={player.ID} />
+                  <PlayerPositions
+                    key={player.ID}
+                    flip={true}
+                    player_ID={player.ID}
+                  />
                 ))}
             </div>
           </div>

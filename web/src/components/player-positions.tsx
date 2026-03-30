@@ -23,9 +23,12 @@ function PlayerPositions({
   if (!player) return null
 
   return (
-    <div className="flex gap-2 py-2">
+    <div className="flex gap-8 py-4 px-4">
       {player.positions.map((pos) => (
-        <div key={pos.ID} className={cn('flex items-end', flip && 'items-start')}>
+        <div
+          key={pos.ID}
+          className={cn('flex items-end', flip && 'items-start')}
+        >
           {pos.actor_ID ? (
             <ActorCard
               key={pos.ID}
@@ -37,8 +40,10 @@ function PlayerPositions({
               className={flip ? 'flex-col-reverse' : ''}
             />
           ) : (
-            <Item variant='muted' className='p-6 w-72'>
-              <span className='text-center w-full text-muted-foreground'>Empty</span>
+            <Item className="p-6 w-72">
+              <span className="text-center w-full text-muted-foreground">
+                Empty
+              </span>
             </Item>
           )}
         </div>
