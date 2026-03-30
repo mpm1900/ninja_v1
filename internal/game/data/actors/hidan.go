@@ -13,7 +13,7 @@ var Hidan = game.ActorDef{
 	Name:         "Hidan",
 	Affiliations: []string{game.AffAkatsuki, game.AffYuga},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            200,
 		game.StatStamina:       30,
 		game.StatAttack:        70,

@@ -5,14 +5,14 @@ import type { Nature, NatureSet } from './nature'
 type ActorAttackStat = 'attack' | 'chakra_attack'
 type ActorDefenseStat = 'defense' | 'chakra_defense'
 
-type ActorBaseStat =
+type ActorNatureStat =
   | ActorAttackStat
   | ActorDefenseStat
   | 'accuracy'
   | 'evasion'
-  | 'hp'
   | 'speed'
-  | 'stamina'
+
+type ActorBaseStat = ActorNatureStat | 'hp' | 'stamina'
 
 type ActorStats<T> = Record<ActorBaseStat, T>
 type NatureStats<T> = Record<Nature, T>
@@ -72,8 +72,14 @@ function getTotalBaseStats(actor: ActorDef) {
     accuracy: 0,
     evasion: 0,
   }
-  return Math.floor(Object.values(stats).reduce((p, c) => p + c, 0) * 6 / 7)
+  return Math.floor((Object.values(stats).reduce((p, c) => p + c, 0) * 6) / 7)
 }
 
-export type { ActorDef, Actor, ActorAttackStat, ActorBaseStat }
+export type {
+  ActorDef,
+  Actor,
+  ActorAttackStat,
+  ActorDefenseStat,
+  ActorBaseStat,
+}
 export { checkActorStat, getTotalBaseStats, statNames }

@@ -4,9 +4,7 @@ import (
 	"github.com/google/uuid"
 )
 
-
-
-type ModifierMutation struct {
+type ActorMutation struct {
 	Mutation[Actor, Actor]
 	ModifierGroupID *uuid.UUID
 	TransactionID   *uuid.UUID
@@ -18,21 +16,21 @@ type Modifier struct {
 	Name     string    `json:"name"`
 	Duration *int      `json:"duration"`
 
-	Mutations []ModifierMutation `json:"-"`
-	Triggers  []Trigger          `json:"triggers"`
+	Mutations []ActorMutation `json:"-"`
+	Triggers  []Trigger       `json:"triggers"`
 }
 
 func ResolveTrigger(game Game, transaction Transaction[Trigger]) []Transaction[GameMutation] {
 	return transaction.Mutation.Delta(game, transaction.Context)
 }
 
-func MakeModifierMutation(
+func MakeActorMutation(
 	modifierGroupID *uuid.UUID,
 	priority int,
 	filter func(input Actor, context Context) bool,
 	delta func(input Actor, context Context) Actor,
-) ModifierMutation {
-	return ModifierMutation{
+) ActorMutation {
+	return ActorMutation{
 		ModifierGroupID: modifierGroupID,
 		Mutation: Mutation[Actor, Actor]{
 			Filter:   filter,

@@ -14,7 +14,7 @@ var Naruto = game.ActorDef{
 	Clan:         game.ClanUzumaki,
 	Affiliations: []string{game.AffKonoha},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            105,
 		game.StatStamina:       130,
 		game.StatAttack:        100,

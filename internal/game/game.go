@@ -436,6 +436,7 @@ func (g *Game) NextTurn() {
 
 type GameJSON struct {
 	Status  GameStatus      `json:"status"`
+	Turn    Turn            `json:"turn"`
 	Players []Player        `json:"players"`
 	Actors  []ResolvedActor `json:"actors"`
 
@@ -472,6 +473,7 @@ func (g Game) ToJSON(playerID *uuid.UUID) GameJSON {
 
 	return GameJSON{
 		Status:       status,
+		Turn:         g.Turn,
 		Players:      g.Players,
 		Actors:       resolved,
 		Modifiers:    g.Modifiers,

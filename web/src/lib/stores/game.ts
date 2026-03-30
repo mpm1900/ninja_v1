@@ -3,6 +3,10 @@ import type { Game } from '../game/game'
 
 const gameStore = new Store<Game>({
   status: 'init',
+  turn: {
+    count: 0,
+    phase: 'init'
+  },
   actors: [],
   actions: [],
   modifiers: [],

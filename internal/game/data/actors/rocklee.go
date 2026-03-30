@@ -13,7 +13,7 @@ var RockLee = game.ActorDef{
 	Name:         "Rock Lee",
 	Affiliations: []string{game.AffKonoha},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            70,
 		game.StatStamina:       80,
 		game.StatAttack:        150,

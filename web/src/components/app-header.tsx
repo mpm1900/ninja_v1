@@ -7,7 +7,7 @@ import {
 } from '#/lib/stores/socket'
 import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
-import { Check, Loader, Loader2, LogOut, Signal, TriangleAlert, Unplug, X } from 'lucide-react'
+import { Check, Loader, Loader2, LogOut, Signal, TriangleAlert, Unplug } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { NULL_CONTEXT } from '#/lib/game/context'
@@ -63,6 +63,7 @@ function AppHeader() {
             </TabsTrigger>
           </TabsList>
         </Tabs>
+        {game.turn.count}
         {client && (
           <div className="flex gap-2">
             <Button

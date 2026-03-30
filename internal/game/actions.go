@@ -4,6 +4,17 @@ import (
 	"github.com/google/uuid"
 )
 
+func NewNoop(groupID *uuid.UUID) ActorMutation {
+	return MakeActorMutation(
+		groupID,
+		0,
+		SourceFilter,
+		func(a Actor, c Context) Actor {
+			return a
+		},
+	)
+}
+
 var SwitchPositions = GameMutation{
 	Delta: func(g Game, context Context) Game {
 		ok, source := g.GetSource(context)

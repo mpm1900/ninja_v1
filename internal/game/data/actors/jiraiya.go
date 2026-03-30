@@ -13,7 +13,7 @@ var Jiraiya = game.ActorDef{
 	Name:         "Jiraiya",
 	Affiliations: []string{game.AffKonoha},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            105,
 		game.StatStamina:       90,
 		game.StatAttack:        100,

@@ -14,7 +14,7 @@ var Itachi = game.ActorDef{
 	Clan:         game.ClanUchiha,
 	Affiliations: []string{game.AffAkatsuki, game.AffKonoha},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            65,
 		game.StatStamina:       80,
 		game.StatAttack:        95,

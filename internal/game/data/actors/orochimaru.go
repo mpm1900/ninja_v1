@@ -13,7 +13,7 @@ var Orochimaru = game.ActorDef{
 	Name:         "Orochimaru",
 	Affiliations: []string{game.AffAkatsuki, game.AffOto},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            100,
 		game.StatStamina:       90,
 		game.StatAttack:        90,

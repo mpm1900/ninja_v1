@@ -14,7 +14,7 @@ var Sasuke = game.ActorDef{
 	Clan:         game.ClanUchiha,
 	Affiliations: []string{game.AffAkatsuki, game.AffKonoha},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            80,
 		game.StatStamina:       70,
 		game.StatAttack:        120,

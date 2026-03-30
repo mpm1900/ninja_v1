@@ -14,7 +14,7 @@ var Kakashi = game.ActorDef{
 	Clan:         game.ClanHatake,
 	Affiliations: []string{game.AffKonoha},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            85,
 		game.StatStamina:       70,
 		game.StatAttack:        125,

@@ -2,7 +2,6 @@ package modifiers
 
 import (
 	"ninja_v1/internal/game"
-	actor_mutations "ninja_v1/internal/game/data/actor_mutations"
 	game_mutations "ninja_v1/internal/game/data/game_mutations"
 
 	"github.com/google/uuid"
@@ -43,8 +42,8 @@ var Rage game.Modifier = game.Modifier{
 	ID:      uuid.New(),
 	GroupID: RageGroupId,
 	Name:    "Rage",
-	Mutations: []game.ModifierMutation{
-		actor_mutations.NewNoop(&RageGroupId),
+	Mutations: []game.ActorMutation{
+		game.NewNoop(&RageGroupId),
 	},
 	Triggers: []game.Trigger{
 		RageTrigger,

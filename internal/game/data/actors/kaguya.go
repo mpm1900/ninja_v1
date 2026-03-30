@@ -12,7 +12,7 @@ var Kaguya = game.ActorDef{
 	Name:         "Kaguya Ōtsutsuki",
 	Affiliations: []string{},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            255,
 		game.StatStamina:       255,
 		game.StatAttack:        135,

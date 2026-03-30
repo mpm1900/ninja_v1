@@ -13,7 +13,7 @@ var Kakuzu = game.ActorDef{
 	Name:         "Kakuzu",
 	Affiliations: []string{game.AffAkatsuki, game.AffTaki},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            110,
 		game.StatStamina:       80,
 		game.StatAttack:        108,

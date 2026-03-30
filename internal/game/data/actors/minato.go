@@ -13,7 +13,7 @@ var Minato = game.ActorDef{
 	Name:         "Minato Namikaze",
 	Affiliations: []string{game.AffKonoha},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            60,
 		game.StatStamina:       80,
 		game.StatAttack:        110,

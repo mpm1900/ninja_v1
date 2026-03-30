@@ -5,6 +5,10 @@ import type { Player } from './player'
 
 type Game = {
   status: 'init' | 'idle' | 'running' | 'waiting'
+  turn: {
+    count: number,
+    phase: 'init' | 'start' | 'main' | 'end' | 'cleanup'
+  },
   actors: Actor[]
   modifiers: ModifierTransaction[]
   players: Player[]

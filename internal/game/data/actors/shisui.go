@@ -14,7 +14,7 @@ var Shisui = game.ActorDef{
 	Clan:         game.ClanUchiha,
 	Affiliations: []string{game.AffKonoha},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            71,
 		game.StatStamina:       71,
 		game.StatAttack:        90,

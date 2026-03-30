@@ -13,7 +13,7 @@ var Kisame = game.ActorDef{
 	SpriteURL:    "/sprites/kisame_64.png",
 	Affiliations: []string{game.AffAkatsuki, game.AffKuri},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            110,
 		game.StatStamina:       130,
 		game.StatAttack:        110,

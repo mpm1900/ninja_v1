@@ -106,7 +106,7 @@ function ActorCard({
                 </ItemActions>
               ) : (
                 <Badge
-                  onClick={(e) => {
+                  onClick={() => {
                     sendContextMessage({
                       type: 'remove-action',
                       client_ID: client_ID!,

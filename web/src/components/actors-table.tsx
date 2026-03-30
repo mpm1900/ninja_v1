@@ -89,7 +89,9 @@ const columns = [
         Stamina
       </Button>
     ),
-    cell: (props) => <ActorStatBase actor={props.row.original} stat="stamina" />,
+    cell: (props) => (
+      <ActorStatBase actor={props.row.original} stat="stamina" />
+    ),
   }),
   helper.accessor('stats.speed', {
     header: ({ column }) => (
@@ -110,12 +112,11 @@ const columns = [
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        Attack
+        <StatBadge stat="attack" />
+        ATK
       </Button>
     ),
-    cell: (props) => (
-      <ActorStatBase actor={props.row.original} stat="attack" />
-    ),
+    cell: (props) => <ActorStatBase actor={props.row.original} stat="attack" />,
   }),
   helper.accessor('stats.defense', {
     header: ({ column }) => (
@@ -124,7 +125,8 @@ const columns = [
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        Defense
+        <StatBadge stat="defense" />
+        DEF
       </Button>
     ),
     cell: (props) => (
@@ -138,7 +140,8 @@ const columns = [
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        Ch. Attack
+        <StatBadge stat="chakra_attack" />
+        ATK
       </Button>
     ),
     cell: (props) => (
@@ -152,7 +155,8 @@ const columns = [
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        Ch. Defense
+        <StatBadge stat="chakra_defense" />
+        DEF
       </Button>
     ),
     cell: (props) => (

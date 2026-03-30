@@ -58,8 +58,8 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
                   <SelectValue>
                     {game.players.find((p) => p.ID == actor.player_ID)?.user
                       .email ?? (
-                        <span className="text-red-300">{actor.player_ID}</span>
-                      )}
+                      <span className="text-red-300">{actor.player_ID}</span>
+                    )}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -72,6 +72,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
               </Select>
               <PositionSelect actor={actor} game={game} />
             </div>
+            <div>stats here</div>
           </div>
         </CardContent>
       </div>
@@ -82,10 +83,12 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
             data={actor.actions}
             enabled={enabled && !!player && !!actor.position_ID}
             selected={context.action_ID ?? undefined}
-            onSelectedChange={aid => onContextChange({
-              ...context,
-              action_ID: aid
-            })}
+            onSelectedChange={(aid) =>
+              onContextChange({
+                ...context,
+                action_ID: aid,
+              })
+            }
             subRow={({ row }) => (
               <ActionControl
                 action={actor.actions.find((a) => a.ID === context.action_ID)}

@@ -14,7 +14,7 @@ var Pain = game.ActorDef{
 	Clan:         game.ClanUzumaki,
 	Affiliations: []string{game.AffAkatsuki, game.AffAme},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            80,
 		game.StatStamina:       120,
 		game.StatAttack:        100,

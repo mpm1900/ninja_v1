@@ -23,19 +23,29 @@ const (
 	ChakraDefense DefenseStat = "chakra_defense"
 )
 
-type BaseStat string
+type ActorStat string
 
 const (
-	StatHP            BaseStat = "hp"
-	StatStamina       BaseStat = "stamina"
-	StatAttack        BaseStat = BaseStat(Attack)
-	StatDefense       BaseStat = BaseStat(Defense)
-	StatChakraAttack  BaseStat = BaseStat(ChakraAttack)
-	StatChakraDefense BaseStat = BaseStat(ChakraDefense)
-	StatSpeed         BaseStat = "speed"
-	StatEvasion       BaseStat = "evasion"
-	StatAccuracy      BaseStat = "accuracy"
+	StatHP            ActorStat = "hp"
+	StatStamina       ActorStat = "stamina"
+	StatAttack        ActorStat = ActorStat(Attack)
+	StatDefense       ActorStat = ActorStat(Defense)
+	StatChakraAttack  ActorStat = ActorStat(ChakraAttack)
+	StatChakraDefense ActorStat = ActorStat(ChakraDefense)
+	StatSpeed         ActorStat = "speed"
+	StatEvasion       ActorStat = "evasion"
+	StatAccuracy      ActorStat = "accuracy"
 )
+
+type ActorFocus string
+
+const (
+	FocusNone ActorFocus = "none"
+)
+
+var ActorFocuses map[ActorFocus][]*ActorStat = map[ActorFocus][]*ActorStat{
+	FocusNone: {nil, nil},
+}
 
 const (
 	AffAme      = "ame"
@@ -66,7 +76,7 @@ type ActorDef struct {
 	Clan         string    `json:"clan"`
 	Affiliations []string  `json:"affiliations"`
 
-	Stats            map[BaseStat]int       `json:"stats"`
+	Stats            map[ActorStat]int      `json:"stats"`
 	NatureDamage     map[Nature]float64     `json:"nature_damage"`
 	NatureResistance map[Nature]float64     `json:"nature_resistance"`
 	Natures          map[NatureSet][]Nature `json:"natures"`
@@ -93,12 +103,13 @@ type ActorState struct {
 type Actor struct {
 	ActorDef
 	ActorState
-	ID         uuid.UUID `json:"ID"`
-	PlayerID   uuid.UUID `json:"player_ID"`
-	Level      int       `json:"level"`
-	Experience int       `json:"experience"`
+	ID         uuid.UUID  `json:"ID"`
+	PlayerID   uuid.UUID  `json:"player_ID"`
+	Level      int        `json:"level"`
+	Experience int        `json:"experience"`
+	Focus      ActorFocus `json:"focus"`
 
-	Stages map[BaseStat]int `json:"staged_stats"`
+	Stages map[ActorStat]int `json:"staged_stats"`
 
 	Actions         []Action          `json:"actions"`
 	ActionCooldowns map[uuid.UUID]int `json:"action_cooldowns"`
@@ -106,8 +117,8 @@ type Actor struct {
 
 type ResolvedActor struct {
 	Actor
-	BaseStats        map[BaseStat]int  `json:"base_stats"`
-	PreStats         map[BaseStat]int  `json:"pre_stats"`
+	BaseStats        map[ActorStat]int `json:"base_stats"`
+	PreStats         map[ActorStat]int `json:"pre_stats"`
 	AppliedModifiers map[uuid.UUID]int `json:"applied_modifiers"`
 }
 
@@ -152,13 +163,14 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uui
 		PlayerID:   playerID,
 		Level:      GetLevel(experience),
 		Experience: experience,
+		Focus:      FocusNone,
 		ActorState: ActorState{
 			Alive:      true,
 			Damage:     0,
 			PositionID: nil,
 			Reflect:    0.0,
 		},
-		Stages: map[BaseStat]int{
+		Stages: map[ActorStat]int{
 			StatHP:            0,
 			StatStamina:       0,
 			StatAttack:        0,
@@ -192,6 +204,22 @@ func (a *Actor) RecoverStamina(g Game, ratio float64) {
 	a.StaminaDamage = max(a.StaminaDamage-amount, 0)
 }
 
+func (a Actor) GetFocusModifier(stat ActorStat) float64 {
+	stats, ok := ActorFocuses[a.Focus]
+	if !ok || len(stats) != 2 {
+		return 0.0
+	}
+
+	if stats[0] != nil && *stats[0] == stat {
+		return 1.1
+	}
+	if stats[1] != nil && *stats[1] == stat {
+		return 0.9
+	}
+
+	return 1.0
+}
+
 func resolve(actor Actor, pre Actor) ResolvedActor {
 	return ResolvedActor{
 		Actor:            actor,
@@ -200,23 +228,23 @@ func resolve(actor Actor, pre Actor) ResolvedActor {
 	}
 }
 
-func MapBaseStat(stat, level int, nature float64) int {
+func MapBaseStat(stat, level int, focus float64) int {
 	base := float64((stat * 2) + 15)
 	ev := 0.0 // TODO
 	ratio := float64((base+(ev/4))*float64(level)) / 100
-	return int(math.Floor((ratio + 5) * nature))
+	return int(math.Floor((ratio + 5) * focus))
 }
 
-func MapResourceStat(stat, level int) int {
-	return MapBaseStat(stat, level, 1.0) + level + 5
+func MapResourceStat(stat, level int, focus float64) int {
+	return MapBaseStat(stat, level, focus) + level + 5
 }
 
-func (actor *Actor) MapBase(stat BaseStat) {
-	actor.Stats[stat] = MapBaseStat(actor.Stats[stat], actor.Level, 1.0)
+func (actor *Actor) MapBase(stat ActorStat) {
+	actor.Stats[stat] = MapBaseStat(actor.Stats[stat], actor.Level, actor.GetFocusModifier(stat))
 }
 
-func (actor *Actor) MapResource(stat BaseStat) {
-	actor.Stats[stat] = MapResourceStat(actor.Stats[stat], actor.Level)
+func (actor *Actor) MapResource(stat ActorStat) {
+	actor.Stats[stat] = MapResourceStat(actor.Stats[stat], actor.Level, 1.0)
 }
 
 func MapBaseStats(actor Actor) Actor {
@@ -243,7 +271,7 @@ func MapStagedStat(stat, stage, mod int) int {
 	return int(math.Floor(float64(stat) * m))
 }
 
-func (actor *Actor) MapStaged(stat BaseStat, mod int) {
+func (actor *Actor) MapStaged(stat ActorStat, mod int) {
 	actor.Stats[stat] = MapStagedStat(actor.Stats[stat], actor.Stages[stat], mod)
 
 }
@@ -282,8 +310,8 @@ func GetActorModifiers(game Game) []Transaction[Modifier] {
 	return modifiers
 }
 
-var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
-	MakeModifierMutation(
+var SPECIAL_MUTATIONS []ActorMutation = []ActorMutation{
+	MakeActorMutation(
 		nil,
 		MutPriorityMapBaseStats,
 		AllFilter,
@@ -291,7 +319,7 @@ var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
 			return MapBaseStats(input)
 		},
 	),
-	MakeModifierMutation(
+	MakeActorMutation(
 		nil,
 		MutPriorityMapStagedStats,
 		AllFilter,
@@ -301,10 +329,10 @@ var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
 	),
 }
 
-func GetMutationsFromTransactions(transactions []Transaction[Modifier]) []ModifierMutation {
-	var mutations []ModifierMutation
+func GetMutationsFromTransactions(transactions []Transaction[Modifier]) []ActorMutation {
+	var mutations []ActorMutation
 	for _, transaction := range transactions {
-		var muts []ModifierMutation
+		var muts []ActorMutation
 		for _, mut := range transaction.Mutation.Mutations {
 			mut.TransactionID = &transaction.ID
 			muts = append(muts, mut)

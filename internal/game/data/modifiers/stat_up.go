@@ -7,13 +7,13 @@ import (
 )
 
 func NewStageDelta(
-	stat game.BaseStat,
+	stat game.ActorStat,
 	groupID uuid.UUID,
 	filter func(input game.Actor, context game.Context) bool,
 	priority int,
 	delta int,
 ) game.Modifier {
-	mut := game.MakeModifierMutation(
+	mut := game.MakeActorMutation(
 		&groupID,
 		priority,
 		filter,
@@ -26,19 +26,19 @@ func NewStageDelta(
 	return game.Modifier{
 		ID:      uuid.New(),
 		GroupID: groupID,
-		Mutations: []game.ModifierMutation{
+		Mutations: []game.ActorMutation{
 			mut,
 		},
 	}
 }
 
-func MakeStatUpSource(stat game.BaseStat, name string, groupID uuid.UUID) game.Modifier {
+func MakeStatUpSource(stat game.ActorStat, name string, groupID uuid.UUID) game.Modifier {
 	modifier := NewStageDelta(stat, groupID, game.ComposeAF(game.ActiveFilter, game.SourceFilter), game.MutPriorityDefault, 1)
 	modifier.Name = name
 	return modifier
 }
 
-func MakeStatUpAll(stat game.BaseStat, name string, groupID uuid.UUID) game.Modifier {
+func MakeStatUpAll(stat game.ActorStat, name string, groupID uuid.UUID) game.Modifier {
 	modifier := NewStageDelta(stat, groupID, game.ActiveFilter, game.MutPriorityDefault, 1)
 	modifier.Name = name
 	return modifier
@@ -49,6 +49,6 @@ var JutsuUpID = uuid.New()
 var SpeedUpID = uuid.New()
 
 var AttackUpSource = MakeStatUpSource(game.StatAttack, "Attack Up", AttackUpID)
-var JutsuUpSource = MakeStatUpSource(game.BaseStat(game.ChakraAttack), "Chakra Attack Up", JutsuUpID)
+var JutsuUpSource = MakeStatUpSource(game.ActorStat(game.ChakraAttack), "Chakra Attack Up", JutsuUpID)
 var SpeedUpSource = MakeStatUpSource(game.StatSpeed, "Speed Up", SpeedUpID)
 var SpeedUpAll = MakeStatUpAll(game.StatSpeed, "Speed Up", SpeedUpID)

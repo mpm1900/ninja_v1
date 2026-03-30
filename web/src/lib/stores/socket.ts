@@ -3,7 +3,7 @@ import { clientsStore, type Client } from './clients'
 import { gameStore } from './game'
 import type { Game } from '../game/game'
 import type { Context } from '../game/context'
-import { battleContext, setContextPlayer } from './battle-context'
+import { setContextPlayer } from './battle-context'
 
 type SocketStatus =
   | 'idle'

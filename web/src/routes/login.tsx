@@ -63,7 +63,7 @@ function RouteComponent() {
           </div>
           Shinobi
         </a>
-        <div className={cn('flex flex-col gap-3')}>
+        <form className={cn('flex flex-col gap-3')} onSubmit={form.handleSubmit}>
           <form.Field name="form">
             {(field) => (
               <Card>
@@ -191,7 +191,7 @@ function RouteComponent() {
           <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
             Copyright © 2026 mpm1900. All rights reserved.
           </div>
-        </div>
+        </form>
       </div>
     </div>
   )

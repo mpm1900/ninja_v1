@@ -13,7 +13,7 @@ var Raikage = game.ActorDef{
 	Name:         "A (4th Raikage)",
 	Affiliations: []string{game.AffKumo},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            80,
 		game.StatStamina:       80,
 		game.StatAttack:        130,

@@ -100,12 +100,12 @@ func GetDamage(
 		return damages
 	}
 
-	a_base := float64(source.Stats[BaseStat(attack)])
+	a_base := float64(source.Stats[ActorStat(attack)])
 	a_mod := 1.0
 	attack_value := int(math.Floor(a_base * a_mod))
 
 	for i, target := range targets {
-		d_base := float64(target.Stats[BaseStat(defense)])
+		d_base := float64(target.Stats[ActorStat(defense)])
 		d_mod := 1.0
 		defense_value := int(math.Floor(d_base * d_mod))
 

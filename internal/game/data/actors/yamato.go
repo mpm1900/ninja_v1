@@ -13,7 +13,7 @@ var Yamato = game.ActorDef{
 	Name:         "Yamato",
 	Affiliations: []string{game.AffKonoha},
 
-	Stats: map[game.BaseStat]int{
+	Stats: map[game.ActorStat]int{
 		game.StatHP:            90,
 		game.StatStamina:       101,
 		game.StatAttack:        80,
