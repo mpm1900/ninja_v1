@@ -97,6 +97,11 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 			resolved := resolveTargets(g, context)
 			totals := make([]int, len(resolved))
 			for t_index, target := range resolved {
+				if target.Protected {
+					g.PushLog(fmt.Sprintf("%s was protected.", target.Name))
+					continue
+				}
+
 				base_accuracy := game.GetAccuracy(g, source, target)
 
 				if action.Accuracy != nil {

@@ -64,8 +64,7 @@ function AppHeader() {
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        {game.turn.count}
-        <Badge>{game.turn.phase}</Badge>
+        <Badge>{game.turn.count}: {game.turn.phase}</Badge>
         {client && (
           <div className="flex gap-2">
             <Button

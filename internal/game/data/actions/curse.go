@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"fmt"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/mutations"
 
@@ -35,7 +36,14 @@ func MakeCurse() game.Action {
 				source := s.Resolve(g)
 				targets := g.GetTargets(context)
 
-				for _, target := range targets {
+				for _, t := range targets {
+					target := t.Resolve(g)
+					log := mutations.AddLogs(fmt.Sprintf("%s was protected.", target.Name))
+					if tx, protected := target.IsProtected(log); protected {
+						transactions = append(transactions, tx)
+						continue
+					}
+
 					hp := source.Stats[game.StatHP]
 					amount := hp / 2
 

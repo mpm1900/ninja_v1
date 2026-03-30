@@ -1,5 +1,9 @@
 package game
 
+/**
+ * Context Filters
+ */
+
 type ContextFilter func(Context) bool
 
 func ComposeCF(filters ...ContextFilter) ContextFilter {
@@ -25,6 +29,10 @@ func PositionsLengthFilter(length int) func(Context) bool {
 	}
 }
 
+/**
+ * Actor Filters
+ */
+
 type ActorFilter func(Actor, Context) bool
 
 func ComposeAF(filters ...ActorFilter) ActorFilter {
@@ -38,7 +46,6 @@ func ComposeAF(filters ...ActorFilter) ActorFilter {
 		return true
 	}
 }
-
 func AllFilter(actor Actor, context Context) bool {
 	return true
 }
@@ -51,6 +58,12 @@ func OtherFilter(actor Actor, context Context) bool {
 	}
 	return actor.ID != *context.SourceActorID
 }
+
+/**
+ * This filter doesn't need to be a resolved filter
+ * actor.Alive is a special case were modifiers don't modify it, we just mutate it
+ * so this is a safe check to make without resoloving the Actor to a ResolvedActor
+ */
 func AliveFilter(actor Actor, context Context) bool {
 	return actor.Alive
 }
@@ -82,13 +95,27 @@ func OtherTeamFilter(actor Actor, context Context) bool {
 	return actor.PlayerID != *context.SourcePlayerID
 }
 
-// RESOLVED FILTERS
+/**
+ * RESOLVED FILTERS
+ * These filters required modifiers to be resolved to check things like
+ * protected, chakra amount, and things that can change with modifers
+ */
 func HasChakraFilter(game Game, amount int) func(Actor, Context) bool {
 	return func(actor Actor, context Context) bool {
 		resolved := actor.Resolve(game)
 		return resolved.HasChakra(amount)
 	}
 }
+func IsProtectedFilter(game Game, protected bool) func(Actor, Context) bool {
+	return func(actor Actor, context Context) bool {
+		resolved := actor.Resolve(game)
+		return resolved.Protected == protected
+	}
+}
+
+/**
+ * Game Filters
+ */
 
 type GameFilter func(Game, Context) bool
 

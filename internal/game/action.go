@@ -9,6 +9,7 @@ import (
 
 const (
 	ActionPrioritySwitch  = 10
+	ActionPriorityProtect = 4
 	ActionPriorityFast    = 1
 	ActionPriorityDefault = 0
 	ActionPrioritySlow    = -1

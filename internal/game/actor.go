@@ -90,6 +90,14 @@ type ActorState struct {
 	// [Alive] whether or not the actor is alive, could
 	// - could be computed, but this is here to not have to call .Resolve() on filters
 	Alive bool `json:"alive"`
+	// [Protected]
+	// - protected units cannot be damaged by actions
+	// - protected units cannot be targeted by enemy actions
+	Protected bool `json:"protected"`
+	// [Stunned] whether or not an actor _can act_
+	// - stunned units cannot push actions
+	// - stunned units cannot resolve actions (if the status was added during running)
+	Stunned bool `json:"stunned"`
 	// [Damage] how much damage this actor has recieved
 	Damage        int `json:"damage"`
 	StaminaDamage int `json:"stamina_damage"`
@@ -97,7 +105,6 @@ type ActorState struct {
 	PositionID *uuid.UUID `json:"position_ID"`
 	// [Reflect] how much damage is reflected (PureDamage not affected)
 	Reflect float64 `json:"reflect"`
-	Stunned bool    `json:"stunned"`
 }
 
 type Actor struct {
@@ -417,4 +424,11 @@ func (a Actor) Resolve(game Game) ResolvedActor {
 
 func (r ResolvedActor) HasChakra(amount int) bool {
 	return (r.Stats[StatStamina] - r.StaminaDamage) >= amount
+}
+func (r ResolvedActor) IsProtected(mut GameMutation) (GameTransaction, bool) {
+	if r.Protected {
+		return MakeTransaction(mut, NewContext()), true
+	}
+
+	return GameTransaction{}, false
 }
