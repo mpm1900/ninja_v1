@@ -29,7 +29,7 @@ func MakeLeafJab() game.Action {
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.ActiveFilter, game.AliveFilter),
 		ContextValidate: game.PositionsLengthFilter(1),
-		Cost:            mutations.UseChakraSource(chakraCost),
+		Cost:            mutations.UseStaminaSource(chakraCost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityFast,
 			Filter:   game.AllGameFilter,

@@ -74,7 +74,7 @@ function App() {
                         <ActorCard
                           key={a.ID}
                           actor={a}
-                          clientID={client?.ID}
+                          client_ID={client?.ID}
                           game={game}
                           selected={false}
                         />

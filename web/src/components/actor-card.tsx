@@ -6,6 +6,10 @@ import { cva } from 'class-variance-authority'
 import { HealthBar } from './health-bar'
 import { NatureBadge } from './nature-badge'
 import { Item, ItemActions, ItemContent, ItemTitle } from './ui/item'
+import { Badge } from './ui/badge'
+import { X } from 'lucide-react'
+import { sendContextMessage } from '#/lib/stores/socket'
+import { NULL_CONTEXT } from '#/lib/game/context'
 
 const actorVariants = cva(
   cn(
@@ -32,7 +36,7 @@ const actorVariants = cva(
 
 function ActorCard({
   actor,
-  clientID,
+  client_ID,
   game,
   selected,
   targeted,
@@ -40,7 +44,7 @@ function ActorCard({
   ...props
 }: React.ComponentProps<typeof Item> & {
   actor: Actor | undefined
-  clientID?: string
+  client_ID?: string
   game: Game
   selected?: boolean
   targeted?: boolean
@@ -49,7 +53,10 @@ function ActorCard({
     .map((m) => m.mutation)
     .concat(actor?.innate_modifiers ?? [])
 
-  const is_player = actor?.player_ID === clientID
+  const is_player = actor?.player_ID === client_ID
+  const action_tx = game.actions.find(
+    (t) => t.context.source_actor_ID === actor?.ID
+  )
 
   return (
     <div className={cn('flex flex-col', className)}>
@@ -64,7 +71,11 @@ function ActorCard({
       <div
         className={actorVariants({
           player: is_player ? 'player' : 'enemy',
-          selected: selected ? 'selected' : targeted ? 'targeted_damage' : undefined,
+          selected: selected
+            ? 'selected'
+            : targeted
+              ? 'targeted_damage'
+              : undefined,
         })}
         {...props}
       >
@@ -77,21 +88,38 @@ function ActorCard({
                 </span>{' '}
                 <span
                   className={cn({
-                    'text-blue-300': actor.player_ID === clientID,
-                    'text-red-400': actor.player_ID !== clientID,
+                    'text-blue-300': actor.player_ID === client_ID,
+                    'text-red-400': actor.player_ID !== client_ID,
                     'text-foregroud': selected,
                   })}
                 >
                   {actor.name}
                 </span>
               </ItemTitle>
-              <ItemActions className="gap-0">
-                {(Object.keys(actor.natures) as Array<NatureSet>)
-                  .sort((a, b) => natureIndexes[a] - natureIndexes[b])
-                  .map((nature) => (
-                    <NatureBadge key={nature} nature={nature} />
-                  ))}
-              </ItemActions>
+              {!action_tx ? (
+                <ItemActions className="gap-0">
+                  {(Object.keys(actor.natures) as Array<NatureSet>)
+                    .sort((a, b) => natureIndexes[a] - natureIndexes[b])
+                    .map((nature) => (
+                      <NatureBadge key={nature} nature={nature} />
+                    ))}
+                </ItemActions>
+              ) : (
+                <Badge
+                  onClick={(e) => {
+                    sendContextMessage({
+                      type: 'remove-action',
+                      client_ID: client_ID!,
+                      context: {
+                        ...NULL_CONTEXT,
+                        action_ID: action_tx.ID
+                      }
+                    })
+                  }}
+                >
+                  READY <X />
+                </Badge>
+              )}
             </div>
           )}
           <div className="space-y-2">

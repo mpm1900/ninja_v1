@@ -79,17 +79,17 @@ const columns = [
     cell: (props) => <ActorStatBase actor={props.row.original} stat="hp" />,
     sortingFn: 'alphanumeric',
   }),
-  helper.accessor('stats.chakra', {
+  helper.accessor('stats.stamina', {
     header: ({ column }) => (
       <Button
         className="-ml-4"
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        Chakra
+        Stamina
       </Button>
     ),
-    cell: (props) => <ActorStatBase actor={props.row.original} stat="chakra" />,
+    cell: (props) => <ActorStatBase actor={props.row.original} stat="stamina" />,
   }),
   helper.accessor('stats.speed', {
     header: ({ column }) => (
@@ -131,32 +131,32 @@ const columns = [
       <ActorStatBase actor={props.row.original} stat="defense" />
     ),
   }),
-  helper.accessor('stats.jutsu', {
+  helper.accessor('stats.chakra_attack', {
     header: ({ column }) => (
       <Button
         className="-ml-4"
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        Jutsu
+        Ch. Attack
       </Button>
     ),
     cell: (props) => (
-      <ActorStatBase actor={props.row.original} stat="jutsu" />
+      <ActorStatBase actor={props.row.original} stat="chakra_attack" />
     ),
   }),
-  helper.accessor('stats.jutsu_defense', {
+  helper.accessor('stats.chakra_defense', {
     header: ({ column }) => (
       <Button
         className="-ml-4"
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        J. Defense
+        Ch. Defense
       </Button>
     ),
     cell: (props) => (
-      <ActorStatBase actor={props.row.original} stat="jutsu_defense" />
+      <ActorStatBase actor={props.row.original} stat="chakra_defense" />
     ),
   }),
   helper.accessor((a) => getTotalBaseStats(a), {

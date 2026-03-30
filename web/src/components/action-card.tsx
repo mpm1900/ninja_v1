@@ -9,7 +9,7 @@ function StatBar({ action }: { action: Action }) {
   return (
     <div
       className={cn('', {
-        'text-sky-400': stat === 'jutsu',
+        'text-sky-400': stat === 'chakra_attack',
         'text-emerald-400': stat === 'attack',
       })}
     >
@@ -33,7 +33,7 @@ function ActionCard({
         'p-2 border-4 border-neutral-600 bg-input/40 rounded-lg w-[240px] h-[360px]',
         {
           'border-green-700': action.config.stat === 'attack',
-          'border-cyan-600': action.config.stat === 'jutsu'
+          'border-cyan-600': action.config.stat === 'chakra_attack'
         },
         className
       )}

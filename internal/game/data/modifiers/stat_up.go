@@ -49,6 +49,6 @@ var JutsuUpID = uuid.New()
 var SpeedUpID = uuid.New()
 
 var AttackUpSource = MakeStatUpSource(game.StatAttack, "Attack Up", AttackUpID)
-var JutsuUpSource = MakeStatUpSource(game.StatJutsu, "Jutsu Up", JutsuUpID)
+var JutsuUpSource = MakeStatUpSource(game.BaseStat(game.ChakraAttack), "Chakra Attack Up", JutsuUpID)
 var SpeedUpSource = MakeStatUpSource(game.StatSpeed, "Speed Up", SpeedUpID)
 var SpeedUpAll = MakeStatUpAll(game.StatSpeed, "Speed Up", SpeedUpID)

@@ -2,8 +2,8 @@ import type { Action } from './action'
 import type { Modifier } from './modifier'
 import type { Nature, NatureSet } from './nature'
 
-type ActorAttackStat = 'attack' | 'jutsu'
-type ActorDefenseStat = 'defense' | 'jutsu_defense'
+type ActorAttackStat = 'attack' | 'chakra_attack'
+type ActorDefenseStat = 'defense' | 'chakra_defense'
 
 type ActorBaseStat =
   | ActorAttackStat
@@ -12,7 +12,7 @@ type ActorBaseStat =
   | 'evasion'
   | 'hp'
   | 'speed'
-  | 'chakra'
+  | 'stamina'
 
 type ActorStats<T> = Record<ActorBaseStat, T>
 type NatureStats<T> = Record<Nature, T>
@@ -35,7 +35,7 @@ type ActorDef = {
 type ActorState = {
   alive: boolean
   damage: number
-  chakra_damage: number
+  stamina_damage: number
   position_ID: string
   stunned: boolean
 }

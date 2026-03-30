@@ -14,23 +14,23 @@ function HealthBar({
   selected?: boolean
 }) {
   const maxHp = Math.max(1, actor.stats.hp)
-  const maxChakra = Math.max(1, actor.stats.chakra)
+  const maxStamina = Math.max(1, actor.stats.stamina)
 
   const hpCurrent = Math.max(0, actor.stats.hp - actor.damage)
-  const chakraCurrent = Math.max(0, actor.stats.chakra - actor.chakra_damage)
+  const staminaCurrent = Math.max(0, actor.stats.stamina - actor.stamina_damage)
 
   const hpRatio = clamp01(hpCurrent / maxHp)
-  const chakraRatio = clamp01(chakraCurrent / maxChakra)
+  const staminaRatio = clamp01(staminaCurrent / maxStamina)
 
   const hpTarget = useMotionValue(hpRatio * 100)
-  const chakraTarget = useMotionValue(chakraRatio * 100)
+  const staminaTarget = useMotionValue(staminaRatio * 100)
   const hpGhostTarget = useMotionValue(hpRatio * 100)
 
   useEffect(() => {
     hpTarget.set(hpRatio * 100)
-    chakraTarget.set(chakraRatio * 100)
+    staminaTarget.set(staminaRatio * 100)
     hpGhostTarget.set(hpRatio * 100)
-  }, [hpRatio, chakraRatio, hpTarget, chakraTarget, hpGhostTarget])
+  }, [hpRatio, staminaRatio, hpTarget, staminaTarget, hpGhostTarget])
 
   const hpWidth = useTransform(
     useSpring(hpTarget, { stiffness: 280, damping: 30, mass: 0.8 }),
@@ -43,7 +43,7 @@ function HealthBar({
   )
 
   const chakraWidth = useTransform(
-    useSpring(chakraTarget, { stiffness: 200, damping: 26, mass: 0.95 }),
+    useSpring(staminaTarget, { stiffness: 200, damping: 26, mass: 0.95 }),
     (v) => `${v}%`
   )
 
@@ -64,7 +64,7 @@ function HealthBar({
   }, [hpRatio])
 
   return (
-    <div className="relative w-full select-none">
+    <div className="relative w-full select-none nanum-brush-script-regular">
       {selected && (
         <div className="pointer-events-none absolute -inset-1 rounded-sm bg-gradient-to-r from-cyan-400/15 via-indigo-400/10 to-red-500/15 blur-md" />
       )}
@@ -110,7 +110,7 @@ function HealthBar({
         {/* text + values */}
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-end px-2">
           <div className="flex flex-row-reverse items-center gap-2">
-            <span className="text-sm font-black tabular-nums text-white drop-shadow text-shadow-[0px_1px_0px_#000000]">
+            <span className="text-2xl -mb-1 font-black tabular-nums text-white drop-shadow text-shadow-[0px_1px_0px_#000000]">
               {Math.round(hpRatio * 100)}%
             </span>
           </div>

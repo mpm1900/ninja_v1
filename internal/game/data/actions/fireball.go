@@ -14,7 +14,7 @@ func MakeFireball() game.Action {
 	accuracy := 50
 	power := 50
 	nature := game.NsFire
-	stat := game.Jutsu
+	stat := game.ChakraAttack
 	targetCount := 1
 	chakraCost := 30
 	cooldown := 1
@@ -36,7 +36,7 @@ func MakeFireball() game.Action {
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.ActiveFilter),
 		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseChakraSource(chakraCost),
+		Cost:            mutations.UseStaminaSource(chakraCost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter: game.ComposeGF(

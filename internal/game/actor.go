@@ -12,29 +12,29 @@ import (
 type AttackStat string
 
 const (
-	Attack AttackStat = "attack"
-	Jutsu  AttackStat = "jutsu"
+	Attack       AttackStat = "attack"
+	ChakraAttack AttackStat = "chakra_attack"
 )
 
 type DefenseStat string
 
 const (
-	Defense      DefenseStat = "defense"
-	JutsuDefense DefenseStat = "jutsu_defense"
+	Defense       DefenseStat = "defense"
+	ChakraDefense DefenseStat = "chakra_defense"
 )
 
 type BaseStat string
 
 const (
-	StatHP           BaseStat = "hp"
-	StatChakra       BaseStat = "chakra"
-	StatAttack       BaseStat = BaseStat(Attack)
-	StatDefense      BaseStat = BaseStat(Defense)
-	StatJutsu        BaseStat = BaseStat(Jutsu)
-	StatJutsuDefense BaseStat = BaseStat(JutsuDefense)
-	StatSpeed        BaseStat = "speed"
-	StatEvasion      BaseStat = "evasion"
-	StatAccuracy     BaseStat = "accuracy"
+	StatHP            BaseStat = "hp"
+	StatStamina       BaseStat = "stamina"
+	StatAttack        BaseStat = BaseStat(Attack)
+	StatDefense       BaseStat = BaseStat(Defense)
+	StatChakraAttack  BaseStat = BaseStat(ChakraAttack)
+	StatChakraDefense BaseStat = BaseStat(ChakraDefense)
+	StatSpeed         BaseStat = "speed"
+	StatEvasion       BaseStat = "evasion"
+	StatAccuracy      BaseStat = "accuracy"
 )
 
 const (
@@ -81,8 +81,8 @@ type ActorState struct {
 	// - could be computed, but this is here to not have to call .Resolve() on filters
 	Alive bool `json:"alive"`
 	// [Damage] how much damage this actor has recieved
-	Damage       int `json:"damage"`
-	ChakraDamage int `json:"chakra_damage"`
+	Damage        int `json:"damage"`
+	StaminaDamage int `json:"stamina_damage"`
 	// [PositionID] current position, nil if not active
 	PositionID *uuid.UUID `json:"position_ID"`
 	// [Reflect] how much damage is reflected (PureDamage not affected)
@@ -159,15 +159,15 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uui
 			Reflect:    0.0,
 		},
 		Stages: map[BaseStat]int{
-			StatHP:           0,
-			StatChakra:       0,
-			StatAttack:       0,
-			StatDefense:      0,
-			StatJutsu:        0,
-			StatJutsuDefense: 0,
-			StatSpeed:        0,
-			StatEvasion:      0,
-			StatAccuracy:     0,
+			StatHP:            0,
+			StatStamina:       0,
+			StatAttack:        0,
+			StatDefense:       0,
+			StatChakraAttack:  0,
+			StatChakraDefense: 0,
+			StatSpeed:         0,
+			StatEvasion:       0,
+			StatAccuracy:      0,
 		},
 		Actions:         actions,
 		ActionCooldowns: map[uuid.UUID]int{},
@@ -186,10 +186,10 @@ func (a *Actor) DecrementCooldowns() {
 		a.ActionCooldowns[actionID] = cooldown - 1
 	}
 }
-func (a *Actor) RecoverChakra(g Game, ratio float64) {
+func (a *Actor) RecoverStamina(g Game, ratio float64) {
 	resolved := a.Resolve(g)
-	amount := int(math.Floor(float64(resolved.Stats[StatChakra]) * ratio))
-	a.ChakraDamage = max(a.ChakraDamage-amount, 0)
+	amount := int(math.Floor(float64(resolved.Stats[StatStamina]) * ratio))
+	a.StaminaDamage = max(a.StaminaDamage-amount, 0)
 }
 
 func resolve(actor Actor, pre Actor) ResolvedActor {
@@ -221,12 +221,12 @@ func (actor *Actor) MapResource(stat BaseStat) {
 
 func MapBaseStats(actor Actor) Actor {
 	actor.MapResource(StatHP)
-	actor.MapResource(StatChakra)
+	actor.MapResource(StatStamina)
 
 	actor.MapBase(StatAttack)
 	actor.MapBase(StatDefense)
-	actor.MapBase(StatJutsu)
-	actor.MapBase(StatJutsuDefense)
+	actor.MapBase(StatChakraAttack)
+	actor.MapBase(StatChakraDefense)
 	actor.MapBase(StatSpeed)
 
 	return actor
@@ -251,8 +251,8 @@ func (actor *Actor) MapStaged(stat BaseStat, mod int) {
 func MapStagedStats(actor Actor) Actor {
 	actor.MapStaged(StatAttack, 2)
 	actor.MapStaged(StatDefense, 2)
-	actor.MapStaged(StatJutsu, 2)
-	actor.MapStaged(StatJutsuDefense, 2)
+	actor.MapStaged(StatChakraAttack, 2)
+	actor.MapStaged(StatChakraDefense, 2)
 	actor.MapStaged(StatSpeed, 2)
 	actor.MapStaged(StatEvasion, 3)
 	actor.MapStaged(StatAccuracy, 3)
@@ -388,5 +388,5 @@ func (a Actor) Resolve(game Game) ResolvedActor {
 }
 
 func (r ResolvedActor) HasChakra(amount int) bool {
-	return (r.Stats[StatChakra] - r.ChakraDamage) >= amount
+	return (r.Stats[StatStamina] - r.StaminaDamage) >= amount
 }

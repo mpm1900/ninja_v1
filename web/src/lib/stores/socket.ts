@@ -26,6 +26,7 @@ type SocketRequestType =
   | 'add-modifier'
   | 'remove-modifier'
   | 'push-action'
+  | 'remove-action'
   | 'set-actor-player'
   | 'set-actor-position'
   | 'run-game-actions'
@@ -188,7 +189,7 @@ function sendContextMessage(request: SocketRequest) {
   return sendSocketMessage(JSON.stringify(request))
 }
 
-export type {}
+export type { }
 export {
   socketStore,
   connectSocket,

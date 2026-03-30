@@ -49,6 +49,19 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         rel: 'stylesheet',
         href: styles,
       },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com'
+      },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&family=Yeon+Sung&display=swap'
+      }
     ],
   }),
   shellComponent: RootDocument,

@@ -110,8 +110,8 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 				}
 
 				defense := game.Defense
-				if *action.Stat == game.Jutsu {
-					defense = game.JutsuDefense
+				if *action.Stat == game.ChakraAttack {
+					defense = game.ChakraDefense
 				}
 
 				damages := game.GetDamage(

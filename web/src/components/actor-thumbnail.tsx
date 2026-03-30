@@ -16,26 +16,27 @@ function ActorThumbnail({
         'h-18 w-18 overflow-hidden bg-card p-1 border rounded relative',
         {
           'bg-foreground': active,
-        },
-        className
+        }
       )}
       {...props}
     >
-      <img
-        src={actor.sprite_url}
-        className="h-full w-full object-cover absolute inset-0 z-10"
-        width={64}
-        height={64}
-      />
-      <div
-        className={cn(
-          'absolute -top-6 font-black text-7xl z-0 text-center text-foreground',
-          {
-            'text-background!': active,
-          }
-        )}
-      >
-        {index + 1}
+      <div className={className}>
+        <img
+          src={actor.sprite_url}
+          className="h-full w-full object-cover absolute inset-0 z-10"
+          width={64}
+          height={64}
+        />
+        <div
+          className={cn(
+            'absolute -top-6 font-black text-7xl z-0 text-center text-foreground',
+            {
+              'text-background!': active,
+            }
+          )}
+        >
+          {index + 1}
+        </div>
       </div>
     </div>
   )

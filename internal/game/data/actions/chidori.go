@@ -14,7 +14,7 @@ func MakeChidori() game.Action {
 	power := 80
 	recoil := 0.2
 	nature := game.NsLightning
-	stat := game.Jutsu
+	stat := game.ChakraAttack
 	config := game.ActionConfig{
 		Name:     "Chidori",
 		Nature:   &nature,

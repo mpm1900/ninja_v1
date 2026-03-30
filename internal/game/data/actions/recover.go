@@ -26,7 +26,7 @@ func MakeRecover() game.Action {
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.ComposeAF(game.ActiveFilter),
 		ContextValidate: game.TargetLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseChakraSource(chakraCost),
+		Cost:            mutations.UseStaminaSource(chakraCost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter:   game.SourceIsAlive,

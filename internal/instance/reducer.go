@@ -81,6 +81,18 @@ func Reducer(instance *Instance, request Request) int {
 		}
 
 		return state
+	case RemoveAction:
+		if request.Context.ActionID == nil {
+			fmt.Println("no context action_ID")
+			return none
+		}
+
+		instance.Game.Actions = slices.DeleteFunc(instance.Game.Actions, func(tx game.Transaction[game.Action]) bool {
+			return tx.ID == *request.Context.ActionID
+		})
+
+		return state
+
 	case ResolvePrompt:
 		if request.PromptID == nil {
 			return none
