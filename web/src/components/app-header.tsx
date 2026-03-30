@@ -16,6 +16,7 @@ import { GiNinjaHead } from 'react-icons/gi'
 import { useLogout } from '#/lib/mutations/logout'
 import { useUser } from '#/lib/queries/auth'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
+import { Badge } from './ui/badge'
 
 function AppHeader() {
   const { data: user } = useUser()
@@ -28,7 +29,6 @@ function AppHeader() {
     select: (state) => state.location.pathname,
   })
   const activeTab = pathname === '/battle' ? 'battle' : 'setup'
-  console.log(game.active_context)
   return (
     <header className="flex justify-between p-2">
       <div className="flex items-center gap-2">
@@ -65,6 +65,7 @@ function AppHeader() {
           </TabsList>
         </Tabs>
         {game.turn.count}
+        <Badge>{game.turn.phase}</Badge>
         {client && (
           <div className="flex gap-2">
             <Button

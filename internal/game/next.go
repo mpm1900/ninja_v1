@@ -63,6 +63,20 @@ func (g *Game) Validate() bool {
 	return valid
 }
 
+func (g *Game) NextPhase() {
+	switch g.Turn.Phase {
+	case TurnInit, TurnStart:
+		g.Turn.Phase = TurnMain
+	case TurnMain:
+		g.Turn.Phase = TurnEnd
+	case TurnEnd:
+		g.Turn.Phase = TurnCleanup
+	case TurnCleanup:
+		// Keep cleanup stable so callers can run end-of-turn bookkeeping once
+		// without immediately wrapping back to main in the same loop tick.
+	}
+}
+
 func (g *Game) NextTransaction() bool {
 	transaction, err := g.Transactions.Dequeue()
 	if err != nil {
@@ -133,6 +147,8 @@ func (g *Game) Next() bool {
 	if g.NextAction() {
 		return true
 	}
+
+	g.NextPhase()
 
 	return false
 }

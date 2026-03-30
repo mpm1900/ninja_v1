@@ -2,6 +2,7 @@ package instance
 
 import (
 	"context"
+	"fmt"
 	"maps"
 	"ninja_v1/internal/game"
 	"slices"
@@ -124,20 +125,58 @@ func (i *Instance) RunGameActions() {
 		i.Game.Status = game.GameStatusRunning
 		i.BroadcastGame()
 
-		time.Sleep(time.Second / 2)
-		for i.Game.Next() {
-			i.BroadcastGame()
+	resolveStep:
+		for {
+			fmt.Println(i.Game.Turn.Phase)
 			time.Sleep(time.Second / 2)
+
+			for i.Game.Next() {
+				i.BroadcastGame()
+				time.Sleep(time.Second / 2)
+			}
+
+			if len(i.Game.Prompts) > 0 {
+				break resolveStep
+			}
+
+			switch i.Game.Turn.Phase {
+			case game.TurnMain:
+				// Main is complete for this run, proceed to End.
+				i.Game.NextPhase()
+				i.BroadcastGame()
+				continue
+
+			case game.TurnEnd:
+				// Queue and resolve end-of-turn triggers.
+				i.Game.On(game.OnTurnEnd, game.NewContext())
+				for i.Game.Next() {
+					i.BroadcastGame()
+					time.Sleep(time.Second / 2)
+				}
+
+				if len(i.Game.Prompts) > 0 {
+					break resolveStep
+				}
+
+				// End is complete, proceed to Cleanup.
+				i.Game.NextPhase()
+				i.BroadcastGame()
+				continue
+
+			case game.TurnCleanup:
+				// Cleanup is complete, advance turn and reset to Main.
+				i.Game.NextTurn()
+				i.Game.Turn.Phase = game.TurnMain
+				i.BroadcastGame()
+				break resolveStep
+
+			default:
+				// Recover unknown/setup phases by moving toward Main.
+				i.Game.NextPhase()
+				i.BroadcastGame()
+			}
 		}
 
-		i.Game.On(game.OnTurnEnd, game.NewContext())
-
-		for i.Game.Next() {
-			i.BroadcastGame()
-			time.Sleep(time.Second / 2)
-		}
-
-		i.Game.NextTurn()
 		i.Game.Status = game.GameStatusIdle
 		i.BroadcastGame()
 	}()
