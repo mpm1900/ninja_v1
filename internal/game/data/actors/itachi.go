@@ -18,7 +18,7 @@ var Itachi = game.ActorDef{
 		game.StatHP:            65,
 		game.StatStamina:       80,
 		game.StatAttack:        95,
-		game.StatDefense:       80,
+		game.StatDefense:       70,
 		game.StatChakraAttack:  150,
 		game.StatChakraDefense: 130,
 		game.StatSpeed:         130,

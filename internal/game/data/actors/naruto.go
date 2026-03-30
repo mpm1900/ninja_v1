@@ -17,7 +17,7 @@ var Naruto = game.ActorDef{
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            105,
 		game.StatStamina:       130,
-		game.StatAttack:        100,
+		game.StatAttack:        90,
 		game.StatDefense:       80,
 		game.StatChakraAttack:  105,
 		game.StatChakraDefense: 105,

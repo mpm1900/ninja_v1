@@ -20,7 +20,7 @@ var Shisui = game.ActorDef{
 		game.StatAttack:        90,
 		game.StatDefense:       90,
 		game.StatChakraAttack:  155,
-		game.StatChakraDefense: 120,
+		game.StatChakraDefense: 112,
 		game.StatSpeed:         124,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
