@@ -109,11 +109,16 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 					}
 				}
 
+				defense := game.Defense
+				if *action.Stat == game.Jutsu {
+					defense = game.JutsuDefense
+				}
+
 				damages := game.GetDamage(
 					source,
 					[]game.ResolvedActor{target},
 					*action.Stat,
-					*action.Stat, // TODO defense stat
+					defense,
 					*action.Power,
 					config.Critical,
 					action.Nature,

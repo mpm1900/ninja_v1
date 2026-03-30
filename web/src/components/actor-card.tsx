@@ -4,7 +4,6 @@ import type { Game } from '#/lib/game/game'
 import { natureIndexes, type NatureSet } from '#/lib/game/nature'
 import { cn } from '#/lib/utils'
 import { cva } from 'class-variance-authority'
-import { ActorStat } from './actor-stat'
 import { HealthBar } from './health-bar'
 import { NatureBadge } from './nature-badge'
 import { Item, ItemActions, ItemContent, ItemTitle } from './ui/item'
@@ -12,7 +11,7 @@ import { Item, ItemActions, ItemContent, ItemTitle } from './ui/item'
 const actorVariants = cva(
   cn(
     'group/item flex flex-wrap items-center rounded-md border text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50',
-    'px-2 pb-0 pt-2 w-80 border-transparent cursor-pointer',
+    'p-2 w-80 border-transparent cursor-pointer',
     'border-black border-2'
   ),
   {
@@ -45,12 +44,6 @@ function ActorCard({
   const modifiers = (game.modifiers ?? [])
     .map((m) => m.mutation)
     .concat(actor?.innate_modifiers ?? [])
-  const HpIcon = STAT_ICONS.hp
-  const ChakraIcon = STAT_ICONS.chakra
-  const SpeedIcon = STAT_ICONS.speed
-  const NinjutsuIcon = STAT_ICONS.ninjutsu
-  const GenjutsuIcon = STAT_ICONS.genjutsu
-  const Taijutsu = STAT_ICONS.taijutsu
 
   return (
     <div className={cn('flex flex-col', className)}>
@@ -97,34 +90,6 @@ function ActorCard({
           )}
           <div className="space-y-2">
             {actor && <HealthBar actor={actor} selected={selected} />}
-            {actor && (
-              <div className="grid grid-cols-3 lg:grid-cols-6 space-x-2 hidden">
-                <div className="flex items-center gap-2 justify-center">
-                  {HpIcon && <HpIcon />}
-                  <ActorStat actor={actor} stat="hp" showBase={false} />
-                </div>
-                <div className="flex items-center gap-2 justify-center">
-                  {ChakraIcon && <ChakraIcon />}
-                  <ActorStat actor={actor} stat="chakra" showBase={false} />
-                </div>
-                <div className="flex items-center gap-2 justify-center">
-                  {SpeedIcon && <SpeedIcon />}
-                  <ActorStat actor={actor} stat="speed" showBase={false} />
-                </div>
-                <div className="flex items-center gap-2 justify-center">
-                  {NinjutsuIcon && <NinjutsuIcon />}
-                  <ActorStat actor={actor} stat="ninjutsu" showBase={false} />
-                </div>
-                <div className="flex items-center gap-2 justify-center">
-                  {GenjutsuIcon && <GenjutsuIcon />}
-                  <ActorStat actor={actor} stat="genjutsu" showBase={false} />
-                </div>
-                <div className="flex items-center gap-2 justify-center">
-                  {Taijutsu && <Taijutsu />}
-                  <ActorStat actor={actor} stat="taijutsu" showBase={false} />
-                </div>
-              </div>
-            )}
           </div>
         </ItemContent>
       </div>

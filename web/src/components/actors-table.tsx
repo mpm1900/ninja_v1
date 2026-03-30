@@ -73,7 +73,7 @@ const columns = [
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        hp
+        HP
       </Button>
     ),
     cell: (props) => <ActorStatBase actor={props.row.original} stat="hp" />,
@@ -86,7 +86,7 @@ const columns = [
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        chakra
+        Chakra
       </Button>
     ),
     cell: (props) => <ActorStatBase actor={props.row.original} stat="chakra" />,
@@ -98,51 +98,65 @@ const columns = [
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        speed
+        Speed
       </Button>
     ),
     cell: (props) => <ActorStatBase actor={props.row.original} stat="speed" />,
   }),
-  helper.accessor('stats.ninjutsu', {
+  helper.accessor('stats.attack', {
     header: ({ column }) => (
       <Button
         className="-ml-4"
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        <StatBadge stat="ninjutsu" />
+        Attack
       </Button>
     ),
     cell: (props) => (
-      <ActorStatBase actor={props.row.original} stat="ninjutsu" />
+      <ActorStatBase actor={props.row.original} stat="attack" />
     ),
   }),
-  helper.accessor('stats.genjutsu', {
+  helper.accessor('stats.defense', {
     header: ({ column }) => (
       <Button
         className="-ml-4"
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        <StatBadge stat="genjutsu" />
+        Defense
       </Button>
     ),
     cell: (props) => (
-      <ActorStatBase actor={props.row.original} stat="genjutsu" />
+      <ActorStatBase actor={props.row.original} stat="defense" />
     ),
   }),
-  helper.accessor('stats.taijutsu', {
+  helper.accessor('stats.jutsu', {
     header: ({ column }) => (
       <Button
         className="-ml-4"
         variant="ghost"
         onClick={() => column.toggleSorting()}
       >
-        <StatBadge stat="taijutsu" />
+        Jutsu
       </Button>
     ),
     cell: (props) => (
-      <ActorStatBase actor={props.row.original} stat="taijutsu" />
+      <ActorStatBase actor={props.row.original} stat="jutsu" />
+    ),
+  }),
+  helper.accessor('stats.jutsu_defense', {
+    header: ({ column }) => (
+      <Button
+        className="-ml-4"
+        variant="ghost"
+        onClick={() => column.toggleSorting()}
+      >
+        J. Defense
+      </Button>
+    ),
+    cell: (props) => (
+      <ActorStatBase actor={props.row.original} stat="jutsu_defense" />
     ),
   }),
   helper.accessor((a) => getTotalBaseStats(a), {

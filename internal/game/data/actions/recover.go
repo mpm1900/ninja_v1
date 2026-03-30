@@ -11,13 +11,11 @@ var Recover = MakeRecover()
 
 func MakeRecover() game.Action {
 	nature := game.NsYang
-	stat := game.AttackNinjutsu
 	targetCount := 1
 	chakraCost := 30
 	config := game.ActionConfig{
 		Name:        "Recover",
 		Nature:      &nature,
-		Stat:        &stat,
 		TargetCount: &targetCount,
 		Cost:        &chakraCost,
 	}

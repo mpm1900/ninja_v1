@@ -89,7 +89,7 @@ func GetDamage(
 	source ResolvedActor,
 	targets []ResolvedActor,
 	attack AttackStat,
-	defense AttackStat,
+	defense DefenseStat,
 	power int,
 	critical float64,
 	nature *NatureSet,
@@ -101,12 +101,12 @@ func GetDamage(
 	}
 
 	a_base := float64(source.Stats[BaseStat(attack)])
-	a_mod := source.AttackModifiers[attack]
+	a_mod := 1.0
 	attack_value := int(math.Floor(a_base * a_mod))
 
 	for i, target := range targets {
 		d_base := float64(target.Stats[BaseStat(defense)])
-		d_mod := target.DefenseModifiers[defense]
+		d_mod := 1.0
 		defense_value := int(math.Floor(d_base * d_mod))
 
 		var natures []Nature

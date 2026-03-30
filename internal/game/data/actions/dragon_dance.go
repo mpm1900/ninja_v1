@@ -11,10 +11,8 @@ import (
 var DragonDance = MakeDragonDance()
 
 func MakeDragonDance() game.Action {
-	stat := game.AttackGenjutsu
 	config := game.ActionConfig{
 		Name: "Dragon Dance",
-		Stat: &stat,
 	}
 	return game.Action{
 		ID:              uuid.New(),
@@ -27,7 +25,7 @@ func MakeDragonDance() game.Action {
 			Filter:   game.AllGameFilter,
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
-				tju := modifiers.TaijutsuUpSource
+				tju := modifiers.AttackUpSource
 				su := modifiers.SpeedUpSource
 
 				modifiers := []game.Modifier{

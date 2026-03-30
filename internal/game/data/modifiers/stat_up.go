@@ -44,11 +44,11 @@ func MakeStatUpAll(stat game.BaseStat, name string, groupID uuid.UUID) game.Modi
 	return modifier
 }
 
-var GenjutsuUpID = uuid.New()
-var SpeedUpId = uuid.New()
-var TaijutsuUpID = uuid.New()
+var AttackUpID = uuid.New()
+var JutsuUpID = uuid.New()
+var SpeedUpID = uuid.New()
 
-var GenjutsuUpSource = MakeStatUpSource(game.StatGenjutsu, "Genjutsu Up", GenjutsuUpID)
-var SpeedUpSource = MakeStatUpSource(game.StatSpeed, "Speed Up", SpeedUpId)
-var SpeedUpAll = MakeStatUpAll(game.StatSpeed, "Speed Up", SpeedUpId)
-var TaijutsuUpSource = MakeStatUpSource(game.StatTaijutsu, "Taijutsu Up", TaijutsuUpID)
+var AttackUpSource = MakeStatUpSource(game.StatAttack, "Attack Up", AttackUpID)
+var JutsuUpSource = MakeStatUpSource(game.StatJutsu, "Jutsu Up", JutsuUpID)
+var SpeedUpSource = MakeStatUpSource(game.StatSpeed, "Speed Up", SpeedUpID)
+var SpeedUpAll = MakeStatUpAll(game.StatSpeed, "Speed Up", SpeedUpID)

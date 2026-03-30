@@ -29,7 +29,7 @@ var RageTrigger game.Trigger = game.Trigger{
 				SourceActorID:  &target.ID,
 				ParentActorID:  &target.ID,
 			}
-			mutation := game_mutations.AddModifiers(TaijutsuUpSource)
+			mutation := game_mutations.AddModifiers(AttackUpSource)
 			transaction := game.MakeTransaction(mutation, mut_ctx)
 			transactions = append(transactions, transaction)
 

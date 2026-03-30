@@ -2,10 +2,12 @@ import type { Action } from './action'
 import type { Modifier } from './modifier'
 import type { Nature, NatureSet } from './nature'
 
-type ActorAttackStat = 'genjutsu' | 'ninjutsu' | 'taijutsu'
+type ActorAttackStat = 'attack' | 'jutsu'
+type ActorDefenseStat = 'defense' | 'jutsu_defense'
 
 type ActorBaseStat =
   | ActorAttackStat
+  | ActorDefenseStat
   | 'accuracy'
   | 'evasion'
   | 'hp'
@@ -52,7 +54,7 @@ type Actor = ActorDef &
     action_cooldowns: Record<string, number>
   }
 
-const statNames: Record<ActorAttackStat, string> = {
+const statNames: Record<string, string> = {
   genjutsu: '幻',
   ninjutsu: '忍',
   taijutsu: '体',
@@ -70,7 +72,7 @@ function getTotalBaseStats(actor: ActorDef) {
     accuracy: 0,
     evasion: 0,
   }
-  return Object.values(stats).reduce((p, c) => p + c, 0)
+  return Math.floor(Object.values(stats).reduce((p, c) => p + c, 0) * 6 / 7)
 }
 
 export type { ActorDef, Actor, ActorAttackStat, ActorBaseStat }

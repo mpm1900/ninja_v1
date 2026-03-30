@@ -12,22 +12,29 @@ import (
 type AttackStat string
 
 const (
-	AttackNinjutsu AttackStat = "ninjutsu"
-	AttackGenjutsu AttackStat = "genjutsu"
-	AttackTaijutsu AttackStat = "taijutsu"
+	Attack AttackStat = "attack"
+	Jutsu  AttackStat = "jutsu"
+)
+
+type DefenseStat string
+
+const (
+	Defense      DefenseStat = "defense"
+	JutsuDefense DefenseStat = "jutsu_defense"
 )
 
 type BaseStat string
 
 const (
-	StatHP       BaseStat = "hp"
-	StatChakra   BaseStat = "chakra"
-	StatNinjutsu BaseStat = BaseStat(AttackNinjutsu)
-	StatGenjutsu BaseStat = BaseStat(AttackGenjutsu)
-	StatTaijutsu BaseStat = BaseStat(AttackTaijutsu)
-	StatSpeed    BaseStat = "speed"
-	StatEvasion  BaseStat = "evasion"
-	StatAccuracy BaseStat = "accuracy"
+	StatHP           BaseStat = "hp"
+	StatChakra       BaseStat = "chakra"
+	StatAttack       BaseStat = BaseStat(Attack)
+	StatDefense      BaseStat = BaseStat(Defense)
+	StatJutsu        BaseStat = BaseStat(Jutsu)
+	StatJutsuDefense BaseStat = BaseStat(JutsuDefense)
+	StatSpeed        BaseStat = "speed"
+	StatEvasion      BaseStat = "evasion"
+	StatAccuracy     BaseStat = "accuracy"
 )
 
 const (
@@ -91,9 +98,7 @@ type Actor struct {
 	Level      int       `json:"level"`
 	Experience int       `json:"experience"`
 
-	Stages           map[BaseStat]int       `json:"staged_stats"`
-	AttackModifiers  map[AttackStat]float64 `json:"attack_modifiers"`
-	DefenseModifiers map[AttackStat]float64 `json:"defense_modifiers"`
+	Stages map[BaseStat]int `json:"staged_stats"`
 
 	Actions         []Action          `json:"actions"`
 	ActionCooldowns map[uuid.UUID]int `json:"action_cooldowns"`
@@ -154,24 +159,15 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uui
 			Reflect:    0.0,
 		},
 		Stages: map[BaseStat]int{
-			StatHP:       0,
-			StatChakra:   0,
-			StatNinjutsu: 0,
-			StatGenjutsu: 0,
-			StatTaijutsu: 0,
-			StatSpeed:    0,
-			StatEvasion:  0,
-			StatAccuracy: 0,
-		},
-		AttackModifiers: map[AttackStat]float64{
-			AttackGenjutsu: 1,
-			AttackNinjutsu: 1,
-			AttackTaijutsu: 1,
-		},
-		DefenseModifiers: map[AttackStat]float64{
-			AttackGenjutsu: 1,
-			AttackNinjutsu: 1,
-			AttackTaijutsu: 1,
+			StatHP:           0,
+			StatChakra:       0,
+			StatAttack:       0,
+			StatDefense:      0,
+			StatJutsu:        0,
+			StatJutsuDefense: 0,
+			StatSpeed:        0,
+			StatEvasion:      0,
+			StatAccuracy:     0,
 		},
 		Actions:         actions,
 		ActionCooldowns: map[uuid.UUID]int{},
@@ -193,7 +189,7 @@ func (a *Actor) DecrementCooldowns() {
 func (a *Actor) RecoverChakra(g Game, ratio float64) {
 	resolved := a.Resolve(g)
 	amount := int(math.Floor(float64(resolved.Stats[StatChakra]) * ratio))
-	a.ChakraDamage = max(a.ChakraDamage - amount, 0)
+	a.ChakraDamage = max(a.ChakraDamage-amount, 0)
 }
 
 func resolve(actor Actor, pre Actor) ResolvedActor {
@@ -227,9 +223,10 @@ func MapBaseStats(actor Actor) Actor {
 	actor.MapResource(StatHP)
 	actor.MapResource(StatChakra)
 
-	actor.MapBase(StatNinjutsu)
-	actor.MapBase(StatGenjutsu)
-	actor.MapBase(StatTaijutsu)
+	actor.MapBase(StatAttack)
+	actor.MapBase(StatDefense)
+	actor.MapBase(StatJutsu)
+	actor.MapBase(StatJutsuDefense)
 	actor.MapBase(StatSpeed)
 
 	return actor
@@ -252,9 +249,10 @@ func (actor *Actor) MapStaged(stat BaseStat, mod int) {
 }
 
 func MapStagedStats(actor Actor) Actor {
-	actor.MapStaged(StatNinjutsu, 2)
-	actor.MapStaged(StatGenjutsu, 2)
-	actor.MapStaged(StatTaijutsu, 2)
+	actor.MapStaged(StatAttack, 2)
+	actor.MapStaged(StatDefense, 2)
+	actor.MapStaged(StatJutsu, 2)
+	actor.MapStaged(StatJutsuDefense, 2)
 	actor.MapStaged(StatSpeed, 2)
 	actor.MapStaged(StatEvasion, 3)
 	actor.MapStaged(StatAccuracy, 3)

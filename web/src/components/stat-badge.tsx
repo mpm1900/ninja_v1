@@ -9,10 +9,8 @@ type t = Record<string, Partial<Record<ActorAttackStat | 'none', ClassValue>>>
 const variants = cva<t>('py-0.5 px-1 mx-px border border-black rounded', {
   variants: {
     variant: {
-      genjutsu: 'shadow-[inset_0_0_0_1px_theme(colors.rose.900)] text-rose-400',
-      ninjutsu: 'shadow-[inset_0_0_0_1px_theme(colors.sky.900)] text-sky-400',
-      taijutsu:
-        'shadow-[inset_0_0_0_1px_theme(colors.emerald.900)] text-emerald-400',
+      attack: 'shadow-[inset_0_0_0_1px_theme(colors.orange.900)] text-orange-400',
+      jutsu: 'shadow-[inset_0_0_0_1px_theme(colors.indigo.900)] text-indigo-400',
     },
   },
 })
@@ -34,7 +32,8 @@ function StatBadge({
           className={cn(variants({ variant: stat }), className)}
           {...props}
         >
-          {statNames[stat]}術
+          {stat === 'attack' && 'ATK'}
+          {stat === 'jutsu' && 'JSU'}
         </span>
       </TooltipTrigger>
       <TooltipContent {...contentProps}>{stat}</TooltipContent>

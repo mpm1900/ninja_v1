@@ -9,9 +9,8 @@ function StatBar({ action }: { action: Action }) {
   return (
     <div
       className={cn('', {
-        'text-rose-400': stat === 'genjutsu',
-        'text-sky-400': stat === 'ninjutsu',
-        'text-emerald-400': stat === 'taijutsu',
+        'text-sky-400': stat === 'jutsu',
+        'text-emerald-400': stat === 'attack',
       })}
     >
       <div>
@@ -31,7 +30,11 @@ function ActionCard({
   return (
     <div
       className={cn(
-        'p-2 border border-foreground/20 bg-input/40 rounded-lg w-[240px] h-[360px]',
+        'p-2 border-4 border-neutral-600 bg-input/40 rounded-lg w-[240px] h-[360px]',
+        {
+          'border-green-700': action.config.stat === 'attack',
+          'border-cyan-600': action.config.stat === 'jutsu'
+        },
         className
       )}
       {...props}
@@ -46,7 +49,7 @@ function ActionCard({
           <div>{action.config.name}</div>
         </div>
         <div>
-          <div className="bg-sky-300/40 size-7 font-black grid place-items-center text-xs rounded-full border border-black shadow-[inset_0_0_0_1px_theme(colors.neutral.400)] ">
+          <div className="bg-orange-400/70 size-7 font-black grid place-items-center text-xs rounded-full border border-black text-shadow-[1px_1px_0px_#000000] shadow-[inset_0_0_0_1px_theme(colors.neutral.400)] ">
             {action.config.cost ?? 0}
           </div>
         </div>

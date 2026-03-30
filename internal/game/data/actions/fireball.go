@@ -14,7 +14,7 @@ func MakeFireball() game.Action {
 	accuracy := 50
 	power := 50
 	nature := game.NsFire
-	stat := game.AttackNinjutsu
+	stat := game.Jutsu
 	targetCount := 1
 	chakraCost := 30
 	cooldown := 1
