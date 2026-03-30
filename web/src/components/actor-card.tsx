@@ -13,7 +13,7 @@ const actorVariants = cva(
   cn(
     'group/item flex flex-wrap items-center rounded-md border text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50',
     'px-2 pb-0 pt-2 w-80 border-transparent cursor-pointer',
-    ''
+    'border-black border-2'
   ),
   {
     variants: {

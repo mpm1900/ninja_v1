@@ -1,7 +1,13 @@
 import type { Actor } from '#/lib/game/actor'
 import { cn } from '#/lib/utils'
+import type { ComponentProps } from 'react'
 
-function ActorThumbnail({ actor, index }: { actor: Actor; index: number }) {
+function ActorThumbnail({
+  actor,
+  index,
+  className,
+  ...props
+}: ComponentProps<'div'> & { actor: Actor; index: number }) {
   const active = !!actor.position_ID
   return (
     <div
@@ -10,8 +16,10 @@ function ActorThumbnail({ actor, index }: { actor: Actor; index: number }) {
         'h-18 w-18 overflow-hidden bg-card p-1 border rounded relative',
         {
           'bg-foreground': active,
-        }
+        },
+        className
       )}
+      {...props}
     >
       <img
         src={actor.sprite_url}

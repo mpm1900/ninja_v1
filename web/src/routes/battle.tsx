@@ -6,6 +6,7 @@ import { PlayerPositions } from '#/components/player-positions'
 import { PromptController } from '#/components/prompt-controller'
 import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
+import { cn } from '#/lib/utils'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useStore } from '@tanstack/react-store'
 import { useState } from 'react'
@@ -47,7 +48,14 @@ function RouteComponent() {
                     {game.actors
                       .filter((a) => a.player_ID === player.ID)
                       .map((a, i) => (
-                        <ActorThumbnail key={a.ID} actor={a} index={i} />
+                        <ActorThumbnail
+                          key={a.ID}
+                          actor={a}
+                          index={i}
+                          className={cn({
+                            'opacity-70': !a.position_ID,
+                          })}
+                        />
                       ))}
                   </div>
                 ))}
@@ -89,7 +97,14 @@ function RouteComponent() {
                     {game.actors
                       .filter((a) => a.player_ID === player.ID)
                       .map((a, i) => (
-                        <ActorThumbnail key={a.ID} actor={a} index={i} />
+                        <ActorThumbnail
+                          key={a.ID}
+                          actor={a}
+                          index={i}
+                          className={cn({
+                            'opacity-40': !a.position_ID,
+                          })}
+                        />
                       ))}
                   </div>
                 ))}
