@@ -15,6 +15,7 @@ import { PositionSelect } from './position-select'
 import type { Actor } from '#/lib/game/actor'
 import { ActionsTable } from './actions-table'
 import { useGameContext } from '#/hooks/use-game-context'
+import { ActorStat } from './actor-stat'
 
 function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
   const client = useStore(clientsStore, (c) => c.me!)
@@ -36,43 +37,23 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <Select
-                disabled={!enabled}
-                value={actor.player_ID}
-                onValueChange={(playerID) => {
-                  sendContextMessage({
-                    type: 'set-actor-player',
-                    client_ID: client.ID,
-                    context: {
-                      action_ID: null,
-                      source_player_ID: playerID,
-                      source_actor_ID: null,
-                      parent_actor_ID: null,
-                      target_actor_IDs: [actor.ID],
-                      target_position_IDs: [],
-                    },
-                  })
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue>
-                    {game.players.find((p) => p.ID == actor.player_ID)?.user
-                      .email ?? (
-                      <span className="text-red-300">{actor.player_ID}</span>
-                    )}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {game.players.map((item) => (
-                    <SelectItem key={item.ID} value={item.ID}>
-                      {item.user.username || item.user.email}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
               <PositionSelect actor={actor} game={game} />
             </div>
-            <div>stats here</div>
+            <table>
+              <tbody>
+                {Object.keys(actor.stats).map((key) => (
+                  <tr key={key}>
+                    <td className='text-muted-foreground'>{key}:{' '}</td>
+                    <td>
+                      <ActorStat
+                        actor={actor}
+                        showBase
+                        stat={key as keyof typeof actor.stats}
+                      />
+                    </td>
+                  </tr>
+                ))}</tbody>
+            </table>
           </div>
         </CardContent>
       </div>

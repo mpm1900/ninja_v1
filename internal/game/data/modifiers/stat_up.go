@@ -38,6 +38,12 @@ func MakeStatUpSource(stat game.ActorStat, name string, groupID uuid.UUID) game.
 	return modifier
 }
 
+func MakeStatUpTeam(stat game.ActorStat, name string, groupID uuid.UUID) game.Modifier {
+	modifier := NewStageDelta(stat, groupID, game.ComposeAF(game.ActiveFilter, game.TeamFilter), game.MutPriorityDefault, 1)
+	modifier.Name = name
+	return modifier
+}
+
 func MakeStatUpAll(stat game.ActorStat, name string, groupID uuid.UUID) game.Modifier {
 	modifier := NewStageDelta(stat, groupID, game.ActiveFilter, game.MutPriorityDefault, 1)
 	modifier.Name = name
@@ -51,4 +57,5 @@ var SpeedUpID = uuid.New()
 var AttackUpSource = MakeStatUpSource(game.StatAttack, "Attack Up", AttackUpID)
 var JutsuUpSource = MakeStatUpSource(game.ActorStat(game.ChakraAttack), "Chakra Attack Up", JutsuUpID)
 var SpeedUpSource = MakeStatUpSource(game.StatSpeed, "Speed Up", SpeedUpID)
+var SpeedUpTeam = MakeStatUpTeam(game.StatSpeed, "Speed Up", SpeedUpID)
 var SpeedUpAll = MakeStatUpAll(game.StatSpeed, "Speed Up", SpeedUpID)

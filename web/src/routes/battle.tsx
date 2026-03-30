@@ -1,6 +1,7 @@
 import { ActorThumbnail } from '#/components/actor-thumbnail'
 import { AppHeader } from '#/components/app-header'
 import { BattleActions } from '#/components/battle-actions'
+import { BattleContextController } from '#/components/battle-context-controller'
 import { PlayerPositions } from '#/components/player-positions'
 import { PromptController } from '#/components/prompt-controller'
 import { battleContext, setContextSource } from '#/lib/stores/battle-context'
@@ -28,6 +29,7 @@ function RouteComponent() {
   return (
     <>
       <PromptController />
+      <BattleContextController />
       <main className="flex flex-col h-screen">
         <AppHeader />
         <div className="flex flex-col flex-1 relative overflow-auto">

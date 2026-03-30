@@ -47,7 +47,7 @@ function ActorStat({
         {actor.stats[stat]}
       </span>
       {showBase && (
-        <span className="text-muted-foreground">
+        <span className="text-muted-foreground/60">
           {' '}
           ({actor.base_stats[stat]})
         </span>
