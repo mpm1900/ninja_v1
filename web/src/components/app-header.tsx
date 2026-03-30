@@ -31,7 +31,7 @@ function AppHeader() {
   return (
     <header className="flex justify-between p-2">
       <div className="flex items-center gap-2">
-        <Link to="/">
+        <Link to="/" className='pl-2'>
           <GiNinjaHead />
         </Link>
         <div className="flex items-center">

@@ -43,14 +43,16 @@ function InstanceCombobox({
         render={
           <Button
             variant="outline"
-            className="min-w-80 justify-start font-normal font-mono"
+            className={cn("min-w-80 justify-start font-normal font-mono", {
+              'text-destructive': !value
+            })}
           >
             {icon}
-            <ComboboxValue placeholder="NOT_CONNECTED" />
+            <ComboboxValue placeholder='NOT CONNECTED' />
           </Button>
         }
       />
-      <ComboboxContent>
+      < ComboboxContent >
         <ComboboxInput showTrigger={false} placeholder="Search" />
         <ComboboxEmpty>No items found.</ComboboxEmpty>
         <ComboboxList>
@@ -66,8 +68,8 @@ function InstanceCombobox({
             </ComboboxItem>
           )}
         </ComboboxList>
-      </ComboboxContent>
-    </Combobox>
+      </ComboboxContent >
+    </Combobox >
   )
 }
 

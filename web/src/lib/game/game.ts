@@ -4,7 +4,7 @@ import type { ModifierTransaction } from './modifier'
 import type { Player } from './player'
 
 type Game = {
-  status: 'idle' | 'running' | 'waiting'
+  status: 'init' | 'idle' | 'running' | 'waiting'
   actors: Actor[]
   modifiers: ModifierTransaction[]
   players: Player[]
