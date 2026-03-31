@@ -306,14 +306,7 @@ func (g *Game) SetActionCooldown(actorID uuid.UUID, actionID uuid.UUID, cooldown
 	})
 }
 
-func (g *Game) PushAction(transaction Transaction[Action]) bool {
-	for _, t := range g.Actions {
-		if *t.Context.SourceActorID == *transaction.Context.SourceActorID {
-			return false
-		}
-	}
-
-	g.Actions.Enqueue(transaction)
+func (g *Game) SortActions() {
 	slices.SortFunc(g.Actions, func(a, b Transaction[Action]) int {
 		if a.Mutation.Priority != b.Mutation.Priority {
 			return b.Mutation.Priority - a.Mutation.Priority
@@ -332,6 +325,17 @@ func (g *Game) PushAction(transaction Transaction[Action]) bool {
 		b_res := b_source.Resolve(*g)
 		return b_res.Stats[StatSpeed] - a_res.Stats[StatSpeed]
 	})
+}
+
+func (g *Game) PushAction(transaction Transaction[Action]) bool {
+	for _, t := range g.Actions {
+		if *t.Context.SourceActorID == *transaction.Context.SourceActorID {
+			return false
+		}
+	}
+
+	g.Actions.Enqueue(transaction)
+	g.SortActions()
 
 	if len(g.Actions) == len(g.GetActionableActors()) {
 		return true

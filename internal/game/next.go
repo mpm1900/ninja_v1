@@ -93,12 +93,17 @@ func (g *Game) NextTransaction() bool {
 }
 
 func (g *Game) NextAction() bool {
+	g.SortActions()
 	transaction, err := g.Actions.Dequeue()
-	g.ActiveContext = &transaction.Context
-
 	if err != nil {
 		g.ActiveContext = nil
 		return false
+	}
+
+	g.ActiveContext = &transaction.Context
+	if transaction.Mutation.MapContext != nil {
+		c := transaction.Mutation.MapContext(*g, *g.ActiveContext)
+		g.ActiveContext = &c
 	}
 
 	g.RunAction(transaction)

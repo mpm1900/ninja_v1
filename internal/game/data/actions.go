@@ -14,6 +14,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	game.SwitchInIds[3]:    game.SwitchIn(3),
 	game.SwitchInIds[4]:    game.SwitchIn(4),
 	game.SwitchInIds[5]:    game.SwitchIn(5),
+	actions.FollowMe.ID:    actions.FollowMe,
 	actions.Protect.ID:     actions.Protect,
 	actions.Tailwind.ID:    actions.Tailwind,
 	actions.Surf.ID:        actions.Surf,

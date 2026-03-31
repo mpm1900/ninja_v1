@@ -25,10 +25,10 @@ const actorVariants = cva(
         enemy: '',
       },
       selected: {
-        selected: 'scale-110 bg-gray-700! border-gray-400',
+        selected: 'bg-gray-700! border-gray-400',
         // source: 'scale-105 bg-blue-900! border-blue-300/40',
-        targeted: 'scale-105 bg-red-900! border-red-300/40',
-        source: 'scale-110 bg-yellow-900! border-yellow-300/40',
+        targeted: 'bg-red-900! border-red-300/40',
+        source: 'bg-yellow-900! border-yellow-300/40',
       },
     },
     defaultVariants: {},

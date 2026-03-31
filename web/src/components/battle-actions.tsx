@@ -88,7 +88,7 @@ function BattleActions({ actor }: { actor: Actor }) {
                   damping: 50,
                   mass: 0.68,
                 }}
-                className="flex items-end -space-x-9 px-4"
+                className="flex items-end -space-x-9 px-4 transform-gpu"
               >
                 {actor.actions.map((a, i) => {
                   const selected = context.action_ID === a.ID
@@ -98,11 +98,16 @@ function BattleActions({ actor }: { actor: Actor }) {
                   return (
                     <motion.div
                       key={`${actor.ID}:${a.ID}`}
-                      layout
-                      className={cn('relative pointer-events-auto', {
-                        'pointer-events-none': !!queued && !selected,
-                      })}
-                      style={{ zIndex: selected ? 80 : 20 + i }}
+                      className={cn(
+                        'relative pointer-events-auto transform-gpu will-change-transform',
+                        {
+                          'pointer-events-none': !!queued && !selected,
+                        }
+                      )}
+                      style={{
+                        zIndex: selected ? 80 : 20 + i,
+                        willChange: 'transform',
+                      }}
                       initial={{ y: 12, scale: 0.985 }}
                       animate={{
                         y: selected ? -64 : 0,

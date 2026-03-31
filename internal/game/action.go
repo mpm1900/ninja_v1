@@ -8,11 +8,12 @@ import (
 )
 
 const (
-	ActionPrioritySwitch  = 10
-	ActionPriorityProtect = 4
-	ActionPriorityFast    = 1
-	ActionPriorityDefault = 0
-	ActionPrioritySlow    = -1
+	ActionPrioritySwitch   = 10
+	ActionPriorityProtect  = 4
+	ActionPriorityVeryFast = 2
+	ActionPriorityFast     = 1
+	ActionPriorityDefault  = 0
+	ActionPrioritySlow     = -1
 )
 
 type ActionJutsu string
@@ -67,12 +68,13 @@ type ActionMutation Mutation[Game, []Transaction[GameMutation]]
  */
 type Action struct {
 	ActionMutation
-	ID              uuid.UUID                 `json:"ID"`
-	Config          ActionConfig              `json:"config"`
-	TargetType      ActionTargetType          `json:"target_type"`
-	TargetPredicate func(Actor, Context) bool `json:"-"`
-	ContextValidate func(Context) bool        `json:"-"`
-	Cost            GameMutation              `json:"-"`
+	ID              uuid.UUID                   `json:"ID"`
+	Config          ActionConfig                `json:"config"`
+	TargetType      ActionTargetType            `json:"target_type"`
+	TargetPredicate func(Actor, Context) bool   `json:"-"`
+	ContextValidate func(Context) bool          `json:"-"`
+	MapContext      func(Game, Context) Context `json:"-"`
+	Cost            GameMutation                `json:"-"`
 }
 
 func ResolveAction(game *Game, transaction Transaction[Action]) []Transaction[GameMutation] {
@@ -89,7 +91,12 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []Transaction[Ga
 		)
 	}
 
-	return transaction.Mutation.Delta(*game, transaction.Context)
+	context := transaction.Context
+	if transaction.Mutation.MapContext != nil {
+		context = transaction.Mutation.MapContext(*game, context)
+	}
+
+	return transaction.Mutation.Delta(*game, context)
 }
 
 func GetAccuracy(game Game, source ResolvedActor, target ResolvedActor) float64 {

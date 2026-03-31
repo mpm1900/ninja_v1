@@ -16,7 +16,7 @@ function ActionCard({
   ...props
 }: ActionCardProps) {
   const accuracyLabel =
-    action.config.accuracy !== null && `${action.config.accuracy}%`
+    action.config.accuracy !== null ? `${action.config.accuracy}%` : '-'
 
   return (
     <button
@@ -60,22 +60,16 @@ function ActionCard({
           </div>
         </div>
 
-        <div className="text-orange-300 font-black nanum-brush-script-regular text-4xl -mt-0.5">
-          {action.config.cost ?? 0}
-        </div>
+        {action.config.cost && (
+          <div className="text-orange-300 font-black nanum-brush-script-regular text-4xl h-8 -mt-0.5">
+            {action.config.cost ?? 0}
+          </div>
+        )}
       </div>
 
       <div className="flex [&>*]:flex-1 text-[11px] border-t border-b bg-background">
-        {action.config.power && (
-          <StatChip label="Power" value={action.config.power} />
-        )}
-        {accuracyLabel && <StatChip label="Acc" value={accuracyLabel} />}
-        {action.config.cooldown && (
-          <StatChip label="Turns" value={action.config.cooldown} />
-        )}
-        {!!action.priority && (
-          <StatChip label="Speed" value={action.priority} />
-        )}
+        <StatChip label="Power" value={action.config.power ?? '-'} />
+        <StatChip label="Acc" value={accuracyLabel} />
       </div>
     </button>
   )

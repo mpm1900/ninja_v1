@@ -37,6 +37,13 @@ func MakeSurf() game.Action {
 		TargetPredicate: game.NoneFilter,
 		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
 		Cost:            mutations.UseStaminaSource(cost),
+		MapContext: func(g game.Game, context game.Context) game.Context {
+			other_team_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherTeamFilter))
+			for _, t := range other_team_actors {
+				context.TargetPositionIDs = append(context.TargetPositionIDs, *t.PositionID)
+			}
+			return context
+		},
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter: game.ComposeGF(
