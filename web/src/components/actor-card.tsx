@@ -26,9 +26,9 @@ const actorVariants = cva(
       },
       selected: {
         selected: 'scale-110 bg-gray-700! border-gray-400',
-        source: 'scale-105 bg-blue-900! border-blue-300/40',
-        targeted_damage: 'scale-105 bg-red-900! border-red-300/40',
-        targeted_buff: 'scale-105 bg-yellow-900! border-yellow-300/40',
+        // source: 'scale-105 bg-blue-900! border-blue-300/40',
+        targeted: 'scale-105 bg-red-900! border-red-300/40',
+        source: 'scale-110 bg-yellow-900! border-yellow-300/40',
       },
     },
     defaultVariants: {},
@@ -40,6 +40,7 @@ function ActorCard({
   client_ID,
   game,
   selected,
+  source,
   targeted,
   className,
   ...props
@@ -48,7 +49,8 @@ function ActorCard({
   client_ID?: string
   game: Game
   selected?: boolean
-  targeted?: boolean
+  targeted?: 'targeted'
+  source?: 'source'
 }) {
   const modifiers = (game.modifiers ?? [])
     .map((m) => m.mutation)
@@ -73,11 +75,7 @@ function ActorCard({
         className={actorVariants({
           className: cn(is_player && 'cursor-pointer', 'gap-2'),
           player: is_player ? 'player' : 'enemy',
-          selected: selected
-            ? 'selected'
-            : targeted
-              ? 'targeted_damage'
-              : undefined,
+          selected: selected ? 'selected' : source ? source : targeted,
         })}
         {...props}
       >
@@ -103,7 +101,7 @@ function ActorCard({
                   {actor.name}
                 </span>
               </ItemTitle>
-              {!action_tx || !is_player ? (
+              {!action_tx || !is_player || game.status === 'running' ? (
                 <ItemActions className="gap-0">
                   {(Object.keys(actor.natures) as Array<NatureSet>)
                     .sort((a, b) => natureIndexes[a] - natureIndexes[b])

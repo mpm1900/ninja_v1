@@ -4,6 +4,7 @@ import { ActorCard } from './actor-card'
 import { clientsStore } from '#/lib/stores/clients'
 import { Item } from './ui/item'
 import { cn } from '#/lib/utils'
+import { motion, AnimatePresence } from 'motion/react'
 
 function PlayerPositions({
   flip,
@@ -19,35 +20,62 @@ function PlayerPositions({
   const game = useStore(gameStore, (g) => g)
   const client = useStore(clientsStore, (c) => c.me)
   const player = game.players.find((p) => p.ID === player_ID)
+  const coef = flip ? -1 : 1
+  const target_IDs = game.active_context?.target_actor_IDs
+  const pos_IDs = game.active_context?.target_position_IDs
 
   if (!player) return null
 
   return (
     <div className="flex gap-8 py-4 px-4">
-      {player.positions.map((pos) => (
-        <div
-          key={pos.ID}
-          className={cn('flex items-end', flip && 'items-start')}
-        >
-          {pos.actor_ID ? (
-            <ActorCard
-              key={pos.ID}
-              actor={game.actors.find((a) => a.ID === pos.actor_ID)}
-              client_ID={client?.ID}
-              game={game}
-              selected={selected === pos.actor_ID}
-              onClick={() => onSelectedChange?.(pos.actor_ID ?? '')}
-              className={flip ? 'flex-col-reverse' : ''}
-            />
-          ) : (
-            <Item className="p-6 w-72">
-              <span className="text-center w-full text-muted-foreground">
-                Empty
-              </span>
-            </Item>
-          )}
-        </div>
-      ))}
+      {player.positions.map((pos) => {
+        const targeted =
+          target_IDs?.includes(pos.actor_ID ?? '') || pos_IDs?.includes(pos.ID)
+        return (
+          <div
+            key={pos.ID}
+            className={cn('flex items-end', flip && 'items-start')}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={pos.actor_ID ?? `empty:${pos.ID}`}
+                initial={{ y: 24 * coef, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 24 * coef, opacity: 0 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 520,
+                  damping: 36,
+                  mass: 0.6,
+                }}
+              >
+                {pos.actor_ID ? (
+                  <ActorCard
+                    actor={game.actors.find((a) => a.ID === pos.actor_ID)}
+                    client_ID={client?.ID}
+                    game={game}
+                    selected={selected === pos.actor_ID}
+                    source={
+                      game.active_context?.source_actor_ID === pos.actor_ID
+                        ? 'source'
+                        : undefined
+                    }
+                    targeted={targeted ? 'targeted' : undefined}
+                    onClick={() => onSelectedChange?.(pos.actor_ID ?? '')}
+                    className={flip ? 'flex-col-reverse' : ''}
+                  />
+                ) : (
+                  <Item className="p-6 w-86">
+                    <span className="text-center w-full text-muted-foreground">
+                      Empty
+                    </span>
+                  </Item>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        )
+      })}
     </div>
   )
 }

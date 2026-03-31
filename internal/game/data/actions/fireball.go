@@ -11,8 +11,8 @@ var Fireball = MakeFireball()
 
 func MakeFireball() game.Action {
 	ID := uuid.New()
-	accuracy := 50
-	power := 50
+	accuracy := 80
+	power := 80
 	nature := game.NsFire
 	stat := game.ChakraAttack
 	targetCount := 1

@@ -20,25 +20,15 @@ function BattleActions({ actor }: { actor: Actor }) {
     (tx) => tx.context.source_actor_ID === actor.ID
   )
 
-  const pulseScale =
-    game.turn.phase === 'start' ? 1.01 : game.turn.phase === 'end' ? 1.006 : 1
-
   return (
     <LayoutGroup id="battle-actions">
       <div className="pointer-events-none relative flex w-full flex-col items-center gap-4 pb-8">
         <div
-          className="pointer-events-auto w-xl transition-opacity duration-150"
-          style={{
-            pointerEvents: idle ? 'auto' : 'none',
-            opacity: idle ? 1 : 0,
-          }}
-        >
-          {!queued && (
-            <div className="grid place-items-center text-muted-foreground mb-6">
-              <div>{action ? 'Select Targets' : 'Choose an Action'}</div>
-            </div>
+          className={cn(
+            'pointer-events-auto w-xl transition-opacity duration-150',
+            !idle && 'opacity-0'
           )}
-
+        >
           <AnimatePresence mode="wait" initial={false}>
             {action && (
               <motion.div
@@ -53,6 +43,11 @@ function BattleActions({ actor }: { actor: Actor }) {
                   mass: 0.6,
                 }}
               >
+                {!queued && (
+                  <div className="grid place-items-center text-muted-foreground mb-6">
+                    <div>{action ? 'Select Targets' : 'Choose an Action'}</div>
+                  </div>
+                )}
                 <ActionControl
                   action={action}
                   queued={queued}
@@ -74,26 +69,23 @@ function BattleActions({ actor }: { actor: Actor }) {
             initial={false}
             animate={{
               y: idle ? -56 : 18,
-              scale: idle ? [1, pulseScale, 1] : 1,
             }}
             transition={{
               y: { type: 'spring', stiffness: 420, damping: 34, mass: 0.68 },
-              scale: { duration: 0.2, ease: 'easeOut' },
             }}
             className="pointer-events-none"
-            style={{ pointerEvents: idle ? 'auto' : 'none' }}
             aria-hidden={!idle}
           >
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={actor.ID}
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -10, opacity: 0 }}
+                initial={{ y: 100, opacity: 0 }}
+                animate={{ y: 0, opacity: idle ? 1 : 0 }}
+                exit={{ y: 100, opacity: 0 }}
                 transition={{
                   type: 'spring',
-                  stiffness: 480,
-                  damping: 34,
+                  stiffness: 800,
+                  damping: 50,
                   mass: 0.68,
                 }}
                 className="flex items-end -space-x-9 px-4"
@@ -110,19 +102,18 @@ function BattleActions({ actor }: { actor: Actor }) {
                       className={cn('relative pointer-events-auto', {
                         'pointer-events-none': !!queued && !selected,
                       })}
-                      initial={{ y: 12, opacity: 0, scale: 0.985 }}
+                      style={{ zIndex: selected ? 80 : 20 + i }}
+                      initial={{ y: 12, scale: 0.985 }}
                       animate={{
                         y: selected ? -64 : 0,
                         scale: selected ? 1.015 : 1,
                         rotate: selected ? 0 : fanRotate,
-                        opacity: idle ? 1 : 0,
                       }}
-                      exit={{ y: 10, opacity: 0, scale: 0.985 }}
+                      exit={{ y: 10, scale: 0.985 }}
                       whileHover={{
                         y: selected ? -64 : -36,
-                        scale: selected ? 1.025 : 1.02,
+                        scale: selected ? 1.05 : 1.02,
                         rotate: 0,
-                        opacity: 1,
                         zIndex: 90,
                       }}
                       whileTap={{ scale: 1.01 }}
@@ -132,7 +123,6 @@ function BattleActions({ actor }: { actor: Actor }) {
                         damping: 38,
                         mass: 0.5,
                       }}
-                      style={{ zIndex: selected ? 80 : 20 + i }}
                     >
                       <ActionCard
                         action={a}

@@ -27,7 +27,7 @@ func Reducer(instance *Instance, request Request) int {
 			fmt.Println("[AddActor] Team Full")
 			return none
 		}
-		actor := game.MakeActor(def, request.ClientID, 13824, data.ACTIONS)
+		actor := game.MakeActor(def, request.ClientID, /* 24 13824 */ 1000000, data.ACTIONS)
 		instance.Game.AddActor(actor)
 		instance.Game.PushLog(fmt.Sprintf("Actor joined: %s", actor.Name))
 		return state

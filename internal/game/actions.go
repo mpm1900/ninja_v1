@@ -67,7 +67,7 @@ var Switch = Action{
 		Name: "Switch",
 	},
 	TargetType:      TargetActorID,
-	TargetPredicate: ComposeAF(TeamFilter, InactiveFilter),
+	TargetPredicate: ComposeAF(TeamFilter, InactiveFilter, AliveFilter),
 	ContextValidate: TargetLengthFilter(1),
 	ActionMutation: ActionMutation{
 		Priority: ActionPrioritySwitch,

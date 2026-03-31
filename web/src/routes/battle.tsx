@@ -53,7 +53,7 @@ function RouteComponent() {
                         />
                       ))}
                   </div>
-                ))} 
+                ))}
             </div>
             <div className="flex">
               {game.players
@@ -67,8 +67,23 @@ function RouteComponent() {
                 ))}
             </div>
           </div>
-          <div className="flex-1 grid place-items-center overflow-hidden">
+          <div className="flex-1 grid place-items-center overflow-hidden relative">
             {actor && <BattleActions actor={actor} />}
+            {game.status === 'running' &&
+              game.active_context?.source_actor_ID && (
+                <div className="absolute">
+                  <div>
+                    {game.active_context?.source_actor_ID} uses{' '}
+                    {game.active_context?.action_ID}
+                  </div>
+                  <div>
+                    on{' '}
+                    {game.active_context?.target_actor_IDs.concat(
+                      game.active_context?.target_position_IDs
+                    )}
+                  </div>
+                </div>
+              )}
           </div>
           <div className="fixed bottom-0 px-4 flex left-0 z-10">
             {game.players

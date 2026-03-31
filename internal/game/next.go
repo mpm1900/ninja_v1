@@ -107,6 +107,7 @@ func (g *Game) NextAction() bool {
 
 func (g *Game) NextPrompt() bool {
 	transaction, err := g.Prompts.Dequeue()
+	g.ActiveContext = &transaction.Context
 	if err != nil {
 		return false
 	}
@@ -117,6 +118,7 @@ func (g *Game) NextPrompt() bool {
 
 func (g *Game) NextTrigger() bool {
 	transaction, err := g.Triggers.Dequeue()
+	g.ActiveContext = &transaction.Context
 	if err != nil {
 		return false
 	}
@@ -148,6 +150,7 @@ func (g *Game) Next() bool {
 		return true
 	}
 
+	g.ActiveContext = nil
 	g.NextPhase()
 
 	return false

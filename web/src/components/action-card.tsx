@@ -28,7 +28,7 @@ function ActionCard({
         'transition-all duration-200',
         'hover:-translate-y-0.5 hover:shadow-md',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300/70',
-        'flex flex-col hover:shadow-xl hover:shadow-black',
+        'flex flex-col hover:shadow-xl hover:shadow-black transition-colors',
         {
           'border-orange-400/60 hover:border-orange-400/80':
             action.config.stat === 'attack',
