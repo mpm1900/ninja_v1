@@ -46,13 +46,14 @@ function RouteComponent() {
                           key={a.ID}
                           actor={a}
                           index={i}
+                          hidden={!a.seen && !a.position_ID}
                           className={cn({
                             'opacity-70': !a.position_ID,
                           })}
                         />
                       ))}
                   </div>
-                ))}
+                ))} 
             </div>
             <div className="flex">
               {game.players

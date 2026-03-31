@@ -55,7 +55,7 @@ function ActionControl({
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-2">
       {action && (
         <div className="p-2 flex gap-2 justify-center">
           {actors.map((a) => (

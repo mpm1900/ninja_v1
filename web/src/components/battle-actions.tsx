@@ -34,7 +34,7 @@ function BattleActions({ actor }: { actor: Actor }) {
           }}
         >
           {!queued && (
-            <div className="grid place-items-center text-muted-foreground">
+            <div className="grid place-items-center text-muted-foreground mb-6">
               <div>{action ? 'Select Targets' : 'Choose an Action'}</div>
             </div>
           )}

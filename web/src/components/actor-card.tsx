@@ -10,11 +10,12 @@ import { Badge } from './ui/badge'
 import { X } from 'lucide-react'
 import { sendContextMessage } from '#/lib/stores/socket'
 import { NULL_CONTEXT } from '#/lib/game/context'
+import { ActorThumbnail } from './actor-thumbnail'
 
 const actorVariants = cva(
   cn(
     'group/item flex flex-wrap items-center rounded-md border text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50',
-    'p-2 w-80 border-transparent',
+    'p-2 w-86 border-transparent',
     'border-black border-2'
   ),
   {
@@ -70,7 +71,7 @@ function ActorCard({
       </div>
       <div
         className={actorVariants({
-          className: is_player && 'cursor-pointer',
+          className: cn(is_player && 'cursor-pointer', 'gap-2'),
           player: is_player ? 'player' : 'enemy',
           selected: selected
             ? 'selected'
@@ -80,13 +81,18 @@ function ActorCard({
         })}
         {...props}
       >
+        {actor && (
+          <div className="relative">
+            <ActorThumbnail actor={actor} size={50} />
+            <div className="absolute font-bold px-1 h-4 leading-5 rounded whitespace-nowrap -bottom-1 z-10 bg-mist-300 text-background text-lg nanum-brush-script-regular">
+              LV {actor.level}
+            </div>
+          </div>
+        )}
         <ItemContent>
           {actor && (
             <div className="flex justify-between items-end gap-4">
               <ItemTitle>
-                <span className="text-foreground/50 text-sm">
-                  Lv.{actor.level}
-                </span>{' '}
                 <span
                   className={cn({
                     'text-blue-300': actor.player_ID === client_ID,
@@ -97,7 +103,7 @@ function ActorCard({
                   {actor.name}
                 </span>
               </ItemTitle>
-              {!action_tx ? (
+              {!action_tx || !is_player ? (
                 <ItemActions className="gap-0">
                   {(Object.keys(actor.natures) as Array<NatureSet>)
                     .sort((a, b) => natureIndexes[a] - natureIndexes[b])

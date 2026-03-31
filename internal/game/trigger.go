@@ -40,18 +40,13 @@ var END_OF_TURN_TRIGGER Trigger = Trigger{
 						g.Actors[i].RecoverStamina(g, 0.08)
 					}
 
-					for i, mod := range g.Modifiers {
-						if mod.Mutation.Duration != nil {
-							*g.Modifiers[i].Mutation.Duration -= 1
-						}
-					}
-
 					g.FilterModifiers(func(mod Transaction[Modifier]) bool {
-						if mod.Mutation.Duration != nil {
-							return *mod.Mutation.Duration > 0
-						}
-						return true
+						return mod.Mutation.Duration != 0
 					})
+
+					for i, _ := range g.Modifiers {
+						g.Modifiers[i].Mutation.Duration -= 1
+					}
 
 					return g
 				},

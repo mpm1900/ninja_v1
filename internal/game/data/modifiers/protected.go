@@ -6,13 +6,12 @@ import (
 	"github.com/google/uuid"
 )
 
-var protectedCooldown = 1
 var ProtectedID = uuid.New()
 var Protected = game.Modifier{
 	ID:       uuid.New(),
 	Name:     "Protected",
 	GroupID:  ProtectedID,
-	Duration: &protectedCooldown,
+	Duration: 0,
 	Mutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&ProtectedID,

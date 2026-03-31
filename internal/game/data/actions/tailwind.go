@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"fmt"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/modifiers"
 	"ninja_v1/internal/game/data/mutations"
@@ -27,14 +28,24 @@ func MakeTailwind() game.Action {
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
+				for _, tx := range g.Modifiers {
+					if tx.Context.SourcePlayerID == nil {
+						continue
+					}
+
+					if *tx.Context.SourcePlayerID == *context.SourcePlayerID && tx.Mutation.ID == modifiers.SpeedUpTeam.ID {
+						g.PushLog(fmt.Sprintf("%s failed.", config.Name))
+						return transactions
+					}
+
+				}
+
 				su := modifiers.SpeedUpTeam
-				dur := 5
-				su.Duration = &dur
+				su.Duration = 5
 				modifiers := []game.Modifier{su}
 				mutation := mutations.AddModifiers(modifiers...)
-				suContext := context
-				suContext.ParentActorID = nil
-				transaction := game.MakeTransaction(mutation, suContext)
+				context.ParentActorID = nil
+				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)
 
 				return transactions

@@ -94,6 +94,7 @@ type ActorState struct {
 	// - protected units cannot be damaged by actions
 	// - protected units cannot be targeted by enemy actions
 	Protected bool `json:"protected"`
+	Seen      bool `json:"seen"`
 	// [Stunned] whether or not an actor _can act_
 	// - stunned units cannot push actions
 	// - stunned units cannot resolve actions (if the status was added during running)

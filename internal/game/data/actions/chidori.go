@@ -36,9 +36,6 @@ func MakeChidori() game.Action {
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				// accuracy checks TODO
-				// fmt.Print(config.Accuracy)
-
 				damages := mutations.NewDamage(config, game.NewDamageConfig())
 				transactions = append(
 					transactions,

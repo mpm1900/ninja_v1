@@ -81,14 +81,18 @@ func Reducer(instance *Instance, request Request) int {
 		}
 
 		return state
-	case RemoveAction:
+	case RemoveAction: //CancelAction
 		if request.Context.ActionID == nil {
 			fmt.Println("no context action_ID")
 			return none
 		}
 
 		instance.Game.Actions = slices.DeleteFunc(instance.Game.Actions, func(tx game.Transaction[game.Action]) bool {
-			return tx.ID == *request.Context.ActionID
+			if tx.Context.SourcePlayerID != nil && *tx.Context.SourcePlayerID == request.ClientID {
+				return tx.ID == *request.Context.ActionID
+			}
+
+			return false
 		})
 
 		return state

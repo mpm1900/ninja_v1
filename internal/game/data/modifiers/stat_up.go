@@ -24,8 +24,9 @@ func NewStageDelta(
 	)
 
 	return game.Modifier{
-		ID:      uuid.New(),
-		GroupID: groupID,
+		ID:       uuid.New(),
+		GroupID:  groupID,
+		Duration: game.ModifierDurationInf,
 		Mutations: []game.ActorMutation{
 			mut,
 		},
