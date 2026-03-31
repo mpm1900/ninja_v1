@@ -14,7 +14,7 @@ import { NULL_CONTEXT } from '#/lib/game/context'
 const actorVariants = cva(
   cn(
     'group/item flex flex-wrap items-center rounded-md border text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50',
-    'p-2 w-80 border-transparent cursor-pointer',
+    'p-2 w-80 border-transparent',
     'border-black border-2'
   ),
   {
@@ -70,6 +70,7 @@ function ActorCard({
       </div>
       <div
         className={actorVariants({
+          className: is_player && 'cursor-pointer',
           player: is_player ? 'player' : 'enemy',
           selected: selected
             ? 'selected'
@@ -112,12 +113,12 @@ function ActorCard({
                       client_ID: client_ID!,
                       context: {
                         ...NULL_CONTEXT,
-                        action_ID: action_tx.ID
-                      }
+                        action_ID: action_tx.ID,
+                      },
                     })
                   }}
                 >
-                  READY <X />
+                  {action_tx.mutation.config.name} <X />
                 </Badge>
               )}
             </div>

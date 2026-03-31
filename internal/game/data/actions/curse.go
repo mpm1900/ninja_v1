@@ -15,6 +15,7 @@ func MakeCurse() game.Action {
 	config := game.ActionConfig{
 		Name:   "Curse",
 		Nature: &nature,
+		Jutsu:  game.Fuinjutsu,
 	}
 	return game.Action{
 		ID:              uuid.New(),

@@ -22,6 +22,7 @@ func MakeChidori() game.Action {
 		Power:    &power,
 		Stat:     &stat,
 		Recoil:   &recoil,
+		Jutsu:    game.Ninjutsu,
 	}
 	return game.Action{
 		ID:              uuid.New(),

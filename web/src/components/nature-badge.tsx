@@ -7,12 +7,12 @@ import { cn } from '#/lib/utils'
 type t = Record<string, Partial<Record<NatureSet | 'none', ClassValue>>>
 
 const variants = cva<t>(
-  'text-white px-1 py-0.5 rounded text-shadow-[1px_1px_0px_#000000] shadow-[1px_1px_0_rgba(0,0,0,1)] mx-px text-nowrap',
+  'text-sm text-white px-1 py-0.5 rounded text-shadow-[1px_1px_0px_#000000] shadow-[1px_1px_0_rgba(0,0,0,1)] mx-px text-nowrap',
   {
     variants: {
       variant: {
         none: '',
-        tai: 'bg-neutral-500',
+        tai: 'bg-olive-500',
         pure: 'bg-slate-500 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
         fire: 'bg-red-500',
         wind: 'bg-emerald-700',

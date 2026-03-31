@@ -1,61 +1,95 @@
 import type { Action } from '#/lib/game/action'
-import { statNames } from '#/lib/game/actor'
 import { cn } from '#/lib/utils'
 import type { ComponentProps } from 'react'
 import { NatureBadge } from './nature-badge'
 
-function StatBar({ action }: { action: Action }) {
-  const stat = action.config.stat!
-  return (
-    <div
-      className={cn('', {
-        'text-sky-400': stat === 'chakra_attack',
-        'text-emerald-400': stat === 'attack',
-      })}
-    >
-      <div>
-        {statNames[stat]}:{' '}
-        {action.config.power ? `POW: ${action.config.power}` : '-'}{' '}
-        {action.config.accuracy ? `ACC: ${action.config.accuracy}%` : '-'}
-      </div>
-    </div>
-  )
+type ActionCardProps = ComponentProps<'button'> & {
+  action: Action
+  selected?: boolean
 }
 
 function ActionCard({
   action,
+  selected = false,
+  disabled = false,
   className,
   ...props
-}: ComponentProps<'div'> & { action: Action }) {
+}: ActionCardProps) {
+  const accuracyLabel =
+    action.config.accuracy !== null && `${action.config.accuracy}%`
+
   return (
-    <div
+    <button
+      type="button"
+      disabled={disabled}
       className={cn(
-        'p-2 border-4 border-neutral-600 bg-input/40 rounded-lg w-[240px] h-[360px]',
+        'w-[200px] h-[300px] rounded-lg border-4 text-left',
+        'bg-zinc-900 border-white/40 hover:border-white/60 text-zinc-100',
+        'transition-all duration-200',
+        'hover:-translate-y-0.5 hover:shadow-md',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300/70',
+        'flex flex-col hover:shadow-xl hover:shadow-black',
         {
-          'border-green-700': action.config.stat === 'attack',
-          'border-cyan-600': action.config.stat === 'chakra_attack'
+          'border-orange-400/60 hover:border-orange-400/80':
+            action.config.stat === 'attack',
+          'border-indigo-500/60 hover:border-indigo-400/80':
+            action.config.stat === 'chakra_attack',
+          'shadow-xl shadow-black': selected,
         },
         className
       )}
       {...props}
     >
-      <div className="flex gap-4 justify-between">
-        <div className="flex gap-1">
+      <div
+        className={cn(
+          'flex items-start justify-between gap-2 p-2',
+          disabled && 'opacity-50'
+        )}
+      >
+        <div className="min-w-0 flex items-center gap-1">
           {action.config.nature && (
-            <div>
-              <NatureBadge nature={action.config.nature} />
-            </div>
+            <NatureBadge nature={action.config.nature} />
           )}
-          <div>{action.config.name}</div>
-        </div>
-        <div>
-          <div className="bg-orange-400/70 size-7 font-black grid place-items-center text-xs rounded-full border border-black text-shadow-[1px_1px_0px_#000000] shadow-[inset_0_0_0_1px_theme(colors.neutral.400)] ">
-            {action.config.cost ?? 0}
+          <div>
+            <div className="truncate text-xs font-semibold text-zinc-200">
+              {action.config.name}
+            </div>
+            <div className="text-[10px] uppercase tracking-wide text-zinc-400">
+              {action.config.jutsu}
+            </div>
           </div>
         </div>
+
+        <div className="text-orange-300 font-black nanum-brush-script-regular text-4xl -mt-0.5">
+          {action.config.cost ?? 0}
+        </div>
       </div>
-      <div className="h-20"></div>
-      {action.config.stat && <StatBar action={action} />}
+
+      <div className="flex [&>*]:flex-1 text-[11px] border-t border-b bg-background">
+        {action.config.power && (
+          <StatChip label="Power" value={action.config.power} />
+        )}
+        {accuracyLabel && <StatChip label="Acc" value={accuracyLabel} />}
+        {action.config.cooldown && (
+          <StatChip label="Turns" value={action.config.cooldown} />
+        )}
+        {!!action.priority && (
+          <StatChip label="Speed" value={action.priority} />
+        )}
+      </div>
+    </button>
+  )
+}
+
+function StatChip({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="px-1.5 py-1 text-center">
+      <div className="text-[9px] uppercase tracking-wide text-zinc-400">
+        {label}
+      </div>
+      <div className="text-xs font-semibold leading-tight text-zinc-100">
+        {value}
+      </div>
     </div>
   )
 }

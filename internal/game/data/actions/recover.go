@@ -18,6 +18,7 @@ func MakeRecover() game.Action {
 		Nature:      &nature,
 		TargetCount: &targetCount,
 		Cost:        &chakraCost,
+		Jutsu:       game.Senjutsu,
 	}
 
 	return game.Action{

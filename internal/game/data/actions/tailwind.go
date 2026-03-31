@@ -12,7 +12,8 @@ var Tailwind = MakeTailwind()
 
 func MakeTailwind() game.Action {
 	config := game.ActionConfig{
-		Name: "Tailwind",
+		Name:  "Tailwind",
+		Jutsu: game.Ninjutsu,
 	}
 	return game.Action{
 		ID:              uuid.New(),

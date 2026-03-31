@@ -6,6 +6,7 @@ type Action = {
   ID: string
   config: {
     name: string
+    jutsu: string
     nature: NatureSet | null
     cost: number | null
     cooldown: number | null

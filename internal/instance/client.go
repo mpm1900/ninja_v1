@@ -15,7 +15,7 @@ import (
 const WriteWait = 10 * time.Second
 const PongWait = 60 * time.Second
 const PingPeriod = (PongWait * 9) / 10
-const MaxMessageSize = 512
+const MaxMessageSize = 64 * 1024
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,

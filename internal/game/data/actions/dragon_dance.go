@@ -12,7 +12,8 @@ var DragonDance = MakeDragonDance()
 
 func MakeDragonDance() game.Action {
 	config := game.ActionConfig{
-		Name: "Dragon Dance",
+		Name:  "Dragon Dance",
+		Jutsu: game.Taijutsu,
 	}
 	return game.Action{
 		ID:              uuid.New(),

@@ -67,46 +67,46 @@ function RouteComponent() {
             </div>
           </div>
           <div className="flex-1 grid place-items-center overflow-hidden">
-            {actor && game.status === 'idle' && <BattleActions actor={actor} />}
+            {actor && <BattleActions actor={actor} />}
           </div>
-          <div className="fixed bottom-0 w-full px-4 flex items-end justify-between z-10">
-            <div>
-              {game.players
-                .filter((p) => p.ID === client?.ID)
-                .map((player) => (
-                  <PlayerPositions
-                    key={player.ID}
-                    flip={false}
-                    player_ID={player.ID}
-                    selected={
-                      game.status === 'idle'
-                        ? (context.source_actor_ID ?? '')
-                        : ''
-                    }
-                    onSelectedChange={(actor_ID) => setContextSource(actor_ID)}
-                  />
-                ))}
-            </div>
-            <div>
-              {game.players
-                .filter((p) => p.ID === client?.ID)
-                .map((player) => (
-                  <div key={player.ID} className="flex gap-2 py-2">
-                    {game.actors
-                      .filter((a) => a.player_ID === player.ID)
-                      .map((a, i) => (
-                        <ActorThumbnail
-                          key={a.ID}
-                          actor={a}
-                          index={i}
-                          className={cn({
-                            'opacity-40': !a.position_ID,
-                          })}
-                        />
-                      ))}
-                  </div>
-                ))}
-            </div>
+          <div className="fixed bottom-0 px-4 flex left-0 z-10">
+            {game.players
+              .filter((p) => p.ID === client?.ID)
+              .map((player) => (
+                <PlayerPositions
+                  key={player.ID}
+                  flip={false}
+                  player_ID={player.ID}
+                  selected={
+                    game.status === 'idle'
+                      ? (context.source_actor_ID ?? '')
+                      : ''
+                  }
+                  onSelectedChange={(actor_ID) =>
+                    setContextSource(actor_ID, game)
+                  }
+                />
+              ))}
+          </div>
+          <div className="fixed bottom-0 px-4 flex right-0 z-10">
+            {game.players
+              .filter((p) => p.ID === client?.ID)
+              .map((player) => (
+                <div key={player.ID} className="flex gap-2 py-2">
+                  {game.actors
+                    .filter((a) => a.player_ID === player.ID)
+                    .map((a, i) => (
+                      <ActorThumbnail
+                        key={a.ID}
+                        actor={a}
+                        index={i}
+                        className={cn({
+                          'opacity-40': !a.position_ID,
+                        })}
+                      />
+                    ))}
+                </div>
+              ))}
           </div>
         </div>
       </main>

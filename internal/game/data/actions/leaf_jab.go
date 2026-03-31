@@ -22,6 +22,7 @@ func MakeLeafJab() game.Action {
 		Stat:     &stat,
 		Nature:   &nature,
 		Cost:     &chakraCost,
+		Jutsu:    game.Taijutsu,
 	}
 	return game.Action{
 		ID:              uuid.New(),

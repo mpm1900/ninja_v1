@@ -28,6 +28,7 @@ func MakeFireball() game.Action {
 		TargetCount: &targetCount,
 		Cost:        &chakraCost,
 		Cooldown:    &cooldown,
+		Jutsu:       game.Ninjutsu,
 	}
 
 	return game.Action{

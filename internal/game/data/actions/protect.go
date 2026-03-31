@@ -15,6 +15,7 @@ func MakeProtect() game.Action {
 	config := game.ActionConfig{
 		Name:     "Protect",
 		Cooldown: &cooldown,
+		Jutsu:    game.Ninjutsu,
 	}
 	return game.Action{
 		ID:              uuid.New(),

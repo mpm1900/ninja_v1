@@ -15,6 +15,17 @@ const (
 	ActionPrioritySlow    = -1
 )
 
+type ActionJutsu string
+
+const (
+	Bukijutsu ActionJutsu = "bukijutsu"
+	Fuinjutsu ActionJutsu = "fuinjutsu"
+	Genjutsu  ActionJutsu = "genjutsu"
+	Ninjutsu  ActionJutsu = "ninjutsu"
+	Senjutsu  ActionJutsu = "senjutsu"
+	Taijutsu  ActionJutsu = "taijutsu"
+)
+
 type ActionConfig struct {
 	Accuracy    *int        `json:"accuracy"`
 	Cooldown    *int        `json:"cooldown"`
@@ -26,6 +37,7 @@ type ActionConfig struct {
 	Recoil      *float64    `json:"recoil"`
 	Stat        *AttackStat `json:"stat"`
 	TargetCount *int        `json:"target_count"`
+	Jutsu       ActionJutsu `json:"jutsu"`
 }
 
 type ActionTargetType string
