@@ -70,23 +70,24 @@ function ActionControl({
               onContextChange={onContextChange}
             />
           ))}
-          {actors.length == 0 && valid.data === false && (
+          {!loading && actors.length == 0 && valid.data === false && (
             <span className="text-muted-foreground text-sm">
               no targets available
             </span>
           )}
         </div>
       )}
-      {valid.data && (
+      {enabled && action && valid.data && (
         <Button
-          disabled={loading || !enabled}
+          disabled={loading}
           onClick={() => {
             sendContextMessage({
               type: 'push-action',
               client_ID: client.ID,
               context,
             })
-            setActionID(context.source_actor_ID!, context.action_ID!)
+
+            setActionID(context.source_actor_ID!, context.action_ID!, game)
           }}
         >
           Select

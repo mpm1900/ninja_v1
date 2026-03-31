@@ -2,9 +2,11 @@ import { Store } from '@tanstack/store'
 import { NULL_CONTEXT, type Context } from '../game/context'
 import type { Game } from '../game/game'
 
-const battleContext = new Store<
-  Context & { previous_action_IDs: Record<string, string> }
->({
+type BattleContextState = Context & {
+  previous_action_IDs: Record<string, string>
+}
+
+const battleContext = new Store<BattleContextState>({
   ...NULL_CONTEXT,
   previous_action_IDs: {},
 })
@@ -21,24 +23,66 @@ function setContextPlayer(player_ID: string) {
   }))
 }
 
-function setActionID(actor_ID: string, action_ID: string) {
-  battleContext.setState((s) => ({
-    ...s,
-    parent_actor_ID: null,
-    source_actor_ID: null,
-    target_actor_IDs: [],
-    target_position_IDs: [],
-    previous_action_IDs: {
+function getNextActionableActor(
+  game: Game,
+  context: BattleContextState,
+  actor_ID: string
+) {
+  const playerID = context.source_player_ID
+  if (!playerID) return null
+
+  const actedActorIDs = new Set(
+    game.actions.map((tx) => tx.context.source_actor_ID).filter(Boolean) as string[]
+  )
+  actedActorIDs.add(actor_ID)
+
+  const actors = game.actors.filter((a) => a.player_ID === playerID)
+  const activeActors = actors.filter((a) => !!a.position_ID)
+  const actionableActors = activeActors.filter(
+    (a) => !a.stunned && !actedActorIDs.has(a.ID)
+  )
+
+  return actionableActors[0] ?? null
+}
+
+function setActionID(actor_ID: string, action_ID: string, game: Game) {
+  battleContext.setState((s) => {
+    const previous_action_IDs = {
       ...s.previous_action_IDs,
       [actor_ID]: action_ID,
-    },
-  }))
+    }
+
+    const nextActor = getNextActionableActor(game, s, actor_ID)
+    if (!nextActor) {
+      return {
+        ...s,
+        action_ID: null,
+        parent_actor_ID: null,
+        source_actor_ID: null,
+        target_actor_IDs: [],
+        target_position_IDs: [],
+        previous_action_IDs,
+      }
+    }
+
+    const preferredActionID = previous_action_IDs[nextActor.ID]
+    const fallbackActionID = nextActor.actions[0]?.ID ?? null
+    const nextActionID = preferredActionID ?? fallbackActionID
+
+    return {
+      ...s,
+      action_ID: nextActionID,
+      parent_actor_ID: nextActor.ID,
+      source_actor_ID: nextActor.ID,
+      target_actor_IDs: [],
+      target_position_IDs: [],
+      previous_action_IDs,
+    }
+  })
 }
 
 function setContextSource(source_ID: string, game: Game) {
-  const existing = game.actions.find(
-    (t) => t.context.source_actor_ID === source_ID
-  )
+  const existing = game.actions.find((t) => t.context.source_actor_ID === source_ID)
 
   if (existing) {
     return battleContext.setState((s) => ({
@@ -55,7 +99,7 @@ function setContextSource(source_ID: string, game: Game) {
 
   battleContext.setState((s) => ({
     ...s,
-    action_ID: prev?.ID ?? source?.actions[0].ID ?? null,
+    action_ID: prev?.ID ?? source.actions[0]?.ID ?? null,
     parent_actor_ID: source_ID,
     source_actor_ID: source_ID,
     target_actor_IDs: [],
@@ -78,7 +122,6 @@ function setContext(context: Context) {
     ...context,
   }))
 }
-
 
 export {
   battleContext,

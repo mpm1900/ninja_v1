@@ -26,17 +26,12 @@ function BattleActions({ actor }: { actor: Actor }) {
   return (
     <LayoutGroup id="battle-actions">
       <div className="pointer-events-none relative flex w-full flex-col items-center gap-4 pb-8">
-        <motion.div
-          initial={false}
-          animate={{ opacity: idle ? 1 : 0 }}
-          transition={{
-            type: 'spring',
-            stiffness: 420,
-            damping: 34,
-            mass: 0.72,
+        <div
+          className="pointer-events-auto w-xl transition-opacity duration-150"
+          style={{
+            pointerEvents: idle ? 'auto' : 'none',
+            opacity: idle ? 1 : 0,
           }}
-          className="pointer-events-auto w-xl"
-          style={{ pointerEvents: idle ? 'auto' : 'none' }}
         >
           {!queued && (
             <div className="grid place-items-center text-muted-foreground">
@@ -72,19 +67,17 @@ function BattleActions({ actor }: { actor: Actor }) {
               </motion.div>
             )}
           </AnimatePresence>
-        </motion.div>
+        </div>
 
         <div className="pointer-events-none fixed inset-x-0 -bottom-32 z-0 flex justify-center">
           <motion.div
             initial={false}
             animate={{
               y: idle ? -56 : 18,
-              opacity: idle ? 1 : 0,
               scale: idle ? [1, pulseScale, 1] : 1,
             }}
             transition={{
               y: { type: 'spring', stiffness: 420, damping: 34, mass: 0.68 },
-              opacity: { duration: 0.12 },
               scale: { duration: 0.2, ease: 'easeOut' },
             }}
             className="pointer-events-none"
@@ -122,7 +115,7 @@ function BattleActions({ actor }: { actor: Actor }) {
                         y: selected ? -64 : 0,
                         scale: selected ? 1.015 : 1,
                         rotate: selected ? 0 : fanRotate,
-                        opacity: 1,
+                        opacity: idle ? 1 : 0,
                       }}
                       exit={{ y: 10, opacity: 0, scale: 0.985 }}
                       whileHover={{
