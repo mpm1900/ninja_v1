@@ -78,7 +78,7 @@ function RouteComponent() {
                   </div>
                   <div>
                     on{' '}
-                    {game.active_context?.target_actor_IDs.concat(
+                    {game.active_context?.target_actor_IDs?.concat(
                       game.active_context?.target_position_IDs
                     )}
                   </div>

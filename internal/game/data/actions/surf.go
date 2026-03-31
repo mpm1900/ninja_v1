@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"fmt"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/mutations"
 
@@ -58,7 +57,6 @@ func MakeSurf() game.Action {
 					damage_context.TargetPositionIDs = append(damage_context.TargetPositionIDs, *t.PositionID)
 				}
 
-				fmt.Printf("%d %+v \n", len(other_team_actors), damage_context)
 				damages := mutations.NewDamage(config, game.NewDamageConfig())
 				transactions = append(
 					transactions,

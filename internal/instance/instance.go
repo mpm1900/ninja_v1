@@ -147,7 +147,6 @@ func (i *Instance) RunGameActions() {
 				continue
 
 			case game.TurnEnd:
-				// Queue and resolve end-of-turn triggers.
 				i.Game.On(game.OnTurnEnd, game.NewContext())
 				for i.Game.Next() {
 					i.BroadcastGame()

@@ -175,3 +175,10 @@ func Match__TargetActor_SourceActor(game Game, context Context, modifier_tx Tran
 
 	return context.TargetActorIDs[0] == *modifier_tx.Context.SourceActorID
 }
+func Match__SourceActor_SourceActor(game Game, context Context, modifier_tx Transaction[Modifier]) bool {
+	if context.SourceActorID == nil || modifier_tx.Context.SourceActorID == nil {
+		return false
+	}
+
+	return *context.SourceActorID == *modifier_tx.Context.SourceActorID
+}

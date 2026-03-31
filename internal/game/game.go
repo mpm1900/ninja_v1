@@ -146,7 +146,7 @@ func (g Game) GetResolvedActors() map[uuid.UUID]ResolvedActor {
 	return actors
 }
 
-func (g Game) GetTriggers(context Context) []Transaction[Trigger] {
+func (g Game) GetTriggers(on TriggerOn, context Context) []Transaction[Trigger] {
 	triggers := []Transaction[Trigger]{
 		MakeTransaction(END_OF_TURN_TRIGGER, context),
 	}
@@ -156,7 +156,12 @@ func (g Game) GetTriggers(context Context) []Transaction[Trigger] {
 
 	for _, mod := range modifiers {
 		for _, trig := range mod.Mutation.Triggers {
+			if trig.On != on {
+				continue
+			}
+
 			if trig.Check != nil && !trig.Check(g, context, mod) {
+				fmt.Println(mod.Mutation.Name, "FAILED")
 				continue
 			}
 			triggers = append(triggers, MakeTransaction(trig, context))
@@ -255,6 +260,14 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 		g.UpdatePlayer(actor.PlayerID, func(p Player) Player {
 			p.SetPosition(*prev, nil)
 			return p
+		})
+	}
+
+	if positionID != nil {
+		g.On(OnActorEnter, Context{
+			ParentActorID:  &actor.ID,
+			SourceActorID:  &actor.ID,
+			SourcePlayerID: &actor.PlayerID,
 		})
 	}
 }
@@ -423,8 +436,9 @@ func (g *Game) RunTrigger(transaction Transaction[Trigger]) {
 }
 
 func (g *Game) On(on TriggerOn, context Context) {
+	fmt.Println("ON:", on)
 	triggers := make([]Transaction[Trigger], 0)
-	for _, trigger := range g.GetTriggers(context) {
+	for _, trigger := range g.GetTriggers(on, context) {
 		if trigger.Mutation.On == on {
 			triggers = append(triggers, trigger)
 		}
