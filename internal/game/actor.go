@@ -298,6 +298,7 @@ func MapStagedStats(actor Actor) Actor {
 func GetActorModifiers(game Game) []Transaction[Modifier] {
 	var modifiers []Transaction[Modifier]
 	activeActors := game.GetActorsFilters(
+		Context{},
 		ActiveFilter,
 	)
 

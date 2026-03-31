@@ -12,8 +12,10 @@ var Protect = MakeProtect()
 
 func MakeProtect() game.Action {
 	cooldown := 1
+	nature := game.NsEarth
 	config := game.ActionConfig{
 		Name:     "Protect",
+		Nature:   &nature,
 		Cooldown: &cooldown,
 		Jutsu:    game.Ninjutsu,
 	}

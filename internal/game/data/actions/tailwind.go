@@ -12,8 +12,10 @@ import (
 var Tailwind = MakeTailwind()
 
 func MakeTailwind() game.Action {
+	nature := game.NsWind
 	config := game.ActionConfig{
 		Name:  "Tailwind",
+		Nature: &nature,
 		Jutsu: game.Ninjutsu,
 	}
 	return game.Action{

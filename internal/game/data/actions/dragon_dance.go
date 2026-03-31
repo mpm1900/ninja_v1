@@ -11,9 +11,11 @@ import (
 var DragonDance = MakeDragonDance()
 
 func MakeDragonDance() game.Action {
+	nature := game.NsTai
 	config := game.ActionConfig{
-		Name:  "Dragon Dance",
-		Jutsu: game.Taijutsu,
+		Name:   "Dragon Dance",
+		Nature: &nature,
+		Jutsu:  game.Taijutsu,
 	}
 	return game.Action{
 		ID:              uuid.New(),

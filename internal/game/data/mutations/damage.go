@@ -122,6 +122,7 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 				damages := game.GetDamage(
 					source,
 					[]game.ResolvedActor{target},
+					len(resolved),
 					*action.Stat,
 					defense,
 					*action.Power,

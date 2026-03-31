@@ -16,6 +16,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	game.SwitchInIds[5]:    game.SwitchIn(5),
 	actions.Protect.ID:     actions.Protect,
 	actions.Tailwind.ID:    actions.Tailwind,
+	actions.Surf.ID:        actions.Surf,
 	actions.LeafJab.ID:     actions.LeafJab,
 	actions.DragonDance.ID: actions.DragonDance,
 	actions.Fireball.ID:    actions.Fireball,

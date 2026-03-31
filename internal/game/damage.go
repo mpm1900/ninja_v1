@@ -18,6 +18,7 @@ type DamageTerms struct {
 	Power    int
 	Random   float64
 	STAB     float64
+	Targets  float64
 }
 
 type DamageConfig struct {
@@ -36,10 +37,10 @@ func DamageEquation(terms DamageTerms) int {
 	pow_ad := float64(terms.Power) * float64(terms.Attack) / float64(terms.Defense)
 	level_mod := float64(2*terms.Level)/5 + 2
 	base := (pow_ad*level_mod)/50 + 2
-	raw := (base * terms.Critical * terms.Nature * terms.STAB * terms.Random * terms.Other)
+	raw := (base * terms.Critical * terms.Nature * terms.STAB * terms.Targets * terms.Random * terms.Other)
 	fmt.Printf(
-		"(((%d * %d / %d) * ((2 * %d / 5) + 2) / 50 + 2) * (%f) * (%f) = %f \n",
-		terms.Power, terms.Attack, terms.Defense, terms.Level, terms.Nature, terms.STAB, raw,
+		"(((%d * %d / %d) * ((2 * %d / 5) + 2) / 50 + 2) * (%f * %f * %f * %f)  = %f \n",
+		terms.Power, terms.Attack, terms.Defense, terms.Level, terms.Nature, terms.STAB, terms.Targets, terms.Random, raw,
 	)
 	return int(math.Floor(raw)) + terms.Offset
 }
@@ -88,6 +89,7 @@ func GetStabModifier(source ResolvedActor, nature *NatureSet) float64 {
 func GetDamage(
 	source ResolvedActor,
 	targets []ResolvedActor,
+	targetsCount int,
 	attack AttackStat,
 	defense DefenseStat,
 	power int,
@@ -103,6 +105,10 @@ func GetDamage(
 	a_base := float64(source.Stats[ActorStat(attack)])
 	a_mod := 1.0
 	attack_value := int(math.Floor(a_base * a_mod))
+	targets_mod := 1.0
+	if targetsCount > 1 {
+		targets_mod = 0.75
+	}
 
 	for i, target := range targets {
 		d_base := float64(target.Stats[ActorStat(defense)])
@@ -127,6 +133,7 @@ func GetDamage(
 			Power:    power,
 			Random:   random,
 			STAB:     stab_mod,
+			Targets:  targets_mod,
 		})
 	}
 	return damages

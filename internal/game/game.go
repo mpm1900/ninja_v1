@@ -129,10 +129,10 @@ func (g Game) GetActionableActors() []Actor {
 		return active && a.Alive && !a.Stunned
 	})
 }
-func (g Game) GetActorsFilters(filters ...ActorFilter) []Actor {
+func (g Game) GetActorsFilters(context Context, filters ...ActorFilter) []Actor {
 	filter := ComposeAF(filters...)
 	return g.GetActors(func(a Actor) bool {
-		return filter(a, Context{})
+		return filter(a, context)
 	})
 }
 

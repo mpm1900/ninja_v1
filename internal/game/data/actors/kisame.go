@@ -34,6 +34,7 @@ var Kisame = game.ActorDef{
 	ActionCount:     6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
+		actions.Surf.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
