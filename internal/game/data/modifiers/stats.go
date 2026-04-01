@@ -1,6 +1,7 @@
 package modifiers
 
 import (
+	"math"
 	"ninja_v1/internal/game"
 
 	"github.com/google/uuid"
@@ -33,6 +34,33 @@ func NewStageDelta(
 	}
 }
 
+func NewStatMult(
+	stat game.ActorStat,
+	groupID uuid.UUID,
+	filter func(input game.Actor, context game.Context) bool,
+	priority int,
+	mult float64,
+) game.Modifier {
+	mut := game.MakeActorMutation(
+		&groupID,
+		priority,
+		filter,
+		func(actor game.Actor, context game.Context) game.Actor {
+			actor.Stats[stat] = int(math.Floor(float64(actor.Stats[stat]) * mult))
+			return actor
+		},
+	)
+
+	return game.Modifier{
+		ID:       uuid.New(),
+		GroupID:  groupID,
+		Duration: game.ModifierDurationInf,
+		Mutations: []game.ActorMutation{
+			mut,
+		},
+	}
+}
+
 func MakeStatDeltaSource(stat game.ActorStat, name string, groupID uuid.UUID, delta int) game.Modifier {
 	modifier := NewStageDelta(stat, groupID, game.ComposeAF(game.ActiveFilter, game.SourceFilter), game.MutPriorityDefault, delta)
 	modifier.Name = name
@@ -51,6 +79,12 @@ func MakeStatDeltaAll(stat game.ActorStat, name string, groupID uuid.UUID, delta
 	return modifier
 }
 
+func MakeStatMultTeam(stat game.ActorStat, name string, groupID uuid.UUID, mult float64) game.Modifier {
+	modifier := NewStatMult(stat, groupID, game.ComposeAF(game.ActiveFilter, game.TeamFilter), game.MutPriorityPostStagedStats, mult)
+	modifier.Name = name
+	return modifier
+}
+
 var AttackUpID = uuid.New()
 var AttackDownID = uuid.New()
 var JutsuUpID = uuid.New()
@@ -65,4 +99,4 @@ var SpeedUpAll = MakeStatDeltaAll(game.StatSpeed, "Speed Up", SpeedUpID, 1)
 
 // NAMED STAT UPS
 var TailwindID = uuid.New()
-var Tailwind = MakeStatDeltaTeam(game.StatSpeed, "Tailwind", TailwindID, 2)
+var Tailwind = MakeStatMultTeam(game.StatSpeed, "Tailwind", TailwindID, 2.0)

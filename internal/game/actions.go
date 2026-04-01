@@ -64,7 +64,8 @@ var RemovePositions = GameMutation{
 var Switch = Action{
 	ID: uuid.New(),
 	Config: ActionConfig{
-		Name: "Switch",
+		Name:        "Switch",
+		Description: "Switches user out and target ally into battle.",
 	},
 	TargetType:      TargetActorID,
 	TargetPredicate: ComposeAF(TeamFilter, InactiveFilter, AliveFilter),

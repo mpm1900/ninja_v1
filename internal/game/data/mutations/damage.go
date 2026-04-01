@@ -108,7 +108,7 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 					accuracy := int(math.Floor(base_accuracy * float64(*action.Accuracy)))
 					roll := game.MakeActionRoll()
 					if roll > accuracy {
-						g.PushLog(fmt.Sprintf("%s's %s missed!", source.Name, action.Name))
+						g.PushLog(fmt.Sprintf("%s missed!", action.Name))
 						g.PushLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy))
 						continue
 					}
