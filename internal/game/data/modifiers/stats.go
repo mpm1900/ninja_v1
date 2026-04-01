@@ -62,3 +62,7 @@ var JutsuUpSource = MakeStatDeltaSource(game.ActorStat(game.ChakraAttack), "Chak
 var SpeedUpSource = MakeStatDeltaSource(game.StatSpeed, "Speed Up", SpeedUpID, 1)
 var SpeedUpTeam = MakeStatDeltaTeam(game.StatSpeed, "Speed Up", SpeedUpID, 1)
 var SpeedUpAll = MakeStatDeltaAll(game.StatSpeed, "Speed Up", SpeedUpID, 1)
+
+// NAMED STAT UPS
+var TailwindID = uuid.New()
+var Tailwind = MakeStatDeltaTeam(game.StatSpeed, "Tailwind", TailwindID, 2)

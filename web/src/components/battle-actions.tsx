@@ -45,7 +45,7 @@ function BattleActions({ actor }: { actor: Actor }) {
               >
                 {!queued && (
                   <div className="grid place-items-center text-muted-foreground mb-6">
-                    <div>{action ? 'Select Targets' : 'Choose an Action'}</div>
+                    <div>{action ? action.config.name : 'Choose an Action'}</div>
                   </div>
                 )}
                 <ActionControl
@@ -64,7 +64,7 @@ function BattleActions({ actor }: { actor: Actor }) {
           </AnimatePresence>
         </div>
 
-        <div className="pointer-events-none fixed inset-x-0 -bottom-32 z-0 flex justify-center">
+        <div className="pointer-events-none fixed inset-x-0 -bottom-4 z-0 flex justify-center">
           <motion.div
             initial={false}
             animate={{

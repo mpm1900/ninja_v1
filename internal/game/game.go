@@ -265,7 +265,17 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 	}
 
 	if positionID != nil {
+		g.PushLog(fmt.Sprintf("%s joined the battle.", actor.Name))
 		g.On(OnActorEnter, Context{
+			ParentActorID:  &actor.ID,
+			SourceActorID:  &actor.ID,
+			SourcePlayerID: &actor.PlayerID,
+		})
+	}
+
+	if positionID == nil {
+		g.PushLog(fmt.Sprintf("%s left the battle.", actor.Name))
+		g.On(OnActorLeave, Context{
 			ParentActorID:  &actor.ID,
 			SourceActorID:  &actor.ID,
 			SourcePlayerID: &actor.PlayerID,

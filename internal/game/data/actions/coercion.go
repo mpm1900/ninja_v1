@@ -14,10 +14,11 @@ func MakeCoercion() game.Action {
 	cooldown := 1
 	nature := game.NsYin
 	config := game.ActionConfig{
-		Name:     "Sharingan: Coercion",
-		Nature:   &nature,
-		Cooldown: &cooldown,
-		Jutsu:    game.Genjutsu,
+		Name:        "Sharingan: Coercion",
+		Nature:      &nature,
+		Cooldown:    &cooldown,
+		Jutsu:       game.Genjutsu,
+		Description: "Stuns the target this turn. Fails unless it is the user's first turn switched in.",
 	}
 	return game.Action{
 		ID:              uuid.New(),

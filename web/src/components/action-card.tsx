@@ -23,7 +23,7 @@ function ActionCard({
       type="button"
       disabled={disabled}
       className={cn(
-        'w-[200px] h-[300px] rounded-lg border-4 text-left',
+        'w-[200px] h-[200px] rounded-lg border-4 text-left',
         'bg-zinc-900 border-white/40 hover:border-white/60 text-zinc-100',
         'transition-all duration-200',
         'hover:-translate-y-0.5 hover:shadow-md',
@@ -70,6 +70,9 @@ function ActionCard({
       <div className="flex [&>*]:flex-1 text-[11px] border-t border-b bg-background">
         <StatChip label="Power" value={action.config.power ?? '-'} />
         <StatChip label="Acc" value={accuracyLabel} />
+      </div>
+      <div className='px-3 py-2 text-xs text-muted-foreground'>
+        {action.config.description}
       </div>
     </button>
   )

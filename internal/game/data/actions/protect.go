@@ -14,10 +14,11 @@ func MakeProtect() game.Action {
 	cooldown := 1
 	nature := game.NsEarth
 	config := game.ActionConfig{
-		Name:     "Protect",
-		Nature:   &nature,
-		Cooldown: &cooldown,
-		Jutsu:    game.Ninjutsu,
+		Name:        "Protect",
+		Nature:      &nature,
+		Cooldown:    &cooldown,
+		Jutsu:       game.Ninjutsu,
+		Description: "Protects the user from actions this turn. 1 turn cooldown.",
 	}
 	return game.Action{
 		ID:              uuid.New(),

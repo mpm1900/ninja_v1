@@ -12,9 +12,10 @@ var FollowMe = MakeFollowMe()
 func MakeFollowMe() game.Action {
 	nature := game.NsYin
 	config := game.ActionConfig{
-		Name:   "Follow Me",
-		Nature: &nature,
-		Jutsu:  game.Genjutsu,
+		Name:        "Follow Me",
+		Nature:      &nature,
+		Jutsu:       game.Genjutsu,
+		Description: "Changes the target of enemy actions to this user if able.",
 	}
 	return game.Action{
 		ID:              uuid.New(),

@@ -14,9 +14,10 @@ var Tailwind = MakeTailwind()
 func MakeTailwind() game.Action {
 	nature := game.NsWind
 	config := game.ActionConfig{
-		Name:  "Tailwind",
-		Nature: &nature,
-		Jutsu: game.Ninjutsu,
+		Name:        "Tailwind",
+		Nature:      &nature,
+		Jutsu:       game.Ninjutsu,
+		Description: "Doubles the speed of the user's party for 4 turns. This effect cannot stack.",
 	}
 	return game.Action{
 		ID:              uuid.New(),
@@ -35,14 +36,14 @@ func MakeTailwind() game.Action {
 						continue
 					}
 
-					if *tx.Context.SourcePlayerID == *context.SourcePlayerID && tx.Mutation.ID == modifiers.SpeedUpTeam.ID {
-						g.PushLog(fmt.Sprintf("%s failed.", config.Name))
-						return transactions
+					if *tx.Context.SourcePlayerID == *context.SourcePlayerID && tx.Mutation.ID == modifiers.Tailwind.ID {
+						log_tx := game.MakeTransaction(game.AddLogs(fmt.Sprintf("%s failed.", config.Name)), context)
+						return append(transactions, log_tx)
 					}
 
 				}
 
-				su := modifiers.SpeedUpTeam
+				su := modifiers.Tailwind
 				su.Duration = 5
 				modifiers := []game.Modifier{su}
 				mutation := mutations.AddModifiers(modifiers...)

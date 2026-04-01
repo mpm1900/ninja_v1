@@ -4,6 +4,13 @@ import { BattleActions } from '#/components/battle-actions'
 import { BattleContextController } from '#/components/battle-context-controller'
 import { PlayerPositions } from '#/components/player-positions'
 import { PromptController } from '#/components/prompt-controller'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '#/components/ui/accordion'
+import { ScrollArea } from '#/components/ui/scroll-area'
 import { battleContext, setContextSource } from '#/lib/stores/battle-context'
 import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
@@ -33,12 +40,19 @@ function RouteComponent() {
       <main className="flex flex-col h-screen">
         <AppHeader />
         <div className="flex flex-col flex-1 relative overflow-auto">
-          <div className="fixed top-10 w-full flex px-4 justify-between z-10">
-            <div>
+          <div>
+            <div className="fixed top-12 px-4 flex right-0 z-10">
               {game.players
                 .filter((p) => p.ID !== client?.ID)
                 .map((player) => (
-                  <div key={player.ID} className="flex gap-2 py-4">
+                  <PlayerPositions key={player.ID} flip player_ID={player.ID} />
+                ))}
+            </div>
+            <div className="fixed top-12 px-4 left-0 z-10">
+              {game.players
+                .filter((p) => p.ID !== client?.ID)
+                .map((player) => (
+                  <div key={player.ID} className="flex gap-2 py-2">
                     {game.actors
                       .filter((a) => a.player_ID === player.ID)
                       .map((a, i) => (
@@ -48,23 +62,26 @@ function RouteComponent() {
                           index={i}
                           hidden={!a.seen && !a.position_ID}
                           className={cn({
-                            'opacity-70': !a.position_ID,
+                            'opacity-40': !a.position_ID,
                           })}
                         />
                       ))}
                   </div>
                 ))}
-            </div>
-            <div className="flex">
-              {game.players
-                .filter((p) => p.ID !== client?.ID)
-                .map((player) => (
-                  <PlayerPositions
-                    key={player.ID}
-                    flip={true}
-                    player_ID={player.ID}
-                  />
-                ))}
+              <Accordion defaultValue='log' type="single">
+                <AccordionItem value="log">
+                  <AccordionTrigger>Log</AccordionTrigger>
+                  <AccordionContent>
+                    <ScrollArea className="h-40">
+                      <ul className='text-sm'>
+                        {game.log.map((l) => (
+                          <li key={l} className='text-muted-foreground'>{l}</li>
+                        ))}
+                      </ul>
+                    </ScrollArea>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
           </div>
           <div className="flex-1 grid place-items-center overflow-hidden relative">
@@ -78,7 +95,7 @@ function RouteComponent() {
                   </div>
                   <div>
                     on{' '}
-                    {game.active_context?.target_actor_IDs.concat(
+                    {game.active_context?.target_actor_IDs?.concat(
                       game.active_context?.target_position_IDs
                     )}
                   </div>

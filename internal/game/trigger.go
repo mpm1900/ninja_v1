@@ -8,6 +8,7 @@ type TriggerOn string
 
 const (
 	OnActorEnter    TriggerOn = "on-actor-enter"
+	OnActorLeave    TriggerOn = "on-actor-leave"
 	OnDamageRecieve TriggerOn = "on-damage-recieve"
 	OnTurnEnd       TriggerOn = "on-turn-end"
 )

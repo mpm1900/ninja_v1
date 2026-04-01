@@ -14,6 +14,7 @@ type Action = {
     stat: ActorAttackStat | null
     power: number | null
     recoil: number | null
+    description: string
   }
   priority: number
   target_type: 'target-actor-id' | 'target-position-type'
