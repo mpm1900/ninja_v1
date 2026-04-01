@@ -427,8 +427,6 @@ func (g *Game) RunAction(transaction Transaction[Action]) {
 			return
 		}
 
-		g.PushLog(fmt.Sprintf("%s used %s.", source.Name, transaction.Mutation.Config.Name))
-
 		cost := transaction.Mutation.Cost
 		if cost.Delta != nil {
 			costTx := MakeTransaction(cost, transaction.Context)

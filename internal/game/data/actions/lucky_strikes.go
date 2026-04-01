@@ -33,7 +33,7 @@ func MakeLuckyStrikes() game.Action {
 		Cost:            mutations.UseStaminaSource(chakraCost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
-			Filter:   game.AllGameFilter,
+			Filter:   game.SourceIsAlive,
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 

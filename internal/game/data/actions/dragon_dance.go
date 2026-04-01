@@ -25,7 +25,7 @@ func MakeDragonDance() game.Action {
 		ContextValidate: game.TargetLengthFilter(0),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
-			Filter:   game.AllGameFilter,
+			Filter:   game.SourceIsAlive,
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 				tju := modifiers.AttackUpSource

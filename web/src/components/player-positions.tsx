@@ -40,7 +40,15 @@ function PlayerPositions({
               <motion.div
                 key={pos.actor_ID ?? `empty:${pos.ID}`}
                 initial={{ y: 24 * coef, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
+                animate={{
+                  y: 0,
+                  opacity: 1,
+                  scale:
+                    selected === pos.actor_ID ||
+                    game.active_context?.source_actor_ID === pos.actor_ID
+                      ? 1.1
+                      : 1,
+                }}
                 exit={{ y: 24 * coef, opacity: 0 }}
                 transition={{
                   type: 'spring',

@@ -32,7 +32,7 @@ func MakeChidori() game.Action {
 		ContextValidate: game.PositionsLengthFilter(1),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
-			Filter:   game.AllGameFilter,
+			Filter:   game.SourceIsAlive,
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 

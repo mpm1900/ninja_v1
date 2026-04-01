@@ -79,9 +79,9 @@ type Action struct {
 	Cost            GameMutation                `json:"-"`
 }
 
-func ResolveAction(game *Game, transaction Transaction[Action]) []Transaction[GameMutation] {
+func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransaction {
 	if !transaction.Mutation.Filter(*game, transaction.Context) {
-		return []Transaction[GameMutation]{
+		return []GameTransaction{
 			MakeTransaction(AddLogs(fmt.Sprintf("%s failed.", transaction.Mutation.Config.Name)), NewContext()),
 		}
 	}
@@ -99,7 +99,13 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []Transaction[Ga
 		context = transaction.Mutation.MapContext(*game, context)
 	}
 
-	return transaction.Mutation.Delta(*game, context)
+	var transactions = []GameTransaction{}
+	ok, source := game.GetSource(context)
+	if ok {
+		transactions = append(transactions, MakeTransaction(AddLogs(fmt.Sprintf("%s used %s.", source.Name, transaction.Mutation.Config.Name)), context))
+	}
+	transactions = append(transactions, transaction.Mutation.Delta(*game, context)...)
+	return transactions
 }
 
 func GetAccuracy(game Game, source ResolvedActor, target ResolvedActor) float64 {
