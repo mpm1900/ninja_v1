@@ -22,14 +22,18 @@ type DamageTerms struct {
 }
 
 type DamageConfig struct {
-	Critical float64
-	Random   float64
+	Critical  float64
+	Random    float64
+	Repeat    bool
+	RepeatMax int
 }
 
 func NewDamageConfig() DamageConfig {
 	return DamageConfig{
-		Critical: 1.0,
-		Random:   1.0,
+		Critical:  1.0,
+		Random:    1.0,
+		Repeat:    false,
+		RepeatMax: 0,
 	}
 }
 

@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"fmt"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/mutations"
 
@@ -11,8 +10,8 @@ import (
 var LuckyStrikes = MakeLuckyStrikes()
 
 func MakeLuckyStrikes() game.Action {
-	accuracy := 60
-	power := 20
+	accuracy := 80
+	power := 10
 	stat := game.Attack
 	nature := game.NsTai
 	chakraCost := 30
@@ -38,29 +37,14 @@ func MakeLuckyStrikes() game.Action {
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				accuracy := *config.Accuracy
-				for {
-					config.Accuracy = nil
-					roll := game.MakeActionRoll()
-					if roll > accuracy {
-						zero := 0
-						config.Accuracy = &zero
-						fmt.Println("ROLL", roll, accuracy)
-					} else {
-						lx := game.MakeTransaction(game.AddLogs("It hits!"), context)
-						transactions = append(transactions, lx)
-					}
-
-					damages := mutations.NewDamage(config, game.NewDamageConfig())
-					transactions = append(
-						transactions,
-						mutations.MakeDamageTransactions(context, damages)...,
-					)
-
-					if config.Accuracy != nil && *config.Accuracy == 0 {
-						break
-					}
-				}
+				damage_config := game.NewDamageConfig()
+				damage_config.Repeat = true
+				damage_config.RepeatMax = -1
+				damages := mutations.NewDamage(config, damage_config)
+				transactions = append(
+					transactions,
+					mutations.MakeDamageTransactions(context, damages)...,
+				)
 
 				return transactions
 			},

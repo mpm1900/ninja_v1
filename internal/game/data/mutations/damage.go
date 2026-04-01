@@ -92,112 +92,135 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 				return g
 			}
 
+			if action.Stat == nil || action.Power == nil {
+				g.PushLog(fmt.Sprintf("%s failed: missing required damage configuration.", action.Name))
+				return g
+			}
+
+			selfContext := game.Context{
+				ParentActorID:  context.SourceActorID,
+				SourceActorID:  context.SourceActorID,
+				SourcePlayerID: context.SourcePlayerID,
+				TargetActorIDs: []uuid.UUID{*context.SourceActorID},
+			}
+
 			source := s.Resolve(g)
 			total := 0
+			repeats := 0
 			resolved := resolveTargets(g, context)
 			totals := make([]int, len(resolved))
-			for t_index, target := range resolved {
-				if target.Protected {
-					g.PushLog(fmt.Sprintf("%s was protected.", target.Name))
-					continue
-				}
+			repeatTransactions := make([]game.GameTransaction, 0)
 
-				base_accuracy := game.GetAccuracy(g, source, target)
+			defense := game.Defense
+			if *action.Stat == game.ChakraAttack {
+				defense = game.ChakraDefense
+			}
 
-				if action.Accuracy != nil {
-					accuracy := int(math.Floor(base_accuracy * float64(*action.Accuracy)))
-					roll := game.MakeActionRoll()
-					if roll > accuracy {
-						g.PushLog(fmt.Sprintf("%s missed!", action.Name))
-						g.PushLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy))
+			for {
+				missed := false
+
+				for ti, target := range resolved {
+					if target.Protected {
+						g.PushLog(fmt.Sprintf("%s was protected.", target.Name))
 						continue
 					}
-				}
 
-				defense := game.Defense
-				if *action.Stat == game.ChakraAttack {
-					defense = game.ChakraDefense
-				}
-
-				damages := game.GetDamage(
-					source,
-					[]game.ResolvedActor{target},
-					len(resolved),
-					*action.Stat,
-					defense,
-					*action.Power,
-					config.Critical,
-					action.Nature,
-					config.Random,
-				)
-
-				for _, damage := range damages {
-					g.On(game.OnDamageRecieve, context)
-					applied := ApplyDamage(&g, target, damage)
-					total += applied
-					totals[t_index] += applied
-				}
-			}
-
-			/**
-			 * LIFE STEAL
-			 */
-			if total > 0 && action.LifeSteal != nil && *action.LifeSteal > 0.0 && context.SourceActorID != nil {
-				lifeStealContext := game.Context{
-					ParentActorID:  context.SourceActorID,
-					SourceActorID:  context.SourceActorID,
-					SourcePlayerID: context.SourcePlayerID,
-					// Set the source as the target
-					TargetActorIDs: []uuid.UUID{*context.SourceActorID},
-				}
-
-				amount := int(math.Floor(*action.LifeSteal * float64(total)))
-				healMut := PureHeal(amount)
-				damageTx := game.MakeTransaction(healMut, lifeStealContext)
-				g.JumpTransaction(damageTx)
-			}
-
-			/**
-			 * RECOIL DAMAGE
-			 */
-			if total > 0 && action.Recoil != nil && *action.Recoil > 0.0 && context.SourceActorID != nil {
-				recoilContext := game.Context{
-					ParentActorID:  context.SourceActorID,
-					SourceActorID:  context.SourceActorID,
-					SourcePlayerID: context.SourcePlayerID,
-					// Set the source as the target
-					TargetActorIDs: []uuid.UUID{*context.SourceActorID},
-				}
-				amount := int(math.Floor(*action.Recoil * float64(total)))
-				damageMut := PureDamage(amount)
-				damageTx := game.MakeTransaction(damageMut, recoilContext)
-				g.JumpTransaction(damageTx)
-			}
-
-			/*
-			 * REFLECT DAMAGE
-			 */
-			if total > 0 && context.SourceActorID != nil {
-				for t_index, target := range resolved {
-					if target.Reflect > 0.0 && *context.SourceActorID != target.ID {
-						reflectContext := game.Context{
-							ParentActorID:  context.SourceActorID,
-							SourceActorID:  context.SourceActorID,
-							SourcePlayerID: context.SourcePlayerID,
-							// Set the source as the target
-							TargetActorIDs: []uuid.UUID{*context.SourceActorID},
+					baseAccuracy := game.GetAccuracy(g, source, target)
+					if action.Accuracy != nil {
+						accuracy := int(math.Floor(baseAccuracy * float64(*action.Accuracy)))
+						roll := game.MakeActionRoll()
+						if roll > accuracy {
+							if !config.Repeat || repeats == 0 {
+								g.PushLog(fmt.Sprintf("%s missed!", action.Name))
+								g.PushLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy))
+							}
+							missed = true
+							continue
 						}
-						damageMut := PureDamage(int(target.Reflect * float64(totals[t_index])))
-						damageTx := game.MakeTransaction(damageMut, reflectContext)
-						g.JumpTransaction(damageTx)
+					}
+
+					damages := game.GetDamage(
+						source,
+						[]game.ResolvedActor{target},
+						len(resolved),
+						*action.Stat,
+						defense,
+						*action.Power,
+						config.Critical,
+						action.Nature,
+						config.Random,
+					)
+
+					for _, damage := range damages {
+						g.On(game.OnDamageRecieve, context)
+
+						if !config.Repeat {
+							applied := ApplyDamage(&g, target, damage)
+							total += applied
+							totals[ti] += applied
+							continue
+						}
+
+						targetContext := context
+						targetContext.TargetActorIDs = []uuid.UUID{target.ID}
+
+						repeatTx := game.MakeTransaction(PureDamage(damage), targetContext)
+						logTx := game.MakeTransaction(game.AddLogs(fmt.Sprintf("%s hit %d times.", action.Name, repeats+1)), context)
+						repeatTransactions = append(repeatTransactions, repeatTx, logTx)
+
+						applied := clampDamage(damage)
+						total += applied
+						totals[ti] += applied
 					}
 				}
+
+				if !config.Repeat || missed {
+					break
+				}
+
+				if config.RepeatMax < 0 || config.RepeatMax > repeats {
+					repeats++
+				} else {
+					break
+				}
+			}
+
+			sideEffectTransactions := make([]game.GameTransaction, 0)
+
+			if total > 0 && action.LifeSteal != nil && *action.LifeSteal > 0.0 && context.SourceActorID != nil {
+				amount := int(math.Floor(*action.LifeSteal * float64(total)))
+				healMut := PureHeal(amount)
+				damageTx := game.MakeTransaction(healMut, selfContext)
+				sideEffectTransactions = append(sideEffectTransactions, damageTx)
+			}
+
+			if total > 0 && action.Recoil != nil && *action.Recoil > 0.0 && context.SourceActorID != nil {
+				amount := int(math.Floor(*action.Recoil * float64(total)))
+				damageMut := PureDamage(amount)
+				damageTx := game.MakeTransaction(damageMut, selfContext)
+				sideEffectTransactions = append(sideEffectTransactions, damageTx)
+			}
+
+			if total > 0 && context.SourceActorID != nil {
+				for ti, target := range resolved {
+					if target.Reflect > 0.0 && *context.SourceActorID != target.ID {
+						damageMut := PureDamage(int(target.Reflect * float64(totals[ti])))
+						damageTx := game.MakeTransaction(damageMut, selfContext)
+						sideEffectTransactions = append(sideEffectTransactions, damageTx)
+					}
+				}
+			}
+
+			orderedTransactions := make([]game.GameTransaction, 0, len(repeatTransactions)+len(sideEffectTransactions))
+			orderedTransactions = append(orderedTransactions, repeatTransactions...)
+			orderedTransactions = append(orderedTransactions, sideEffectTransactions...)
+			for i := len(orderedTransactions) - 1; i >= 0; i-- {
+				g.JumpTransaction(orderedTransactions[i])
 			}
 
 			return g
 		},
 	}
-
 }
 
 func MakeDamageTransactions(context game.Context, damages ...game.GameMutation) []game.GameTransaction {
