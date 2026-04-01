@@ -81,9 +81,8 @@ type Action struct {
 
 func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransaction {
 	if !transaction.Mutation.Filter(*game, transaction.Context) {
-		return []GameTransaction{
-			MakeTransaction(AddLogs(fmt.Sprintf("%s failed.", transaction.Mutation.Config.Name)), NewContext()),
-		}
+		game.PushLog(fmt.Sprintf("%s failed.", transaction.Mutation.Config.Name))
+		return []GameTransaction{}
 	}
 
 	if transaction.Mutation.Config.Cooldown != nil {
@@ -99,13 +98,21 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 		context = transaction.Mutation.MapContext(*game, context)
 	}
 
-	var transactions = []GameTransaction{}
 	ok, source := game.GetSource(context)
 	if ok {
-		transactions = append(transactions, MakeTransaction(AddLogs(fmt.Sprintf("%s used %s.", source.Name, transaction.Mutation.Config.Name)), context))
+		game.PushLog(fmt.Sprintf("%s used %s.", source.Name, transaction.Mutation.Config.Name))
 	}
-	transactions = append(transactions, transaction.Mutation.Delta(*game, context)...)
-	return transactions
+
+	queue, ok := game.QueuedActions[source.ID]
+	if ok {
+		if queue != transaction.Mutation.ID {
+			fmt.Println("ERROR: INVALID ACTION EXECTUED")
+			return []GameTransaction{}
+		}
+		delete(game.QueuedActions, source.ID)
+	}
+
+	return transaction.Mutation.Delta(*game, context)
 }
 
 func GetAccuracy(game Game, source ResolvedActor, target ResolvedActor) float64 {

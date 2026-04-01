@@ -52,6 +52,12 @@ type Game struct {
 	Actions Queue[Transaction[Action]] `json:"actions"`
 	Prompts Queue[Transaction[Action]]
 
+	/**
+	 * [QueuedActions] are a map of actor IDs to action IDs
+	 *  - the actions need not be on the user, it does a global lookup.
+	 */
+	QueuedActions map[uuid.UUID]uuid.UUID
+
 	Log []GameLog `json:"log"`
 }
 
@@ -467,6 +473,15 @@ func (g *Game) PushLog(log GameLog) {
 
 func (g *Game) NextTurn() {
 	g.Turn.Count++
+	g.Turn.Phase = TurnMain
+	for actorID, actionID := range g.QueuedActions {
+		// ok, actor := g.GetActorByID(actorID) TODO
+
+		context := NewContext()
+		context.ActionID = &actionID
+		context.ParentActorID = &actorID
+		context.SourceActorID = &actorID
+	}
 }
 
 type GameJSON struct {

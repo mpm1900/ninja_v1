@@ -166,7 +166,6 @@ func (i *Instance) RunGameActions() {
 			case game.TurnCleanup:
 				// Cleanup is complete, advance turn and reset to Main.
 				i.Game.NextTurn()
-				i.Game.Turn.Phase = game.TurnMain
 				i.BroadcastGame()
 				break resolveStep
 
