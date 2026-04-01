@@ -1,6 +1,8 @@
 package game
 
-import "slices"
+import (
+	"slices"
+)
 
 /**
  * Context Filters
@@ -195,11 +197,17 @@ func MatchSourceActorIDTrigger(game Game, context Context, modifier_tx Transacti
 }
 
 func Match__TargetActor_SourceActor(game Game, context Context, modifier_tx Transaction[Modifier]) bool {
-	if len(context.TargetActorIDs) == 0 || modifier_tx.Context.SourceActorID == nil {
+	targets := game.GetTargets(context)
+	if len(targets) == 0 || modifier_tx.Context.SourceActorID == nil {
 		return false
 	}
 
-	return context.TargetActorIDs[0] == *modifier_tx.Context.SourceActorID
+	for _, t := range targets {
+		if t.ID == *modifier_tx.Context.SourceActorID {
+			return true
+		}
+	}
+	return false
 }
 func Match__SourceActor_SourceActor(game Game, context Context, modifier_tx Transaction[Modifier]) bool {
 	if context.SourceActorID == nil || modifier_tx.Context.SourceActorID == nil {

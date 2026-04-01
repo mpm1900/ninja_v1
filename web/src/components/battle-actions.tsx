@@ -32,7 +32,7 @@ function BattleActions({ actor }: { actor: Actor }) {
           <AnimatePresence mode="wait" initial={false}>
             {action && (
               <motion.div
-                key={action.ID}
+                key={`${actor.ID}.${action.ID}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
