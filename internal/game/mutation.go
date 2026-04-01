@@ -57,6 +57,16 @@ func ComposeGameMutations(mutations ...GameMutation) GameMutation {
 	}
 }
 
+func AddLogs(logs ...GameLog) GameMutation {
+	return GameMutation{
+		Delta: func(g Game, context Context) Game {
+			g.Log = append(g.Log, logs...)
+
+			return g
+		},
+	}
+}
+
 /**
  * Actor Mutations
  * [ActorMutation]

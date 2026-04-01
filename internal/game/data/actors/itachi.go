@@ -40,6 +40,7 @@ var Itachi = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
 		actions.FollowMe.ID,
+		actions.Coercion.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,

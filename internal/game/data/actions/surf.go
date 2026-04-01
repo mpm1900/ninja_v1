@@ -11,7 +11,7 @@ var Surf = MakeSurf()
 
 func MakeSurf() game.Action {
 	ID := uuid.New()
-	accuracy := 90
+	accuracy := 100
 	power := 90
 	nature := game.NsWater
 	stat := game.ChakraAttack

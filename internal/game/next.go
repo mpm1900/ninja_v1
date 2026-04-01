@@ -65,9 +65,9 @@ func (g *Game) Validate() bool {
 
 func (g *Game) NextPhase() {
 	switch g.Turn.Phase {
-	case TurnInit, TurnStart:
+	case TurnStart:
 		g.Turn.Phase = TurnMain
-	case TurnMain:
+	case TurnInit, TurnMain:
 		g.Turn.Phase = TurnEnd
 	case TurnEnd:
 		g.Turn.Phase = TurnCleanup

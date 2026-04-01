@@ -251,6 +251,7 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 	g.UpdateActor(actor.ID, func(a Actor) Actor {
 		a.PositionID = positionID
 		if positionID != nil {
+			a.ActiveTurns = 0
 			a.Seen = true
 		}
 		return a

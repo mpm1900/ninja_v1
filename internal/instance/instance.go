@@ -148,6 +148,7 @@ func (i *Instance) RunGameActions() {
 
 			case game.TurnEnd:
 				i.Game.On(game.OnTurnEnd, game.NewContext())
+
 				for i.Game.Next() {
 					i.BroadcastGame()
 					time.Sleep(time.Second / 2)

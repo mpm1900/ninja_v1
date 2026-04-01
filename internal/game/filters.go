@@ -1,5 +1,7 @@
 package game
 
+import "slices"
+
 /**
  * Context Filters
  */
@@ -82,6 +84,16 @@ func SourceFilter(actor Actor, context Context) bool {
 	}
 	return actor.ID == *context.SourceActorID
 }
+func TargetFilter(actor Actor, context Context) bool {
+	if slices.Contains(context.TargetActorIDs, actor.ID) {
+		return true
+	}
+	if actor.PositionID != nil && slices.Contains(context.TargetPositionIDs, *actor.PositionID) {
+		return true
+	}
+
+	return false
+}
 func TeamFilter(actor Actor, context Context) bool {
 	if context.SourcePlayerID == nil {
 		return false
@@ -158,6 +170,20 @@ func SourceIsActionOnCooldown(g Game, context Context) bool {
 	}
 
 	return cooldown == 0
+}
+func SourceHasActiveTurns(turns int) func(Game, Context) bool {
+	return func(g Game, context Context) bool {
+		if context.ActionID == nil {
+			return false
+		}
+
+		ok, source := g.GetSource(context)
+		if !ok {
+			return false
+		}
+
+		return source.ActiveTurns == turns
+	}
 }
 
 func MatchSourceActorIDTrigger(game Game, context Context, modifier_tx Transaction[Modifier]) bool {

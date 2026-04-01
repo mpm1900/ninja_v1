@@ -10,7 +10,7 @@ import (
 var Chidori = MakeChidori()
 
 func MakeChidori() game.Action {
-	accuracy := 80
+	accuracy := 100
 	power := 80
 	recoil := 0.2
 	nature := game.NsLightning

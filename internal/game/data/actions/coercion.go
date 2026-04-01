@@ -2,41 +2,40 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/modifiers"
 	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
 
-var FollowMe = MakeFollowMe()
+var Coercion = MakeCoercion()
 
-func MakeFollowMe() game.Action {
+func MakeCoercion() game.Action {
+	cooldown := 1
 	nature := game.NsYin
 	config := game.ActionConfig{
-		Name:   "Follow Me",
-		Nature: &nature,
-		Jutsu:  game.Genjutsu,
+		Name:     "Sharingan: Coercion",
+		Nature:   &nature,
+		Cooldown: &cooldown,
+		Jutsu:    game.Genjutsu,
 	}
 	return game.Action{
 		ID:              uuid.New(),
 		Config:          config,
-		TargetType:      game.TargetActorID,
-		TargetPredicate: game.NoneFilter,
-		ContextValidate: game.TargetLengthFilter(0),
+		TargetType:      game.TargetPositionID,
+		TargetPredicate: game.ComposeAF(game.OtherTeamFilter, game.ActiveFilter),
+		ContextValidate: game.PositionsLengthFilter(1),
 		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityP2,
+			Priority: game.ActionPriorityProtect,
 			Filter: game.ComposeGF(
 				game.SourceIsAlive,
 				game.SourceIsActionOnCooldown,
+				game.SourceHasActiveTurns(1),
 			),
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				ok, source := g.GetSource(context)
-				if !ok {
-					return transactions
-				}
-
-				mutation := mutations.RedirectSingleTargetEnemyActions(source)
+				mutation := mutations.AddModifiers(modifiers.Stunned)
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)
 

@@ -33,6 +33,7 @@ type ActorDef = {
 }
 
 type ActorState = {
+  active_turns: number
   alive: boolean
   damage: number
   stamina_damage: number

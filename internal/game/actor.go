@@ -87,6 +87,7 @@ type ActorDef struct {
 }
 
 type ActorState struct {
+	ActiveTurns int `json:"active_turns"`
 	// [Alive] whether or not the actor is alive, could
 	// - could be computed, but this is here to not have to call .Resolve() on filters
 	Alive bool `json:"alive"`
@@ -271,8 +272,10 @@ func MapBaseStats(actor Actor) Actor {
 func MapStagedStat(stat, stage, mod int) int {
 	m := 1.0
 	if stage > 0 {
+		stage = min(stage, 6)
 		m = float64(stage+mod) / float64(mod)
 	} else if stage < 0 {
+		stage = max(stage, -6)
 		m = float64(mod) / float64(-stage+mod)
 	}
 

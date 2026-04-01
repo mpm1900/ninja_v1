@@ -8,15 +8,18 @@ import (
 )
 
 var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
-	game.Switch.ID:         game.Switch,
-	game.SwitchInIds[1]:    game.SwitchIn(1),
-	game.SwitchInIds[2]:    game.SwitchIn(2),
-	game.SwitchInIds[3]:    game.SwitchIn(3),
-	game.SwitchInIds[4]:    game.SwitchIn(4),
-	game.SwitchInIds[5]:    game.SwitchIn(5),
-	actions.FollowMe.ID:    actions.FollowMe,
-	actions.Protect.ID:     actions.Protect,
-	actions.Tailwind.ID:    actions.Tailwind,
+	game.Switch.ID:      game.Switch,
+	game.SwitchInIds[1]: game.SwitchIn(1),
+	game.SwitchInIds[2]: game.SwitchIn(2),
+	game.SwitchInIds[3]: game.SwitchIn(3),
+	game.SwitchInIds[4]: game.SwitchIn(4),
+	game.SwitchInIds[5]: game.SwitchIn(5),
+
+	actions.FollowMe.ID: actions.FollowMe,
+	actions.Protect.ID:  actions.Protect,
+	actions.Tailwind.ID: actions.Tailwind,
+	actions.Coercion.ID: actions.Coercion,
+
 	actions.Surf.ID:        actions.Surf,
 	actions.LeafJab.ID:     actions.LeafJab,
 	actions.DragonDance.ID: actions.DragonDance,

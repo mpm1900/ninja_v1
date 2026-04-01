@@ -1,8 +1,6 @@
 package game
 
 import (
-	"fmt"
-
 	"github.com/google/uuid"
 )
 
@@ -32,21 +30,26 @@ var END_OF_TURN_TRIGGER Trigger = Trigger{
 	Check: func(g Game, context Context, tx Transaction[Modifier]) bool { return true },
 	ActionMutation: ActionMutation{
 		Delta: func(input Game, context Context) []Transaction[GameMutation] {
-			fmt.Println("ON TURN END")
 			var transactions []Transaction[GameMutation]
 			mut := GameMutation{
 				Delta: func(g Game, c Context) Game {
+					t := g.Turn.Count
 					for i, _ := range g.Actors {
-						g.Actors[i].DecrementCooldowns()
-						g.Actors[i].RecoverStamina(g, 0.08)
+						if t > 0 {
+							g.Actors[i].DecrementCooldowns()
+							g.Actors[i].RecoverStamina(g, 0.08)
+						}
+						g.Actors[i].ActiveTurns++
 					}
 
-					g.FilterModifiers(func(mod Transaction[Modifier]) bool {
-						return mod.Mutation.Duration != 0
-					})
+					if t > 0 {
+						g.FilterModifiers(func(mod Transaction[Modifier]) bool {
+							return mod.Mutation.Duration != 0
+						})
 
-					for i, _ := range g.Modifiers {
-						g.Modifiers[i].Mutation.Duration -= 1
+						for i, _ := range g.Modifiers {
+							g.Modifiers[i].Mutation.Duration -= 1
+						}
 					}
 
 					return g

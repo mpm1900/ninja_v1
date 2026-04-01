@@ -8,12 +8,13 @@ import (
 )
 
 const (
-	ActionPrioritySwitch   = 10
-	ActionPriorityProtect  = 4
-	ActionPriorityVeryFast = 2
-	ActionPriorityFast     = 1
-	ActionPriorityDefault  = 0
-	ActionPrioritySlow     = -1
+	ActionPrioritySwitch  = 10
+	ActionPriorityProtect = 4
+	ActionPriorityP3      = 3
+	ActionPriorityP2      = 2
+	ActionPriorityP1      = 1
+	ActionPriorityDefault = 0
+	ActionPrioritySlow    = -1
 )
 
 type ActionJutsu string
@@ -39,6 +40,7 @@ type ActionConfig struct {
 	Stat        *AttackStat `json:"stat"`
 	TargetCount *int        `json:"target_count"`
 	Jutsu       ActionJutsu `json:"jutsu"`
+	Description string      `json:"description"`
 }
 
 type ActionTargetType string
@@ -79,8 +81,9 @@ type Action struct {
 
 func ResolveAction(game *Game, transaction Transaction[Action]) []Transaction[GameMutation] {
 	if !transaction.Mutation.Filter(*game, transaction.Context) {
-		fmt.Printf("Action Failed: %s +%v\n", transaction.Mutation.Config.Name, transaction.Context)
-		return []Transaction[GameMutation]{}
+		return []Transaction[GameMutation]{
+			MakeTransaction(AddLogs(fmt.Sprintf("%s failed.", transaction.Mutation.Config.Name)), NewContext()),
+		}
 	}
 
 	if transaction.Mutation.Config.Cooldown != nil {
