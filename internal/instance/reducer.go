@@ -16,7 +16,7 @@ func Reducer(instance *Instance, request Request) int {
 			return none
 		}
 
-		ok, player := instance.Game.GetPlayerByID(request.ClientID)
+		player, ok := instance.Game.GetPlayerByID(request.ClientID)
 		if !ok {
 			fmt.Println("[AddActor] Unknown Player")
 			return none
@@ -27,7 +27,7 @@ func Reducer(instance *Instance, request Request) int {
 			fmt.Println("[AddActor] Team Full")
 			return none
 		}
-		actor := game.MakeActor(def, request.ClientID, /* 24 13824 */ 1000000, data.ACTIONS)
+		actor := game.MakeActor(def, request.ClientID /* 24 13824 */, 1000000, data.ACTIONS)
 		instance.Game.AddActor(actor)
 		return state
 	case RemoveActor:
@@ -132,7 +132,7 @@ func Reducer(instance *Instance, request Request) int {
 		}
 
 		target := targets[0]
-		ok, player := instance.Game.GetPlayerByID(*request.Context.SourcePlayerID)
+		player, ok := instance.Game.GetPlayerByID(*request.Context.SourcePlayerID)
 		if !ok {
 			return none
 		}

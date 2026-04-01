@@ -17,7 +17,7 @@ func NewNoop(groupID *uuid.UUID) ActorMutation {
 
 var SwitchPositions = GameMutation{
 	Delta: func(g Game, context Context) Game {
-		ok, source := g.GetSource(context)
+		source, ok := g.GetSource(context)
 		if !ok || source.PositionID == nil {
 			return g
 		}

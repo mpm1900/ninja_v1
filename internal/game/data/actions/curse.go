@@ -29,7 +29,7 @@ func MakeCurse() game.Action {
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				ok, s := g.GetSource(context)
+				s, ok := g.GetSource(context)
 				if !ok {
 					return transactions
 				}

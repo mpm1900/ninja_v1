@@ -15,8 +15,9 @@ function BattleActions({ actor }: { actor: Actor }) {
   const game = useStore(gameStore, (g) => g)
   const context = useStore(battleContext, (c) => c)
   const action = actor.actions.find((a) => a.ID === context.action_ID)
+  const has_queued_action = game.queued_actions[actor.ID]
   const idle = game.status === 'idle'
-  const queued = game.actions.find(
+  const staged = game.actions.find(
     (tx) => tx.context.source_actor_ID === actor.ID
   )
 
@@ -43,14 +44,16 @@ function BattleActions({ actor }: { actor: Actor }) {
                   mass: 0.6,
                 }}
               >
-                {!queued && (
+                {!staged && (
                   <div className="grid place-items-center text-muted-foreground mb-6">
-                    <div>{action ? action.config.name : 'Choose an Action'}</div>
+                    <div>
+                      {action ? action.config.name : 'Choose an Action'}
+                    </div>
                   </div>
                 )}
                 <ActionControl
                   action={action}
-                  queued={queued}
+                  staged={staged}
                   enabled={
                     game.status === 'idle' &&
                     !!actor.position_ID &&
@@ -68,7 +71,7 @@ function BattleActions({ actor }: { actor: Actor }) {
           <motion.div
             initial={false}
             animate={{
-              y: idle ? -56 : 18,
+              y: idle && !has_queued_action ? -56 : 18,
             }}
             transition={{
               y: { type: 'spring', stiffness: 420, damping: 34, mass: 0.68 },
@@ -80,7 +83,7 @@ function BattleActions({ actor }: { actor: Actor }) {
               <motion.div
                 key={actor.ID}
                 initial={{ y: 100, opacity: 0 }}
-                animate={{ y: 0, opacity: idle ? 1 : 0 }}
+                animate={{ y: 0, opacity: idle && !has_queued_action ? 1 : 0 }}
                 exit={{ y: 100, opacity: 0 }}
                 transition={{
                   type: 'spring',
@@ -101,7 +104,7 @@ function BattleActions({ actor }: { actor: Actor }) {
                       className={cn(
                         'relative pointer-events-auto transform-gpu will-change-transform',
                         {
-                          'pointer-events-none': !!queued && !selected,
+                          'pointer-events-none': !!staged && !selected,
                         }
                       )}
                       style={{
@@ -131,7 +134,7 @@ function BattleActions({ actor }: { actor: Actor }) {
                     >
                       <ActionCard
                         action={a}
-                        disabled={!!queued && !selected}
+                        disabled={!!staged && !selected}
                         selected={selected}
                         onClick={() => setContextAction(a.ID)}
                       />

@@ -13,13 +13,13 @@ import { setActionID } from '#/lib/stores/battle-context'
 
 function ActionControl({
   action,
-  queued,
+  staged,
   enabled,
   context,
   onContextChange,
 }: {
   action?: Action
-  queued?: ActionTransaction
+  staged?: ActionTransaction
   enabled: boolean
   context: Context
   onContextChange: (context: Context) => void
@@ -31,25 +31,32 @@ function ActionControl({
   const actionTargets = useQuery(actionTargetsQuery(instanceID, context))
   const loading = valid.isFetching || actionTargets.isFetching
   const actors = game.actors.filter((a) => actionTargets.data?.includes(a.ID))
+  const has_queued_action = game.queued_actions[context.source_actor_ID ?? '']
 
-  if (!!queued) {
+  if (!!staged) {
     return (
       <div className="flex flex-col py-4 items-center">
-        <Button
-          disabled={loading || !enabled}
-          onClick={() => {
-            sendContextMessage({
-              type: 'remove-action',
-              client_ID: client.ID,
-              context: {
-                ...NULL_CONTEXT,
-                action_ID: queued.ID,
-              },
-            })
-          }}
-        >
-          Cancel {queued.mutation.config.name}
-        </Button>
+        {has_queued_action ? (
+          <span className="text-muted-foreground">
+            {staged.mutation.config.name}
+          </span>
+        ) : (
+          <Button
+            disabled={loading || !enabled}
+            onClick={() => {
+              sendContextMessage({
+                type: 'remove-action',
+                client_ID: client.ID,
+                context: {
+                  ...NULL_CONTEXT,
+                  action_ID: staged.ID,
+                },
+              })
+            }}
+          >
+            Cancel {staged.mutation.config.name}
+          </Button>
+        )}
       </div>
     )
   }

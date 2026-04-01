@@ -16,7 +16,7 @@ func (g *Game) Validate() bool {
 				continue
 			}
 
-			ok, actor := g.GetActorByID(*pos.ActorID)
+			actor, ok := g.GetActorByID(*pos.ActorID)
 			if !ok {
 				missing_pos = append(missing_pos, pos.ID)
 				continue

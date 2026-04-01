@@ -56,12 +56,17 @@ type Game struct {
 	 * [QueuedActions] are a map of actor IDs to action IDs
 	 *  - the actions need not be on the user, it does a global lookup.
 	 */
-	QueuedActions map[uuid.UUID]uuid.UUID
+	QueuedActions map[uuid.UUID]Transaction[uuid.UUID] `json:"queued_actions"`
 
 	Log []GameLog `json:"log"`
+
+	/**
+	 * [ActionRegistry]
+	 */
+	ActionRegistry map[uuid.UUID]Action
 }
 
-func NewGame() Game {
+func NewGame(actionRegistry map[uuid.UUID]Action) Game {
 	return Game{
 		Status: GameStatusIdle,
 		Turn: Turn{
@@ -76,7 +81,10 @@ func NewGame() Game {
 		Actions:       MakeQueue[Transaction[Action]](),
 		Prompts:       MakeQueue[Transaction[Action]](),
 		Triggers:      MakeQueue[Transaction[Trigger]](),
+		QueuedActions: make(map[uuid.UUID]Transaction[uuid.UUID]),
 		Log:           []string{},
+
+		ActionRegistry: actionRegistry,
 	}
 }
 
@@ -85,32 +93,32 @@ func NewGame() Game {
  */
 
 // Player
-func (g Game) GetPlayer(predicate func(Player) bool) (bool, Player) {
+func (g Game) GetPlayer(predicate func(Player) bool) (Player, bool) {
 	for _, a := range g.Players {
 		if predicate(a) {
-			return true, a
+			return a, true
 		}
 	}
 
-	return false, Player{}
+	return Player{}, false
 }
-func (g Game) GetPlayerByID(ID uuid.UUID) (bool, Player) {
+func (g Game) GetPlayerByID(ID uuid.UUID) (Player, bool) {
 	return g.GetPlayer(func(p Player) bool {
 		return p.ID == ID
 	})
 }
 
 // Actor
-func (g Game) GetActor(predicate func(Actor) bool) (bool, Actor) {
+func (g Game) GetActor(predicate func(Actor) bool) (Actor, bool) {
 	for _, a := range g.Actors {
 		if predicate(a) {
-			return true, a
+			return a, true
 		}
 	}
 
-	return false, Actor{}
+	return Actor{}, false
 }
-func (g Game) GetActorByID(ID uuid.UUID) (bool, Actor) {
+func (g Game) GetActorByID(ID uuid.UUID) (Actor, bool) {
 	return g.GetActor(func(a Actor) bool {
 		return a.ID == ID
 	})
@@ -230,7 +238,7 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 		return
 	}
 
-	ok, player := g.GetPlayerByID(actor.PlayerID)
+	player, ok := g.GetPlayerByID(actor.PlayerID)
 	if !ok {
 		return
 	}
@@ -242,7 +250,7 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 	if positionID != nil {
 		curr := player.GetActorAtPosition(*positionID)
 		if curr != nil {
-			ok, displaced := g.GetActorByID(*curr)
+			displaced, ok := g.GetActorByID(*curr)
 			if ok {
 				g.SetPosition(displaced, nil)
 			}
@@ -294,7 +302,7 @@ func (g *Game) SetActorPlayerIndex(actor Actor, index *int) {
 		g.SetPosition(actor, nil)
 	}
 
-	ok, player := g.GetPlayerByID(actor.PlayerID)
+	player, ok := g.GetPlayerByID(actor.PlayerID)
 	if !ok || *index >= len(player.Positions) {
 		return
 	}
@@ -342,11 +350,11 @@ func (g *Game) SortActions() {
 			return b.Mutation.Priority - a.Mutation.Priority
 		}
 
-		ok, a_source := g.GetActorByID(*a.Context.SourceActorID)
+		a_source, ok := g.GetActorByID(*a.Context.SourceActorID)
 		if !ok {
 			return 1
 		}
-		ok, b_source := g.GetActorByID(*b.Context.SourceActorID)
+		b_source, ok := g.GetActorByID(*b.Context.SourceActorID)
 		if !ok {
 			return -1
 		}
@@ -425,9 +433,12 @@ func (g *Game) RunPrompt(transaction Transaction[Action]) {
 
 func (g *Game) RunAction(transaction Transaction[Action]) {
 	if transaction.Context.SourceActorID != nil {
-		_, s := g.GetActorByID(*transaction.Context.SourceActorID)
-		source := s.Resolve(*g)
+		s, ok := g.GetActorByID(*transaction.Context.SourceActorID)
+		if !ok {
+			return
+		}
 
+		source := s.Resolve(*g)
 		if source.Stunned {
 			g.PushLog(fmt.Sprintf("%s was stunned", source.Name))
 			return
@@ -474,13 +485,14 @@ func (g *Game) PushLog(log GameLog) {
 func (g *Game) NextTurn() {
 	g.Turn.Count++
 	g.Turn.Phase = TurnMain
-	for actorID, actionID := range g.QueuedActions {
-		// ok, actor := g.GetActorByID(actorID) TODO
+	for _, tx := range g.QueuedActions {
+		action, ok := g.ActionRegistry[tx.Mutation]
+		if !ok {
+			fmt.Println("ERROR: UNREGISTERED ACTION")
+			continue
+		}
 
-		context := NewContext()
-		context.ActionID = &actionID
-		context.ParentActorID = &actorID
-		context.SourceActorID = &actorID
+		g.PushAction(MakeTransaction(action, tx.Context))
 	}
 }
 
@@ -498,6 +510,8 @@ type GameJSON struct {
 	Triggers     []Transaction[Trigger]      `json:"triggers"`
 
 	Log []GameLog `json:"log"`
+
+	QueuedActions map[uuid.UUID]Transaction[uuid.UUID] `json:"queued_actions"`
 }
 
 func (g Game) ToJSON(playerID *uuid.UUID) GameJSON {
@@ -534,6 +548,7 @@ func (g Game) ToJSON(playerID *uuid.UUID) GameJSON {
 		Prompt:        prompt,
 		Triggers:      g.Triggers,
 		Log:           g.Log,
+		QueuedActions: g.QueuedActions,
 	}
 }
 

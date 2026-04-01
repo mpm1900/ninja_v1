@@ -18,6 +18,12 @@ type Game = {
   actions: ActionTransaction[]
   prompt: ActionTransaction | null
   log: string[]
+
+  queued_actions: Record<string, {
+    ID: string
+    context: Context
+    mutation: string
+  }>
 }
 
 export type { Game }

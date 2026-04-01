@@ -41,6 +41,8 @@ type ActionConfig struct {
 	TargetCount *int        `json:"target_count"`
 	Jutsu       ActionJutsu `json:"jutsu"`
 	Description string      `json:"description"`
+	LogSuccessF *string     `json:"-"`
+	LogFailureF *string     `json:"-"`
 }
 
 type ActionTargetType string
@@ -80,39 +82,48 @@ type Action struct {
 }
 
 func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransaction {
-	if !transaction.Mutation.Filter(*game, transaction.Context) {
-		game.PushLog(fmt.Sprintf("%s failed.", transaction.Mutation.Config.Name))
+	action := transaction.Mutation
+	if !action.Filter(*game, transaction.Context) {
+		log := fmt.Sprintf("%s failed.", action.Config.Name)
+		if action.Config.LogFailureF != nil {
+			log = fmt.Sprintf(*action.Config.LogFailureF, action.Config.Name)
+		}
+		game.PushLog(log)
 		return []GameTransaction{}
 	}
 
-	if transaction.Mutation.Config.Cooldown != nil {
+	if action.Config.Cooldown != nil {
 		game.SetActionCooldown(
 			*transaction.Context.SourceActorID,
-			transaction.Mutation.ID,
-			*transaction.Mutation.Config.Cooldown,
+			action.ID,
+			*action.Config.Cooldown,
 		)
 	}
 
 	context := transaction.Context
-	if transaction.Mutation.MapContext != nil {
-		context = transaction.Mutation.MapContext(*game, context)
+	if action.MapContext != nil {
+		context = action.MapContext(*game, context)
 	}
 
-	ok, source := game.GetSource(context)
+	source, ok := game.GetSource(context)
 	if ok {
-		game.PushLog(fmt.Sprintf("%s used %s.", source.Name, transaction.Mutation.Config.Name))
+		log := fmt.Sprintf("%s used %s.", source.Name, action.Config.Name)
+		if action.Config.LogSuccessF != nil {
+			log = fmt.Sprintf(*action.Config.LogSuccessF, source.Name, action.Config.Name)
+		}
+		game.PushLog(log)
 	}
 
 	queue, ok := game.QueuedActions[source.ID]
 	if ok {
-		if queue != transaction.Mutation.ID {
+		delete(game.QueuedActions, source.ID)
+		if queue.Mutation != transaction.Mutation.ID {
 			fmt.Println("ERROR: INVALID ACTION EXECTUED")
 			return []GameTransaction{}
 		}
-		delete(game.QueuedActions, source.ID)
 	}
 
-	return transaction.Mutation.Delta(*game, context)
+	return action.Delta(*game, context)
 }
 
 func GetAccuracy(game Game, source ResolvedActor, target ResolvedActor) float64 {

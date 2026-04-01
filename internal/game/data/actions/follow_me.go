@@ -32,7 +32,7 @@ func MakeFollowMe() game.Action {
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				ok, source := g.GetSource(context)
+				source, ok := g.GetSource(context)
 				if !ok {
 					return transactions
 				}

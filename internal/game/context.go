@@ -44,17 +44,17 @@ func (g Game) GetTargets(context Context) []Actor {
 	return targets
 }
 
-func (g Game) GetSource(context Context) (bool, Actor) {
+func (g Game) GetSource(context Context) (Actor, bool) {
 	if context.SourceActorID == nil {
-		return false, Actor{}
+		return Actor{}, false
 	}
 
 	return g.GetActorByID(*context.SourceActorID)
 }
 
-func (g Game) GetParent(context Context) (bool, Actor) {
+func (g Game) GetParent(context Context) (Actor, bool) {
 	if context.ParentActorID == nil {
-		return false, Actor{}
+		return Actor{}, false
 	}
 
 	return g.GetActorByID(*context.ParentActorID)

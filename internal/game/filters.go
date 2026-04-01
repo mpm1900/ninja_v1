@@ -149,7 +149,7 @@ func AllGameFilter(game Game, context Context) bool {
 	return true
 }
 func SourceIsAlive(game Game, context Context) bool {
-	ok, source := game.GetSource(context)
+	source, ok := game.GetSource(context)
 	if !ok {
 		return false
 	}
@@ -161,7 +161,7 @@ func SourceIsActionOnCooldown(g Game, context Context) bool {
 		return false
 	}
 
-	ok, source := g.GetSource(context)
+	source, ok := g.GetSource(context)
 	if !ok {
 		return false
 	}
@@ -179,7 +179,7 @@ func SourceHasActiveTurns(turns int) func(Game, Context) bool {
 			return false
 		}
 
-		ok, source := g.GetSource(context)
+		source, ok := g.GetSource(context)
 		if !ok {
 			return false
 		}

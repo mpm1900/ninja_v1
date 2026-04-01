@@ -60,6 +60,7 @@ function ActorCard({
   const action_tx = game.actions.find(
     (t) => t.context.source_actor_ID === actor?.ID
   )
+  const has_queued_action = game.queued_actions[actor?.ID ?? '']
 
   return (
     <div className={cn('flex flex-col', className)}>
@@ -112,6 +113,8 @@ function ActorCard({
               ) : (
                 <Badge
                   onClick={() => {
+                    if (has_queued_action) return
+
                     sendContextMessage({
                       type: 'remove-action',
                       client_ID: client_ID!,
@@ -122,7 +125,7 @@ function ActorCard({
                     })
                   }}
                 >
-                  {action_tx.mutation.config.name} <X />
+                  {action_tx.mutation.config.name} {!has_queued_action && <X />}
                 </Badge>
               )}
             </div>

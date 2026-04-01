@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"maps"
 	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data"
 	"slices"
 	"time"
 
@@ -31,7 +32,7 @@ func NewInstance(ctx context.Context, id uuid.UUID) *Instance {
 		Unregister:  make(chan *Client),
 		ReadRequest: make(chan Request),
 
-		Game: game.NewGame(),
+		Game: game.NewGame(data.ACTIONS),
 	}
 }
 
@@ -95,7 +96,7 @@ func (i *Instance) Run() {
 			i.RegisterClient(client)
 			i.BroadcastClients()
 
-			if ok, _ := i.Game.GetPlayerByID(client.ID); !ok {
+			if _, ok := i.Game.GetPlayerByID(client.ID); !ok {
 				i.Game.AddPlayer(game.NewPlayer(client.ID, 2, *client.User))
 				i.BroadcastGame()
 			}

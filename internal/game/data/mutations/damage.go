@@ -87,7 +87,7 @@ func RatioDamage(ratio float64) game.GameMutation {
 func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMutation {
 	return game.GameMutation{
 		Delta: func(g game.Game, context game.Context) game.Game {
-			ok, s := g.GetSource(context)
+			s, ok := g.GetSource(context)
 			if !ok {
 				return g
 			}
@@ -297,7 +297,7 @@ func PureHeal(amount int) game.GameMutation {
 func NewHeal(action game.ActionConfig, ratio float64) game.GameMutation {
 	return game.GameMutation{
 		Delta: func(g game.Game, context game.Context) game.Game {
-			ok, s := g.GetSource(context)
+			s, ok := g.GetSource(context)
 			if !ok {
 				return g
 			}
