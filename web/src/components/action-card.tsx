@@ -6,10 +6,12 @@ import { NatureBadge } from './nature-badge'
 type ActionCardProps = ComponentProps<'button'> & {
   action: Action
   selected?: boolean
+  cooldown: number | undefined
 }
 
 function ActionCard({
   action,
+  cooldown,
   selected = false,
   disabled = false,
   className,
@@ -37,8 +39,8 @@ function ActionCard({
           'border-orange-400': action.config.stat === 'attack' && selected,
           'border-indigo-400/50 hover:border-indigo-400':
             action.config.stat === 'chakra_attack',
-          'border-indigo-400': action.config.stat === 'chakra_attack' && selected,
-
+          'border-indigo-400':
+            action.config.stat === 'chakra_attack' && selected,
         },
         className
       )}
@@ -55,13 +57,19 @@ function ActionCard({
             {action.config.nature && (
               <NatureBadge nature={action.config.nature} />
             )}
-            <div className='-space-y-1'>
+            <div className="-space-y-1">
               <div className="truncate text-sm font-semibold">
                 {action.config.name}
               </div>
-              <div className="text-[10px] uppercase tracking-wide text-white/60">
-                {action.config.jutsu || '-'}
-              </div>
+              {cooldown !== undefined ? (
+                <div className="text-[10px] uppercase tracking-wide text-destructive">
+                  on cooldown
+                </div>
+              ) : (
+                <div className="text-[10px] uppercase tracking-wide text-white/60">
+                  {action.config.jutsu || '-'}
+                </div>
+              )}
             </div>
           </div>
 
@@ -78,8 +86,15 @@ function ActionCard({
         <StatChip label="Power" value={action.config.power ?? '-'} />
         <StatChip label="Acc" value={accuracyLabel} />
       </div>
-      <div className={`flex-1 px-3 py-2 text-xs text-black font-bold rounded-b-md bg-[url('/paper.jpg')] relative`}>
-        <div className={cn('bg-black/30 group-hover:bg-black/15 absolute inset-0 rounded z-1 transition-colors', selected && 'bg-transparent!')} />
+      <div
+        className={`flex-1 px-3 py-2 text-xs text-black font-bold rounded-b-md bg-[url('/paper.jpg')] relative`}
+      >
+        <div
+          className={cn(
+            'bg-black/30 group-hover:bg-black/15 absolute inset-0 rounded z-1 transition-colors',
+            selected && 'bg-transparent!'
+          )}
+        />
         {action.config.description}
       </div>
     </button>

@@ -136,6 +136,7 @@ function BattleActions({ actor }: { actor: Actor }) {
                     >
                       <ActionCard
                         action={a}
+                        cooldown={actor.action_cooldowns[a.ID]}
                         disabled={!!staged && !selected}
                         selected={selected}
                         onClick={() => setContextAction(a.ID)}
