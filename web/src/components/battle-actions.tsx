@@ -123,6 +123,8 @@ function BattleActions({ actor }: { actor: Actor }) {
                         scale: selected ? 1.05 : 1.02,
                         rotate: 0,
                         zIndex: 90,
+                        paddingBottom: 28,
+                        marginBottom: -28
                       }}
                       whileTap={{ scale: 1.01 }}
                       transition={{
@@ -137,6 +139,9 @@ function BattleActions({ actor }: { actor: Actor }) {
                         disabled={!!staged && !selected}
                         selected={selected}
                         onClick={() => setContextAction(a.ID)}
+                        style={{
+                          zIndex: selected ? 80 : 20 + i,
+                        }}
                       />
                     </motion.div>
                   )

@@ -16,17 +16,16 @@ import { StageBadge } from './stage-badge'
 const actorVariants = cva(
   cn(
     'group/item flex flex-wrap items-center rounded-md border text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50',
-    'p-2 w-86 border-transparent',
-    'border-black border-2'
+    'p-2 w-86',
   ),
   {
     variants: {
       player: {
-        player: 'bg-gray-800',
-        enemy: '',
+        player: 'bg-gray-950 border-gray-700',
+        enemy: 'border-transparent',
       },
       selected: {
-        selected: 'bg-gray-700! border-gray-400',
+        selected: 'bg-mist-700! border-gray-400!',
         // source: 'scale-105 bg-blue-900! border-blue-300/40',
         targeted: 'bg-red-900! border-red-300/40',
         source: 'bg-yellow-900! border-yellow-300/40',
@@ -84,7 +83,7 @@ function ActorCard({
         {actor && (
           <div className="relative">
             <ActorThumbnail actor={actor} size={50} />
-            <div className="absolute font-bold px-1 h-4 leading-5 rounded whitespace-nowrap -bottom-1 z-10 bg-mist-300 text-background text-lg nanum-brush-script-regular">
+            <div className="absolute shadow-md shadow- font-bold px-1 h-4 leading-5 rounded whitespace-nowrap -bottom-1 z-10 bg-mist-300 text-background text-lg nanum-brush-script-regular">
               LV {actor.level}
             </div>
           </div>
@@ -137,7 +136,7 @@ function ActorCard({
           {actor && (
             <div className="absolute -bottom-1.5 flex gap-1 px-2">
               {Object.entries(actor.staged_stats).map(([key, stage]) => (
-                <StageBadge stage={stage as any} stat={key as any} />
+                <StageBadge key={key} stage={stage as any} stat={key as any} />
               ))}
             </div>
           )}

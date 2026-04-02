@@ -38,7 +38,7 @@ function RouteComponent() {
     <>
       <PromptController />
       <BattleContextController />
-      <main className="flex flex-col h-screen">
+      <main className="flex flex-col h-screen bg-zinc-800">
         <AppHeader />
         <div className="flex flex-col flex-1 relative overflow-auto">
           <div>
@@ -69,7 +69,7 @@ function RouteComponent() {
                       ))}
                   </div>
                 ))}
-              <Accordion defaultValue='log' type="single">
+              <Accordion defaultValue='log' type="single" className='bg-black/20 px-3'>
                 <AccordionItem value="log">
                   <AccordionTrigger>Log</AccordionTrigger>
                   <AccordionContent>

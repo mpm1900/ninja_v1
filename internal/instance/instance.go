@@ -161,6 +161,7 @@ func (i *Instance) RunGameActions() {
 				continue
 
 			case game.TurnCleanup:
+				time.Sleep(i.Game.Tick)
 				// Cleanup is complete, advance turn and reset to Main.
 				i.Game.NextTurn()
 				i.BroadcastGame()

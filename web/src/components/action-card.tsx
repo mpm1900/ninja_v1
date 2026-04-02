@@ -23,68 +23,104 @@ function ActionCard({
       type="button"
       disabled={disabled}
       className={cn(
-        'w-[200px] h-[200px] rounded-lg border-4 text-left',
-        'bg-zinc-900 border-white/40 hover:border-white/60 text-zinc-100',
+        'group',
+        'flex flex-col w-[200px] h-[200px] rounded-lg border-2 border-white/50 hover:border-white text-left relative',
+        `bg-black text-foreground`,
         'transition-all duration-200',
-        'hover:-translate-y-0.5 hover:shadow-md',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300/70',
-        'flex flex-col hover:shadow-xl hover:shadow-black transition-colors',
+        'hover:-translate-y-0.5',
+        'focus-visible:outline-none',
+        'flex flex-col shadow-xl shadow-black/60 hover:shadow-black',
         {
-          'border-orange-400/60 hover:border-orange-400/80':
+          'border-white shadow-lg shadow-black': selected,
+          'border-orange-400/70 hover:border-orange-400':
             action.config.stat === 'attack',
-          'border-indigo-500/60 hover:border-indigo-400/80':
+          'border-orange-400/80': action.config.stat === 'attack' && selected,
+          'border-indigo-400/50 hover:border-indigo-400':
             action.config.stat === 'chakra_attack',
-          'shadow-xl shadow-black': selected,
+          'border-indigo-400/80': action.config.stat === 'chakra_attack' && selected,
+
         },
         className
       )}
       {...props}
     >
-      <div
-        className={cn(
-          'flex items-start justify-between gap-2 p-2',
-          disabled && 'opacity-50'
-        )}
-      >
-        <div className="min-w-0 flex items-center gap-1">
-          {action.config.nature && (
-            <NatureBadge nature={action.config.nature} />
+      <div className="relative">
+        <div
+          className={cn(
+            'flex items-start justify-between gap-2 p-2 bg-black text-white rounded-t-sm',
+            disabled && 'opacity-50'
           )}
-          <div>
-            <div className="truncate text-xs font-semibold text-zinc-200">
-              {action.config.name}
-            </div>
-            <div className="text-[10px] uppercase tracking-wide text-zinc-400">
-              {action.config.jutsu}
+        >
+          <div className="min-w-0 flex items-center gap-2">
+            {action.config.nature && (
+              <NatureBadge nature={action.config.nature} />
+            )}
+            <div className='-space-y-1'>
+              <div className="truncate text-sm font-semibold">
+                {action.config.name}
+              </div>
+              <div className="text-[10px] uppercase tracking-wide text-white/60">
+                {action.config.jutsu || '-'}
+              </div>
             </div>
           </div>
-        </div>
 
-        {action.config.cost && (
-          <div className="text-orange-300 font-black nanum-brush-script-regular text-4xl h-8 -mt-0.5">
-            {action.config.cost ?? 0}
-          </div>
-        )}
+          {action.config.cost && (
+            <div className="text-white/90 font-black nanum-brush-script-regular text-4xl h-8 -mt-0.5">
+              {action.config.cost ?? 0}
+            </div>
+          )}
+        </div>
+        <BrushEdge />
       </div>
 
-      <div className="flex [&>*]:flex-1 text-[11px] border-t border-b bg-background">
+      <div className="flex [&>*]:flex-1 text-[11px] border-t border-b bg-white shadow-md z-2">
         <StatChip label="Power" value={action.config.power ?? '-'} />
         <StatChip label="Acc" value={accuracyLabel} />
       </div>
-      <div className='px-3 py-2 text-xs text-muted-foreground'>
+      <div className={`flex-1 px-3 py-2 text-xs text-black font-bold rounded-b-md bg-[url('/paper.jpg')] relative`}>
+        <div className={cn('bg-black/30 group-hover:bg-black/15 absolute inset-0 rounded z-1 transition-colors', selected && 'bg-transparent!')} />
         {action.config.description}
       </div>
     </button>
   )
 }
 
+function BrushEdge() {
+  return (
+    <svg
+      className="z-10 pointer-events-none absolute -bottom-[3px] left-0 w-full h-4"
+      viewBox="0 0 200 14"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M3 5C12 9 21 2 31 7C41 12 50 3 60 8C70 13 79 4 89 9C99 14 108 5 118 9C128 13 137 5 147 9C157 13 166 5 176 9C185 12 193 6 197 8"
+        stroke="#000"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.96"
+      />
+      <path
+        d="M10 8C18 11 27 5 35 9C44 13 53 7 61 10C70 13 79 8 87 11C96 14 105 9 113 11C122 13 131 9 139 11C148 13 157 9 165 11C173 13 181 10 189 11"
+        stroke="#000"
+        strokeWidth="1.15"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.72"
+      />
+    </svg>
+  )
+}
+
 function StatChip({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="px-1.5 py-1 text-center">
-      <div className="text-[9px] uppercase tracking-wide text-zinc-400">
+    <div className="py-1 flex items-center justify-center gap-1">
+      <div className="text-[9px] uppercase tracking-wide text-neutral-800">
         {label}
       </div>
-      <div className="text-xs font-semibold leading-tight text-zinc-100">
+      <div className="text-xs font-semibold leading-tight text-zinc-900">
         {value}
       </div>
     </div>

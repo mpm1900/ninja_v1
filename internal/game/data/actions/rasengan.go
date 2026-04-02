@@ -13,18 +13,18 @@ var RasenganRecharge = MakeRasenganRecharge()
 func MakeRasengan() game.Action {
 	accuracy := 100
 	power := 150
-	stat := game.Attack
+	stat := game.ChakraAttack
 	nature := game.NsPure
 	chakraCost := 100
 	config := game.ActionConfig{
-		Name:     "Rasengan",
+		Name:        "Rasengan",
 		Description: "Powerful chakra attack. Must recharge the next turn.",
-		Accuracy: &accuracy,
-		Power:    &power,
-		Stat:     &stat,
-		Nature:   &nature,
-		Cost:     &chakraCost,
-		Jutsu:    game.Ninjutsu,
+		Accuracy:    &accuracy,
+		Power:       &power,
+		Stat:        &stat,
+		Nature:      &nature,
+		Cost:        &chakraCost,
+		Jutsu:       game.Ninjutsu,
 	}
 	return game.Action{
 		ID:              uuid.New(),

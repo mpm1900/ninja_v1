@@ -240,6 +240,18 @@ func (g *Game) FilterParentModifiers(actorID uuid.UUID) {
 		return true
 	})
 }
+func (g *Game) FilterParentActions(actorID uuid.UUID) {
+	actions := g.Actions[:0]
+
+	for _, tx := range g.Actions {
+		parent := tx.Context.ParentActorID
+		if parent != nil && *parent != actorID {
+			actions = append(actions, tx)
+		}
+	}
+
+	g.Actions = actions
+}
 
 func (g *Game) AddPlayer(player Player) {
 	g.Players = append(g.Players, player)
@@ -280,6 +292,7 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 
 	if positionID == nil {
 		g.FilterParentModifiers(actor.ID)
+		g.FilterParentActions(actor.ID)
 	}
 
 	if positionID != nil {

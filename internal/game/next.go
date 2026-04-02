@@ -134,19 +134,19 @@ func (g *Game) NextTrigger() bool {
 }
 
 func (g *Game) Next() bool {
-	if g.NextTrigger() {
-		g.Tick = time.Second / 2
-		return true
-	}
-
+	g.Tick = time.Second / 2
 	if g.NextTransaction() {
-		g.Tick = time.Second / 2
 		return true
 	}
 
+	g.Tick = time.Second / 2
+	if g.NextTrigger() {
+		return true
+	}
+
+	g.Tick = time.Second / 2
 	if g.AllPromptsReady() {
 		if g.NextPrompt() {
-			g.Tick = time.Second / 2
 			return true
 		}
 	}
@@ -155,14 +155,14 @@ func (g *Game) Next() bool {
 		return false
 	}
 
+	g.Tick = time.Second * 2
 	if g.NextAction() {
-		g.Tick = time.Second * 2
 		return true
 	}
 
+	g.Tick = time.Second / 2
 	g.ActiveContext = nil
 	g.NextPhase()
-	g.Tick = time.Second / 2
 
 	return false
 }
