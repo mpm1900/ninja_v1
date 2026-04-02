@@ -7,10 +7,12 @@ import (
 	"github.com/google/uuid"
 )
 
+var rageID = uuid.New()
 var RageTrigger game.Trigger = game.Trigger{
-	ID:    uuid.New(),
-	On:    game.OnDamageRecieve,
-	Check: game.Match__TargetActor_SourceActor,
+	ID:         uuid.New(),
+	ModifierID: rageID,
+	On:         game.OnDamageRecieve,
+	Check:      game.Match__TargetActor_SourceActor,
 	ActionMutation: game.ActionMutation{
 		Priority: 0,
 		Filter:   game.AllGameFilter,
@@ -39,7 +41,7 @@ var RageTrigger game.Trigger = game.Trigger{
 
 var RageGroupId = uuid.New()
 var Rage game.Modifier = game.Modifier{
-	ID:       uuid.New(),
+	ID:       rageID,
 	GroupID:  RageGroupId,
 	Name:     "Rage",
 	Duration: game.ModifierDurationInf,

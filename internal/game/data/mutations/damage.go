@@ -49,22 +49,26 @@ func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) int {
 	return ApplyDamageWith(g, target, damage, nil)
 }
 
-func PureDamageWith(damage int, updater func(game.Actor) game.Actor) game.GameMutation {
+func PureDamageWith(damage int, trigger bool, updater func(game.Actor) game.Actor) game.GameMutation {
 	return game.GameMutation{
 		Filter: game.TargetsIsOneAlive,
 		Delta: func(g game.Game, context game.Context) game.Game {
+			fmt.Println("PURE DAMAGE:", trigger)
 			targets := g.GetTargets(context)
 			for _, t := range targets {
 				target := t.Resolve(g)
 				ApplyDamageWith(&g, target, damage, updater)
+				if trigger {
+					g.On(game.OnDamageRecieve, context)
+				}
 			}
 
 			return g
 		},
 	}
 }
-func PureDamage(damage int) game.GameMutation {
-	return PureDamageWith(damage, nil)
+func PureDamage(damage int, trigger bool) game.GameMutation {
+	return PureDamageWith(damage, trigger, nil)
 }
 
 func RatioDamageWith(ratio float64, updater func(game.Actor) game.Actor) game.GameMutation {
@@ -155,10 +159,11 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 					)
 
 					for _, damage := range damages {
-						g.On(game.OnDamageRecieve, context)
 
 						if !config.Repeat {
 							applied := ApplyDamage(&g, target, damage)
+							g.On(game.OnDamageRecieve, context)
+
 							total += applied
 							totals[ti] += applied
 							continue
@@ -166,8 +171,9 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 
 						targetContext := context
 						targetContext.TargetActorIDs = []uuid.UUID{target.ID}
+						targetContext.TargetPositionIDs = []uuid.UUID{}
 
-						repeatTx := game.MakeTransaction(PureDamage(damage), targetContext)
+						repeatTx := game.MakeTransaction(PureDamage(damage, true), targetContext)
 						log := game.NewLogContext(fmt.Sprintf("$action$ hit %d times.", repeats+1), context)
 						logMux := game.AddLogs(log)
 						logMux.Filter = game.TargetsIsOneAlive
@@ -202,7 +208,7 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 
 			if total > 0 && action.Recoil != nil && *action.Recoil > 0.0 && context.SourceActorID != nil {
 				amount := int(math.Floor(*action.Recoil * float64(total)))
-				damageMut := PureDamage(amount)
+				damageMut := PureDamage(amount, false)
 				damageTx := game.MakeTransaction(damageMut, selfContext)
 				sideEffectTransactions = append(sideEffectTransactions, damageTx)
 			}
@@ -210,7 +216,7 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 			if total > 0 && context.SourceActorID != nil {
 				for ti, target := range resolved {
 					if target.Reflect > 0.0 && *context.SourceActorID != target.ID {
-						damageMut := PureDamage(int(target.Reflect * float64(totals[ti])))
+						damageMut := PureDamage(int(target.Reflect*float64(totals[ti])), false)
 						damageTx := game.MakeTransaction(damageMut, selfContext)
 						sideEffectTransactions = append(sideEffectTransactions, damageTx)
 					}

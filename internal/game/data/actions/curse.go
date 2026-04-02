@@ -50,14 +50,14 @@ func MakeCurse() game.Action {
 					hp := source.Stats[game.StatHP]
 					amount := hp / 2
 
-					hp_loss := mutations.PureDamageWith(amount, func(a game.Actor) game.Actor {
+					hp_loss := mutations.PureDamageWith(amount, false, func(a game.Actor) game.Actor {
 						if !a.Alive {
 							a.Alive = true
 							a.Damage = hp - 1
 						}
 						return a
 					})
-					damage := mutations.PureDamage(amount)
+					damage := mutations.PureDamage(amount, false)
 
 					sourceTx := game.MakeTransaction(hp_loss, game.WithTargetIDs(context, []uuid.UUID{source.ID}))
 					targetTx := game.MakeTransaction(damage, game.WithTargetIDs(context, []uuid.UUID{target.ID}))

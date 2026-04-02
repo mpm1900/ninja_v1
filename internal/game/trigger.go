@@ -20,9 +20,10 @@ var TRIGGERS []TriggerOn = []TriggerOn{
 
 type Trigger struct {
 	ActionMutation
-	ID    uuid.UUID                                       `json:"ID"`
-	On    TriggerOn                                       `json:"on"`
-	Check func(Game, Context, Transaction[Modifier]) bool `json:"-"`
+	ID         uuid.UUID                                       `json:"ID"`
+	ModifierID uuid.UUID                                       `json:"modifier_ID"`
+	On         TriggerOn                                       `json:"on"`
+	Check      func(Game, Context, Transaction[Modifier]) bool `json:"-"`
 }
 
 var END_OF_TURN_TRIGGER Trigger = Trigger{

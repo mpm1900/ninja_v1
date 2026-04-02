@@ -41,8 +41,8 @@ function StatBadge({
           className={cn(variants({ variant: stat }), className)}
           {...props}
         >
-          {(stat === 'attack' || stat === 'defense') && 'PH'}
-          {(stat === 'chakra_attack' || stat === 'chakra_defense') && 'CH'}
+          {(stat === 'attack' || stat === 'defense') && 'P'}
+          {(stat === 'chakra_attack' || stat === 'chakra_defense') && 'C'}
         </span>
       </TooltipTrigger>
       <TooltipContent {...contentProps}>{stat}</TooltipContent>

@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -133,16 +134,19 @@ func (g *Game) NextTrigger() bool {
 }
 
 func (g *Game) Next() bool {
-	if g.NextTransaction() {
+	if g.NextTrigger() {
+		g.Tick = time.Second / 2
 		return true
 	}
 
-	if g.NextTrigger() {
+	if g.NextTransaction() {
+		g.Tick = time.Second / 2
 		return true
 	}
 
 	if g.AllPromptsReady() {
 		if g.NextPrompt() {
+			g.Tick = time.Second / 2
 			return true
 		}
 	}
@@ -152,11 +156,13 @@ func (g *Game) Next() bool {
 	}
 
 	if g.NextAction() {
+		g.Tick = time.Second * 2
 		return true
 	}
 
 	g.ActiveContext = nil
 	g.NextPhase()
+	g.Tick = time.Second / 2
 
 	return false
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"slices"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -33,6 +34,8 @@ type Game struct {
 	Players       []Player                `json:"players"`
 	Actors        []Actor                 `json:"actors"`
 	Modifiers     []Transaction[Modifier] `json:"modifiers"`
+
+	Tick time.Duration `json:"-"`
 
 	/*
 	 * [Transactions] are the quable/storable change in state
@@ -96,6 +99,7 @@ func NewGame(actionRegistry map[uuid.UUID]Action) Game {
 		Players:       make([]Player, 0),
 		Actors:        make([]Actor, 0),
 		Modifiers:     make([]Transaction[Modifier], 0),
+		Tick:          time.Second / 2,
 		Transactions:  MakeQueue[GameTransaction](),
 		Actions:       MakeQueue[Transaction[Action]](),
 		Prompts:       MakeQueue[Transaction[Action]](),
@@ -202,6 +206,14 @@ func (g Game) GetTriggers(on TriggerOn, context Context) []Transaction[Trigger] 
 	}
 
 	return triggers
+}
+func (g Game) GetModifierByID(id uuid.UUID) (Modifier, bool) {
+	for _, m := range g.Modifiers {
+		if m.Mutation.ID == id {
+			return m.Mutation, true
+		}
+	}
+	return Modifier{}, false
 }
 
 func (g *Game) FilterModifiers(predicate func(modifier Transaction[Modifier]) bool) {
@@ -481,14 +493,20 @@ func (g *Game) RunAction(transaction Transaction[Action]) {
 
 func (g *Game) RunTrigger(transaction Transaction[Trigger]) {
 	transactions := ResolveTrigger(*g, transaction)
-	g.Transactions = append(g.Transactions, transactions...)
+	g.Transactions = append(transactions, g.Transactions...)
 }
 
 func (g *Game) On(on TriggerOn, context Context) {
-	fmt.Println("ON:", on)
 	triggers := make([]Transaction[Trigger], 0)
 	for _, trigger := range g.GetTriggers(on, context) {
 		if trigger.Mutation.On == on {
+			modifier, ok := g.GetModifierByID(trigger.Mutation.ModifierID)
+			if ok {
+				text := fmt.Sprintf("[%s]: %s", on, modifier.Name)
+				fmt.Println(text)
+				g.PushLog(NewLog(text))
+			}
+
 			triggers = append(triggers, trigger)
 		}
 	}

@@ -2,7 +2,6 @@ package instance
 
 import (
 	"context"
-	"fmt"
 	"maps"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data"
@@ -128,12 +127,9 @@ func (i *Instance) RunGameActions() {
 
 	resolveStep:
 		for {
-			fmt.Println(i.Game.Turn.Phase)
-			time.Sleep(time.Second / 2)
-
 			for i.Game.Next() {
 				i.BroadcastGame()
-				time.Sleep(time.Second / 2)
+				time.Sleep(i.Game.Tick)
 			}
 
 			if len(i.Game.Prompts) > 0 {
@@ -152,7 +148,7 @@ func (i *Instance) RunGameActions() {
 
 				for i.Game.Next() {
 					i.BroadcastGame()
-					time.Sleep(time.Second / 2)
+					time.Sleep(i.Game.Tick)
 				}
 
 				if len(i.Game.Prompts) > 0 {
