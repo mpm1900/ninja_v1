@@ -54,7 +54,7 @@ func PureDamageWith(damage int, trigger bool, updater func(game.Actor) game.Acto
 			for _, t := range targets {
 				target := t.Resolve(g)
 				ApplyDamageWith(&g, target, damage, updater)
-				if trigger {
+				if trigger && damage > 0 {
 					g.On(game.OnDamageRecieve, context)
 				}
 			}
