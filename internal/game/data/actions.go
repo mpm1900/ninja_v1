@@ -15,10 +15,11 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	game.SwitchInIds[4]: game.SwitchIn(4),
 	game.SwitchInIds[5]: game.SwitchIn(5),
 
-	actions.FollowMe.ID: actions.FollowMe,
-	actions.Protect.ID:  actions.Protect,
-	actions.Tailwind.ID: actions.Tailwind,
-	actions.Coercion.ID: actions.Coercion,
+	actions.FollowMe.ID:   actions.FollowMe,
+	actions.Protect.ID:    actions.Protect,
+	actions.Tailwind.ID:   actions.Tailwind,
+	actions.Coercion.ID:   actions.Coercion,
+	actions.MirageCrow.ID: actions.MirageCrow,
 
 	actions.Surf.ID:         actions.Surf,
 	actions.LuckyStrikes.ID: actions.LuckyStrikes,
@@ -32,4 +33,5 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.Chidori.ID:     actions.Chidori,
 	actions.Curse.ID:       actions.Curse,
 	actions.Recover.ID:     actions.Recover,
+	actions.LeechSeed.ID:   actions.LeechSeed,
 }

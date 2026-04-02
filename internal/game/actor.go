@@ -91,22 +91,22 @@ type ActorState struct {
 	// [Alive] whether or not the actor is alive, could
 	// - could be computed, but this is here to not have to call .Resolve() on filters
 	Alive bool `json:"alive"`
+	// [Damage] how much damage this actor has recieved
+	Damage int `json:"damage"`
+	// [PositionID] current position, nil if not active
+	PositionID *uuid.UUID `json:"position_ID"`
 	// [Protected]
 	// - protected units cannot be damaged by actions
 	// - protected units cannot be targeted by enemy actions
 	Protected bool `json:"protected"`
-	Seen      bool `json:"seen"`
+	// [Reflect] how much damage is reflected (PureDamage not affected)
+	Reflect       float64 `json:"reflect"`
+	Seen          bool    `json:"seen"`
+	StaminaDamage int     `json:"stamina_damage"`
 	// [Stunned] whether or not an actor _can act_
 	// - stunned units cannot push actions
 	// - stunned units cannot resolve actions (if the status was added during running)
 	Stunned bool `json:"stunned"`
-	// [Damage] how much damage this actor has recieved
-	Damage        int `json:"damage"`
-	StaminaDamage int `json:"stamina_damage"`
-	// [PositionID] current position, nil if not active
-	PositionID *uuid.UUID `json:"position_ID"`
-	// [Reflect] how much damage is reflected (PureDamage not affected)
-	Reflect float64 `json:"reflect"`
 }
 
 type Actor struct {
@@ -175,7 +175,7 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uui
 		Focus:      FocusNone,
 		ActorState: ActorState{
 			Alive:      true,
-			Damage:     0,
+			Damage:     100,
 			PositionID: nil,
 			Reflect:    0.0,
 		},

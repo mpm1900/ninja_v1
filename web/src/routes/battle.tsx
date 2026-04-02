@@ -69,7 +69,7 @@ function RouteComponent() {
                       ))}
                   </div>
                 ))}
-              <Accordion defaultValue='log' type="single" className='bg-black/20 px-3'>
+              <Accordion defaultValue={['log']} type="multiple" className='bg-black/20 px-3'>
                 <AccordionItem value="log">
                   <AccordionTrigger>Log</AccordionTrigger>
                   <AccordionContent>

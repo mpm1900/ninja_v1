@@ -6,15 +6,15 @@ import (
 	"github.com/google/uuid"
 )
 
-var StunnedID = uuid.New()
+var stunnedID = uuid.New()
 var Stunned = game.Modifier{
 	ID:       uuid.New(),
 	Name:     "Stunned",
-	GroupID:  StunnedID,
+	GroupID:  &stunnedID,
 	Duration: 0,
 	Mutations: []game.ActorMutation{
 		game.MakeActorMutation(
-			&StunnedID,
+			&stunnedID,
 			game.MutPriorityDefault,
 			game.ComposeAF(game.ActiveFilter, game.TargetFilter),
 			func(a game.Actor, c game.Context) game.Actor {

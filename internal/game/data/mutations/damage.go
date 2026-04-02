@@ -55,7 +55,7 @@ func PureDamageWith(damage int, trigger bool, updater func(game.Actor) game.Acto
 				target := t.Resolve(g)
 				ApplyDamageWith(&g, target, damage, updater)
 				if trigger && damage > 0 {
-					g.On(game.OnDamageRecieve, context)
+					g.On(game.OnDamageRecieve, &context)
 				}
 			}
 
@@ -156,7 +156,7 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 						if !config.Repeat {
 							ApplyDamage(&g, target, damage)
 							if damage > 0 {
-								g.On(game.OnDamageRecieve, context)
+								g.On(game.OnDamageRecieve, &context)
 							}
 
 							total += clampDamage(damage)

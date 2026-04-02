@@ -86,6 +86,15 @@ func SourceFilter(actor Actor, context Context) bool {
 	}
 	return actor.ID == *context.SourceActorID
 }
+func ParentFilter(actor Actor, context Context) bool {
+	if context.ParentActorID == nil {
+		return false
+	}
+	if !ActiveFilter(actor, context) {
+		return false
+	}
+	return actor.ID == *context.ParentActorID
+}
 func TargetFilter(actor Actor, context Context) bool {
 	if slices.Contains(context.TargetActorIDs, actor.ID) {
 		return true
@@ -195,14 +204,6 @@ func TargetsIsOneAlive(game Game, context Context) bool {
 		}
 	}
 	return false
-}
-
-func MatchSourceActorIDTrigger(game Game, context Context, modifier_tx Transaction[Modifier]) bool {
-	if context.SourceActorID == nil || modifier_tx.Context.SourceActorID == nil {
-		return false
-	}
-
-	return *context.SourceActorID == *modifier_tx.Context.SourceActorID
 }
 
 func Match__TargetActor_SourceActor(game Game, context Context, modifier_tx Transaction[Modifier]) bool {

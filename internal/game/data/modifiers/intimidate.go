@@ -42,11 +42,11 @@ var IntimidateTrigger game.Trigger = game.Trigger{
 
 var Intimidate game.Modifier = game.Modifier{
 	ID:       intimidateID,
-	GroupID:  intimidateID,
+	GroupID:  &intimidateID,
 	Name:     "Intimidate",
 	Duration: game.ModifierDurationInf,
 	Mutations: []game.ActorMutation{
-		game.NewNoop(&intimidateID),
+		game.NewNoopSource(&intimidateID),
 	},
 	Triggers: []game.Trigger{
 		IntimidateTrigger,

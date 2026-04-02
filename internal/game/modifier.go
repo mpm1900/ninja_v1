@@ -7,10 +7,10 @@ import (
 const ModifierDurationInf = -1
 
 type Modifier struct {
-	ID       uuid.UUID `json:"ID"`
-	GroupID  uuid.UUID `json:"group_ID"`
-	Name     string    `json:"name"`
-	Duration int       `json:"duration"`
+	ID       uuid.UUID  `json:"ID"`
+	GroupID  *uuid.UUID `json:"group_ID"`
+	Name     string     `json:"name"`
+	Duration int        `json:"duration"`
 
 	Mutations []ActorMutation `json:"-"`
 	Triggers  []Trigger       `json:"triggers"`

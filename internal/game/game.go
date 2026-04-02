@@ -183,25 +183,32 @@ func (g Game) GetResolvedActors() map[uuid.UUID]ResolvedActor {
 	return actors
 }
 
-func (g Game) GetTriggers(on TriggerOn, context Context) []Transaction[Trigger] {
+func (g Game) GetTriggers(on TriggerOn, context *Context) []Transaction[Trigger] {
+	ctx := NewContext()
+	if context != nil {
+		ctx = *context
+	}
 	triggers := []Transaction[Trigger]{
-		MakeTransaction(END_OF_TURN_TRIGGER, context),
+		MakeTransaction(END_OF_TURN_TRIGGER, ctx),
 	}
 	modifiers := make([]Transaction[Modifier], 0, len(g.Modifiers))
 	modifiers = append(modifiers, g.Modifiers...)
 	modifiers = append(modifiers, GetActorModifiers(g)...)
 
-	for _, mod := range modifiers {
-		for _, trig := range mod.Mutation.Triggers {
+	for _, tx := range modifiers {
+		if context == nil {
+			ctx = tx.Context
+		}
+		for _, trig := range tx.Mutation.Triggers {
 			if trig.On != on {
 				continue
 			}
 
-			if trig.Check != nil && !trig.Check(g, context, mod) {
-				fmt.Println(mod.Mutation.Name, "FAILED")
+			if trig.Check != nil && !trig.Check(g, ctx, tx) {
+				fmt.Println(tx.Mutation.Name, "FAILED")
 				continue
 			}
-			triggers = append(triggers, MakeTransaction(trig, context))
+			triggers = append(triggers, MakeTransaction(trig, ctx))
 		}
 	}
 
@@ -330,22 +337,24 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 		context := NewContext()
 		context.SourceActorID = &actor.ID
 		g.PushLog(NewLogContext("$source$ joined the battle.", context))
-		g.On(OnActorEnter, Context{
+		t_context := Context{
 			ParentActorID:  &actor.ID,
 			SourceActorID:  &actor.ID,
 			SourcePlayerID: &actor.PlayerID,
-		})
+		}
+		g.On(OnActorEnter, &t_context)
 	}
 
 	if positionID == nil {
 		context := NewContext()
 		context.SourceActorID = &actor.ID
 		g.PushLog(NewLogContext("$source$ left the battle.", context))
-		g.On(OnActorLeave, Context{
+		t_context := Context{
 			ParentActorID:  &actor.ID,
 			SourceActorID:  &actor.ID,
 			SourcePlayerID: &actor.PlayerID,
-		})
+		}
+		g.On(OnActorLeave, &t_context)
 	}
 }
 
@@ -513,7 +522,7 @@ func (g *Game) RunTrigger(transaction Transaction[Trigger]) {
 	g.Transactions = append(transactions, g.Transactions...)
 }
 
-func (g *Game) On(on TriggerOn, context Context) {
+func (g *Game) On(on TriggerOn, context *Context) {
 	triggers := make([]Transaction[Trigger], 0)
 	for _, trigger := range g.GetTriggers(on, context) {
 		if trigger.Mutation.On == on {
@@ -588,7 +597,7 @@ func (g Game) ToJSON(playerID *uuid.UUID) GameJSON {
 	var prompt *Transaction[Action]
 	if playerID != nil {
 		for _, p := range g.Prompts {
-			if *p.Context.SourcePlayerID == *playerID && p.Ready == false {
+			if p.Context.SourcePlayerID != nil && *p.Context.SourcePlayerID == *playerID && !p.Ready {
 				prompt = &p
 				break
 			}

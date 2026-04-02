@@ -21,7 +21,7 @@ const actorVariants = cva(
   {
     variants: {
       player: {
-        player: 'bg-gray-950 border-gray-700',
+        player: 'bg-gray-900 border-gray-700',
         enemy: 'border-transparent',
       },
       selected: {

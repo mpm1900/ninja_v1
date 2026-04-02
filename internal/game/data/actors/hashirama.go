@@ -39,7 +39,7 @@ var Hashirama = game.ActorDef{
 		game.Switch.ID,
 		actions.Protect.ID,
 		actions.Tailwind.ID,
-		actions.Chidori.ID,
+		actions.LeechSeed.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,

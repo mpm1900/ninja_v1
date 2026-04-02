@@ -24,20 +24,20 @@ function ActionCard({
       disabled={disabled}
       className={cn(
         'group',
-        'flex flex-col w-[200px] h-[200px] rounded-lg border-2 border-white/50 hover:border-white text-left relative',
+        'flex flex-col w-[200px] h-[200px] rounded-lg border-2 border-zinc-900 hover:border-zinc-700 text-left relative',
         `bg-black text-foreground`,
         'transition-all duration-200',
         'hover:-translate-y-0.5',
         'focus-visible:outline-none',
         'flex flex-col shadow-xl shadow-black/60 hover:shadow-black',
         {
-          'border-white shadow-lg shadow-black': selected,
+          'border-white hover:border-white shadow-lg shadow-black': selected,
           'border-orange-400/70 hover:border-orange-400':
             action.config.stat === 'attack',
-          'border-orange-400/80': action.config.stat === 'attack' && selected,
+          'border-orange-400': action.config.stat === 'attack' && selected,
           'border-indigo-400/50 hover:border-indigo-400':
             action.config.stat === 'chakra_attack',
-          'border-indigo-400/80': action.config.stat === 'chakra_attack' && selected,
+          'border-indigo-400': action.config.stat === 'chakra_attack' && selected,
 
         },
         className
@@ -47,7 +47,7 @@ function ActionCard({
       <div className="relative">
         <div
           className={cn(
-            'flex items-start justify-between gap-2 p-2 bg-black text-white rounded-t-sm',
+            'flex items-start justify-between gap-2 p-2 bg-zinc-900 text-white rounded-t-sm',
             disabled && 'opacity-50'
           )}
         >

@@ -144,7 +144,7 @@ func (i *Instance) RunGameActions() {
 				continue
 
 			case game.TurnEnd:
-				i.Game.On(game.OnTurnEnd, game.NewContext())
+				i.Game.On(game.OnTurnEnd, nil)
 
 				for i.Game.Next() {
 					i.BroadcastGame()
