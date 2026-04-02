@@ -15,4 +15,5 @@ var MODIFIERS = map[uuid.UUID]game.Modifier{
 	modifiers.JutsuUpSource.ID:  modifiers.JutsuUpSource,
 	modifiers.SpeedUpSource.ID:  modifiers.SpeedUpSource,
 	modifiers.SpeedUpAll.ID:     modifiers.SpeedUpAll,
+	modifiers.WaterAbsorb.ID:    modifiers.WaterAbsorb,
 }

@@ -13,7 +13,7 @@ func MakeFireball() game.Action {
 	ID := uuid.New()
 	accuracy := 100
 	power := 80
-	nature := game.NsFire
+	nature := game.NsWater
 	stat := game.ChakraAttack
 	targetCount := 1
 	chakraCost := 30

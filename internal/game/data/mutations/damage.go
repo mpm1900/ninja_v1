@@ -24,16 +24,15 @@ func resolveTargets(g game.Game, context game.Context) []game.ResolvedActor {
 	return resolved
 }
 
-func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, updater func(game.Actor) game.Actor) int {
+func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, updater func(game.Actor) game.Actor) {
 	if !target.Alive {
-		return 0
+		return
 	}
 
-	clamped := clampDamage(damage)
 	hp := target.Stats[game.StatHP]
 
 	g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
-		a.Damage += clamped
+		a.Damage += damage // clamped
 		a.Alive = hp > a.Damage
 		if updater == nil {
 			return a
@@ -42,11 +41,9 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 		u := updater
 		return u(a)
 	})
-
-	return clamped
 }
-func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) int {
-	return ApplyDamageWith(g, target, damage, nil)
+func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) {
+	ApplyDamageWith(g, target, damage, nil)
 }
 
 func PureDamageWith(damage int, trigger bool, updater func(game.Actor) game.Actor) game.GameMutation {
@@ -101,15 +98,15 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 			}
 
 			selfContext := game.Context{
-				ParentActorID:  context.SourceActorID,
+				ParentActorID:  context.ParentActorID,
 				SourceActorID:  context.SourceActorID,
 				SourcePlayerID: context.SourcePlayerID,
 				TargetActorIDs: []uuid.UUID{*context.SourceActorID},
 			}
 
-			source := s.Resolve(g)
 			total := 0
 			repeats := 0
+			source := s.Resolve(g)
 			resolved := resolveTargets(g, context)
 			totals := make([]int, len(resolved))
 			repeatTransactions := make([]game.GameTransaction, 0)
@@ -157,11 +154,13 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 					for _, damage := range damages {
 
 						if !config.Repeat {
-							applied := ApplyDamage(&g, target, damage)
-							g.On(game.OnDamageRecieve, context)
+							ApplyDamage(&g, target, damage)
+							if damage > 0 {
+								g.On(game.OnDamageRecieve, context)
+							}
 
-							total += applied
-							totals[ti] += applied
+							total += clampDamage(damage)
+							totals[ti] += clampDamage(damage)
 							continue
 						}
 

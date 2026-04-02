@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -30,8 +31,10 @@ var Kisame = game.ActorDef{
 		game.NsWater,
 	}),
 
-	InnateModifiers: []game.Modifier{},
-	ActionCount:     6,
+	InnateModifiers: []game.Modifier{
+		modifiers.WaterAbsorb,
+	},
+	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
 		actions.Surf.ID,
