@@ -53,7 +53,6 @@ func PureDamageWith(damage int, trigger bool, updater func(game.Actor) game.Acto
 	return game.GameMutation{
 		Filter: game.TargetsIsOneAlive,
 		Delta: func(g game.Game, context game.Context) game.Game {
-			fmt.Println("PURE DAMAGE:", trigger)
 			targets := g.GetTargets(context)
 			for _, t := range targets {
 				target := t.Resolve(g)
@@ -98,9 +97,6 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 			}
 
 			if action.Stat == nil || action.Power == nil {
-				g.PushLog(
-					game.NewLog(fmt.Sprintf("%s failed: missing required damage configuration.", action.Name)),
-				)
 				return g
 			}
 
@@ -178,7 +174,7 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 						logMux := game.AddLogs(log)
 						logMux.Filter = game.TargetsIsOneAlive
 						logTx := game.MakeTransaction(logMux, context)
-						repeatTransactions = append(repeatTransactions, repeatTx, logTx)
+						repeatTransactions = append(repeatTransactions, logTx, repeatTx)
 
 						applied := clampDamage(damage)
 						total += applied

@@ -208,7 +208,11 @@ func (g Game) GetTriggers(on TriggerOn, context Context) []Transaction[Trigger] 
 	return triggers
 }
 func (g Game) GetModifierByID(id uuid.UUID) (Modifier, bool) {
-	for _, m := range g.Modifiers {
+	modifiers := make([]Transaction[Modifier], 0, len(g.Modifiers))
+	modifiers = append(modifiers, g.Modifiers...)
+	modifiers = append(modifiers, GetActorModifiers(g)...)
+
+	for _, m := range modifiers {
 		if m.Mutation.ID == id {
 			return m.Mutation, true
 		}
@@ -545,7 +549,7 @@ type GameJSON struct {
 	Actors        []ResolvedActor `json:"actors"`
 
 	Modifiers    []Transaction[Modifier]     `json:"modifiers"`
-	Transactions []Transaction[GameMutation] `json:"transactions"`
+	Transactions []Transaction[GameMutation] `json:"-"`
 	Actions      []Transaction[Action]       `json:"actions"`
 	Prompt       *Transaction[Action]        `json:"prompt"`
 	Triggers     []Transaction[Trigger]      `json:"triggers"`
@@ -555,6 +559,12 @@ type GameJSON struct {
 	QueuedActions map[uuid.UUID]Transaction[uuid.UUID] `json:"queued_actions"`
 }
 
+func getLastN[T any](s []T, n int) []T {
+	if n >= len(s) {
+		return s
+	}
+	return s[len(s)-n:]
+}
 func (g Game) ToJSON(playerID *uuid.UUID) GameJSON {
 	resolvedMap := g.GetResolvedActors()
 	resolved := make([]ResolvedActor, 0, len(g.Actors))
@@ -588,7 +598,7 @@ func (g Game) ToJSON(playerID *uuid.UUID) GameJSON {
 		Actions:       g.Actions,
 		Prompt:        prompt,
 		Triggers:      g.Triggers,
-		Log:           g.Log,
+		Log:           getLastN(g.Log, 30),
 		QueuedActions: g.QueuedActions,
 	}
 }

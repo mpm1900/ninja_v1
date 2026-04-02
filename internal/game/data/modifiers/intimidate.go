@@ -7,10 +7,12 @@ import (
 	"github.com/google/uuid"
 )
 
+var intimidateID = uuid.New()
 var IntimidateTrigger game.Trigger = game.Trigger{
-	ID:    uuid.New(),
-	On:    game.OnActorEnter,
-	Check: game.Match__SourceActor_SourceActor,
+	ID:         uuid.New(),
+	ModifierID: intimidateID,
+	On:         game.OnActorEnter,
+	Check:      game.Match__SourceActor_SourceActor,
 	ActionMutation: game.ActionMutation{
 		Priority: 0,
 		Filter:   game.AllGameFilter,
@@ -38,14 +40,13 @@ var IntimidateTrigger game.Trigger = game.Trigger{
 	},
 }
 
-var IntimidateID = uuid.New()
 var Intimidate game.Modifier = game.Modifier{
-	ID:       uuid.New(),
-	GroupID:  IntimidateID,
+	ID:       intimidateID,
+	GroupID:  intimidateID,
 	Name:     "Intimidate",
 	Duration: game.ModifierDurationInf,
 	Mutations: []game.ActorMutation{
-		game.NewNoop(&IntimidateID),
+		game.NewNoop(&intimidateID),
 	},
 	Triggers: []game.Trigger{
 		IntimidateTrigger,

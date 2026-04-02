@@ -39,14 +39,13 @@ var RageTrigger game.Trigger = game.Trigger{
 	},
 }
 
-var RageGroupId = uuid.New()
 var Rage game.Modifier = game.Modifier{
 	ID:       rageID,
-	GroupID:  RageGroupId,
+	GroupID:  rageID,
 	Name:     "Rage",
 	Duration: game.ModifierDurationInf,
 	Mutations: []game.ActorMutation{
-		game.NewNoop(&RageGroupId),
+		game.NewNoop(&rageID),
 	},
 	Triggers: []game.Trigger{
 		RageTrigger,

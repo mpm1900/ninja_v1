@@ -37,6 +37,8 @@ function StageBadge({
   stage: keyof typeof stageCoef
 }) {
   if (stage === 0) return null
+  if (stage > 6) stage = 6
+  if (stage < -6) stage = -6
   return (
     <span
       className={cn(

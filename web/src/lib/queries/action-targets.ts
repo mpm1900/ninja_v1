@@ -26,10 +26,11 @@ const getActionTargets = createServerFn()
 
 function actionTargetsQuery(
   instanceID: string,
-  context: Context
+  context: Context,
+  deps: any[] = []
 ) {
   return queryOptions({
-    queryKey: ['action-targets', instanceID, context.action_ID, context.source_actor_ID],
+    queryKey: ['action-targets', instanceID, context.action_ID, context.source_actor_ID, ...deps],
     queryFn: async () => {
       return await getActionTargets({
         data: {

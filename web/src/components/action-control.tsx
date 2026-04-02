@@ -28,7 +28,7 @@ function ActionControl({
   const game = useStore(gameStore, (g) => g)
   const valid = useQuery(isActionContextValidQuery(context))
   const client = useStore(clientsStore, (c) => c.me!)
-  const actionTargets = useQuery(actionTargetsQuery(instanceID, context))
+  const actionTargets = useQuery(actionTargetsQuery(instanceID, context, [game.turn.count]))
   const loading = valid.isFetching || actionTargets.isFetching
   const actors = game.actors.filter((a) => actionTargets.data?.includes(a.ID))
   const has_queued_action = game.queued_actions[context.source_actor_ID ?? '']
