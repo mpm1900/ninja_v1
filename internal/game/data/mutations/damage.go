@@ -51,6 +51,7 @@ func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) int {
 
 func PureDamageWith(damage int, updater func(game.Actor) game.Actor) game.GameMutation {
 	return game.GameMutation{
+		Filter: game.TargetsIsOneAlive,
 		Delta: func(g game.Game, context game.Context) game.Game {
 			targets := g.GetTargets(context)
 			for _, t := range targets {
@@ -93,7 +94,9 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 			}
 
 			if action.Stat == nil || action.Power == nil {
-				g.PushLog(fmt.Sprintf("%s failed: missing required damage configuration.", action.Name))
+				g.PushLog(
+					game.NewLog(fmt.Sprintf("%s failed: missing required damage configuration.", action.Name)),
+				)
 				return g
 			}
 
@@ -121,7 +124,7 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 
 				for ti, target := range resolved {
 					if target.Protected {
-						g.PushLog(fmt.Sprintf("%s was protected.", target.Name))
+						g.PushLog(game.NewLog(fmt.Sprintf("%s was protected.", target.Name)))
 						continue
 					}
 
@@ -131,8 +134,8 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 						roll := game.MakeActionRoll()
 						if roll > accuracy {
 							if !config.Repeat || repeats == 0 {
-								g.PushLog(fmt.Sprintf("%s missed!", action.Name))
-								g.PushLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy))
+								g.PushLog(game.NewLog(fmt.Sprintf("%s missed!", action.Name)))
+								g.PushLog(game.NewLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy)))
 							}
 							missed = true
 							continue
@@ -165,7 +168,10 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 						targetContext.TargetActorIDs = []uuid.UUID{target.ID}
 
 						repeatTx := game.MakeTransaction(PureDamage(damage), targetContext)
-						logTx := game.MakeTransaction(game.AddLogs(fmt.Sprintf("%s hit %d times.", action.Name, repeats+1)), context)
+						log := game.NewLogContext(fmt.Sprintf("$action$ hit %d times.", repeats+1), context)
+						logMux := game.AddLogs(log)
+						logMux.Filter = game.TargetsIsOneAlive
+						logTx := game.MakeTransaction(logMux, context)
 						repeatTransactions = append(repeatTransactions, repeatTx, logTx)
 
 						applied := clampDamage(damage)
@@ -316,8 +322,8 @@ func NewHeal(action game.ActionConfig, ratio float64) game.GameMutation {
 					accuracy := int(math.Floor(base_accuracy * float64(*action.Accuracy)))
 					roll := game.MakeActionRoll()
 					if roll > accuracy {
-						g.PushLog(fmt.Sprintf("%s's %s missed!", source.Name, action.Name))
-						g.PushLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy))
+						g.PushLog(game.NewLog(fmt.Sprintf("%s missed!", action.Name)))
+						g.PushLog(game.NewLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy)))
 						continue
 					}
 				}

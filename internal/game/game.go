@@ -11,7 +11,11 @@ import (
 type GameTransaction = Transaction[GameMutation]
 
 type GameStatus string
-type GameLog = string
+type GameLog struct {
+	ID      uuid.UUID `json:"ID"`
+	Text    string    `json:"text"`
+	Context Context   `json:"context"`
+}
 
 const (
 	GameStatusRunning GameStatus = "running"
@@ -66,6 +70,21 @@ type Game struct {
 	ActionRegistry map[uuid.UUID]Action
 }
 
+func NewLog(text string) GameLog {
+	return GameLog{
+		ID:      uuid.New(),
+		Text:    text,
+		Context: NewContext(),
+	}
+}
+func NewLogContext(text string, context Context) GameLog {
+	return GameLog{
+		ID:      uuid.New(),
+		Text:    text,
+		Context: context,
+	}
+}
+
 func NewGame(actionRegistry map[uuid.UUID]Action) Game {
 	return Game{
 		Status: GameStatusIdle,
@@ -82,7 +101,7 @@ func NewGame(actionRegistry map[uuid.UUID]Action) Game {
 		Prompts:       MakeQueue[Transaction[Action]](),
 		Triggers:      MakeQueue[Transaction[Trigger]](),
 		QueuedActions: make(map[uuid.UUID]Transaction[uuid.UUID]),
-		Log:           []string{},
+		Log:           []GameLog{},
 
 		ActionRegistry: actionRegistry,
 	}
@@ -279,7 +298,9 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 	}
 
 	if positionID != nil {
-		g.PushLog(fmt.Sprintf("%s joined the battle.", actor.Name))
+		context := NewContext()
+		context.SourceActorID = &actor.ID
+		g.PushLog(NewLogContext("$source$ joined the battle.", context))
 		g.On(OnActorEnter, Context{
 			ParentActorID:  &actor.ID,
 			SourceActorID:  &actor.ID,
@@ -288,7 +309,9 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 	}
 
 	if positionID == nil {
-		g.PushLog(fmt.Sprintf("%s left the battle.", actor.Name))
+		context := NewContext()
+		context.SourceActorID = &actor.ID
+		g.PushLog(NewLogContext("$source$ left the battle.", context))
 		g.On(OnActorLeave, Context{
 			ParentActorID:  &actor.ID,
 			SourceActorID:  &actor.ID,
@@ -440,7 +463,7 @@ func (g *Game) RunAction(transaction Transaction[Action]) {
 
 		source := s.Resolve(*g)
 		if source.Stunned {
-			g.PushLog(fmt.Sprintf("%s was stunned", source.Name))
+			g.PushLog(NewLog(fmt.Sprintf("%s was stunned", source.Name)))
 			return
 		}
 

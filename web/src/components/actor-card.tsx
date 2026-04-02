@@ -11,6 +11,7 @@ import { X } from 'lucide-react'
 import { sendContextMessage } from '#/lib/stores/socket'
 import { NULL_CONTEXT } from '#/lib/game/context'
 import { ActorThumbnail } from './actor-thumbnail'
+import { StageBadge } from './stage-badge'
 
 const actorVariants = cva(
   cn(
@@ -88,7 +89,7 @@ function ActorCard({
             </div>
           </div>
         )}
-        <ItemContent>
+        <ItemContent className="relative">
           {actor && (
             <div className="flex justify-between items-end gap-4">
               <ItemTitle>
@@ -133,6 +134,13 @@ function ActorCard({
           <div className="space-y-2">
             {actor && <HealthBar actor={actor} selected={selected} />}
           </div>
+          {actor && (
+            <div className="absolute -bottom-1.5 flex gap-1 px-2">
+              {Object.entries(actor.staged_stats).map(([key, stage]) => (
+                <StageBadge stage={stage as any} stat={key as any} />
+              ))}
+            </div>
+          )}
         </ItemContent>
       </div>
     </div>

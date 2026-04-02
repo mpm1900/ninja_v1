@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"fmt"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/modifiers"
 	"ninja_v1/internal/game/data/mutations"
@@ -37,7 +36,8 @@ func MakeTailwind() game.Action {
 					}
 
 					if *tx.Context.SourcePlayerID == *context.SourcePlayerID && tx.Mutation.ID == modifiers.Tailwind.ID {
-						log_tx := game.MakeTransaction(game.AddLogs(fmt.Sprintf("%s failed.", config.Name)), context)
+						log := game.NewLogContext("$action$ failed.", context)
+						log_tx := game.MakeTransaction(game.AddLogs(log), context)
 						return append(transactions, log_tx)
 					}
 

@@ -16,6 +16,7 @@ func MakeDragonDance() game.Action {
 		Name:   "Dragon Dance",
 		Nature: &nature,
 		Jutsu:  game.Taijutsu,
+		Description: "Raises the user's Speed and Physical Attack stats.",
 	}
 	return game.Action{
 		ID:              uuid.New(),

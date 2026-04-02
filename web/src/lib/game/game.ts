@@ -1,6 +1,7 @@
 import type { ActionTransaction } from './action'
 import type { Actor } from './actor'
 import type { Context } from './context'
+import type { GameLog } from './log'
 import type { ModifierTransaction } from './modifier'
 import type { Player } from './player'
 
@@ -17,7 +18,7 @@ type Game = {
 
   actions: ActionTransaction[]
   prompt: ActionTransaction | null
-  log: string[]
+  log: GameLog[]
 
   queued_actions: Record<string, {
     ID: string

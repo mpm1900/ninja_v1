@@ -187,6 +187,15 @@ func SourceHasActiveTurns(turns int) func(Game, Context) bool {
 		return source.ActiveTurns == turns
 	}
 }
+func TargetsIsOneAlive(game Game, context Context) bool {
+	targets := game.GetTargets(context)
+	for _, target := range targets {
+		if target.Alive {
+			return true
+		}
+	}
+	return false
+}
 
 func MatchSourceActorIDTrigger(game Game, context Context, modifier_tx Transaction[Modifier]) bool {
 	if context.SourceActorID == nil || modifier_tx.Context.SourceActorID == nil {

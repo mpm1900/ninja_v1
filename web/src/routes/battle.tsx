@@ -2,6 +2,7 @@ import { ActorThumbnail } from '#/components/actor-thumbnail'
 import { AppHeader } from '#/components/app-header'
 import { BattleActions } from '#/components/battle-actions'
 import { BattleContextController } from '#/components/battle-context-controller'
+import { GameLogList } from '#/components/game-log'
 import { PlayerPositions } from '#/components/player-positions'
 import { PromptController } from '#/components/prompt-controller'
 import {
@@ -73,11 +74,7 @@ function RouteComponent() {
                   <AccordionTrigger>Log</AccordionTrigger>
                   <AccordionContent>
                     <ScrollArea className="h-40">
-                      <ul className='text-sm'>
-                        {game.log.map((l) => (
-                          <li key={l} className='text-muted-foreground'>{l}</li>
-                        ))}
-                      </ul>
+                      <GameLogList />
                     </ScrollArea>
                   </AccordionContent>
                 </AccordionItem>

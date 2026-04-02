@@ -39,7 +39,9 @@ func MakeCurse() game.Action {
 
 				for _, t := range targets {
 					target := t.Resolve(g)
-					log := game.AddLogs(fmt.Sprintf("%s was protected.", target.Name))
+					log := game.AddLogs(
+						game.NewLog(fmt.Sprintf("%s was protected.", target.Name)),
+					)
 					if tx, protected := target.IsProtected(log); protected {
 						transactions = append(transactions, tx)
 						continue

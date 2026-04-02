@@ -84,9 +84,11 @@ type Action struct {
 func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransaction {
 	action := transaction.Mutation
 	if !action.Filter(*game, transaction.Context) {
-		log := fmt.Sprintf("%s failed.", action.Config.Name)
+		context := NewContext()
+		context.ActionID = &action.ID
+		log := NewLogContext("$action$ failed.", context)
 		if action.Config.LogFailureF != nil {
-			log = fmt.Sprintf(*action.Config.LogFailureF, action.Config.Name)
+			log = NewLog(fmt.Sprintf(*action.Config.LogFailureF, action.Config.Name))
 		}
 		game.PushLog(log)
 		return []GameTransaction{}
@@ -107,9 +109,9 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 
 	source, ok := game.GetSource(context)
 	if ok {
-		log := fmt.Sprintf("%s used %s.", source.Name, action.Config.Name)
+		log := NewLogContext("$source$ used $action$", context)
 		if action.Config.LogSuccessF != nil {
-			log = fmt.Sprintf(*action.Config.LogSuccessF, source.Name, action.Config.Name)
+			log = NewLog(fmt.Sprintf(*action.Config.LogSuccessF, source.Name, action.Config.Name))
 		}
 		game.PushLog(log)
 	}

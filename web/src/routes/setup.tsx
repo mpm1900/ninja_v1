@@ -160,13 +160,6 @@ function App() {
               }}
             />
           </div>
-          <div className="w-sm hidden max-w-[200px] shrink-0 overflow-x-auto">
-            {game.log?.map((log, i) => (
-              <div key={i} className="wrap-break-word">
-                {log}
-              </div>
-            ))}
-          </div>
         </div>
 
         <pre className="max-w-full overflow-x-auto whitespace-pre-wrap wrap-break-word">
