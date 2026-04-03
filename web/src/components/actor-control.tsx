@@ -1,25 +1,14 @@
 import { Card, CardContent } from './ui/card'
 import { useStore } from '@tanstack/react-store'
-import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
 import { ActionControl } from './action-control'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select'
-import { sendContextMessage } from '#/lib/stores/socket'
 import { PositionSelect } from './position-select'
 import type { Actor } from '#/lib/game/actor'
 import { ActionsTable } from './actions-table'
 import { useGameContext } from '#/hooks/use-game-context'
-import { ActorStat } from './actor-stat'
 import { ActorStats } from './actor-stats'
 
 function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
-  const client = useStore(clientsStore, (c) => c.me!)
   const game = useStore(gameStore, (g) => g)
   const player = game.players.find((p) => p.ID == actor.player_ID)
   const { context, onContextChange } = useGameContext(actor, undefined, [game])
@@ -47,7 +36,6 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
       <div>
         <CardContent className="px-2">
           <ActionsTable
-            cooldowns={actor.action_cooldowns}
             data={actor.actions}
             enabled={enabled && !!player && !!actor.position_ID}
             selected={context.action_ID ?? undefined}
@@ -64,7 +52,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
                   enabled &&
                   !!player &&
                   !!actor.position_ID &&
-                  actor.action_cooldowns[row.original.ID] == undefined
+                  row.original.cooldown == null
                 }
                 context={context}
                 onContextChange={onContextChange}

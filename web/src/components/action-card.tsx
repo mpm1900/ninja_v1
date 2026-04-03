@@ -6,12 +6,10 @@ import { NatureBadge } from './nature-badge'
 type ActionCardProps = ComponentProps<'button'> & {
   action: Action
   selected?: boolean
-  cooldown: number | undefined
 }
 
 function ActionCard({
   action,
-  cooldown,
   selected = false,
   disabled = false,
   className,
@@ -61,7 +59,7 @@ function ActionCard({
               <div className="truncate text-sm font-semibold">
                 {action.config.name}
               </div>
-              {cooldown !== undefined ? (
+              {action.cooldown !== null ? (
                 <div className="text-[10px] uppercase tracking-wide text-destructive">
                   on cooldown
                 </div>

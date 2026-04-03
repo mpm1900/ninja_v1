@@ -165,7 +165,7 @@ func SourceIsAlive(game Game, context Context) bool {
 
 	return source.Alive
 }
-func SourceIsActionOnCooldown(g Game, context Context) bool {
+func SourceIsActionOffCooldown(g Game, context Context) bool {
 	if context.ActionID == nil {
 		return false
 	}
@@ -175,12 +175,12 @@ func SourceIsActionOnCooldown(g Game, context Context) bool {
 		return false
 	}
 
-	cooldown, ok := source.ActionCooldowns[*context.ActionID]
+	action, ok := source.GetActionByID(g, *context.ActionID)
 	if !ok {
 		return true
 	}
 
-	return cooldown == 0
+	return action.Cooldown == nil
 }
 func SourceHasActiveTurns(turns int) func(Game, Context) bool {
 	return func(g Game, context Context) bool {

@@ -30,7 +30,7 @@ func MakeProtect() game.Action {
 			Priority: game.ActionPriorityProtect,
 			Filter: game.ComposeGF(
 				game.SourceIsAlive,
-				game.SourceIsActionOnCooldown,
+				game.SourceIsActionOffCooldown,
 			),
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}

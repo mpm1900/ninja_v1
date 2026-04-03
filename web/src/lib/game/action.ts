@@ -16,6 +16,7 @@ type Action = {
     recoil?: number
     description: string
   }
+  cooldown: number | null
   priority: number
   target_type: 'target-actor-id' | 'target-position-type'
 }

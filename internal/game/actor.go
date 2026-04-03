@@ -120,8 +120,7 @@ type Actor struct {
 
 	Stages map[ActorStat]int `json:"staged_stats"`
 
-	Actions         []Action          `json:"actions"`
-	ActionCooldowns map[uuid.UUID]int `json:"action_cooldowns"`
+	Actions []Action `json:"actions"`
 }
 
 type ResolvedActor struct {
@@ -206,21 +205,27 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uui
 			StatEvasion:       0,
 			StatAccuracy:      0,
 		},
-		Actions:         actions,
-		ActionCooldowns: map[uuid.UUID]int{},
+		Actions: actions,
 	}
 }
 
 func (a *Actor) SetActionCooldown(actionID uuid.UUID, cooldown int) {
-	a.ActionCooldowns[actionID] = cooldown
+	for i := range a.Actions {
+		if a.Actions[i].ID == actionID {
+			a.Actions[i].Cooldown = &cooldown
+		}
+	}
 }
 func (a *Actor) DecrementCooldowns() {
-	for actionID, cooldown := range a.ActionCooldowns {
-		if cooldown <= 0 {
-			delete(a.ActionCooldowns, actionID)
-			continue
+	for i := range a.Actions {
+		if a.Actions[i].Cooldown != nil {
+			cd := *a.Actions[i].Cooldown - 1
+			if cd < 0 {
+				a.Actions[i].Cooldown = nil
+			} else {
+				a.Actions[i].Cooldown = &cd
+			}
 		}
-		a.ActionCooldowns[actionID] = cooldown - 1
 	}
 }
 func (a *Actor) RecoverStamina(g Game, ratio float64) {

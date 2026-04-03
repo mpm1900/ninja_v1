@@ -24,71 +24,68 @@ import { StatBadge } from './stat-badge'
 const helper = createColumnHelper<Action>()
 const columns = (
   selected: string | undefined,
-  cooldowns: Actor['action_cooldowns']
 ) => [
-  helper.display({
-    id: 'select',
-    cell: ({ row }) =>
-      !row.getCanSelect() ? (
-        <CircleX className="size-4 opacity-0" />
-      ) : row.original.ID === selected ? (
-        <CircleCheck className="size-4 text-muted-foreground" />
-      ) : (
-        <Circle className="size-4 text-muted-foreground/40" />
-      ),
-  }),
-  helper.accessor('config.name', {
-    header: 'name',
-  }),
-  helper.accessor('config.nature', {
-    header: 'nature',
-    cell: ({ row }) =>
-      row.original.config.nature ? (
-        <NatureBadge nature={row.original.config.nature} />
-      ) : (
-        '-'
-      ),
-  }),
-  helper.accessor('config.stat', {
-    header: 'stat',
-    cell: ({ row }) =>
-      row.original.config.stat ? (
-        <StatBadge
-          stat={row.original.config.stat}
-          contentProps={{ side: 'right' }}
-        />
-      ) : (
-        '-'
-      ),
-  }),
-  helper.accessor('config.power', {
-    header: 'power',
-    cell: ({ row }) => row.original.config.power ?? '-',
-  }),
-  helper.accessor('config.accuracy', {
-    header: 'accuracy',
-    cell: ({ row }) =>
-      row.original.config.accuracy ? `${row.original.config.accuracy}%` : '-',
-  }),
-  helper.accessor('config.cooldown', {
-    header: 'cooldown',
-    cell: ({ row }) => row.original.config.cooldown ?? '-',
-  }),
-  helper.display({
-    header: 'active cooldown',
-    cell: ({ row }) => cooldowns[row.original.ID] ?? '-',
-  }),
-]
+    helper.display({
+      id: 'select',
+      cell: ({ row }) =>
+        !row.getCanSelect() ? (
+          <CircleX className="size-4 opacity-0" />
+        ) : row.original.ID === selected ? (
+          <CircleCheck className="size-4 text-muted-foreground" />
+        ) : (
+          <Circle className="size-4 text-muted-foreground/40" />
+        ),
+    }),
+    helper.accessor('config.name', {
+      header: 'name',
+    }),
+    helper.accessor('config.nature', {
+      header: 'nature',
+      cell: ({ row }) =>
+        row.original.config.nature ? (
+          <NatureBadge nature={row.original.config.nature} />
+        ) : (
+          '-'
+        ),
+    }),
+    helper.accessor('config.stat', {
+      header: 'stat',
+      cell: ({ row }) =>
+        row.original.config.stat ? (
+          <StatBadge
+            stat={row.original.config.stat}
+            contentProps={{ side: 'right' }}
+          />
+        ) : (
+          '-'
+        ),
+    }),
+    helper.accessor('config.power', {
+      header: 'power',
+      cell: ({ row }) => row.original.config.power ?? '-',
+    }),
+    helper.accessor('config.accuracy', {
+      header: 'accuracy',
+      cell: ({ row }) =>
+        row.original.config.accuracy ? `${row.original.config.accuracy}%` : '-',
+    }),
+    helper.accessor('config.cooldown', {
+      header: 'cooldown',
+      cell: ({ row }) => row.original.config.cooldown ?? '-',
+    }),
+    helper.accessor('cooldown', {
+      header: 'active cooldown',
+      cell: ({ row }) => row.original.cooldown ?? '-',
+    }),
+  ]
 
 function ActionsTable({
-  cooldowns,
   data,
   enabled,
   selected,
   onSelectedChange,
   subRow,
 }: {
-  cooldowns: Actor['action_cooldowns']
   data: Action[]
   enabled: boolean
   selected: string | undefined
@@ -97,7 +94,7 @@ function ActionsTable({
 }) {
   const table = useReactTable({
     data,
-    columns: columns(selected, cooldowns),
+    columns: columns(selected),
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: enabled,
     getRowId: (a) => a.ID,

@@ -42,7 +42,7 @@ func MakeC1Bird() game.Action {
 			Priority: game.ActionPriorityP1,
 			Filter: game.ComposeGF(
 				game.SourceIsAlive,
-				game.SourceIsActionOnCooldown,
+				game.SourceIsActionOffCooldown,
 			),
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}

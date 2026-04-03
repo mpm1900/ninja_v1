@@ -80,6 +80,7 @@ type Action struct {
 	ContextValidate func(Context) bool          `json:"-"`
 	MapContext      func(Game, Context) Context `json:"-"`
 	Cost            GameMutation                `json:"-"`
+	Cooldown        *int                        `json:"cooldown"`
 }
 
 func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransaction {

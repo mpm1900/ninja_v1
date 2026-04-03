@@ -53,7 +53,6 @@ type Actor = Omit<ActorDef, 'action_IDs'> &
     pre_stats: ActorStats<number>
     applied_modifiers: Record<string, number>
     actions: Array<Action>
-    action_cooldowns: Record<string, number>
     resolved_nature_resistance: NatureStats<number>
     resolved_nature_damage: NatureStats<number>
   }

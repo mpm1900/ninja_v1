@@ -57,7 +57,7 @@ function BattleActions({ actor }: { actor: Actor }) {
                   enabled={
                     game.status === 'idle' &&
                     !!actor.position_ID &&
-                    actor.action_cooldowns[action.ID] == undefined
+                    action.cooldown == null
                   }
                   context={context}
                   onContextChange={setContext}
@@ -124,7 +124,7 @@ function BattleActions({ actor }: { actor: Actor }) {
                         rotate: 0,
                         zIndex: 90,
                         paddingBottom: 28,
-                        marginBottom: -28
+                        marginBottom: -28,
                       }}
                       whileTap={{ scale: 1.01 }}
                       transition={{
@@ -136,7 +136,6 @@ function BattleActions({ actor }: { actor: Actor }) {
                     >
                       <ActionCard
                         action={a}
-                        cooldown={actor.action_cooldowns[a.ID]}
                         disabled={!!staged && !selected}
                         selected={selected}
                         onClick={() => setContextAction(a.ID)}

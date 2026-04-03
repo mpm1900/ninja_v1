@@ -27,7 +27,7 @@ func MakeFollowMe() game.Action {
 			Priority: game.ActionPriorityP2,
 			Filter: game.ComposeGF(
 				game.SourceIsAlive,
-				game.SourceIsActionOnCooldown,
+				game.SourceIsActionOffCooldown,
 			),
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
