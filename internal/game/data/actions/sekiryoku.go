@@ -1,0 +1,55 @@
+package actions
+
+import (
+	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/mutations"
+
+	"github.com/google/uuid"
+)
+
+var Sekiryoku = MakeSekiryoku()
+
+func MakeSekiryoku() game.Action {
+	ID := uuid.New()
+	nature := game.NsPure
+	targetCount := 1
+	chakraCost := 30
+
+	config := game.ActionConfig{
+		Name:        "Sekiryoku",
+		Description: "Forces target to switch out.",
+		Nature:      &nature,
+		TargetCount: &targetCount,
+		Cost:        &chakraCost,
+		Jutsu:       game.Ninjutsu,
+	}
+
+	return game.Action{
+		ID:              ID,
+		Config:          config,
+		TargetType:      game.TargetPositionID,
+		TargetPredicate: game.ComposeAF(game.OtherFilter, game.ActiveFilter),
+		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
+		Cost:            mutations.UseStaminaSource(chakraCost),
+		ActionMutation: game.ActionMutation{
+			Priority: game.ActionPriorityDefault,
+			Filter: game.ComposeGF(
+				game.SourceIsAlive,
+			),
+			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
+				transactions := []game.GameTransaction{}
+
+				targets := g.GetTargets(context)
+				for _, target := range targets {
+					switch_mux := game.RemovePositions
+					switch_ctx := game.NewContext()
+					switch_ctx.TargetActorIDs = append(switch_ctx.TargetActorIDs, target.ID)
+					switch_tx := game.MakeTransaction(switch_mux, switch_ctx)
+					transactions = append(transactions, switch_tx)
+				}
+
+				return transactions
+			},
+		},
+	}
+}

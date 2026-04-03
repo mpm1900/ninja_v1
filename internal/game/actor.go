@@ -175,7 +175,7 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uui
 		Focus:      FocusNone,
 		ActorState: ActorState{
 			Alive:      true,
-			Damage:     100,
+			Damage:     0,
 			PositionID: nil,
 			Reflect:    0.0,
 		},

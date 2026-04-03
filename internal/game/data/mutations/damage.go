@@ -41,6 +41,12 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 		u := updater
 		return u(a)
 	})
+
+	log_ctx := game.NewContext()
+	log_ctx.ParentActorID = &target.ID
+	log_ctx.SourceActorID = &target.ID
+	ratio := int(float64(damage) * 100 / float64(hp))
+	g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ lost %d%% HP.", ratio), log_ctx))
 }
 func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) {
 	ApplyDamageWith(g, target, damage, nil)
@@ -85,6 +91,17 @@ func RatioDamage(ratio float64) game.GameMutation {
 	return RatioDamageWith(ratio, nil)
 }
 
+func MakeAccuracyCheck(g *game.Game, action game.ActionConfig, source game.ResolvedActor, target game.ResolvedActor) (bool, int, int) {
+	baseAccuracy := game.GetAccuracy(*g, source, target)
+	if action.Accuracy == nil {
+		return true, 0, 0
+	}
+
+	accuracy := int(math.Floor(baseAccuracy * float64(*action.Accuracy)))
+	roll := game.MakeActionRoll()
+	return roll <= accuracy, roll, accuracy
+}
+
 func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMutation {
 	return game.GameMutation{
 		Delta: func(g game.Game, context game.Context) game.Game {
@@ -118,25 +135,20 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 
 			for {
 				missed := false
-
 				for ti, target := range resolved {
 					if target.Protected {
 						g.PushLog(game.NewLog(fmt.Sprintf("%s was protected.", target.Name)))
 						continue
 					}
 
-					baseAccuracy := game.GetAccuracy(g, source, target)
-					if action.Accuracy != nil {
-						accuracy := int(math.Floor(baseAccuracy * float64(*action.Accuracy)))
-						roll := game.MakeActionRoll()
-						if roll > accuracy {
-							if !config.Repeat || repeats == 0 {
-								g.PushLog(game.NewLog(fmt.Sprintf("%s missed!", action.Name)))
-								g.PushLog(game.NewLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy)))
-							}
-							missed = true
-							continue
+					success, roll, accuracy := MakeAccuracyCheck(&g, action, source, target)
+					if !success {
+						if !config.Repeat || repeats == 0 {
+							g.PushLog(game.NewLog(fmt.Sprintf("%s missed!", action.Name)))
+							g.PushLog(game.NewLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy)))
 						}
+						missed = true
+						continue
 					}
 
 					damages := game.GetDamage(
@@ -152,7 +164,6 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 					)
 
 					for _, damage := range damages {
-
 						if !config.Repeat {
 							ApplyDamage(&g, target, damage)
 							if damage > 0 {
@@ -264,6 +275,19 @@ func ApplyHealRawWith(g *game.Game, targetID uuid.UUID, amount int, updater func
 		return u(a)
 	})
 
+	t, ok := g.GetActorByID(targetID)
+	if !ok {
+		return amount
+	}
+
+	target := t.Resolve(*g)
+	hp := target.Stats[game.StatHP]
+	log_ctx := game.NewContext()
+	log_ctx.ParentActorID = &targetID
+	log_ctx.SourceActorID = &targetID
+	ratio := int(float64(amount) * 100 / float64(hp))
+	g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %d%% HP.", ratio), log_ctx))
+
 	return amount
 }
 func ApplyHealRaw(g *game.Game, targetID uuid.UUID, amount int) int {
@@ -317,21 +341,17 @@ func NewHeal(action game.ActionConfig, ratio float64) game.GameMutation {
 			}
 
 			for _, target := range resolved {
-				base_accuracy := game.GetAccuracy(g, source, target)
-
-				if action.Accuracy != nil {
-					accuracy := int(math.Floor(base_accuracy * float64(*action.Accuracy)))
-					roll := game.MakeActionRoll()
-					if roll > accuracy {
-						g.PushLog(game.NewLog(fmt.Sprintf("%s missed!", action.Name)))
-						g.PushLog(game.NewLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy)))
-						continue
-					}
+				success, roll, accuracy := MakeAccuracyCheck(&g, action, source, target)
+				if !success {
+					g.PushLog(game.NewLog(fmt.Sprintf("%s missed!", action.Name)))
+					g.PushLog(game.NewLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy)))
+					continue
 				}
 
 				ApplyHealRatio(&g, target, ratio)
 
 			}
+
 			return g
 		},
 	}

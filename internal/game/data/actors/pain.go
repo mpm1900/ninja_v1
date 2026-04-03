@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -32,15 +33,15 @@ var Pain = game.ActorDef{
 		game.NsYang,
 	}),
 
-	InnateModifiers: []game.Modifier{},
-	ActionCount:     6,
+	InnateModifiers: []game.Modifier{
+		modifiers.VesselOfPain,
+	},
+	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
+		actions.Sekiryoku.ID,
 		actions.Protect.ID,
 		actions.Tailwind.ID,
-		actions.Chidori.ID,
-		actions.DragonDance.ID,
-		actions.Fireball.ID,
 		actions.LeafJab.ID,
 	},
 }

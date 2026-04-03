@@ -54,7 +54,7 @@ function ActorCard({
 }) {
   const modifiers = (game.modifiers ?? [])
     .map((m) => m.mutation)
-    .concat(actor?.innate_modifiers ?? [])
+    .concat(game.actors.flatMap(a => a.innate_modifiers))
 
   const is_player = actor?.player_ID === client_ID
   const action_tx = game.actions.find(
