@@ -4,6 +4,7 @@ import {
   type ActorBaseStat,
   type ActorDef,
 } from '#/lib/game/actor'
+import type { Nature } from '#/lib/game/nature'
 import { cn } from '#/lib/utils'
 
 function getBaseStatColorClass(value: number) {
@@ -25,7 +26,6 @@ function getBaseStatColorClass(value: number) {
   return 'text-fuchsia-300'
 }
 
-
 function ActorStat({
   stat,
   actor,
@@ -36,12 +36,13 @@ function ActorStat({
   stat: ActorBaseStat
   showBase?: boolean
 }) {
+  const check = checkActorStat(actor, stat)
   return (
     <span data-role="actor-stat" {...props}>
       <span
         className={cn({
-          'text-green-400': checkActorStat(actor, stat) === 1,
-          'text-red-300': checkActorStat(actor, stat) === -1,
+          'text-green-400': check === 1,
+          'text-red-300': check === -1,
         })}
       >
         {actor.stats[stat]}
@@ -69,9 +70,46 @@ function ActorStatBase({
       <span className={getBaseStatColorClass(actor.stats[stat])}>
         {actor.stats[stat]}
       </span>
-
     </span>
   )
 }
 
-export { ActorStat, ActorStatBase }
+function NatureDamageStat({
+  actor,
+  nature,
+  ...props
+}: React.ComponentProps<'span'> & {
+  actor: Actor
+  nature: Nature
+}) {
+  const value = actor.resolved_nature_damage[nature]
+  return (
+    <span data-role="nature-stat" {...props}>
+      <span className={cn({
+        'text-green-400': value > 1,
+        'text-red-300': value < 1,
+      })}>{100 * value}%</span>
+    </span>
+  )
+}
+
+function NatureResistanceStat({
+  actor,
+  nature,
+  ...props
+}: React.ComponentProps<'span'> & {
+  actor: Actor
+  nature: Nature
+}) {
+  const value = actor.resolved_nature_resistance[nature]
+  return (
+    <span data-role="nature-stat" {...props}>
+      <span className={cn({
+        'text-green-400': value > 1 || value < 0,
+        'text-red-300': value < 1 && value > 0,
+      })}>{Math.floor(100 * value)}%</span>
+    </span>
+  )
+}
+
+export { ActorStat, ActorStatBase, NatureDamageStat, NatureResistanceStat }

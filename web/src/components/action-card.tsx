@@ -18,7 +18,7 @@ function ActionCard({
   ...props
 }: ActionCardProps) {
   const accuracyLabel =
-    action.config.accuracy !== null ? `${action.config.accuracy}%` : '-'
+    action.config.accuracy !== undefined ? `${action.config.accuracy}%` : '-'
 
   return (
     <button

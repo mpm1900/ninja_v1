@@ -49,30 +49,6 @@ func DamageEquation(terms DamageTerms) int {
 	return int(math.Floor(raw)) + terms.Offset
 }
 
-func GetNaturesModifier(source, target ResolvedActor, moveNatures []Nature) float64 {
-	targetNatures := make(map[Nature]struct{})
-	for _, group := range target.Natures {
-		for _, nature := range group {
-			targetNatures[nature] = struct{}{}
-		}
-	}
-
-	effectiveness := 1.0
-	for _, moveNature := range moveNatures {
-		for targetNature := range targetNatures {
-			effectiveness *= GetEffectiveness(moveNature, targetNature)
-		}
-	}
-
-	proficiency := 1.0
-	for _, nature := range moveNatures {
-		proficiency *= source.NatureDamage[nature]
-		proficiency /= target.NatureResistance[nature]
-	}
-
-	return proficiency * effectiveness
-}
-
 func GetStabModifier(source ResolvedActor, nature *NatureSet) float64 {
 	if nature == nil {
 		return 1.00
@@ -123,7 +99,7 @@ func GetDamage(
 		if nature != nil {
 			natures = NATURES[*nature]
 		}
-		nature_mod := GetNaturesModifier(source, target, natures)
+		nature_mod := ResolveNatures(natures, source.NatureDamage, target.NatureResistance, target.Natures)
 		stab_mod := GetStabModifier(source, nature)
 
 		damages[i] = DamageEquation(DamageTerms{

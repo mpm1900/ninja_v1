@@ -16,6 +16,7 @@ import type { Actor } from '#/lib/game/actor'
 import { ActionsTable } from './actions-table'
 import { useGameContext } from '#/hooks/use-game-context'
 import { ActorStat } from './actor-stat'
+import { ActorStats } from './actor-stats'
 
 function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
   const client = useStore(clientsStore, (c) => c.me!)
@@ -39,21 +40,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
             <div className="flex flex-col gap-2">
               <PositionSelect actor={actor} game={game} />
             </div>
-            <table>
-              <tbody>
-                {Object.keys(actor.stats).map((key) => (
-                  <tr key={key}>
-                    <td className='text-muted-foreground'>{key}:{' '}</td>
-                    <td>
-                      <ActorStat
-                        actor={actor}
-                        showBase
-                        stat={key as keyof typeof actor.stats}
-                      />
-                    </td>
-                  </tr>
-                ))}</tbody>
-            </table>
+            <ActorStats actor={actor} />
           </div>
         </CardContent>
       </div>

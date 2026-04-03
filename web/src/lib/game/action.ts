@@ -7,13 +7,13 @@ type Action = {
   config: {
     name: string
     jutsu: string
-    nature: NatureSet | null
-    cost: number | null
-    cooldown: number | null
-    accuracy: number | null
-    stat: ActorAttackStat | null
-    power: number | null
-    recoil: number | null
+    nature?: NatureSet
+    cost?: number
+    cooldown?: number
+    accuracy?: number
+    stat?: ActorAttackStat
+    power?: number
+    recoil?: number
     description: string
   }
   priority: number

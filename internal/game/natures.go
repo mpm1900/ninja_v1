@@ -85,6 +85,9 @@ func NewNatureSetValues() map[Nature]float64 {
 }
 
 func GetEffectiveness(moveNature Nature, targetNature Nature) float64 {
+	if moveNature == targetNature {
+		return 0.8
+	}
 	if ElementalCycle[moveNature] == targetNature {
 		return 2.0
 	}
@@ -100,4 +103,33 @@ func MapNatures(keys []NatureSet) map[NatureSet][]Nature {
 		natures[key] = NATURES[key]
 	}
 	return natures
+}
+
+func ResolveNatures(
+	input []Nature,
+	damages map[Nature]float64,
+	resistances map[Nature]float64,
+	natures map[NatureSet][]Nature,
+) float64 {
+	targetNatures := make(map[Nature]struct{})
+	for _, group := range natures {
+		for _, nature := range group {
+			targetNatures[nature] = struct{}{}
+		}
+	}
+
+	effectiveness := 1.0
+	for _, moveNature := range input {
+		for targetNature := range targetNatures {
+			effectiveness *= GetEffectiveness(moveNature, targetNature)
+		}
+	}
+
+	proficiency := 1.0
+	for _, nature := range input {
+		proficiency *= damages[nature]
+		proficiency /= resistances[nature]
+	}
+
+	return proficiency * effectiveness
 }

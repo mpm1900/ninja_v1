@@ -126,9 +126,11 @@ type Actor struct {
 
 type ResolvedActor struct {
 	Actor
-	BaseStats        map[ActorStat]int `json:"base_stats"`
-	PreStats         map[ActorStat]int `json:"pre_stats"`
-	AppliedModifiers map[uuid.UUID]int `json:"applied_modifiers"`
+	BaseStats                map[ActorStat]int  `json:"base_stats"`
+	PreStats                 map[ActorStat]int  `json:"pre_stats"`
+	AppliedModifiers         map[uuid.UUID]int  `json:"applied_modifiers"`
+	ResolvedNatureResistance map[Nature]float64 `json:"resolved_nature_resistance"`
+	ResolvedNatureDamage     map[Nature]float64 `json:"resolved_nature_damage"`
 }
 
 const (
@@ -416,6 +418,27 @@ func resolveActor(actor Actor, mtransactions []Transaction[Modifier], atransacti
 
 	resolved := resolve(mapped, actor)
 	maps.Copy(resolved.AppliedModifiers, applied)
+	resolved.ResolvedNatureResistance = make(map[Nature]float64)
+	resolved.ResolvedNatureDamage = make(map[Nature]float64)
+
+	for nature := range resolved.NatureResistance {
+		incomingMultiplier := ResolveNatures(
+			[]Nature{nature},
+			NewNatureSetValues(),
+			resolved.NatureResistance,
+			resolved.Natures,
+		)
+
+		if incomingMultiplier == 0 {
+			resolved.ResolvedNatureResistance[nature] = 0
+			continue
+		}
+
+		resolved.ResolvedNatureResistance[nature] = 1.0 / incomingMultiplier
+		ns := NatureSet(nature)
+		resolved.ResolvedNatureDamage[nature] = GetStabModifier(resolved, &ns)
+	}
+
 	return resolved
 }
 

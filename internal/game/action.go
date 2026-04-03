@@ -29,16 +29,16 @@ const (
 )
 
 type ActionConfig struct {
-	Accuracy    *int        `json:"accuracy"`
-	Cooldown    *int        `json:"cooldown"`
-	Cost        *int        `json:"cost"`
-	LifeSteal   *float64    `json:"life_steal"`
+	Accuracy    *int        `json:"accuracy,omitempty"`
+	Cooldown    *int        `json:"cooldown,omitempty"`
+	Cost        *int        `json:"cost,omitempty"`
+	LifeSteal   *float64    `json:"life_steal,omitempty"`
 	Name        string      `json:"name"`
-	Nature      *NatureSet  `json:"nature"`
-	Power       *int        `json:"power"`
-	Recoil      *float64    `json:"recoil"`
-	Stat        *AttackStat `json:"stat"`
-	TargetCount *int        `json:"target_count"`
+	Nature      *NatureSet  `json:"nature,omitempty"`
+	Power       *int        `json:"power,omitempty"`
+	Recoil      *float64    `json:"recoil,omitempty"`
+	Stat        *AttackStat `json:"stat,omitempty"`
+	TargetCount *int        `json:"target_count,omitempty"`
 	Jutsu       ActionJutsu `json:"jutsu"`
 	Description string      `json:"description"`
 	LogSuccessF *string     `json:"-"`

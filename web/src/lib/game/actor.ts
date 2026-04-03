@@ -54,6 +54,8 @@ type Actor = ActorDef &
     applied_modifiers: Record<string, number>
     actions: Array<Action>
     action_cooldowns: Record<string, number>
+    resolved_nature_resistance: NatureStats<number>
+    resolved_nature_damage: NatureStats<number>
   }
 
 const statNames: Record<string, string> = {

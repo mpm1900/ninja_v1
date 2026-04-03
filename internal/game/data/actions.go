@@ -22,8 +22,10 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.MirageCrow.ID: actions.MirageCrow,
 	actions.Sekiryoku.ID:  actions.Sekiryoku,
 
-	actions.Surf.ID:         actions.Surf,
-	actions.LuckyStrikes.ID: actions.LuckyStrikes,
+	actions.Surf.ID:           actions.Surf,
+	actions.LuckyStrikes.ID:   actions.LuckyStrikes,
+	actions.GreatTreeSpear.ID: actions.GreatTreeSpear,
+	actions.C1Bird.ID:         actions.C1Bird,
 
 	actions.Rasengan.ID:         actions.Rasengan,
 	actions.RasenganRecharge.ID: actions.RasenganRecharge,
