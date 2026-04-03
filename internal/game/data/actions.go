@@ -26,6 +26,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.LuckyStrikes.ID:   actions.LuckyStrikes,
 	actions.GreatTreeSpear.ID: actions.GreatTreeSpear,
 	actions.C1Bird.ID:         actions.C1Bird,
+	actions.SearingMigrane.ID: actions.SearingMigrane,
 
 	actions.Rasengan.ID:         actions.Rasengan,
 	actions.RasenganRecharge.ID: actions.RasenganRecharge,

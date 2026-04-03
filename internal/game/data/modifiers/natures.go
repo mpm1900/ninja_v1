@@ -9,11 +9,11 @@ import (
 
 var addNatureID = uuid.New()
 
-func AddNature(nature game.NatureSet) game.Modifier {
+func AddNature(nature game.NatureSet, duration int) game.Modifier {
 	return game.Modifier{
 		ID:       addNatureID,
 		Name:     fmt.Sprintf("Add Nature: %s", nature),
-		Duration: 0,
+		Duration: duration,
 		Mutations: []game.ActorMutation{
 			game.MakeActorMutation(
 				nil,

@@ -36,7 +36,7 @@ var Kakuzu = game.ActorDef{
 		game.Switch.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
-		actions.Fireball.ID,
+		actions.SearingMigrane.ID,
 		actions.LeafJab.ID,
 	},
 }
