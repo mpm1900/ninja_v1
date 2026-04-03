@@ -140,6 +140,13 @@ func (g *Game) Next() bool {
 	}
 
 	g.Tick = time.Second / 2
+	if g.AllPromptsReady() {
+		if g.NextPrompt() {
+			return true
+		}
+	}
+
+	g.Tick = time.Second / 2
 	if g.NextTrigger() {
 		return true
 	}

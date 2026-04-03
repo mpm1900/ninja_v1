@@ -527,6 +527,12 @@ func (g *Game) RunAction(transaction Transaction[Action]) {
 }
 
 func (g *Game) RunTrigger(transaction Transaction[Trigger]) {
+	modifier, ok := g.GetModifierByID(transaction.Mutation.ModifierID)
+	if ok {
+		text := fmt.Sprintf("[%s]: %s", transaction.Mutation.On, modifier.Name)
+		fmt.Println(text)
+		g.PushLog(NewLog(text))
+	}
 	transactions := ResolveTrigger(*g, transaction)
 	g.Transactions = append(transactions, g.Transactions...)
 }
@@ -535,13 +541,6 @@ func (g *Game) On(on TriggerOn, context *Context) {
 	triggers := make([]Transaction[Trigger], 0)
 	for _, trigger := range g.GetTriggers(on, context) {
 		if trigger.Mutation.On == on {
-			modifier, ok := g.GetModifierByID(trigger.Mutation.ModifierID)
-			if ok {
-				text := fmt.Sprintf("[%s]: %s", on, modifier.Name)
-				fmt.Println(text)
-				g.PushLog(NewLog(text))
-			}
-
 			triggers = append(triggers, trigger)
 		}
 	}
