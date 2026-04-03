@@ -10,15 +10,14 @@ type RequestType = string
 
 const (
 	AddActor         RequestType = "add-actor"
-	RemoveActor      RequestType = "remove-actor"    //TEMP
-	AddModifier      RequestType = "add-modifier"    // TEMP
-	RemoveModifier   RequestType = "remove-modifier" // TEMP
+	RemoveActor      RequestType = "remove-actor" //TEMP
 	PushAction       RequestType = "push-action"
 	RemoveAction     RequestType = "remove-action"
 	SetActorPlayer   RequestType = "set-actor-player"   // TEMP
 	SetActorPosition RequestType = "set-actor-position" // TEMP
 	RunGameActions   RequestType = "run-game-actions"   // TEMP
 	ValidateState    RequestType = "validate-state"     // TEMP
+	ValidateContext  RequestType = "validate-context"
 	ResolvePrompt    RequestType = "resolve-prompt"
 )
 

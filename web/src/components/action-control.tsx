@@ -2,14 +2,17 @@ import { NULL_CONTEXT, type Context } from '#/lib/game/context'
 import { useQuery } from '@tanstack/react-query'
 import { Button } from './ui/button'
 import { useStore } from '@tanstack/react-store'
-import { sendContextMessage, socketStore } from '#/lib/stores/socket'
+import {
+  sendContextMessage,
+  socketStore,
+} from '#/lib/stores/socket'
 import { gameStore } from '#/lib/stores/game'
 import { actionTargetsQuery } from '#/lib/queries/action-targets'
-import { isActionContextValidQuery } from '#/lib/queries/is-action-context-valid'
 import { clientsStore } from '#/lib/stores/clients'
 import { TargetButton } from './target-button'
 import type { Action, ActionTransaction } from '#/lib/game/action'
 import { setActionID } from '#/lib/stores/battle-context'
+import { useValidateContext } from '#/hooks/use-validate-context'
 
 function ActionControl({
   action,
@@ -26,10 +29,13 @@ function ActionControl({
 }) {
   const instanceID = useStore(socketStore, (s) => s.instanceID!)
   const game = useStore(gameStore, (g) => g)
-  const valid = useQuery(isActionContextValidQuery(context))
+  const { valid } = useValidateContext(context)
+
   const client = useStore(clientsStore, (c) => c.me!)
-  const actionTargets = useQuery(actionTargetsQuery(instanceID, context, [game.turn.count]))
-  const loading = valid.isFetching || actionTargets.isFetching
+  const actionTargets = useQuery(
+    actionTargetsQuery(instanceID, context, [game.turn.count])
+  )
+  const loading = actionTargets.isFetching
   const actors = game.actors.filter((a) => actionTargets.data?.includes(a.ID))
   const has_queued_action = game.queued_actions[context.source_actor_ID ?? '']
 
@@ -71,20 +77,20 @@ function ActionControl({
               actor={a}
               enabled={enabled}
               loading={loading}
-              contextValid={!!valid.data}
+              contextValid={!!valid}
               targetType={action.target_type}
               context={context}
               onContextChange={onContextChange}
             />
           ))}
-          {!loading && actors.length == 0 && valid.data === false && (
+          {!loading && actors.length == 0 && valid === false && (
             <span className="text-muted-foreground text-sm">
               no targets available
             </span>
           )}
         </div>
       )}
-      {enabled && action && valid.data && (
+      {enabled && action && valid && (
         <Button
           disabled={loading}
           onClick={() => {

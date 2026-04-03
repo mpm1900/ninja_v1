@@ -23,14 +23,13 @@ type SocketState = {
 type SocketRequestType =
   | 'add-actor'
   | 'remove-actor'
-  | 'add-modifier'
-  | 'remove-modifier'
   | 'push-action'
   | 'remove-action'
   | 'set-actor-player'
   | 'set-actor-position'
   | 'run-game-actions'
   | 'validate-state'
+  | 'validate-context'
   | 'resolve-prompt'
 
 type SocketRequest = {
@@ -41,6 +40,19 @@ type SocketRequest = {
   modifier_ID?: string
   position_index?: number
 }
+
+type SocketResponse = {
+  type: 'game' | 'clients' | 'join-success' | 'validate-context'
+  state: Game | null
+  clients: Array<Client> | null
+  context: Context | null
+  valid: boolean | null
+}
+
+type SocketMessageSubscriber = (
+  event: MessageEvent,
+  message: SocketResponse | null
+) => void
 
 const DEFAULT_HOST = 'localhost:3005'
 
@@ -55,8 +67,17 @@ const socketStore = new Store<SocketState>({
   url: null,
 })
 
+const messageSubscribers = new Set<SocketMessageSubscriber>()
+
 function isCurrentSocket(socket: WebSocket): boolean {
   return socketStore.state.socket === socket
+}
+
+function subscribeSocketMessages(subscriber: SocketMessageSubscriber) {
+  messageSubscribers.add(subscriber)
+  return () => {
+    messageSubscribers.delete(subscriber)
+  }
 }
 
 function clearSocketEventHandlers(socket: WebSocket) {
@@ -101,34 +122,41 @@ function connectSocket(instanceID: string) {
 
   socket.onmessage = (event) => {
     if (!isCurrentSocket(socket)) return
-    if (typeof event.data !== 'string') return
 
-    try {
-      const message = JSON.parse(event.data) as {
-        type: 'state' | 'clients' | 'join-success'
-        state: Game | null
-        clients: Array<Client> | null
+    let message: SocketResponse | null = null
+
+    if (typeof event.data === 'string') {
+      try {
+        message = JSON.parse(event.data) as SocketResponse
+      } catch {
+        console.error('non-JSON payload')
       }
-      if (message.type === 'state') {
-        gameStore.setState(() => message.state!)
+    }
+
+    if (message?.type === 'game') {
+      gameStore.setState(() => message.state!)
+    }
+    if (message?.type === 'clients') {
+      clientsStore.setState((c) => ({
+        ...c,
+        clients: message.clients!,
+      }))
+    }
+    if (message?.type === 'join-success') {
+      gameStore.setState(() => message.state!)
+      clientsStore.setState((c) => ({
+        ...c,
+        me: message.clients![0],
+      }))
+      setContextPlayer(message.clients![0].ID)
+    }
+
+    for (const subscriber of messageSubscribers) {
+      try {
+        subscriber(event, message)
+      } catch (error) {
+        console.error('socket message subscriber error', error)
       }
-      if (message.type === 'clients') {
-        clientsStore.setState((c) => ({
-          ...c,
-          clients: message.clients!,
-        }))
-      }
-      if (message.type === 'join-success') {
-        gameStore.setState(() => message.state!)
-        clientsStore.setState((c) => ({
-          ...c,
-          me: message.clients![0],
-        }))
-        setContextPlayer(message.clients![0].ID)
-      }
-    } catch {
-      // Ignore non-JSON websocket payloads
-      console.error('non-JSON payload')
     }
   }
 
@@ -189,11 +217,12 @@ function sendContextMessage(request: SocketRequest) {
   return sendSocketMessage(JSON.stringify(request))
 }
 
-export type { }
+export type { SocketResponse, SocketMessageSubscriber }
 export {
   socketStore,
   connectSocket,
   disconnectSocket,
   sendSocketMessage,
   sendContextMessage,
+  subscribeSocketMessages,
 }

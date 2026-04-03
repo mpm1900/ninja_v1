@@ -31,9 +31,6 @@ func NewServer(ctx context.Context, queries *db.Queries) *Server {
 
 	api.HandleFunc("GET /actions", dataHandler.HandleGetActions)
 	api.HandleFunc("GET /actors", dataHandler.HandleGetActors)
-	api.HandleFunc("GET /modifiers", dataHandler.HandleGetModifiers)
-	api.HandleFunc("GET /triggers", dataHandler.HandleGetTriggerTypes)
-	api.HandleFunc("POST /validate", dataHandler.HandleIsActionContextValid)
 
 	api.HandleFunc("GET /instances", instancesHandler.HandleGetGames)
 	api.HandleFunc("POST /{instanceID}/targets", instancesHandler.HandleGetTargets)

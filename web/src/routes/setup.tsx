@@ -8,11 +8,8 @@ import { ClientOnly, createFileRoute, redirect } from '@tanstack/react-router'
 import { gameStore } from '#/lib/stores/game'
 import { clientsStore } from '#/lib/stores/clients'
 import { ActorCard } from '#/components/actor-card'
-import { modifiersQuery } from '#/lib/queries/modifiers'
-import { ModifiersTable } from '#/components/modifiers-table'
 import { actionsQuery } from '#/lib/queries/actions'
 import { ActorControl } from '#/components/actor-control'
-import { triggersQuery } from '#/lib/queries/trigger-types'
 import { ActionQueue } from '#/components/action-queue'
 import { PromptController } from '#/components/prompt-controller'
 import { ActorThumbnail } from '#/components/actor-thumbnail'
@@ -29,8 +26,6 @@ export const Route = createFileRoute('/setup')({
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData(actionsQuery)
     await context.queryClient.ensureQueryData(actorsQuery)
-    await context.queryClient.ensureQueryData(modifiersQuery)
-    await context.queryClient.ensureQueryData(triggersQuery)
     await context.queryClient.ensureQueryData(instancesQuery)
   },
 })
@@ -138,26 +133,6 @@ function App() {
                   />
                 )
               }
-            />
-            <ModifiersTable
-              data={game.modifiers ?? []}
-              onRowRemove={(modifier) => {
-                if (!client) return
-
-                sendContextMessage({
-                  type: 'remove-modifier',
-                  client_ID: client.ID,
-                  modifier_ID: modifier.ID,
-                  context: {
-                    action_ID: null,
-                    source_player_ID: null,
-                    source_actor_ID: null,
-                    parent_actor_ID: null,
-                    target_actor_IDs: [],
-                    target_position_IDs: [],
-                  },
-                })
-              }}
             />
           </div>
         </div>

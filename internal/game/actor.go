@@ -158,6 +158,20 @@ func GetExperienceToNextLevel(level, exp int) int {
 	return GetBaseExperience(level+1) - (GetBaseExperience(level) + exp)
 }
 
+func (a Actor) GetActionByID(g Game, actionID uuid.UUID) (Action, bool) {
+	ra := a.Resolve(g)
+	return ra.GetActionByID(actionID)
+}
+func (ra ResolvedActor) GetActionByID(actionID uuid.UUID) (Action, bool) {
+	for _, action := range ra.Actions {
+		if action.ID == actionID {
+			return action, true
+		}
+	}
+
+	return Action{}, false
+}
+
 // TODO make actions selectable
 func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uuid.UUID]Action) Actor {
 	actions := make([]Action, 0)

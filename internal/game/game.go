@@ -214,17 +214,26 @@ func (g Game) GetTriggers(on TriggerOn, context *Context) []Transaction[Trigger]
 
 	return triggers
 }
-func (g Game) GetModifierByID(id uuid.UUID) (Modifier, bool) {
+func (g Game) GetModifierByID(ID uuid.UUID) (Modifier, bool) {
 	modifiers := make([]Transaction[Modifier], 0, len(g.Modifiers))
 	modifiers = append(modifiers, g.Modifiers...)
 	modifiers = append(modifiers, GetActorModifiers(g)...)
 
 	for _, m := range modifiers {
-		if m.Mutation.ID == id {
+		if m.Mutation.ID == ID {
 			return m.Mutation, true
 		}
 	}
 	return Modifier{}, false
+}
+func (g Game) GetPromptTxByID(ID uuid.UUID) (Transaction[Action], bool) {
+	for _, tx := range g.Prompts {
+		if tx.ID == ID {
+			return tx, true
+		}
+	}
+
+	return Transaction[Action]{}, false
 }
 
 func (g *Game) FilterModifiers(predicate func(modifier Transaction[Modifier]) bool) {

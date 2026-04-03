@@ -73,7 +73,7 @@ function RouteComponent() {
                 <AccordionItem value="log">
                   <AccordionTrigger>Log</AccordionTrigger>
                   <AccordionContent>
-                    <ScrollArea className="h-40">
+                    <ScrollArea className="h-40 min-w-60">
                       <GameLogList />
                     </ScrollArea>
                   </AccordionContent>

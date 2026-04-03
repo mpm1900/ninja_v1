@@ -13,12 +13,12 @@ import {
 import type { Context } from '#/lib/game/context'
 import { sendContextMessage, socketStore } from '#/lib/stores/socket'
 import { useQuery } from '@tanstack/react-query'
-import { isActionContextValidQuery } from '#/lib/queries/is-action-context-valid'
 import { actionTargetsQuery } from '#/lib/queries/action-targets'
 import { TargetButton } from './target-button'
 import { Button } from './ui/button'
 import { useEffect, useState } from 'react'
 import type { ActionTransaction } from '#/lib/game/action'
+import { useValidateContext } from '#/hooks/use-validate-context'
 
 function PromptControl({
   prompt,
@@ -32,12 +32,14 @@ function PromptControl({
   const action = prompt?.mutation
   const instanceID = useStore(socketStore, (s) => s.instanceID!)
   const game = useStore(gameStore, (g) => g)
-  const valid = useQuery(isActionContextValidQuery(context))
+  const { valid } = useValidateContext(context, prompt?.ID)
+
   const client = useStore(clientsStore, (c) => c.me!)
   const actionTargets = useQuery(
     actionTargetsQuery(instanceID, context)
   )
-  const loading = valid.isFetching || actionTargets.isFetching
+  const loading = actionTargets.isFetching
+
 
   return (
     <>
@@ -51,7 +53,7 @@ function PromptControl({
                 actor={a}
                 enabled
                 loading={loading}
-                contextValid={!!valid.data}
+                contextValid={!!valid}
                 context={context}
                 onContextChange={onContextChange}
                 targetType={action.target_type}
@@ -62,7 +64,7 @@ function PromptControl({
       <AlertDialogFooter>
         <AlertDialogAction asChild>
           <Button
-            disabled={loading || !valid.data}
+            disabled={loading || !valid}
             onClick={() => {
               sendContextMessage({
                 type: 'resolve-prompt',

@@ -44,24 +44,6 @@ func Reducer(instance *Instance, request Request) int {
 		instance.Game.RemoveActor(actor.ID)
 		return state
 
-	case AddModifier:
-		if request.ModifierID == nil {
-			return none
-		}
-
-		if modifier, ok := data.MODIFIERS[*request.ModifierID]; ok {
-			transaction := game.MakeModifierTransaction(modifier, request.Context)
-			instance.Game.AddModifier(transaction)
-			return state
-		}
-
-		return none
-	case RemoveModifier:
-		instance.Game.FilterModifiers(func(m game.Transaction[game.Modifier]) bool {
-			return m.ID != *request.ModifierID
-		})
-		return state
-
 	case PushAction:
 		if request.Context.ActionID == nil {
 			fmt.Println("no context action_ID")
@@ -116,6 +98,39 @@ func Reducer(instance *Instance, request Request) int {
 		instance.RunGameActions()
 		return state
 
+	case ValidateContext:
+		if request.Context.ActionID == nil && request.PromptID == nil {
+			instance.ValidateContextResponse(request.ClientID, request.Context, false)
+			return none
+		}
+
+		if request.PromptID != nil {
+			action, ok := instance.Game.GetPromptTxByID(*request.PromptID)
+			if !ok {
+				instance.ValidateContextResponse(request.ClientID, request.Context, false)
+				return none
+			}
+
+			valid := action.Mutation.ContextValidate(request.Context)
+			instance.ValidateContextResponse(request.ClientID, request.Context, valid)
+			return none
+		}
+
+		actor, ok := instance.Game.GetSource(request.Context)
+		if !ok {
+			instance.ValidateContextResponse(request.ClientID, request.Context, false)
+			return none
+		}
+
+		action, ok := actor.GetActionByID(instance.Game, *request.Context.ActionID)
+		if !ok {
+			instance.ValidateContextResponse(request.ClientID, request.Context, false)
+			return none
+		}
+
+		valid := action.ContextValidate(request.Context)
+		instance.ValidateContextResponse(request.ClientID, request.Context, valid)
+		return none
 	case ValidateState:
 		if instance.Game.Status == game.GameStatusRunning {
 			return none

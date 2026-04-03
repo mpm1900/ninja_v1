@@ -56,7 +56,7 @@ func (i *Instance) BroadcastGame() {
 	// fmt.Printf("BROADCAST STATE %#v\n", game)
 	for _, client := range i.Clients {
 		select {
-		case client.inbox <- NewStateMessage(client, &i.Game):
+		case client.inbox <- NewGameMessage(client, &i.Game):
 		// if a client is unable to handle the state update,
 		//   unregister them so they don't the loop
 		default:
@@ -66,7 +66,16 @@ func (i *Instance) BroadcastGame() {
 }
 
 func (i *Instance) PostRegister(client *Client) {
-	client.inbox <- PostRegisterMssage(client, &i.Game)
+	client.inbox <- PostRegisterMessage(client, &i.Game)
+}
+
+func (i *Instance) ValidateContextResponse(clientID uuid.UUID, context game.Context, valid bool) {
+	client, ok := i.Clients[clientID]
+	if !ok {
+		return
+	}
+
+	client.inbox <- ValidateContextMessage(client, context, valid)
 }
 
 func (i *Instance) BroadcastClients() {

@@ -74,6 +74,7 @@ type Action struct {
 	ActionMutation
 	ID              uuid.UUID                   `json:"ID"`
 	Config          ActionConfig                `json:"config"`
+	Disabled        bool                        `json:"disabled"`
 	TargetType      ActionTargetType            `json:"target_type"`
 	TargetPredicate func(Actor, Context) bool   `json:"-"`
 	ContextValidate func(Context) bool          `json:"-"`
@@ -83,7 +84,7 @@ type Action struct {
 
 func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransaction {
 	action := transaction.Mutation
-	if !action.Filter(*game, transaction.Context) {
+	if !action.Disabled && !action.Filter(*game, transaction.Context) {
 		context := NewContext()
 		context.ActionID = &action.ID
 		log := NewLogContext("$action$ failed.", context)
