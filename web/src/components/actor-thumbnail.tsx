@@ -1,6 +1,6 @@
 import type { Actor } from '#/lib/game/actor'
 import { cn } from '#/lib/utils'
-import { CircleQuestionMark } from 'lucide-react'
+import { CircleQuestionMark, X } from 'lucide-react'
 import type { ComponentProps } from 'react'
 
 function ActorThumbnail({
@@ -17,6 +17,7 @@ function ActorThumbnail({
   size?: number
 }) {
   const active = !!actor.position_ID
+  const alive = actor.alive
   return (
     <div
       key={actor.ID}
@@ -31,6 +32,7 @@ function ActorThumbnail({
       {...props}
     >
       <div className={cn('h-full w-full', className)}>
+        {!alive && <div className='bg-red-950 absolute inset-0'></div>}
         {!hidden && (
           <img
             src={actor.sprite_url}
@@ -39,6 +41,7 @@ function ActorThumbnail({
             height={size}
           />
         )}
+
         {!hidden && index !== undefined && (
           <div
             className={cn(
@@ -56,6 +59,9 @@ function ActorThumbnail({
             <CircleQuestionMark className="size-12 text-muted-foreground/30" />
           </div>
         )}
+        {!alive && <div className="grid place-items-center absolute inset-0 z-20 ">
+          <X className="size-12 text-destructive" />
+        </div>}
       </div>
     </div>
   )

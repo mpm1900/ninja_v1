@@ -13,7 +13,7 @@ type PlayerPosition struct {
 
 type Player struct {
 	ID                uuid.UUID        `json:"ID"`
-	User              User             `json:"user,omitempty"`
+	User              User             `json:"user"`
 	PositionsCapacity int              `json:"positions_capacity"`
 	Positions         []PlayerPosition `json:"positions"`
 	TeamCapacity      int              `json:"team_capacity"`

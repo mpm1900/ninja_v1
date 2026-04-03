@@ -82,7 +82,7 @@ type ActorDef struct {
 	Natures          map[NatureSet][]Nature `json:"natures"`
 
 	InnateModifiers []Modifier  `json:"innate_modifiers"`
-	ActionIDs       []uuid.UUID `json:"action_IDs"`
+	ActionIDs       []uuid.UUID `json:"action_IDs,omitempty"`
 	ActionCount     int         `json:"action_count"`
 }
 
@@ -453,6 +453,7 @@ func resolveActor(actor Actor, mtransactions []Transaction[Modifier], atransacti
 		resolved.ResolvedNatureDamage[nature] = GetStabModifier(resolved, &ns)
 	}
 
+	resolved.ActionIDs = []uuid.UUID{}
 	return resolved
 }
 

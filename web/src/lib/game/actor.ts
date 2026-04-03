@@ -42,7 +42,7 @@ type ActorState = {
   seen: boolean
 }
 
-type Actor = ActorDef &
+type Actor = Omit<ActorDef, 'action_IDs'> &
   ActorState & {
     ID: string
     player_ID: string
