@@ -1,7 +1,3 @@
-import type { ActorBaseStat } from '#/lib/game/actor'
-import { GiHearts, GiSprint, GiPunch, GiMagicSwirl } from 'react-icons/gi'
-import { MdEnergySavingsLeaf } from 'react-icons/md'
-
 import type { IconType } from 'react-icons/lib'
 
 const Ame: IconType = (props) => (
@@ -24,6 +20,9 @@ const Kumo: IconType = (props) => (
 )
 const Kuri: IconType = (props) => (
   <img src="/icons/kuri.svg" alt="Kuri" {...(props as any)} />
+)
+const Nara: IconType = (props) => (
+  <img src="/icons/nara.svg" alt="Nara" {...(props as any)} />
 )
 const Oto: IconType = (props) => (
   <img src="/icons/oto.svg" alt="Oto" {...(props as any)} />
@@ -66,17 +65,6 @@ const Genjutsu: IconType = (props) => (
   </svg>
 )
 
-const STAT_ICONS: Record<ActorBaseStat, IconType | undefined> = {
-  accuracy: undefined,
-  evasion: undefined,
-  genjutsu: Genjutsu,
-  hp: GiHearts,
-  ninjutsu: GiMagicSwirl,
-  speed: GiSprint,
-  chakra: MdEnergySavingsLeaf,
-  taijutsu: GiPunch,
-}
-
 const SHINOBI_ICONS: Record<string, IconType | undefined> = {
   ame: Ame,
   akatsuki: Akatsuki,
@@ -85,6 +73,7 @@ const SHINOBI_ICONS: Record<string, IconType | undefined> = {
   konoha: Konoha,
   kumo: Kumo,
   kuri: Kuri,
+  nara: Nara,
   oto: Oto,
   senju: Senju,
   taki: Taki,
@@ -93,4 +82,4 @@ const SHINOBI_ICONS: Record<string, IconType | undefined> = {
   yuga: Yuga,
 }
 
-export { Akatsuki, STAT_ICONS, SHINOBI_ICONS }
+export { Akatsuki, SHINOBI_ICONS }

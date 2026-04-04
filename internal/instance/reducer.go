@@ -107,11 +107,16 @@ func Reducer(instance *Instance, request Request) int {
 		return state
 
 	case PushAction:
-		if request.Context.ActionID == nil {
+		if request.Context.ActionID == nil || request.Context.SourceActorID == nil {
 			return none
 		}
 
-		action, ok := data.ACTIONS[*request.Context.ActionID]
+		actor, ok := instance.Game.GetSource(request.Context)
+		if !ok {
+			return none
+		}
+
+		action, ok := actor.GetActionByID(instance.Game, *request.Context.ActionID)
 		if !ok {
 			return none
 		}
