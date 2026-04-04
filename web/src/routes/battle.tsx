@@ -62,6 +62,7 @@ function RouteComponent() {
                           actor={a}
                           index={i}
                           hidden={!a.seen && !a.position_ID}
+                          showRing
                           className={cn({
                             'opacity-40': !a.position_ID,
                           })}
@@ -69,7 +70,11 @@ function RouteComponent() {
                       ))}
                   </div>
                 ))}
-              <Accordion defaultValue={['log']} type="multiple" className='bg-black/20 px-3'>
+              <Accordion
+                defaultValue={['log']}
+                type="multiple"
+                className="bg-black/20 px-3 border border-zinc-900"
+              >
                 <AccordionItem value="log">
                   <AccordionTrigger>Log</AccordionTrigger>
                   <AccordionContent>
@@ -130,6 +135,8 @@ function RouteComponent() {
                         key={a.ID}
                         actor={a}
                         index={i}
+                        showHealthBar
+                        showRing
                         className={cn({
                           'opacity-40': !a.position_ID,
                         })}

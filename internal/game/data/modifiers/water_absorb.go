@@ -19,7 +19,7 @@ var WaterAbsorb game.Modifier = game.Modifier{
 			game.MutPrioritySet,
 			game.ComposeAF(game.SourceFilter),
 			func(actor game.Actor, context game.Context) game.Actor {
-				actor.NatureResistance[game.NatureWater] = -0.5
+				actor.NatureResistance[game.NatureWater] = 0
 				return actor
 			},
 		),

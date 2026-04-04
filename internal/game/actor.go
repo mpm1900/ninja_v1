@@ -335,7 +335,7 @@ func GetActorModifiers(game Game) []Transaction[Modifier] {
 			TargetPositionIDs: []uuid.UUID{},
 		}
 		for _, modifier := range actor.InnateModifiers {
-			transaction := MakeModifierTransaction(modifier, context)
+			transaction := MakeTransaction(modifier, context)
 			modifiers = append(modifiers, transaction)
 		}
 	}

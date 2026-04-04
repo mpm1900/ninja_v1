@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react'
 import type { Actor } from '#/lib/game/actor'
 
-function clamp01(value: number) {
+function clamp(value: number) {
   return Math.max(0, Math.min(1, value))
 }
 
@@ -19,8 +19,8 @@ function HealthBar({
   const hpCurrent = Math.max(0, actor.stats.hp - actor.damage)
   const staminaCurrent = Math.max(0, actor.stats.stamina - actor.stamina_damage)
 
-  const hpRatio = clamp01(hpCurrent / maxHp)
-  const staminaRatio = clamp01(staminaCurrent / maxStamina)
+  const hpRatio = clamp(hpCurrent / maxHp)
+  const staminaRatio = clamp(staminaCurrent / maxStamina)
 
   const hpTarget = useMotionValue(hpRatio * 100)
   const staminaTarget = useMotionValue(staminaRatio * 100)

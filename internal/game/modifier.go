@@ -20,6 +20,12 @@ func ResolveTrigger(game Game, transaction Transaction[Trigger]) []Transaction[G
 	return transaction.Mutation.Delta(game, transaction.Context)
 }
 
-func MakeModifierTransaction(modifier Modifier, context Context) Transaction[Modifier] {
-	return MakeTransaction(modifier, context)
+func CheckModifier(tx Transaction[Modifier], actor Actor) bool {
+	for _, mut := range tx.Mutation.Mutations {
+		if mut.Filter(actor, tx.Context) {
+			return true
+		}
+	}
+
+	return false
 }

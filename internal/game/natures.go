@@ -127,8 +127,13 @@ func ResolveNatures(
 
 	proficiency := 1.0
 	for _, nature := range input {
+		res := resistances[nature]
+		if res == 0 {
+			proficiency = 0
+			break
+		}
 		proficiency *= damages[nature]
-		proficiency /= resistances[nature]
+		proficiency /= res
 	}
 
 	return proficiency * effectiveness

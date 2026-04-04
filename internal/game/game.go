@@ -295,6 +295,10 @@ func (g *Game) UpdatePlayer(playerID uuid.UUID, updater func(Player) Player) {
 	g.Players[index] = updater(g.Players[index])
 }
 
+/**
+ * [SetPosition]
+ * This is a very important function
+ */
 func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 	prev := actor.PositionID
 	if (prev == nil && positionID == nil) || (prev != nil && positionID != nil && *prev == *positionID) {
@@ -304,11 +308,6 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 	player, ok := g.GetPlayerByID(actor.PlayerID)
 	if !ok {
 		return
-	}
-
-	if positionID == nil {
-		g.FilterParentModifiers(actor.ID)
-		g.FilterParentActions(actor.ID)
 	}
 
 	if positionID != nil {
@@ -343,28 +342,39 @@ func (g *Game) SetPosition(actor Actor, positionID *uuid.UUID) {
 	}
 
 	if positionID != nil {
-		context := NewContext()
-		context.SourceActorID = &actor.ID
-		g.PushLog(NewLogContext("$source$ joined the battle.", context))
-		t_context := Context{
-			ParentActorID:  &actor.ID,
-			SourceActorID:  &actor.ID,
-			SourcePlayerID: &actor.PlayerID,
-		}
-		g.On(OnActorEnter, &t_context)
+		g.ActorSwitchInSideEffects(actor)
 	}
 
 	if positionID == nil {
-		context := NewContext()
-		context.SourceActorID = &actor.ID
-		g.PushLog(NewLogContext("$source$ left the battle.", context))
-		t_context := Context{
-			ParentActorID:  &actor.ID,
-			SourceActorID:  &actor.ID,
-			SourcePlayerID: &actor.PlayerID,
-		}
-		g.On(OnActorLeave, &t_context)
+		g.ActorSwitchOutSideEffects(actor)
 	}
+}
+
+func (g *Game) ActorSwitchInSideEffects(actor Actor) {
+	context := NewContext()
+	context.SourceActorID = &actor.ID
+	g.PushLog(NewLogContext("$source$ joined the battle.", context))
+	t_context := Context{
+		ParentActorID:  &actor.ID,
+		SourceActorID:  &actor.ID,
+		SourcePlayerID: &actor.PlayerID,
+	}
+	g.On(OnActorEnter, &t_context)
+}
+
+func (g *Game) ActorSwitchOutSideEffects(actor Actor) {
+	g.FilterParentModifiers(actor.ID)
+	g.FilterParentActions(actor.ID)
+
+	context := NewContext()
+	context.SourceActorID = &actor.ID
+	g.PushLog(NewLogContext("$source$ left the battle.", context))
+	t_context := Context{
+		ParentActorID:  &actor.ID,
+		SourceActorID:  &actor.ID,
+		SourcePlayerID: &actor.PlayerID,
+	}
+	g.On(OnActorLeave, &t_context)
 }
 
 func (g *Game) SetActorPlayerIndex(actor Actor, index *int) {
