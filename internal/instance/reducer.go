@@ -1,7 +1,6 @@
 package instance
 
 import (
-	"fmt"
 	"ninja_v1/internal/game"
 	data "ninja_v1/internal/game/data"
 	"slices"
@@ -12,19 +11,16 @@ func Reducer(instance *Instance, request Request) int {
 	case AddActor:
 		def, ok := data.ACTORS[*request.Context.SourceActorID]
 		if !ok {
-			fmt.Println("[AddActor] Unknown Actor")
 			return none
 		}
 
 		player, ok := instance.Game.GetPlayerByID(request.ClientID)
 		if !ok {
-			fmt.Println("[AddActor] Unknown Player")
 			return none
 		}
 
 		actors := instance.Game.GetActorsByPlayer(player.ID)
 		if len(actors) >= player.TeamCapacity {
-			fmt.Println("[AddActor] Team Full")
 			return none
 		}
 		actor := game.MakeActor(def, request.ClientID /* 24 13824 */, 1000000, data.ACTIONS)
@@ -46,13 +42,11 @@ func Reducer(instance *Instance, request Request) int {
 
 	case PushAction:
 		if request.Context.ActionID == nil {
-			fmt.Println("no context action_ID")
 			return none
 		}
 
 		action, ok := data.ACTIONS[*request.Context.ActionID]
 		if !ok {
-			fmt.Println("action not found")
 			return none
 		}
 
@@ -64,7 +58,6 @@ func Reducer(instance *Instance, request Request) int {
 		return state
 	case RemoveAction: //CancelAction
 		if request.Context.ActionID == nil {
-			fmt.Println("no context action_ID")
 			return none
 		}
 

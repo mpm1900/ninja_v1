@@ -86,7 +86,7 @@ func NewNatureSetValues() map[Nature]float64 {
 
 func GetEffectiveness(moveNature Nature, targetNature Nature) float64 {
 	if moveNature == targetNature {
-		return 0.8
+		return 1
 	}
 	if ElementalCycle[moveNature] == targetNature {
 		return 2.0

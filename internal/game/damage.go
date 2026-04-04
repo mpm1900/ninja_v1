@@ -28,7 +28,7 @@ type DamageConfig struct {
 	RepeatMax int
 }
 
-func NewDamageConfig() DamageConfig {
+func NewDamageConfig(critical float64, random float64) DamageConfig {
 	return DamageConfig{
 		Critical:  1.0,
 		Random:    1.0,

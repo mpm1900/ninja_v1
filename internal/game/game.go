@@ -605,7 +605,6 @@ func (g *Game) NextTurn() {
 	for _, tx := range g.QueuedActions {
 		action, ok := g.ActionRegistry[tx.Mutation]
 		if !ok {
-			fmt.Println("ERROR: UNREGISTERED ACTION")
 			continue
 		}
 

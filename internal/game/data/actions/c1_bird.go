@@ -47,7 +47,7 @@ func MakeC1Bird() game.Action {
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				damages := mutations.NewDamage(config, game.NewDamageConfig())
+				damages := mutations.NewDamage(config, game.NewDamageConfig(1, 1))
 				transactions = append(
 					transactions,
 					mutations.MakeDamageTransactions(context, damages)...,

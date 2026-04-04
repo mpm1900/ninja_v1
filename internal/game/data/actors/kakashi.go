@@ -7,6 +7,13 @@ import (
 	"github.com/google/uuid"
 )
 
+func getKakashiResistances() map[game.Nature]float64 {
+	res := game.NewNatureSetValues()
+	res[game.NatureLightning] = 2.0
+	res[game.NatureEarth] = 0.5
+	return res
+}
+
 var Kakashi = game.ActorDef{
 	ActorID:      uuid.New(),
 	SpriteURL:    "/sprites/kakashi_64.png",
@@ -26,7 +33,7 @@ var Kakashi = game.ActorDef{
 		game.StatAccuracy:      100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),
-	NatureResistance: game.NewNatureSetValues(),
+	NatureResistance: getKakashiResistances(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsLightning,
 		game.NsEarth,

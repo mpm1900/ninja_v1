@@ -95,17 +95,6 @@ func RatioDamage(ratio float64) game.GameMutation {
 	return RatioDamageWith(ratio, nil)
 }
 
-func MakeAccuracyCheck(g *game.Game, action game.ActionConfig, source game.ResolvedActor, target game.ResolvedActor) (bool, int, int) {
-	base_accuracy := game.GetAccuracy(*g, source, target)
-	if action.Accuracy == nil {
-		return true, 0, 0
-	}
-
-	accuracy := int(math.Floor(base_accuracy * float64(*action.Accuracy)))
-	roll := game.MakeActionRoll()
-	return roll <= accuracy, roll, accuracy
-}
-
 func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMutation {
 	return game.GameMutation{
 		Delta: func(g game.Game, context game.Context) game.Game {
@@ -145,11 +134,11 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 						continue
 					}
 
-					success, roll, accuracy := MakeAccuracyCheck(&g, action, source, target)
-					if !success {
+					result := game.MakeAccuracyCheck(&g, action, source, target)
+					if !result.Success {
 						if !config.Repeat || repeats == 0 {
 							g.PushLog(game.NewLog(fmt.Sprintf("%s missed!", action.Name)))
-							g.PushLog(game.NewLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy)))
+							g.PushLog(game.NewLog(fmt.Sprintf("roll = %d, acc = %d", result.Roll, result.Chance)))
 						}
 						missed = true
 						continue
@@ -172,6 +161,9 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 							ApplyDamage(&g, target, damage)
 							if damage > 0 {
 								g.On(game.OnDamageRecieve, &context)
+							}
+							if config.Critical > 1.0 {
+								g.PushLog(game.NewLog(fmt.Sprintf("Critical Hit! (x%f)", config.Critical)))
 							}
 
 							total += clampDamage(damage)
@@ -345,10 +337,10 @@ func NewHeal(action game.ActionConfig, ratio float64) game.GameMutation {
 			}
 
 			for _, target := range resolved {
-				success, roll, accuracy := MakeAccuracyCheck(&g, action, source, target)
-				if !success {
+				result := game.MakeAccuracyCheck(&g, action, source, target)
+				if !result.Success {
 					g.PushLog(game.NewLog(fmt.Sprintf("%s missed!", action.Name)))
-					g.PushLog(game.NewLog(fmt.Sprintf("roll = %d, acc = %d", roll, accuracy)))
+					g.PushLog(game.NewLog(fmt.Sprintf("roll = %d, acc = %d", result.Roll, result.Chance)))
 					continue
 				}
 

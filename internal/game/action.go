@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 
 	"github.com/google/uuid"
@@ -32,6 +33,8 @@ type ActionConfig struct {
 	Accuracy    *int        `json:"accuracy,omitempty"`
 	Cooldown    *int        `json:"cooldown,omitempty"`
 	Cost        *int        `json:"cost,omitempty"`
+	CritChance  *int        `json:"crit_chance,omitempty"`
+	CritMod     float64     `json:"crit_mod,omitempty"`
 	LifeSteal   *float64    `json:"life_steal,omitempty"`
 	Name        string      `json:"name"`
 	Nature      *NatureSet  `json:"nature,omitempty"`
@@ -139,8 +142,49 @@ func MakeActionRoll() int {
 	return rand.Intn(100)
 }
 
-type AccuracyResult struct {
-	Accuracy int
-	Roll     int
-	Success  bool
+type ChanceResult struct {
+	Chance  int
+	Roll    int
+	Success bool
+}
+
+func MakeCriticalCheck(action ActionConfig) ChanceResult {
+	if action.CritChance == nil {
+		return ChanceResult{
+			Success: false,
+		}
+	}
+
+	accuracy := int(*action.CritChance)
+	roll := MakeActionRoll()
+	return ChanceResult{
+		Chance:  accuracy,
+		Roll:    roll,
+		Success: roll <= accuracy,
+	}
+}
+func GetCriticalModifier(action ActionConfig) float64 {
+	result := MakeCriticalCheck(action)
+	if result.Success {
+		return action.CritMod
+	}
+
+	return 1.0
+}
+
+func MakeAccuracyCheck(g *Game, action ActionConfig, source ResolvedActor, target ResolvedActor) ChanceResult {
+	base_accuracy := GetAccuracy(*g, source, target)
+	if action.Accuracy == nil {
+		return ChanceResult{
+			Success: true,
+		}
+	}
+
+	accuracy := int(math.Floor(base_accuracy * float64(*action.Accuracy)))
+	roll := MakeActionRoll()
+	return ChanceResult{
+		Chance:  accuracy,
+		Roll:    roll,
+		Success: roll <= accuracy,
+	}
 }

@@ -57,7 +57,7 @@ func MakeSurf() game.Action {
 					damage_context.TargetPositionIDs = append(damage_context.TargetPositionIDs, *t.PositionID)
 				}
 
-				damages := mutations.NewDamage(config, game.NewDamageConfig())
+				damages := mutations.NewDamage(config, game.NewDamageConfig(1, 1))
 				transactions = append(
 					transactions,
 					mutations.MakeDamageTransactions(damage_context, damages)...,
