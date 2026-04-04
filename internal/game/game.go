@@ -235,6 +235,30 @@ func (g Game) GetPromptTxByID(ID uuid.UUID) (Transaction[Action], bool) {
 
 	return Transaction[Action]{}, false
 }
+func (g Game) GetActiveAction() (Action, bool) {
+	if g.ActiveContext == nil || g.ActiveContext.ActionID == nil {
+		return Action{}, false
+	}
+
+	source, ok := g.GetSource(*g.ActiveContext)
+	if !ok {
+		return Action{}, false
+	}
+
+	var action *Action
+	for i := range source.Actions {
+		if source.Actions[i].ID == *g.ActiveContext.ActionID {
+			action = &source.Actions[i]
+			break
+		}
+	}
+
+	if action == nil {
+		return Action{}, false
+	}
+
+	return *action, true
+}
 func (g Game) WithActor(actor Actor) Game {
 	next := g
 	next.Actors = append([]Actor{}, g.Actors...)

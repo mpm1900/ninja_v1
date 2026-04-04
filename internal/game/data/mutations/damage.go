@@ -49,7 +49,7 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 	if ratio > 0 {
 		g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ lost %d%% HP.", ratio), log_ctx))
 	} else {
-		g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %d%% HP.", ratio), log_ctx))
+		g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %d%% HP.", ratio*-1), log_ctx))
 	}
 }
 func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) {

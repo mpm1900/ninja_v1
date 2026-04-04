@@ -20,23 +20,8 @@ var WaterAbsorb game.Modifier = game.Modifier{
 				return game.SourceFilter(a, c)
 			},
 			ActorDelta: func(g game.Game, a game.Actor, c game.Context) game.Actor {
-				if g.ActiveContext == nil || g.ActiveContext.ActionID == nil {
-					return a
-				}
-
-				source, ok := g.GetSource(*g.ActiveContext)
-				if !ok {
-					return a
-				}
-
-				var action *game.Action
-				for i := range source.Actions {
-					if source.Actions[i].ID == *g.ActiveContext.ActionID {
-						action = &source.Actions[i]
-						break
-					}
-				}
-				if action == nil || action.Config.Nature == nil {
+				action, ok := g.GetActiveAction()
+				if !ok || action.Config.Nature == nil {
 					return a
 				}
 
