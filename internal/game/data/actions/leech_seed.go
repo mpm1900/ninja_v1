@@ -70,7 +70,7 @@ var LeechSeedTrigger game.Trigger = game.Trigger{
 	},
 	ActionMutation: game.ActionMutation{
 		Priority: 0,
-		Filter:   game.AllGameFilter,
+		Filter:   game.TrueGameFilter,
 		Delta: func(g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
 			transactions := []game.GameTransaction{}
 			p, ok := g.GetParent(context)

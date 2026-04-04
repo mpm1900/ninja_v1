@@ -21,5 +21,6 @@ var MODIFIERS = map[uuid.UUID]game.Modifier{
 	modifiers.SpeedUpAll.ID:              modifiers.SpeedUpAll,
 	modifiers.WaterAbsorb.ID:             modifiers.WaterAbsorb,
 	modifiers.VesselOfPain.ID:            modifiers.VesselOfPain,
+	modifiers.PriorityFailure.ID:         modifiers.PriorityFailure,
 	actions.LeechSeedModifier.ID:         actions.LeechSeedModifier,
 }

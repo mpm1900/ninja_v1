@@ -88,9 +88,24 @@ type Action struct {
 
 func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransaction {
 	action := transaction.Mutation
-	if !action.Disabled && !action.Filter(*game, transaction.Context) {
-		context := NewContext()
-		context.ActionID = &action.ID
+	/**
+	 * This section may look silly, but actions can be changed in between
+	 * queuing and resolution, and modifiers can only change Actors
+	 * so this re-assigning is how I'm doing it right now.
+	 */
+	s, ok := game.GetSource(transaction.Context)
+	source := s.Resolve(*game)
+	a, ok := source.GetActionByID(transaction.Mutation.ID)
+	if ok {
+		action = a
+	}
+
+	context := transaction.Context
+	if action.MapContext != nil {
+		context = action.MapContext(*game, context)
+	}
+
+	if !action.Disabled && !action.Filter(*game, context) {
 		log := NewLogContext("$action$ failed.", context)
 		if action.Config.LogFailureF != nil {
 			log = NewLog(fmt.Sprintf(*action.Config.LogFailureF, action.Config.Name))
@@ -101,18 +116,12 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 
 	if action.Config.Cooldown != nil {
 		game.SetActionCooldown(
-			*transaction.Context.SourceActorID,
+			*context.SourceActorID,
 			action.ID,
 			*action.Config.Cooldown,
 		)
 	}
 
-	context := transaction.Context
-	if action.MapContext != nil {
-		context = action.MapContext(*game, context)
-	}
-
-	source, ok := game.GetSource(context)
 	if ok {
 		log := NewLogContext("$source$ used $action$", context)
 		if action.Config.LogSuccessF != nil {
