@@ -158,7 +158,7 @@ func TrueGameFilter(parent Game, game Game, context Context) bool {
 	return true
 }
 func FalseGameFilter(parent Game, game Game, context Context) bool {
-	return true
+	return false
 }
 func SourceIsAlive(parent Game, game Game, context Context) bool {
 	source, ok := game.GetSource(context)

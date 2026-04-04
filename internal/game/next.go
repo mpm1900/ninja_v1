@@ -101,6 +101,18 @@ func (g *Game) NextAction() bool {
 		return false
 	}
 
+	source, ok := g.GetSource(transaction.Context)
+	if !ok {
+		g.ActiveContext = nil
+		return false
+	}
+
+	resolved := source.Resolve(*g)
+	action, ok := resolved.GetActionByID(transaction.Mutation.ID)
+	if ok {
+		transaction.Mutation = action
+	}
+
 	g.ActiveContext = &transaction.Context
 	if transaction.Mutation.MapContext != nil {
 		c := transaction.Mutation.MapContext(*g, *g.ActiveContext)

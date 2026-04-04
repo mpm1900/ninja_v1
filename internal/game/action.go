@@ -89,13 +89,16 @@ type Action struct {
 func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransaction {
 	action := transaction.Mutation
 	if !action.Disabled && !action.Filter(*game, *game, transaction.Context) {
-		context := NewContext()
+		context := transaction.Context
 		context.ActionID = &action.ID
-		log := NewLogContext("$action$ failed.", context)
+		logStart := NewLogContext("$source$ used $action$", context)
+		logFail := NewLogContext("$action$ failed.", context)
 		if action.Config.LogFailureF != nil {
-			log = NewLog(fmt.Sprintf(*action.Config.LogFailureF, action.Config.Name))
+			logFail = NewLog(fmt.Sprintf(*action.Config.LogFailureF, action.Config.Name))
 		}
-		game.PushLog(log)
+
+		game.PushLog(logStart)
+		game.PushLog(logFail)
 		return []GameTransaction{}
 	}
 
