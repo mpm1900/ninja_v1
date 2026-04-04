@@ -44,7 +44,7 @@ func MakeFireball() game.Action {
 				game.SourceIsAlive,
 				game.SourceIsActionOffCooldown,
 			),
-			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
+			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
 				crit_mod := game.GetCriticalModifier(config)

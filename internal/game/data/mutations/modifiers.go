@@ -9,7 +9,7 @@ import (
 
 func AddModifiers(modifiers ...game.Modifier) game.GameMutation {
 	return game.GameMutation{
-		Delta: func(g game.Game, context game.Context) game.Game {
+		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			for _, modifier := range modifiers {
 				mod_tx := game.MakeTransaction(modifier, context)
 				g.Modifiers = append(g.Modifiers, mod_tx)
@@ -30,7 +30,7 @@ func AddModifiers(modifiers ...game.Modifier) game.GameMutation {
 
 func RemoveModifierTxByID(ID uuid.UUID) game.GameMutation {
 	return game.GameMutation{
-		Delta: func(g game.Game, context game.Context) game.Game {
+		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			modifiers := []game.Transaction[game.Modifier]{}
 			for _, tx := range g.Modifiers {
 				if tx.ID != ID {

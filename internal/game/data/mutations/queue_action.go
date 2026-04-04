@@ -8,7 +8,7 @@ import (
 
 func QueueAction(actionID uuid.UUID, context game.Context) game.GameMutation {
 	return game.GameMutation{
-		Delta: func(g game.Game, context game.Context) game.Game {
+		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			if context.SourceActorID == nil {
 				return g
 			}

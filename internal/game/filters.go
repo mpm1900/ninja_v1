@@ -140,12 +140,12 @@ func IsProtectedFilter(game Game, protected bool) func(Actor, Context) bool {
  * Game Filters
  */
 
-type GameFilter func(Game, Context) bool
+type GameFilter func(Game, Game, Context) bool
 
 func ComposeGF(filters ...GameFilter) GameFilter {
-	return func(game Game, context Context) bool {
+	return func(parent Game, game Game, context Context) bool {
 		for _, filter := range filters {
-			if !filter(game, context) {
+			if !filter(parent, game, context) {
 				return false
 			}
 		}
@@ -154,10 +154,13 @@ func ComposeGF(filters ...GameFilter) GameFilter {
 	}
 }
 
-func AllGameFilter(game Game, context Context) bool {
+func TrueGameFilter(parent Game, game Game, context Context) bool {
 	return true
 }
-func SourceIsAlive(game Game, context Context) bool {
+func FalseGameFilter(parent Game, game Game, context Context) bool {
+	return true
+}
+func SourceIsAlive(parent Game, game Game, context Context) bool {
 	source, ok := game.GetSource(context)
 	if !ok {
 		return false
@@ -165,25 +168,25 @@ func SourceIsAlive(game Game, context Context) bool {
 
 	return source.Alive
 }
-func SourceIsActionOffCooldown(g Game, context Context) bool {
+func SourceIsActionOffCooldown(parent Game, game Game, context Context) bool {
 	if context.ActionID == nil {
 		return false
 	}
 
-	source, ok := g.GetSource(context)
+	source, ok := game.GetSource(context)
 	if !ok {
 		return false
 	}
 
-	action, ok := source.GetActionByID(g, *context.ActionID)
+	action, ok := source.GetActionByID(game, *context.ActionID)
 	if !ok {
 		return true
 	}
 
 	return action.Cooldown == nil
 }
-func SourceHasActiveTurns(turns int) func(Game, Context) bool {
-	return func(g Game, context Context) bool {
+func SourceHasActiveTurns(turns int) func(Game, Game, Context) bool {
+	return func(parent Game, g Game, context Context) bool {
 		if context.ActionID == nil {
 			return false
 		}
@@ -196,7 +199,7 @@ func SourceHasActiveTurns(turns int) func(Game, Context) bool {
 		return source.ActiveTurns == turns
 	}
 }
-func TargetsIsOneAlive(game Game, context Context) bool {
+func TargetsIsOneAlive(parent Game, game Game, context Context) bool {
 	targets := game.GetTargets(context)
 	for _, target := range targets {
 		if target.Alive {
@@ -206,7 +209,7 @@ func TargetsIsOneAlive(game Game, context Context) bool {
 	return false
 }
 
-func Match__TargetActor_SourceActor(game Game, context Context, modifier_tx Transaction[Modifier]) bool {
+func Match__TargetActor_SourceActor(parent Game, game Game, context Context, modifier_tx Transaction[Modifier]) bool {
 	targets := game.GetTargets(context)
 	if len(targets) == 0 || modifier_tx.Context.SourceActorID == nil {
 		return false
@@ -219,7 +222,7 @@ func Match__TargetActor_SourceActor(game Game, context Context, modifier_tx Tran
 	}
 	return false
 }
-func Match__SourceActor_SourceActor(game Game, context Context, modifier_tx Transaction[Modifier]) bool {
+func Match__SourceActor_SourceActor(parent Game, game Game, context Context, modifier_tx Transaction[Modifier]) bool {
 	if context.SourceActorID == nil || modifier_tx.Context.SourceActorID == nil {
 		return false
 	}

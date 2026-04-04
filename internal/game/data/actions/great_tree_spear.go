@@ -42,7 +42,7 @@ func MakeGreatTreeSpear() game.Action {
 				game.SourceIsAlive,
 				game.SourceIsActionOffCooldown,
 			),
-			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
+			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
 				damages := mutations.NewDamage(config, game.NewDamageConfig(1, 1))

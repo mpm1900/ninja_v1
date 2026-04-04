@@ -84,7 +84,7 @@ func (g *Game) NextTransaction() bool {
 		return false
 	}
 
-	n, ok := ResolveTransaction(*g, transaction, *g)
+	n, ok := ResolveTransaction(*g, *g, transaction, *g)
 	if !ok {
 		return false
 	}

@@ -13,9 +13,9 @@ var DragonDance = MakeDragonDance()
 func MakeDragonDance() game.Action {
 	nature := game.NsTai
 	config := game.ActionConfig{
-		Name:   "Dragon Dance",
-		Nature: &nature,
-		Jutsu:  game.Taijutsu,
+		Name:        "Dragon Dance",
+		Nature:      &nature,
+		Jutsu:       game.Taijutsu,
 		Description: "Raises the user's Speed and Physical Attack stats.",
 	}
 	return game.Action{
@@ -27,7 +27,7 @@ func MakeDragonDance() game.Action {
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter:   game.SourceIsAlive,
-			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
+			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 				tju := modifiers.AttackUpSource
 				su := modifiers.SpeedUpSource

@@ -12,18 +12,18 @@ type Modifier struct {
 	Name     string     `json:"name"`
 	Duration int        `json:"duration"`
 
-	Mutations []ModifierMutation `json:"-"`
-	Triggers  []Trigger          `json:"triggers"`
+	Mutations []ActorMutation `json:"-"`
+	Triggers  []Trigger       `json:"triggers"`
 }
 
 func ResolveTrigger(game Game, transaction Transaction[Trigger]) []Transaction[GameMutation] {
-	return transaction.Mutation.Delta(game, transaction.Context)
+	return transaction.Mutation.Delta(game, game, transaction.Context)
 }
 
 func CheckModifierForActor(tx Transaction[Modifier], game Game, actor Actor) bool {
 	game.Actors = []Actor{actor}
 	for _, mut := range tx.Mutation.Mutations {
-		if mut.ActorFilter != nil && mut.ActorFilter(game, actor, tx.Context) {
+		if mut.Filter(game, actor, tx.Context) {
 			return true
 		}
 	}

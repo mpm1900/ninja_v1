@@ -48,7 +48,7 @@ func MakeSurf() game.Action {
 			Filter: game.ComposeGF(
 				game.SourceIsAlive,
 			),
-			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
+			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
 				damage_context := context

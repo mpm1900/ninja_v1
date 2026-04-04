@@ -15,8 +15,8 @@ var IntimidateTrigger game.Trigger = game.Trigger{
 	Check:      game.Match__SourceActor_SourceActor,
 	ActionMutation: game.ActionMutation{
 		Priority: 0,
-		Filter:   game.AllGameFilter,
-		Delta: func(g game.Game, context game.Context) []game.GameTransaction {
+		Filter:   game.TrueGameFilter,
+		Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 			transactions := []game.GameTransaction{}
 			targets := g.GetActorsFilters(context, game.ComposeAF(
 				game.ActiveFilter,
@@ -45,7 +45,7 @@ var Intimidate game.Modifier = game.Modifier{
 	GroupID:  &intimidateID,
 	Name:     "Intimidate",
 	Duration: game.ModifierDurationInf,
-	Mutations: []game.ModifierMutation{
+	Mutations: []game.ActorMutation{
 		game.NewNoopSource(&intimidateID),
 	},
 	Triggers: []game.Trigger{

@@ -20,21 +20,21 @@ var TRIGGERS []TriggerOn = []TriggerOn{
 
 type Trigger struct {
 	ActionMutation
-	ID         uuid.UUID                                       `json:"ID"`
-	ModifierID uuid.UUID                                       `json:"modifier_ID"`
-	On         TriggerOn                                       `json:"on"`
-	Check      func(Game, Context, Transaction[Modifier]) bool `json:"-"`
+	ID         uuid.UUID                                             `json:"ID"`
+	ModifierID uuid.UUID                                             `json:"modifier_ID"`
+	On         TriggerOn                                             `json:"on"`
+	Check      func(Game, Game, Context, Transaction[Modifier]) bool `json:"-"`
 }
 
 var END_OF_TURN_TRIGGER Trigger = Trigger{
 	ID:    uuid.New(),
 	On:    OnTurnEnd,
-	Check: func(g Game, context Context, tx Transaction[Modifier]) bool { return true },
+	Check: func(p Game, g Game, context Context, tx Transaction[Modifier]) bool { return true },
 	ActionMutation: ActionMutation{
-		Delta: func(input Game, context Context) []Transaction[GameMutation] {
+		Delta: func(parent Game, input Game, context Context) []Transaction[GameMutation] {
 			var transactions []Transaction[GameMutation]
 			mut := GameMutation{
-				Delta: func(g Game, c Context) Game {
+				Delta: func(p Game, g Game, c Context) Game {
 					t := g.Turn.Count
 					for i, _ := range g.Actors {
 						if t > 0 {

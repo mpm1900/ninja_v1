@@ -29,7 +29,7 @@ func MakeFollowMe() game.Action {
 				game.SourceIsAlive,
 				game.SourceIsActionOffCooldown,
 			),
-			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
+			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
 				source, ok := g.GetSource(context)

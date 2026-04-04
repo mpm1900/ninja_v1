@@ -4,7 +4,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func NewNoopSource(groupID *uuid.UUID) ModifierMutation {
+func NewNoopSource(groupID *uuid.UUID) ActorMutation {
 	return MakeActorMutation(
 		groupID,
 		0,
@@ -14,7 +14,7 @@ func NewNoopSource(groupID *uuid.UUID) ModifierMutation {
 		},
 	)
 }
-func NewNoopParent(groupID *uuid.UUID) ModifierMutation {
+func NewNoopParent(groupID *uuid.UUID) ActorMutation {
 	return MakeActorMutation(
 		groupID,
 		0,
@@ -26,7 +26,7 @@ func NewNoopParent(groupID *uuid.UUID) ModifierMutation {
 }
 
 var SwitchPositions = GameMutation{
-	Delta: func(g Game, context Context) Game {
+	Delta: func(p Game, g Game, context Context) Game {
 		source, ok := g.GetSource(context)
 		if !ok || source.PositionID == nil {
 			return g
@@ -43,7 +43,7 @@ var SwitchPositions = GameMutation{
 }
 
 var SetPositions = GameMutation{
-	Delta: func(g Game, context Context) Game {
+	Delta: func(p Game, g Game, context Context) Game {
 		targets := g.GetTargets(context)
 		positionCount := len(context.TargetPositionIDs)
 		if len(targets) == 0 || positionCount == 0 {
@@ -61,7 +61,7 @@ var SetPositions = GameMutation{
 }
 
 var RemovePositions = GameMutation{
-	Delta: func(g Game, context Context) Game {
+	Delta: func(p Game, g Game, context Context) Game {
 		targets := g.GetTargets(context)
 		for i := range len(targets) {
 			g.SetPosition(targets[i], nil)
@@ -82,8 +82,8 @@ var Switch = Action{
 	ContextValidate: TargetLengthFilter(1),
 	ActionMutation: ActionMutation{
 		Priority: ActionPrioritySwitch,
-		Filter:   AllGameFilter,
-		Delta: func(input Game, context Context) []Transaction[GameMutation] {
+		Filter:   TrueGameFilter,
+		Delta: func(p Game, input Game, context Context) []Transaction[GameMutation] {
 			transactions := []GameTransaction{
 				MakeTransaction(SwitchPositions, context),
 			}
@@ -111,8 +111,8 @@ func SwitchIn(count int) Action {
 		ContextValidate: TargetLengthFilter(count),
 		ActionMutation: ActionMutation{
 			Priority: ActionPrioritySwitch,
-			Filter:   AllGameFilter,
-			Delta: func(input Game, context Context) []Transaction[GameMutation] {
+			Filter:   TrueGameFilter,
+			Delta: func(parent Game, input Game, context Context) []Transaction[GameMutation] {
 				transactions := []GameTransaction{}
 				min := min(len(context.TargetActorIDs), len(context.TargetPositionIDs))
 				for i := range min {

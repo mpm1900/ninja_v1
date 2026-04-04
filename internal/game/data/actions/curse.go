@@ -26,7 +26,7 @@ func MakeCurse() game.Action {
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter:   game.SourceIsAlive,
-			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
+			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
 				s, ok := g.GetSource(context)

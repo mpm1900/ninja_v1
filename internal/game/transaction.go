@@ -24,32 +24,35 @@ func MakeTransaction[M any](
 	}
 }
 
-func CheckTransaction[I any, O any](
+func CheckTransaction[P any, I any, O any](
+	parent P,
 	input I,
-	transaction Transaction[Mutation[I, O]],
+	transaction Transaction[Mutation[P, I, O]],
 ) bool {
 	if transaction.Mutation.Filter == nil {
 		return true
 	}
-	return transaction.Mutation.Filter(input, transaction.Context)
+	return transaction.Mutation.Filter(parent, input, transaction.Context)
 }
 
-func ResolveTransaction[I any, O any](
+func ResolveTransaction[P any, I any, O any](
+	parent P,
 	input I,
-	transaction Transaction[Mutation[I, O]],
+	transaction Transaction[Mutation[P, I, O]],
 	fallback O,
 ) (O, bool) {
-	if !CheckTransaction(input, transaction) {
+	if !CheckTransaction(parent, input, transaction) {
 		return fallback, false
 	}
 
-	return transaction.Mutation.Delta(input, transaction.Context), true
+	return transaction.Mutation.Delta(parent, input, transaction.Context), true
 }
 
-func ResolveTransactionFn[I any, O any](
+func ResolveTransactionFn[P any, I any, O any](
+	parent P,
 	input I,
-	transaction Transaction[Mutation[I, O]],
+	transaction Transaction[Mutation[P, I, O]],
 	fallback func(I) O,
 ) (O, bool) {
-	return ResolveTransaction(input, transaction, fallback(input))
+	return ResolveTransaction(parent, input, transaction, fallback(input))
 }

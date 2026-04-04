@@ -32,7 +32,7 @@ func MakeLeechSeed() game.Action {
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter:   game.SourceIsAlive,
-			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
+			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
 				source, ok := g.GetSource(context)
@@ -65,26 +65,26 @@ var LeechSeedTrigger game.Trigger = game.Trigger{
 	ID:         uuid.New(),
 	ModifierID: leechSeedModifierID,
 	On:         game.OnTurnEnd,
-	Check: func(g game.Game, ctx game.Context, t game.Transaction[game.Modifier]) bool {
+	Check: func(p game.Game, g game.Game, ctx game.Context, t game.Transaction[game.Modifier]) bool {
 		return true
 	},
 	ActionMutation: game.ActionMutation{
 		Priority: 0,
-		Filter:   game.AllGameFilter,
-		Delta: func(g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
+		Filter:   game.TrueGameFilter,
+		Delta: func(p game.Game, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
 			transactions := []game.GameTransaction{}
-			p, ok := g.GetParent(context)
+			parent, ok := g.GetParent(context)
 			if !ok {
 				return transactions
 			}
 
-			parent := p.Resolve(g)
+			resolved_parent := parent.Resolve(g)
 			targets := g.GetTargets(context)
 			for _, target := range targets {
 				ratio := 0.125
-				hp_loss := int(math.Floor(float64(parent.Stats[game.StatHP]) * ratio))
+				hp_loss := int(math.Floor(float64(resolved_parent.Stats[game.StatHP]) * ratio))
 				hp_loss_ctx := context
-				hp_loss_ctx.TargetActorIDs = []uuid.UUID{parent.ID}
+				hp_loss_ctx.TargetActorIDs = []uuid.UUID{resolved_parent.ID}
 				hp_loss_ctx.TargetPositionIDs = []uuid.UUID{}
 				hp_loss_mut := mutations.PureDamage(hp_loss, false)
 				hp_loss_tx := game.MakeTransaction(hp_loss_mut, hp_loss_ctx)
@@ -108,7 +108,7 @@ var LeechSeedModifier game.Modifier = game.Modifier{
 	GroupID:  &leechSeedModifierID,
 	Name:     "Seeded",
 	Duration: game.ModifierDurationInf,
-	Mutations: []game.ModifierMutation{
+	Mutations: []game.ActorMutation{
 		game.NewNoopParent(&leechSeedModifierID),
 	},
 	Triggers: []game.Trigger{

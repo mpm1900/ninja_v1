@@ -59,7 +59,7 @@ func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) {
 func PureDamageWith(damage int, trigger bool, updater func(game.Actor) game.Actor) game.GameMutation {
 	return game.GameMutation{
 		Filter: game.TargetsIsOneAlive,
-		Delta: func(g game.Game, context game.Context) game.Game {
+		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			targets := g.GetTargets(context)
 			for _, t := range targets {
 				target := t.Resolve(g)
@@ -79,7 +79,7 @@ func PureDamage(damage int, trigger bool) game.GameMutation {
 
 func RatioDamageWith(ratio float64, updater func(game.Actor) game.Actor) game.GameMutation {
 	return game.GameMutation{
-		Delta: func(g game.Game, context game.Context) game.Game {
+		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			targets := g.GetTargets(context)
 			for _, t := range targets {
 				target := t.Resolve(g)
@@ -97,7 +97,7 @@ func RatioDamage(ratio float64) game.GameMutation {
 
 func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMutation {
 	return game.GameMutation{
-		Delta: func(g game.Game, context game.Context) game.Game {
+		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			s, ok := g.GetSource(context)
 			if !ok {
 				return g
@@ -299,7 +299,7 @@ func ApplyHealRatio(g *game.Game, target game.ResolvedActor, ratio float64) int 
 
 func RatioHeal(ratio float64) game.GameMutation {
 	return game.GameMutation{
-		Delta: func(g game.Game, context game.Context) game.Game {
+		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			resolved := resolveTargets(g, context)
 			for _, target := range resolved {
 				ApplyHealRatio(&g, target, ratio)
@@ -311,7 +311,7 @@ func RatioHeal(ratio float64) game.GameMutation {
 
 func PureHeal(amount int) game.GameMutation {
 	return game.GameMutation{
-		Delta: func(g game.Game, context game.Context) game.Game {
+		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			targets := g.GetTargets(context)
 			for _, target := range targets {
 				ApplyHealRaw(&g, target.ID, amount)
@@ -323,7 +323,7 @@ func PureHeal(amount int) game.GameMutation {
 
 func NewHeal(action game.ActionConfig, ratio float64) game.GameMutation {
 	return game.GameMutation{
-		Delta: func(g game.Game, context game.Context) game.Game {
+		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			s, ok := g.GetSource(context)
 			if !ok {
 				return g

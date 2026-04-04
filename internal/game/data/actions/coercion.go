@@ -33,7 +33,7 @@ func MakeCoercion() game.Action {
 				game.SourceIsActionOffCooldown,
 				game.SourceHasActiveTurns(1),
 			),
-			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
+			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
 				mutation := mutations.AddModifiers(modifiers.Stunned)

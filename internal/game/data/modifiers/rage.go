@@ -15,8 +15,8 @@ var RageTrigger game.Trigger = game.Trigger{
 	Check:      game.Match__TargetActor_SourceActor,
 	ActionMutation: game.ActionMutation{
 		Priority: 0,
-		Filter:   game.AllGameFilter,
-		Delta: func(g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
+		Filter:   game.TrueGameFilter,
+		Delta: func(p game.Game, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
 			transactions := []game.GameTransaction{}
 
 			targets := g.GetTargets(context)
@@ -44,7 +44,7 @@ var Rage game.Modifier = game.Modifier{
 	GroupID:  &rageID,
 	Name:     "Rage",
 	Duration: game.ModifierDurationInf,
-	Mutations: []game.ModifierMutation{
+	Mutations: []game.ActorMutation{
 		game.NewNoopSource(&rageID),
 	},
 	Triggers: []game.Trigger{

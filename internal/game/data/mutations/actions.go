@@ -9,7 +9,7 @@ import (
 
 func RedirectSingleTargetEnemyActions(source game.Actor) game.GameMutation {
 	return game.GameMutation{
-		Delta: func(g game.Game, context game.Context) game.Game {
+		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			for i, a := range g.Actions {
 				if a.Context.SourcePlayerID == nil {
 					continue

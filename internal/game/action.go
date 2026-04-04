@@ -55,7 +55,7 @@ const (
 	TargetPositionID ActionTargetType = "target-position-type"
 )
 
-type ActionMutation Mutation[Game, []Transaction[GameMutation]]
+type ActionMutation Mutation[Game, Game, []Transaction[GameMutation]]
 
 /** [This comment was not written by an LLM]
  * Action Function Members for Action "a"
@@ -88,7 +88,7 @@ type Action struct {
 
 func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransaction {
 	action := transaction.Mutation
-	if !action.Disabled && !action.Filter(*game, transaction.Context) {
+	if !action.Disabled && !action.Filter(*game, *game, transaction.Context) {
 		context := NewContext()
 		context.ActionID = &action.ID
 		log := NewLogContext("$action$ failed.", context)
@@ -130,7 +130,7 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 		}
 	}
 
-	return action.Delta(*game, context)
+	return action.Delta(*game, *game, context)
 }
 
 func GetAccuracy(game Game, source ResolvedActor, target ResolvedActor) float64 {

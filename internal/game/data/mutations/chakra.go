@@ -7,7 +7,7 @@ import (
 
 func UseStaminaSource(amount int) game.GameMutation {
 	return game.GameMutation{
-		Delta: func(g game.Game, context game.Context) game.Game {
+		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			if context.SourceActorID == nil {
 				return g
 			}
@@ -25,7 +25,7 @@ func UseStaminaSource(amount int) game.GameMutation {
 
 func GainStaminaSource(amount int) game.GameMutation {
 	return game.GameMutation{
-		Delta: func(g game.Game, context game.Context) game.Game {
+		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			if context.SourceActorID == nil {
 				return g
 			}
@@ -42,7 +42,7 @@ func GainStaminaSource(amount int) game.GameMutation {
 
 func RecoverStaminaSource(ratio float64) game.GameMutation {
 	return game.GameMutation{
-		Delta: func(g game.Game, context game.Context) game.Game {
+		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			if context.SourceActorID == nil {
 				return g
 			}

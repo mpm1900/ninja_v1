@@ -343,7 +343,7 @@ func GetActorModifiers(game Game) []Transaction[Modifier] {
 	return modifiers
 }
 
-var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
+var SPECIAL_MUTATIONS []ActorMutation = []ActorMutation{
 	MakeActorMutation(
 		nil,
 		MutPriorityMapBaseStats,
@@ -377,7 +377,7 @@ func (a Actor) Clone() Actor {
 	return b
 }
 
-func getContext(actor Actor, transactions []Transaction[Modifier], mutation ModifierMutation) Context {
+func getContext(actor Actor, transactions []Transaction[Modifier], mutation ActorMutation) Context {
 	context := Context{
 		SourcePlayerID:    &actor.PlayerID,
 		SourceActorID:     &actor.ID,
@@ -399,8 +399,8 @@ func getContext(actor Actor, transactions []Transaction[Modifier], mutation Modi
 	return context
 }
 
-func getMutations(transactions []Transaction[Modifier]) []ModifierMutation {
-	mutations := make([]ModifierMutation, 0)
+func getMutations(transactions []Transaction[Modifier]) []ActorMutation {
+	mutations := make([]ActorMutation, 0)
 	for _, transaction := range transactions {
 		for _, mut := range transaction.Mutation.Mutations {
 			mut.TransactionID = &transaction.ID
@@ -411,29 +411,17 @@ func getMutations(transactions []Transaction[Modifier]) []ModifierMutation {
 	return append(mutations, SPECIAL_MUTATIONS...)
 }
 
-func applyModifierMutation(gi Game, mapped Actor, transactions []Transaction[Modifier], mutation ModifierMutation) (Actor, bool) {
-	context := getContext(mapped, transactions, mutation)
-	g := gi.WithActor(mapped)
+func applyModifierMutation(gi Game, actor Actor, transactions []Transaction[Modifier], mutation ActorMutation) (Actor, bool) {
+	context := getContext(actor, transactions, mutation)
+	g := gi.WithActor(actor)
 
-	if mutation.ActorFilter != nil && mutation.ActorDelta != nil {
-		if mutation.ActorFilter(g, mapped, context) {
-			return mutation.ActorDelta(g, mapped, context), true
-		}
-		return mapped, false
-	}
-
-	tx := MakeTransaction(mutation.GameMutation, context)
-	next, ok := ResolveTransaction(g, tx, g)
+	tx := MakeTransaction(mutation.Mutation, context)
+	next, ok := ResolveTransaction(g, actor, tx, actor)
 	if !ok {
-		return mapped, false
+		return actor, false
 	}
 
-	updated, ok := next.GetActorByID(mapped.ID)
-	if !ok {
-		return mapped, false
-	}
-
-	return updated, true
+	return next, true
 }
 
 func resolveActor(actor Actor, g Game, mtransactions []Transaction[Modifier], atransactions []Transaction[Modifier]) ResolvedActor {

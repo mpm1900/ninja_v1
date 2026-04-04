@@ -6,22 +6,22 @@ import (
 	"github.com/google/uuid"
 )
 
-type Mutation[I any, O any] struct {
-	Delta    func(input I, context Context) O    `json:"-"`
-	Filter   func(input I, context Context) bool `json:"-"`
-	Priority int                                 `json:"priority"`
+type Mutation[P any, I any, O any] struct {
+	Delta    func(parent P, input I, context Context) O    `json:"-"`
+	Filter   func(parent P, input I, context Context) bool `json:"-"`
+	Priority int                                           `json:"priority"`
 }
 
 /**
  * Game Mutations
  * [GameMutation]
  */
-type GameMutation = Mutation[Game, Game]
+type GameMutation = Mutation[Game, Game, Game]
 
 func NewGameMutation() GameMutation {
 	return GameMutation{
-		Delta:    func(input Game, context Context) Game { return input },
-		Filter:   func(input Game, context Context) bool { return true },
+		Delta:    func(parent Game, input Game, context Context) Game { return input },
+		Filter:   func(parent Game, input Game, context Context) bool { return true },
 		Priority: 0,
 	}
 }
@@ -36,18 +36,18 @@ func ComposeGameMutations(mutations ...GameMutation) GameMutation {
 	})
 
 	return GameMutation{
-		Delta: func(input Game, context Context) Game {
+		Delta: func(g Game, input Game, context Context) Game {
 			for _, mut := range mutations {
 				if mut.Delta != nil {
-					input = mut.Delta(input, context)
+					input = mut.Delta(g, input, context)
 				}
 			}
 
 			return input
 		},
-		Filter: func(input Game, context Context) bool {
+		Filter: func(g Game, input Game, context Context) bool {
 			for _, mut := range mutations {
-				if mut.Filter != nil && !mut.Filter(input, context) {
+				if mut.Filter != nil && !mut.Filter(g, input, context) {
 					return false
 				}
 			}
@@ -59,7 +59,7 @@ func ComposeGameMutations(mutations ...GameMutation) GameMutation {
 
 func AddLogs(logs ...GameLog) GameMutation {
 	return GameMutation{
-		Delta: func(g Game, context Context) Game {
+		Delta: func(p Game, g Game, context Context) Game {
 			g.Log = append(g.Log, logs...)
 
 			return g
@@ -71,10 +71,8 @@ func AddLogs(logs ...GameLog) GameMutation {
  * Modifier Mutations
  * [GameMutation]
  */
-type ModifierMutation struct {
-	GameMutation
-	ActorFilter     func(Game, Actor, Context) bool
-	ActorDelta      func(Game, Actor, Context) Actor
+type ActorMutation struct {
+	Mutation[Game, Actor, Actor]
 	ModifierGroupID *uuid.UUID
 	TransactionID   *uuid.UUID
 }
@@ -84,18 +82,12 @@ func MakeActorMutation(
 	priority int,
 	filter func(Game, Actor, Context) bool,
 	delta func(Game, Actor, Context) Actor,
-) ModifierMutation {
-	return ModifierMutation{
-		ActorFilter:     filter,
-		ActorDelta:      delta,
+) ActorMutation {
+	return ActorMutation{
 		ModifierGroupID: modifierGroupID,
-		GameMutation: GameMutation{
-			Filter: func(g Game, context Context) bool {
-				return false
-			},
-			Delta: func(g Game, context Context) Game {
-				return g
-			},
+		Mutation: Mutation[Game, Actor, Actor]{
+			Filter:   filter,
+			Delta:    delta,
 			Priority: priority,
 		},
 	}

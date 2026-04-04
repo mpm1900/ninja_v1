@@ -204,7 +204,7 @@ func (g Game) GetTriggers(on TriggerOn, context *Context) []Transaction[Trigger]
 				continue
 			}
 
-			if trig.Check != nil && !trig.Check(g, ctx, tx) {
+			if trig.Check != nil && !trig.Check(g, g, ctx, tx) {
 				fmt.Println(tx.Mutation.Name, "FAILED")
 				continue
 			}
