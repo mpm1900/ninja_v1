@@ -97,3 +97,32 @@ var SpeedUpAll = MakeStatDeltaAll(game.StatSpeed, "Speed Up", nil, 1)
 // NAMED STAT UPS
 var TailwindID = uuid.New()
 var Tailwind = MakeStatMultTeam(game.StatSpeed, "Tailwind", &TailwindID, 2.0)
+
+// HAZE
+var hazeID = uuid.New()
+var Haze game.Modifier = game.Modifier{
+	ID:       hazeID,
+	GroupID:  &hazeID,
+	Name:     "Haze",
+	Duration: game.ModifierDurationInf,
+	Mutations: []game.ModifierMutation{
+		game.MakeActorMutation(
+			&hazeID,
+			game.MutPrioritySet,
+			game.ActiveFilter,
+			func(g game.Game, actor game.Actor, context game.Context) game.Actor {
+				actor.Stages[game.StatAccuracy] = 0
+				actor.Stages[game.StatAttack] = 0
+				actor.Stages[game.StatChakraAttack] = 0
+				actor.Stages[game.StatChakraDefense] = 0
+				actor.Stages[game.StatDefense] = 0
+				actor.Stages[game.StatEvasion] = 0
+				actor.Stages[game.StatHP] = 0
+				actor.Stages[game.StatSpeed] = 0
+				actor.Stages[game.StatStamina] = 0
+
+				return actor
+			},
+		),
+	},
+}

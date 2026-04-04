@@ -18,6 +18,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.FollowMe.ID:   actions.FollowMe,
 	actions.Protect.ID:    actions.Protect,
 	actions.Tailwind.ID:   actions.Tailwind,
+	actions.Haze.ID:       actions.Haze,
 	actions.Coercion.ID:   actions.Coercion,
 	actions.MirageCrow.ID: actions.MirageCrow,
 	actions.Sekiryoku.ID:  actions.Sekiryoku,
