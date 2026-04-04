@@ -13,7 +13,7 @@ func MakeLeafJab() game.Action {
 	accuracy := 100
 	power := 90
 	stat := game.Attack
-	nature := game.NsTai
+	nature := game.NsWood
 	chakraCost := 30
 	config := game.ActionConfig{
 		Name:     "Leaf Jab",

@@ -56,10 +56,12 @@ type SocketMessageSubscriber = (
   message: SocketResponse | null
 ) => void
 
-const DEFAULT_HOST = 'localhost:3005'
-
 function getSocketUrl(instanceID: string): string {
-  return `ws://${DEFAULT_HOST}/socket/${instanceID}/connect`
+  const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
+  const hostname = window.location.hostname
+  const port = '3005'
+
+  return `${protocol}://${hostname}:${port}/socket/${instanceID}/connect`
 }
 
 const socketStore = new Store<SocketState>({

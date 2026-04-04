@@ -86,7 +86,7 @@ func NewNatureSetValues() map[Nature]float64 {
 
 func GetEffectiveness(moveNature Nature, targetNature Nature) float64 {
 	if moveNature == targetNature {
-		return 1
+		return 1.0
 	}
 	if ElementalCycle[moveNature] == targetNature {
 		return 2.0
@@ -118,23 +118,28 @@ func ResolveNatures(
 		}
 	}
 
-	effectiveness := 1.0
+	total_effectiveness := 0.0
 	for _, moveNature := range input {
+		effectiveness := 1.0
 		for targetNature := range targetNatures {
 			effectiveness *= GetEffectiveness(moveNature, targetNature)
 		}
+
+		total_effectiveness += effectiveness
 	}
 
-	proficiency := 1.0
+	avg_effectiveness := total_effectiveness / float64(len(input))
+	dr_ratio := 1.0
+
 	for _, nature := range input {
 		res := resistances[nature]
+
 		if res == 0 {
-			proficiency = 0
+			dr_ratio = 0
 			break
 		}
-		proficiency *= damages[nature]
-		proficiency /= res
+		dr_ratio = dr_ratio * damages[nature] / res
 	}
 
-	return proficiency * effectiveness
+	return dr_ratio * avg_effectiveness
 }
