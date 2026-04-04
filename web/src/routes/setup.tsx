@@ -8,7 +8,6 @@ import { ClientOnly, createFileRoute, redirect } from '@tanstack/react-router'
 import { gameStore } from '#/lib/stores/game'
 import { clientsStore } from '#/lib/stores/clients'
 import { ActorCard } from '#/components/actor-card'
-import { actionsQuery } from '#/lib/queries/actions'
 import { ActorControl } from '#/components/actor-control'
 import { ActionQueue } from '#/components/action-queue'
 import { PromptController } from '#/components/prompt-controller'
@@ -24,7 +23,6 @@ export const Route = createFileRoute('/setup')({
   },
   component: App,
   loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData(actionsQuery)
     await context.queryClient.ensureQueryData(actorsQuery)
     await context.queryClient.ensureQueryData(instancesQuery)
   },

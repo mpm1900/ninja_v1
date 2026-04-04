@@ -69,6 +69,14 @@ func (i *Instance) PostRegister(client *Client) {
 	client.inbox <- PostRegisterMessage(client, &i.Game)
 }
 
+func (i *Instance) TargetIDsResponse(clientID uuid.UUID, context game.Context, targetIDs []uuid.UUID) {
+	client, ok := i.Clients[clientID]
+	if !ok {
+		return
+	}
+
+	client.inbox <- TargetIDsResponse(client, context, targetIDs)
+}
 func (i *Instance) ValidateContextResponse(clientID uuid.UUID, context game.Context, valid bool) {
 	client, ok := i.Clients[clientID]
 	if !ok {

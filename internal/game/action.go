@@ -75,15 +75,15 @@ type ActionMutation Mutation[Game, []Transaction[GameMutation]]
  */
 type Action struct {
 	ActionMutation
-	ID              uuid.UUID                   `json:"ID"`
-	Config          ActionConfig                `json:"config"`
-	Disabled        bool                        `json:"disabled"`
-	TargetType      ActionTargetType            `json:"target_type"`
-	TargetPredicate func(Actor, Context) bool   `json:"-"`
-	ContextValidate func(Context) bool          `json:"-"`
-	MapContext      func(Game, Context) Context `json:"-"`
-	Cost            GameMutation                `json:"-"`
-	Cooldown        *int                        `json:"cooldown"`
+	ID              uuid.UUID                       `json:"ID"`
+	Config          ActionConfig                    `json:"config"`
+	Disabled        bool                            `json:"disabled"`
+	TargetType      ActionTargetType                `json:"target_type"`
+	TargetPredicate func(Game, Actor, Context) bool `json:"-"`
+	ContextValidate func(Context) bool              `json:"-"`
+	MapContext      func(Game, Context) Context     `json:"-"`
+	Cost            GameMutation                    `json:"-"`
+	Cooldown        *int                            `json:"cooldown"`
 }
 
 func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransaction {

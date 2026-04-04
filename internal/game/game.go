@@ -169,7 +169,7 @@ func (g Game) GetActionableActors() []Actor {
 func (g Game) GetActorsFilters(context Context, filters ...ActorFilter) []Actor {
 	filter := ComposeAF(filters...)
 	return g.GetActors(func(a Actor) bool {
-		return filter(a, context)
+		return filter(g, a, context)
 	})
 }
 

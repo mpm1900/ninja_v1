@@ -8,7 +8,6 @@ import (
 
 	"ninja_v1/internal/auth"
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data"
 	"ninja_v1/internal/instance"
 
 	"github.com/google/uuid"
@@ -75,53 +74,6 @@ func (ih *InstancesHandler) HandleGetGames(w http.ResponseWriter, r *http.Reques
 	}
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(games)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-}
-
-func (ih *InstancesHandler) HandleGetTargets(w http.ResponseWriter, r *http.Request) {
-	instanceID, err := uuid.Parse(r.PathValue("instanceID"))
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	var context game.Context
-	err = json.NewDecoder(r.Body).Decode(&context)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	if context.ActionID == nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	instance, ok := ih.GetInstance(instanceID)
-	if !ok {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	action, ok := data.ACTIONS[*context.ActionID]
-	if !ok {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	targets := instance.Game.GetActors(func(a game.Actor) bool {
-		return action.TargetPredicate(a, context)
-	})
-	targetIDs := make([]uuid.UUID, 0, len(targets))
-	for _, a := range targets {
-		targetIDs = append(targetIDs, a.ID)
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(targetIDs)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

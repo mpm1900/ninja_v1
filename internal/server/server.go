@@ -33,7 +33,6 @@ func NewServer(ctx context.Context, queries *db.Queries) *Server {
 	api.HandleFunc("GET /actors", dataHandler.HandleGetActors)
 
 	api.HandleFunc("GET /instances", instancesHandler.HandleGetGames)
-	api.HandleFunc("POST /{instanceID}/targets", instancesHandler.HandleGetTargets)
 
 	mux.Handle("/api/", http.StripPrefix("/api", api))
 	mux.Handle("/socket/", http.StripPrefix("/socket", authenticatedInstancesHandler))

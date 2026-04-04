@@ -4,10 +4,76 @@ import (
 	"ninja_v1/internal/game"
 	data "ninja_v1/internal/game/data"
 	"slices"
+
+	"github.com/google/uuid"
 )
 
 func Reducer(instance *Instance, request Request) int {
 	switch request.Type {
+	case GetTargets:
+		if request.Context.ActionID == nil && request.PromptID == nil {
+			instance.TargetIDsResponse(request.ClientID, request.Context, nil)
+			return none
+		}
+
+		var action = game.Action{}
+		if request.PromptID != nil {
+			tx, ok := instance.Game.GetPromptTxByID(*request.PromptID)
+			if !ok {
+				instance.TargetIDsResponse(request.ClientID, request.Context, nil)
+				return none
+			}
+			action = tx.Mutation
+		}
+
+		action, ok := data.ACTIONS[*request.Context.ActionID]
+		if !ok {
+			instance.TargetIDsResponse(request.ClientID, request.Context, nil)
+			return none
+		}
+		targets := instance.Game.GetActors(func(a game.Actor) bool {
+			return action.TargetPredicate(instance.Game, a, request.Context)
+		})
+		targetIDs := make([]uuid.UUID, 0, len(targets))
+		for _, a := range targets {
+			targetIDs = append(targetIDs, a.ID)
+		}
+
+		instance.TargetIDsResponse(request.ClientID, request.Context, targetIDs)
+		return none
+	case ValidateContext:
+		if request.Context.ActionID == nil && request.PromptID == nil {
+			instance.ValidateContextResponse(request.ClientID, request.Context, false)
+			return none
+		}
+
+		if request.PromptID != nil {
+			action, ok := instance.Game.GetPromptTxByID(*request.PromptID)
+			if !ok {
+				instance.ValidateContextResponse(request.ClientID, request.Context, false)
+				return none
+			}
+
+			valid := action.Mutation.ContextValidate(request.Context)
+			instance.ValidateContextResponse(request.ClientID, request.Context, valid)
+			return none
+		}
+
+		actor, ok := instance.Game.GetSource(request.Context)
+		if !ok {
+			instance.ValidateContextResponse(request.ClientID, request.Context, false)
+			return none
+		}
+
+		action, ok := actor.GetActionByID(instance.Game, *request.Context.ActionID)
+		if !ok {
+			instance.ValidateContextResponse(request.ClientID, request.Context, false)
+			return none
+		}
+
+		valid := action.ContextValidate(request.Context)
+		instance.ValidateContextResponse(request.ClientID, request.Context, valid)
+		return none
 	case AddActor:
 		def, ok := data.ACTORS[*request.Context.SourceActorID]
 		if !ok {
@@ -90,40 +156,6 @@ func Reducer(instance *Instance, request Request) int {
 
 		instance.RunGameActions()
 		return state
-
-	case ValidateContext:
-		if request.Context.ActionID == nil && request.PromptID == nil {
-			instance.ValidateContextResponse(request.ClientID, request.Context, false)
-			return none
-		}
-
-		if request.PromptID != nil {
-			action, ok := instance.Game.GetPromptTxByID(*request.PromptID)
-			if !ok {
-				instance.ValidateContextResponse(request.ClientID, request.Context, false)
-				return none
-			}
-
-			valid := action.Mutation.ContextValidate(request.Context)
-			instance.ValidateContextResponse(request.ClientID, request.Context, valid)
-			return none
-		}
-
-		actor, ok := instance.Game.GetSource(request.Context)
-		if !ok {
-			instance.ValidateContextResponse(request.ClientID, request.Context, false)
-			return none
-		}
-
-		action, ok := actor.GetActionByID(instance.Game, *request.Context.ActionID)
-		if !ok {
-			instance.ValidateContextResponse(request.ClientID, request.Context, false)
-			return none
-		}
-
-		valid := action.ContextValidate(request.Context)
-		instance.ValidateContextResponse(request.ClientID, request.Context, valid)
-		return none
 	case ValidateState:
 		if instance.Game.Status == game.GameStatusRunning {
 			return none

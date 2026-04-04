@@ -73,7 +73,7 @@ func AddLogs(logs ...GameLog) GameMutation {
  */
 type ModifierMutation struct {
 	GameMutation
-	ActorFilter     func(Actor, Context) bool
+	ActorFilter     func(Game, Actor, Context) bool
 	ActorDelta      func(Game, Actor, Context) Actor
 	ModifierGroupID *uuid.UUID
 	TransactionID   *uuid.UUID
@@ -82,7 +82,7 @@ type ModifierMutation struct {
 func MakeActorMutation(
 	modifierGroupID *uuid.UUID,
 	priority int,
-	filter func(Actor, Context) bool,
+	filter func(Game, Actor, Context) bool,
 	delta func(Game, Actor, Context) Actor,
 ) ModifierMutation {
 	return ModifierMutation{
@@ -92,7 +92,7 @@ func MakeActorMutation(
 		GameMutation: GameMutation{
 			Filter: func(g Game, context Context) bool {
 				for _, actor := range g.Actors {
-					if filter(actor, context) {
+					if filter(g, actor, context) {
 						return true
 					}
 				}
@@ -100,7 +100,7 @@ func MakeActorMutation(
 			},
 			Delta: func(g Game, context Context) Game {
 				for _, actor := range g.Actors {
-					if filter(actor, context) {
+					if filter(g, actor, context) {
 						g.UpdateActor(actor.ID, func(a Actor) Actor {
 							return delta(g, a, context)
 						})

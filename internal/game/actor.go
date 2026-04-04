@@ -416,7 +416,7 @@ func applyModifierMutation(gi Game, mapped Actor, transactions []Transaction[Mod
 	g := gi.WithActor(mapped)
 
 	if mutation.ActorFilter != nil && mutation.ActorDelta != nil {
-		if mutation.ActorFilter(mapped, context) {
+		if mutation.ActorFilter(g, mapped, context) {
 			return mutation.ActorDelta(g, mapped, context), true
 		}
 		return mapped, false

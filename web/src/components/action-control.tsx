@@ -1,18 +1,16 @@
 import { NULL_CONTEXT, type Context } from '#/lib/game/context'
-import { useQuery } from '@tanstack/react-query'
 import { Button } from './ui/button'
 import { useStore } from '@tanstack/react-store'
 import {
   sendContextMessage,
-  socketStore,
 } from '#/lib/stores/socket'
 import { gameStore } from '#/lib/stores/game'
-import { actionTargetsQuery } from '#/lib/queries/action-targets'
 import { clientsStore } from '#/lib/stores/clients'
 import { TargetButton } from './target-button'
 import type { Action, ActionTransaction } from '#/lib/game/action'
 import { setActionID } from '#/lib/stores/battle-context'
 import { useValidateContext } from '#/hooks/use-validate-context'
+import { useGetTargets } from '#/hooks/use-get-targets'
 
 function ActionControl({
   action,
@@ -27,16 +25,12 @@ function ActionControl({
   context: Context
   onContextChange: (context: Context) => void
 }) {
-  const instanceID = useStore(socketStore, (s) => s.instanceID!)
   const game = useStore(gameStore, (g) => g)
   const { valid } = useValidateContext(context)
 
   const client = useStore(clientsStore, (c) => c.me!)
-  const actionTargets = useQuery(
-    actionTargetsQuery(instanceID, context, [game.turn.count])
-  )
-  const loading = actionTargets.isFetching
-  const actors = game.actors.filter((a) => actionTargets.data?.includes(a.ID))
+  const { targetIDs } = useGetTargets(context)
+  const actors = game.actors.filter((a) => targetIDs?.includes(a.ID))
   const has_queued_action = game.queued_actions[context.source_actor_ID ?? '']
 
   if (!!staged) {
@@ -48,7 +42,7 @@ function ActionControl({
           </span>
         ) : (
           <Button
-            disabled={loading || !enabled}
+            disabled={!enabled}
             onClick={() => {
               sendContextMessage({
                 type: 'remove-action',
@@ -76,14 +70,14 @@ function ActionControl({
               key={a.ID}
               actor={a}
               enabled={enabled}
-              loading={loading}
+              loading={false}
               contextValid={!!valid}
               targetType={action.target_type}
               context={context}
               onContextChange={onContextChange}
             />
           ))}
-          {!loading && actors.length == 0 && valid === false && (
+          {actors.length == 0 && valid === false && (
             <span className="text-muted-foreground text-sm">
               no targets available
             </span>
@@ -92,7 +86,6 @@ function ActionControl({
       )}
       {enabled && action && valid && (
         <Button
-          disabled={loading}
           onClick={() => {
             sendContextMessage({
               type: 'push-action',

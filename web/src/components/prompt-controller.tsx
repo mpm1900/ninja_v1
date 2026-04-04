@@ -11,14 +11,13 @@ import {
   AlertDialogTitle,
 } from './ui/alert-dialog'
 import type { Context } from '#/lib/game/context'
-import { sendContextMessage, socketStore } from '#/lib/stores/socket'
-import { useQuery } from '@tanstack/react-query'
-import { actionTargetsQuery } from '#/lib/queries/action-targets'
+import { sendContextMessage } from '#/lib/stores/socket'
 import { TargetButton } from './target-button'
 import { Button } from './ui/button'
 import { useEffect, useState } from 'react'
 import type { ActionTransaction } from '#/lib/game/action'
 import { useValidateContext } from '#/hooks/use-validate-context'
+import { useGetTargets } from '#/hooks/use-get-targets'
 
 function PromptControl({
   prompt,
@@ -30,15 +29,11 @@ function PromptControl({
   onContextChange: (context: Context) => void
 }) {
   const action = prompt?.mutation
-  const instanceID = useStore(socketStore, (s) => s.instanceID!)
   const game = useStore(gameStore, (g) => g)
   const { valid } = useValidateContext(context, prompt?.ID)
 
   const client = useStore(clientsStore, (c) => c.me!)
-  const actionTargets = useQuery(
-    actionTargetsQuery(instanceID, context)
-  )
-  const loading = actionTargets.isFetching
+  const { targetIDs } = useGetTargets(context)
 
 
   return (
@@ -46,13 +41,13 @@ function PromptControl({
       {action && (
         <div className="p-2 flex flex-wrap gap-2">
           {game.actors
-            .filter((a) => actionTargets.data?.includes(a.ID))
+            .filter((a) => targetIDs?.includes(a.ID))
             .map((a) => (
               <TargetButton
                 key={a.ID}
                 actor={a}
                 enabled
-                loading={loading}
+                loading={false}
                 contextValid={!!valid}
                 context={context}
                 onContextChange={onContextChange}
@@ -64,7 +59,7 @@ function PromptControl({
       <AlertDialogFooter>
         <AlertDialogAction asChild>
           <Button
-            disabled={loading || !valid}
+            disabled={!valid}
             onClick={() => {
               sendContextMessage({
                 type: 'resolve-prompt',

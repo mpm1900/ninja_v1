@@ -17,8 +17,10 @@ const (
 	SetActorPosition RequestType = "set-actor-position" // TEMP
 	RunGameActions   RequestType = "run-game-actions"   // TEMP
 	ValidateState    RequestType = "validate-state"     // TEMP
-	ValidateContext  RequestType = "validate-context"
 	ResolvePrompt    RequestType = "resolve-prompt"
+
+	GetTargets      RequestType = "get-targets"
+	ValidateContext RequestType = "validate-context"
 )
 
 type Request struct {

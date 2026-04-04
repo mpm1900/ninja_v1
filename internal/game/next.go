@@ -40,7 +40,7 @@ func (g *Game) Validate() bool {
 			context.SourcePlayerID = &player.ID
 			context.TargetPositionIDs = missing_pos
 			possible_targets := g.GetActors(func(a Actor) bool {
-				return action.TargetPredicate(a, context)
+				return action.TargetPredicate(*g, a, context)
 			})
 
 			if len(possible_targets) == 0 {

@@ -31,6 +31,7 @@ type SocketRequestType =
   | 'validate-state'
   | 'validate-context'
   | 'resolve-prompt'
+  | 'get-targets'
 
 type SocketRequest = {
   type: SocketRequestType
@@ -42,11 +43,12 @@ type SocketRequest = {
 }
 
 type SocketResponse = {
-  type: 'game' | 'clients' | 'join-success' | 'validate-context'
+  type: 'game' | 'clients' | 'join-success' | 'validate-context' | 'target-IDs'
   state: Game | null
   clients: Array<Client> | null
   context: Context | null
   valid: boolean | null
+  target_IDs: Array<string> | null
 }
 
 type SocketMessageSubscriber = (

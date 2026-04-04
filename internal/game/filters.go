@@ -37,12 +37,12 @@ func PositionsLengthFilter(length int) func(Context) bool {
  * Actor Filters
  */
 
-type ActorFilter func(Actor, Context) bool
+type ActorFilter func(Game, Actor, Context) bool
 
 func ComposeAF(filters ...ActorFilter) ActorFilter {
-	return func(actor Actor, context Context) bool {
+	return func(game Game, actor Actor, context Context) bool {
 		for _, filter := range filters {
-			if !filter(actor, context) {
+			if !filter(game, actor, context) {
 				return false
 			}
 		}
@@ -50,13 +50,13 @@ func ComposeAF(filters ...ActorFilter) ActorFilter {
 		return true
 	}
 }
-func AllFilter(actor Actor, context Context) bool {
+func AllFilter(game Game, actor Actor, context Context) bool {
 	return true
 }
-func NoneFilter(actor Actor, context Context) bool {
+func NoneFilter(game Game, actor Actor, context Context) bool {
 	return false
 }
-func OtherFilter(actor Actor, context Context) bool {
+func OtherFilter(game Game, actor Actor, context Context) bool {
 	if context.SourceActorID == nil {
 		return false
 	}
@@ -68,34 +68,34 @@ func OtherFilter(actor Actor, context Context) bool {
  * actor.Alive is a special case were modifiers don't modify it, we just mutate it
  * so this is a safe check to make without resoloving the Actor to a ResolvedActor
  */
-func AliveFilter(actor Actor, context Context) bool {
+func AliveFilter(game Game, actor Actor, context Context) bool {
 	return actor.Alive
 }
-func ActiveFilter(actor Actor, context Context) bool {
+func ActiveFilter(game Game, actor Actor, context Context) bool {
 	return actor.PositionID != nil
 }
-func InactiveFilter(actor Actor, context Context) bool {
+func InactiveFilter(game Game, actor Actor, context Context) bool {
 	return actor.PositionID == nil
 }
-func SourceFilter(actor Actor, context Context) bool {
+func SourceFilter(game Game, actor Actor, context Context) bool {
 	if context.SourceActorID == nil {
 		return false
 	}
-	if !ActiveFilter(actor, context) {
+	if !ActiveFilter(game, actor, context) {
 		return false
 	}
 	return actor.ID == *context.SourceActorID
 }
-func ParentFilter(actor Actor, context Context) bool {
+func ParentFilter(game Game, actor Actor, context Context) bool {
 	if context.ParentActorID == nil {
 		return false
 	}
-	if !ActiveFilter(actor, context) {
+	if !ActiveFilter(game, actor, context) {
 		return false
 	}
 	return actor.ID == *context.ParentActorID
 }
-func TargetFilter(actor Actor, context Context) bool {
+func TargetFilter(game Game, actor Actor, context Context) bool {
 	if slices.Contains(context.TargetActorIDs, actor.ID) {
 		return true
 	}
@@ -105,13 +105,13 @@ func TargetFilter(actor Actor, context Context) bool {
 
 	return false
 }
-func TeamFilter(actor Actor, context Context) bool {
+func TeamFilter(game Game, actor Actor, context Context) bool {
 	if context.SourcePlayerID == nil {
 		return false
 	}
 	return actor.PlayerID == *context.SourcePlayerID
 }
-func OtherTeamFilter(actor Actor, context Context) bool {
+func OtherTeamFilter(game Game, actor Actor, context Context) bool {
 	if context.SourcePlayerID == nil {
 		return false
 	}

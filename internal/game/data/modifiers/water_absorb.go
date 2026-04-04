@@ -16,8 +16,8 @@ var WaterAbsorb game.Modifier = game.Modifier{
 	Mutations: []game.ModifierMutation{
 		{
 			ModifierGroupID: &waterAbsorbID,
-			ActorFilter: func(a game.Actor, c game.Context) bool {
-				return game.SourceFilter(a, c)
+			ActorFilter: func(g game.Game, a game.Actor, c game.Context) bool {
+				return game.SourceFilter(g, a, c)
 			},
 			ActorDelta: func(g game.Game, a game.Actor, c game.Context) game.Actor {
 				action, ok := g.GetActiveAction()
