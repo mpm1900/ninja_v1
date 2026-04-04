@@ -91,21 +91,9 @@ func MakeActorMutation(
 		ModifierGroupID: modifierGroupID,
 		GameMutation: GameMutation{
 			Filter: func(g Game, context Context) bool {
-				for _, actor := range g.Actors {
-					if filter(g, actor, context) {
-						return true
-					}
-				}
 				return false
 			},
 			Delta: func(g Game, context Context) Game {
-				for _, actor := range g.Actors {
-					if filter(g, actor, context) {
-						g.UpdateActor(actor.ID, func(a Actor) Actor {
-							return delta(g, a, context)
-						})
-					}
-				}
 				return g
 			},
 			Priority: priority,
