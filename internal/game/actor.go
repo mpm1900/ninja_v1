@@ -181,6 +181,7 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uui
 		}
 		actions = append(actions, a)
 	}
+
 	return Actor{
 		ActorDef:   def,
 		ID:         uuid.New(),
@@ -348,16 +349,16 @@ var SPECIAL_MUTATIONS []ModifierMutation = []ModifierMutation{
 		nil,
 		MutPriorityMapBaseStats,
 		AllFilter,
-		func(g Game, input Actor, context Context) Actor {
-			return MapBaseStats(input)
+		func(g Game, actor Actor, context Context) Actor {
+			return MapBaseStats(actor)
 		},
 	),
 	MakeActorMutation(
 		nil,
 		MutPriorityMapStagedStats,
 		AllFilter,
-		func(g Game, input Actor, context Context) Actor {
-			return MapStagedStats(input)
+		func(g Game, actor Actor, context Context) Actor {
+			return MapStagedStats(actor)
 		},
 	),
 }

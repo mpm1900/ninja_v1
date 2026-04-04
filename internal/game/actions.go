@@ -82,7 +82,7 @@ var Switch = Action{
 	ContextValidate: TargetLengthFilter(1),
 	ActionMutation: ActionMutation{
 		Priority: ActionPrioritySwitch,
-		Filter:   AllGameFilter,
+		Filter:   TrueGameFilter,
 		Delta: func(input Game, context Context) []Transaction[GameMutation] {
 			transactions := []GameTransaction{
 				MakeTransaction(SwitchPositions, context),
@@ -111,7 +111,7 @@ func SwitchIn(count int) Action {
 		ContextValidate: TargetLengthFilter(count),
 		ActionMutation: ActionMutation{
 			Priority: ActionPrioritySwitch,
-			Filter:   AllGameFilter,
+			Filter:   TrueGameFilter,
 			Delta: func(input Game, context Context) []Transaction[GameMutation] {
 				transactions := []GameTransaction{}
 				min := min(len(context.TargetActorIDs), len(context.TargetPositionIDs))

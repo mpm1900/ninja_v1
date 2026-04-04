@@ -15,7 +15,7 @@ var IntimidateTrigger game.Trigger = game.Trigger{
 	Check:      game.Match__SourceActor_SourceActor,
 	ActionMutation: game.ActionMutation{
 		Priority: 0,
-		Filter:   game.AllGameFilter,
+		Filter:   game.TrueGameFilter,
 		Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 			transactions := []game.GameTransaction{}
 			targets := g.GetActorsFilters(context, game.ComposeAF(

@@ -32,7 +32,7 @@ func MakeLeafJab() game.Action {
 		ContextValidate: game.PositionsLengthFilter(1),
 		Cost:            mutations.UseStaminaSource(chakraCost),
 		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityDefault,
+			Priority: game.ActionPriorityP1,
 			Filter:   game.SourceIsAlive,
 			Delta: func(g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}

@@ -154,8 +154,11 @@ func ComposeGF(filters ...GameFilter) GameFilter {
 	}
 }
 
-func AllGameFilter(game Game, context Context) bool {
+func TrueGameFilter(game Game, context Context) bool {
 	return true
+}
+func FalseGameFilter(game Game, context Context) bool {
+	return false
 }
 func SourceIsAlive(game Game, context Context) bool {
 	source, ok := game.GetSource(context)
