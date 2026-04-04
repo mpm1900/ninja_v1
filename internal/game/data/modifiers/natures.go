@@ -14,12 +14,12 @@ func AddNature(nature game.NatureSet, duration int) game.Modifier {
 		ID:       addNatureID,
 		Name:     fmt.Sprintf("Add Nature: %s", nature),
 		Duration: duration,
-		Mutations: []game.ActorMutation{
+		Mutations: []game.ModifierMutation{
 			game.MakeActorMutation(
 				nil,
 				game.MutPriorityDefault,
 				game.ComposeAF(game.SourceFilter, game.ActiveFilter),
-				func(a game.Actor, c game.Context) game.Actor {
+				func(g game.Game, a game.Actor, c game.Context) game.Actor {
 					a.Natures[nature] = game.NATURES[nature]
 					return a
 				},
@@ -35,12 +35,12 @@ func RemoveNature(nature game.NatureSet) game.Modifier {
 		ID:       removeNatureID,
 		Name:     fmt.Sprintf("Add Nature: %s", nature),
 		Duration: 0,
-		Mutations: []game.ActorMutation{
+		Mutations: []game.ModifierMutation{
 			game.MakeActorMutation(
 				nil,
 				game.MutPriorityDefault,
 				game.ComposeAF(game.SourceFilter, game.ActiveFilter),
-				func(a game.Actor, c game.Context) game.Actor {
+				func(g game.Game, a game.Actor, c game.Context) game.Actor {
 					delete(a.Natures, nature)
 					return a
 				},

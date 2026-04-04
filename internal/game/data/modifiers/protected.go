@@ -12,12 +12,12 @@ var Protected = game.Modifier{
 	Name:     "Protected",
 	GroupID:  &protectedID,
 	Duration: 0,
-	Mutations: []game.ActorMutation{
+	Mutations: []game.ModifierMutation{
 		game.MakeActorMutation(
 			&protectedID,
 			game.MutPriorityDefault,
 			game.ComposeAF(game.ActiveFilter, game.SourceFilter),
-			func(a game.Actor, c game.Context) game.Actor {
+			func(g game.Game, a game.Actor, c game.Context) game.Actor {
 				a.Protected = true
 				return a
 			},

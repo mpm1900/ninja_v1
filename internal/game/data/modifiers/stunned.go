@@ -12,12 +12,12 @@ var Stunned = game.Modifier{
 	Name:     "Stunned",
 	GroupID:  &stunnedID,
 	Duration: 0,
-	Mutations: []game.ActorMutation{
+	Mutations: []game.ModifierMutation{
 		game.MakeActorMutation(
 			&stunnedID,
 			game.MutPriorityDefault,
 			game.ComposeAF(game.ActiveFilter, game.TargetFilter),
-			func(a game.Actor, c game.Context) game.Actor {
+			func(g game.Game, a game.Actor, c game.Context) game.Actor {
 				a.Stunned = true
 				return a
 			},

@@ -4,22 +4,22 @@ import (
 	"github.com/google/uuid"
 )
 
-func NewNoopSource(groupID *uuid.UUID) ActorMutation {
+func NewNoopSource(groupID *uuid.UUID) ModifierMutation {
 	return MakeActorMutation(
 		groupID,
 		0,
 		SourceFilter,
-		func(a Actor, c Context) Actor {
+		func(g Game, a Actor, c Context) Actor {
 			return a
 		},
 	)
 }
-func NewNoopParent(groupID *uuid.UUID) ActorMutation {
+func NewNoopParent(groupID *uuid.UUID) ModifierMutation {
 	return MakeActorMutation(
 		groupID,
 		0,
 		ParentFilter,
-		func(a Actor, c Context) Actor {
+		func(g Game, a Actor, c Context) Actor {
 			return a
 		},
 	)

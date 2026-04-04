@@ -18,7 +18,7 @@ func NewStageDelta(
 		groupID,
 		priority,
 		filter,
-		func(actor game.Actor, context game.Context) game.Actor {
+		func(g game.Game, actor game.Actor, context game.Context) game.Actor {
 			actor.Stages[stat] = actor.Stages[stat] + delta
 			return actor
 		},
@@ -28,7 +28,7 @@ func NewStageDelta(
 		ID:       uuid.New(),
 		GroupID:  groupID,
 		Duration: game.ModifierDurationInf,
-		Mutations: []game.ActorMutation{
+		Mutations: []game.ModifierMutation{
 			mut,
 		},
 	}
@@ -45,7 +45,7 @@ func NewStatMult(
 		groupID,
 		priority,
 		filter,
-		func(actor game.Actor, context game.Context) game.Actor {
+		func(g game.Game, actor game.Actor, context game.Context) game.Actor {
 			actor.Stats[stat] = int(math.Floor(float64(actor.Stats[stat]) * mult))
 			return actor
 		},
@@ -55,7 +55,7 @@ func NewStatMult(
 		ID:       uuid.New(),
 		GroupID:  groupID,
 		Duration: game.ModifierDurationInf,
-		Mutations: []game.ActorMutation{
+		Mutations: []game.ModifierMutation{
 			mut,
 		},
 	}

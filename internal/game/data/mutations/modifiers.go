@@ -16,7 +16,7 @@ func AddModifiers(modifiers ...game.Modifier) game.GameMutation {
 
 				// logs
 				for _, actor := range g.GetActionableActors() {
-					if game.CheckModifier(mod_tx, actor) {
+					if game.CheckModifierForActor(mod_tx, g, actor) {
 						context.SourceActorID = &actor.ID
 						g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %s", modifier.Name), context))
 					}

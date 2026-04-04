@@ -68,12 +68,13 @@ func AddLogs(logs ...GameLog) GameMutation {
 }
 
 /**
- * Actor Mutations
- * [ActorMutation]
+ * Modifier Mutations
+ * [GameMutation]
  */
-
-type ActorMutation struct {
-	Mutation[Actor, Actor]
+type ModifierMutation struct {
+	GameMutation
+	ActorFilter     func(Actor, Context) bool
+	ActorDelta      func(Game, Actor, Context) Actor
 	ModifierGroupID *uuid.UUID
 	TransactionID   *uuid.UUID
 }
@@ -81,14 +82,32 @@ type ActorMutation struct {
 func MakeActorMutation(
 	modifierGroupID *uuid.UUID,
 	priority int,
-	filter func(input Actor, context Context) bool,
-	delta func(input Actor, context Context) Actor,
-) ActorMutation {
-	return ActorMutation{
+	filter func(Actor, Context) bool,
+	delta func(Game, Actor, Context) Actor,
+) ModifierMutation {
+	return ModifierMutation{
+		ActorFilter:     filter,
+		ActorDelta:      delta,
 		ModifierGroupID: modifierGroupID,
-		Mutation: Mutation[Actor, Actor]{
-			Filter:   filter,
-			Delta:    delta,
+		GameMutation: GameMutation{
+			Filter: func(g Game, context Context) bool {
+				for _, actor := range g.Actors {
+					if filter(actor, context) {
+						return true
+					}
+				}
+				return false
+			},
+			Delta: func(g Game, context Context) Game {
+				for _, actor := range g.Actors {
+					if filter(actor, context) {
+						g.UpdateActor(actor.ID, func(a Actor) Actor {
+							return delta(g, a, context)
+						})
+					}
+				}
+				return g
+			},
 			Priority: priority,
 		},
 	}
