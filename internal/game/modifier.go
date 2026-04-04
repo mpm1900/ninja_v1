@@ -23,7 +23,7 @@ func ResolveTrigger(game Game, transaction Transaction[Trigger]) []Transaction[G
 func CheckModifierForActor(tx Transaction[Modifier], game Game, actor Actor) bool {
 	game.Actors = []Actor{actor}
 	for _, mut := range tx.Mutation.Mutations {
-		if mut.Filter(game, tx.Context) {
+		if mut.ActorFilter != nil && mut.ActorFilter(game, actor, tx.Context) {
 			return true
 		}
 	}
