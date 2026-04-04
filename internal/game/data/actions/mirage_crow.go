@@ -47,7 +47,7 @@ func MakeMirageCrow() game.Action {
 						SourceActorID:  &target.ID,
 						ParentActorID:  &target.ID,
 					}
-					mutation := mutations.AddModifiers(modifiers.AttackDownSource, modifiers.AttackDownSource)
+					mutation := mutations.AddModifiers(modifiers.ChakraAttackDown2Source)
 					transaction := game.MakeTransaction(mutation, mut_ctx)
 					transactions = append(transactions, transaction)
 				}

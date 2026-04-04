@@ -428,8 +428,8 @@ func applyModifierMutation(gi Game, mapped Actor, transactions []Transaction[Mod
 		return mapped, false
 	}
 
-	updated, found := next.GetActorByID(mapped.ID)
-	if !found {
+	updated, ok := next.GetActorByID(mapped.ID)
+	if !ok {
 		return mapped, false
 	}
 
