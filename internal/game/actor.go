@@ -399,30 +399,7 @@ func getContext(actor Actor, transactions []Transaction[Modifier], mutation Modi
 	return context
 }
 
-func modifierGame(gi Game, mapped Actor) Game {
-	g := Game{
-		Status:        gi.Status,
-		Turn:          gi.Turn,
-		ActiveContext: gi.ActiveContext,
-		Players:       gi.Players,
-		Actors:        append([]Actor{}, gi.Actors...),
-		Modifiers:     gi.Modifiers,
-		Tick:          gi.Tick,
-		Transactions:  gi.Transactions,
-		Triggers:      gi.Triggers,
-		Actions:       gi.Actions,
-		Prompts:       gi.Prompts,
-		QueuedActions: gi.QueuedActions,
-		Log:           gi.Log,
-	}
-	g.UpdateActor(mapped.ID, func(a Actor) Actor {
-		return mapped
-	})
-
-	return g
-}
-
-func modifierMutations(transactions []Transaction[Modifier]) []ModifierMutation {
+func getMutations(transactions []Transaction[Modifier]) []ModifierMutation {
 	mutations := make([]ModifierMutation, 0)
 	for _, transaction := range transactions {
 		for _, mut := range transaction.Mutation.Mutations {
@@ -436,7 +413,7 @@ func modifierMutations(transactions []Transaction[Modifier]) []ModifierMutation 
 
 func applyModifierMutation(gi Game, mapped Actor, transactions []Transaction[Modifier], mutation ModifierMutation) (Actor, bool) {
 	context := getContext(mapped, transactions, mutation)
-	g := modifierGame(gi, mapped)
+	g := gi.WithActor(mapped)
 
 	if mutation.ActorFilter != nil && mutation.ActorDelta != nil {
 		if mutation.ActorFilter(mapped, context) {
@@ -465,7 +442,7 @@ func resolveActor(actor Actor, g Game, mtransactions []Transaction[Modifier], at
 	transactions = append(transactions, atransactions...)
 	transactions = append(transactions, mtransactions...)
 
-	mutations := modifierMutations(transactions)
+	mutations := getMutations(transactions)
 
 	sort.Slice(mutations, func(i, j int) bool {
 		return mutations[i].Priority < mutations[j].Priority

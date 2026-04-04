@@ -46,7 +46,11 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 	log_ctx.ParentActorID = &target.ID
 	log_ctx.SourceActorID = &target.ID
 	ratio := int(float64(damage) * 100 / float64(hp))
-	g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ lost %d%% HP.", ratio), log_ctx))
+	if ratio > 0 {
+		g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ lost %d%% HP.", ratio), log_ctx))
+	} else {
+		g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %d%% HP.", ratio), log_ctx))
+	}
 }
 func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) {
 	ApplyDamageWith(g, target, damage, nil)
@@ -92,12 +96,12 @@ func RatioDamage(ratio float64) game.GameMutation {
 }
 
 func MakeAccuracyCheck(g *game.Game, action game.ActionConfig, source game.ResolvedActor, target game.ResolvedActor) (bool, int, int) {
-	baseAccuracy := game.GetAccuracy(*g, source, target)
+	base_accuracy := game.GetAccuracy(*g, source, target)
 	if action.Accuracy == nil {
 		return true, 0, 0
 	}
 
-	accuracy := int(math.Floor(baseAccuracy * float64(*action.Accuracy)))
+	accuracy := int(math.Floor(base_accuracy * float64(*action.Accuracy)))
 	roll := game.MakeActionRoll()
 	return roll <= accuracy, roll, accuracy
 }

@@ -235,6 +235,14 @@ func (g Game) GetPromptTxByID(ID uuid.UUID) (Transaction[Action], bool) {
 
 	return Transaction[Action]{}, false
 }
+func (g Game) WithActor(actor Actor) Game {
+	next := g
+	next.Actors = append([]Actor{}, g.Actors...)
+	next.UpdateActor(actor.ID, func(a Actor) Actor {
+		return actor
+	})
+	return next
+}
 
 func (g *Game) FilterModifiers(predicate func(modifier Transaction[Modifier]) bool) {
 	filtered := g.Modifiers[:0]
