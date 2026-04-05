@@ -72,7 +72,7 @@ func AliveFilter(game Game, actor Actor, context Context) bool {
 	return actor.Alive
 }
 func ActiveFilter(game Game, actor Actor, context Context) bool {
-	return actor.PositionID != nil
+	return actor.IsActive()
 }
 func InactiveFilter(game Game, actor Actor, context Context) bool {
 	return actor.PositionID == nil
@@ -99,7 +99,7 @@ func TargetFilter(game Game, actor Actor, context Context) bool {
 	if slices.Contains(context.TargetActorIDs, actor.ID) {
 		return true
 	}
-	if actor.PositionID != nil && slices.Contains(context.TargetPositionIDs, *actor.PositionID) {
+	if actor.IsActive() && slices.Contains(context.TargetPositionIDs, *actor.PositionID) {
 		return true
 	}
 

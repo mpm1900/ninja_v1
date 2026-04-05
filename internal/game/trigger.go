@@ -36,12 +36,14 @@ var END_OF_TURN_TRIGGER Trigger = Trigger{
 			mut := GameMutation{
 				Delta: func(p Game, g Game, c Context) Game {
 					t := g.Turn.Count
-					for i, _ := range g.Actors {
+					for i, a := range g.Actors {
 						if t > 0 {
 							g.Actors[i].DecrementCooldowns()
 							g.Actors[i].RecoverStamina(g, 0.08)
 						}
-						g.Actors[i].ActiveTurns++
+						if a.IsActive() {
+							g.Actors[i].ActiveTurns++
+						}
 					}
 
 					if t > 0 {

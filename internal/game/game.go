@@ -24,9 +24,6 @@ const (
 	GameStatusWaiting GameStatus = "waiting"
 )
 
-type GameState struct {
-}
-
 /**
  * Game is the main state container state for a game instance
  */
@@ -168,7 +165,7 @@ func (g Game) GetActorsByPlayer(playerID uuid.UUID) []Actor {
 }
 func (g Game) GetActionableActors() []Actor {
 	return g.GetActors(func(a Actor) bool {
-		active := a.PositionID != nil
+		active := a.IsActive()
 		return active && a.Alive && !a.Stunned
 	})
 }

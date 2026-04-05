@@ -30,7 +30,7 @@ var Pain = game.ActorDef{
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsYin,
-		game.NsYang,
+		game.NsWater,
 	}),
 
 	InnateModifiers: []game.Modifier{

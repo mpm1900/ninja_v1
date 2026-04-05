@@ -7,6 +7,7 @@ import type { Actor } from '#/lib/game/actor'
 import { ActionsTable } from './actions-table'
 import { useGameContext } from '#/hooks/use-game-context'
 import { ActorStats } from './actor-stats'
+import { FocusSelect } from './focus-select'
 
 function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
   const game = useStore(gameStore, (g) => g)
@@ -18,16 +19,21 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
       <div>
         <CardContent className="px-2 flex flex-col gap-2">
           <div className="flex gap-2">
-            <div className="h-16 w-16 overflow-hidden">
-              <img
-                src={actor.sprite_url}
-                className="h-full w-full object-cover"
-                width={64}
-                height={64}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <PositionSelect actor={actor} game={game} />
+            <div>
+              <div className='flex'>
+                <div className="h-16 w-16 overflow-hidden">
+                  <img
+                    src={actor.sprite_url}
+                    className="h-full w-full object-cover"
+                    width={64}
+                    height={64}
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <PositionSelect actor={actor} game={game} />
+                </div>
+              </div>
+              <FocusSelect />
             </div>
             <ActorStats actor={actor} />
           </div>

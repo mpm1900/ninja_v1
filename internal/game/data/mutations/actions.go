@@ -29,7 +29,7 @@ func RedirectSingleTargetEnemyActions(source game.Actor) game.GameMutation {
 					if a.Mutation.TargetType == game.TargetActorID {
 						g.Actions[i].Context.TargetActorIDs = []uuid.UUID{source.ID}
 					}
-					if a.Mutation.TargetType == game.TargetPositionID && source.PositionID != nil {
+					if a.Mutation.TargetType == game.TargetPositionID && source.IsActive() {
 						g.Actions[i].Context.TargetPositionIDs = []uuid.UUID{*source.PositionID}
 					}
 				}

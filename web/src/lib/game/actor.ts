@@ -48,6 +48,7 @@ type Actor = Omit<ActorDef, 'action_IDs'> &
     player_ID: string
     level: number
     experience: number
+    focus: string
     base_stats: ActorStats<number>
     staged_stats: ActorStats<number>
     pre_stats: ActorStats<number>
@@ -57,11 +58,25 @@ type Actor = Omit<ActorDef, 'action_IDs'> &
     resolved_nature_damage: NatureStats<number>
   }
 
-const statNames: Record<string, string> = {
-  genjutsu: '幻',
-  ninjutsu: '忍',
-  taijutsu: '体',
-}
+const actorFocuses = [
+  "none",
+  "aggressive",
+  "relentless",
+  "reckless",
+  "heavy",
+  "patient",
+  "patient",
+  "tough",
+  "steadfast",
+  "intelligent",
+  "volatile",
+  "intense",
+  "calculated",
+  "agile",
+  "hasty",
+  "impulsive",
+  "alert"
+] as const
 
 function checkActorStat(actor: Actor, key: ActorBaseStat) {
   const stat = actor.stats[key]
@@ -85,4 +100,4 @@ export type {
   ActorDefenseStat,
   ActorBaseStat,
 }
-export { checkActorStat, getTotalBaseStats, statNames }
+export { checkActorStat, getTotalBaseStats, actorFocuses }

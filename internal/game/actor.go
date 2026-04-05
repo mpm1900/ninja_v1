@@ -41,10 +41,46 @@ type ActorFocus string
 
 const (
 	FocusNone ActorFocus = "none"
+	// +P.ATK
+	FocusAggressive ActorFocus = "aggressive" // -P.DEF
+	FocusRelentless ActorFocus = "relentless" // -C.ATK
+	FocusReckless   ActorFocus = "reckless"   // -C.DEF
+	FocusHeavy      ActorFocus = "heavy"      // -SPE
+	// +P.DEF
+	FocusPatient   ActorFocus = "patient"   // -P.ATK
+	FocusHardened  ActorFocus = "hardened"  // -C.ATK
+	FocusTough     ActorFocus = "tough"     // -C.DEF
+	FocusSteadfast ActorFocus = "steadfast" // -SPE
+	// +C.ATK
+	FocusIntelligent ActorFocus = "intelligent" // -P.ATK
+	FocusVolatile    ActorFocus = "volatile"    // -P.DEF
+	FocusIntense     ActorFocus = "intense"     // -C.DEF
+	FocusCalculated  ActorFocus = "calculated"  // -SPE
+	// +SPE
+	FocusAgile     ActorFocus = "agile"     // -P.ATK
+	FocusHasty     ActorFocus = "hasty"     // -P.DEF
+	FocusImpulsive ActorFocus = "impulsive" // -C.ATK
+	FocusAlert     ActorFocus = "alert"     // -C.DEF
 )
 
-var ActorFocuses map[ActorFocus][]*ActorStat = map[ActorFocus][]*ActorStat{
-	FocusNone: {nil, nil},
+var ActorFocuses map[ActorFocus][]ActorStat = map[ActorFocus][]ActorStat{
+	FocusNone:        nil,
+	FocusAggressive:  {StatAttack, StatDefense},
+	FocusRelentless:  {StatAttack, StatChakraAttack},
+	FocusReckless:    {StatAttack, StatChakraDefense},
+	FocusHeavy:       {StatAttack, StatSpeed},
+	FocusPatient:     {StatDefense, StatAttack},
+	FocusHardened:    {StatDefense, StatChakraAttack},
+	FocusTough:       {StatDefense, StatChakraDefense},
+	FocusSteadfast:   {StatDefense, StatSpeed},
+	FocusIntelligent: {StatChakraAttack, StatAttack},
+	FocusVolatile:    {StatChakraAttack, StatDefense},
+	FocusIntense:     {StatChakraAttack, StatChakraDefense},
+	FocusCalculated:  {StatChakraAttack, StatSpeed},
+	FocusAgile:       {StatSpeed, StatAttack},
+	FocusHasty:       {StatSpeed, StatDefense},
+	FocusImpulsive:   {StatSpeed, StatChakraDefense},
+	FocusAlert:       {StatSpeed, StatChakraDefense},
 }
 
 const (
@@ -69,6 +105,11 @@ type ResourceValues struct {
 	Offset int
 }
 
+/**
+ * [ActorDef]
+ * Actor Definitions, the non-runtime definition of a shinobi's
+ * stats, natures, and information
+ */
 type ActorDef struct {
 	ActorID      uuid.UUID `json:"actor_ID"`
 	SpriteURL    string    `json:"sprite_url"`
@@ -86,6 +127,10 @@ type ActorDef struct {
 	ActionCount     int         `json:"action_count"`
 }
 
+/**
+ * [ActorState]
+ * - the commonly modified fields
+ */
 type ActorState struct {
 	ActiveTurns int `json:"active_turns"`
 	// [Alive] whether or not the actor is alive, could
@@ -112,15 +157,13 @@ type ActorState struct {
 type Actor struct {
 	ActorDef
 	ActorState
-	ID         uuid.UUID  `json:"ID"`
-	PlayerID   uuid.UUID  `json:"player_ID"`
-	Level      int        `json:"level"`
-	Experience int        `json:"experience"`
-	Focus      ActorFocus `json:"focus"`
-
-	Stages map[ActorStat]int `json:"staged_stats"`
-
-	Actions []Action `json:"actions"`
+	ID         uuid.UUID         `json:"ID"`
+	PlayerID   uuid.UUID         `json:"player_ID"`
+	Level      int               `json:"level"`
+	Experience int               `json:"experience"`
+	Focus      ActorFocus        `json:"focus"`
+	Stages     map[ActorStat]int `json:"staged_stats"`
+	Actions    []Action          `json:"actions"`
 }
 
 type ResolvedActor struct {
@@ -209,6 +252,10 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uui
 	}
 }
 
+func (a Actor) IsActive() bool {
+	return a.PositionID != nil
+}
+
 func (a *Actor) SetActionCooldown(actionID uuid.UUID, cooldown int) {
 	for i := range a.Actions {
 		if a.Actions[i].ID == actionID {
@@ -240,10 +287,10 @@ func (a Actor) GetFocusModifier(stat ActorStat) float64 {
 		return 0.0
 	}
 
-	if stats[0] != nil && *stats[0] == stat {
+	if stats[0] == stat {
 		return 1.1
 	}
-	if stats[1] != nil && *stats[1] == stat {
+	if stats[1] == stat {
 		return 0.9
 	}
 

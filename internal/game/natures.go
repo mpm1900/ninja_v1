@@ -70,6 +70,8 @@ var ElementalCycle = map[Nature]Nature{
 	NatureLightning: NatureEarth,
 	NatureEarth:     NatureWater,
 	NatureWater:     NatureFire,
+	NatureYin:       NatureYang,
+	NatureYang:      NatureYin,
 }
 
 func NewNatureSetValues() map[Nature]float64 {
@@ -85,8 +87,8 @@ func NewNatureSetValues() map[Nature]float64 {
 }
 
 func GetEffectiveness(moveNature Nature, targetNature Nature) float64 {
-	if moveNature == targetNature {
-		return 1.0
+	if moveNature == targetNature && (moveNature == NatureYin || moveNature == NatureYang) {
+		return 0.5
 	}
 	if ElementalCycle[moveNature] == targetNature {
 		return 2.0

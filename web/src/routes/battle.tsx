@@ -53,20 +53,6 @@ function RouteComponent() {
               {enemies.map((player) => (
                 <PlayerThumbnails key={player.ID} player_ID={player.ID} />
               ))}
-              <Accordion
-                defaultValue={['log']}
-                type="multiple"
-                className="bg-black/20 px-3 border border-zinc-900"
-              >
-                <AccordionItem value="log">
-                  <AccordionTrigger>Log</AccordionTrigger>
-                  <AccordionContent>
-                    <ScrollArea className="h-40 min-w-60">
-                      <GameLogList />
-                    </ScrollArea>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
             </div>
           </div>
           <div className="flex-1 grid place-items-center overflow-hidden relative">
@@ -90,7 +76,21 @@ function RouteComponent() {
               />
             ))}
           </div>
-          <div className="fixed bottom-0 px-4 flex right-0 z-10">
+          <div className="fixed bottom-0 px-4 flex flex-col items-end right-0 z-10">
+            <Accordion
+              defaultValue={['log']}
+              type="multiple"
+              className="bg-black/20 px-3 border border-zinc-900 min-w-60"
+            >
+              <AccordionItem value="log">
+                <AccordionTrigger>Log</AccordionTrigger>
+                <AccordionContent>
+                  <ScrollArea className="h-40">
+                    <GameLogList />
+                  </ScrollArea>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
             {players.map((player) => (
               <PlayerThumbnails key={player.ID} player_ID={player.ID} />
             ))}
