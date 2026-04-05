@@ -130,9 +130,13 @@ func ResolveNatures(
 		total_effectiveness += effectiveness
 	}
 
-	avg_effectiveness := total_effectiveness / float64(len(input))
-	dr_ratio := 1.0
 
+	avg_effectiveness := total_effectiveness / float64(len(input))
+	if len(input) == 0 {
+		avg_effectiveness = 1
+	}
+
+	dr_ratio := 1.0
 	for _, nature := range input {
 		res := resistances[nature]
 

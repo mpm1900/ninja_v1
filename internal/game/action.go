@@ -77,6 +77,7 @@ type Action struct {
 	ActionMutation
 	ID              uuid.UUID                       `json:"ID"`
 	Config          ActionConfig                    `json:"config"`
+	Locked          bool                            `json:"locked"`
 	Disabled        bool                            `json:"disabled"`
 	TargetType      ActionTargetType                `json:"target_type"`
 	TargetPredicate func(Game, Actor, Context) bool `json:"-"`

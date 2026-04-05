@@ -29,8 +29,8 @@ function ActionControl({
   const { valid } = useValidateContext(context)
 
   const client = useStore(clientsStore, (c) => c.me!)
-  const { targetIDs } = useGetTargets(context)
-  const actors = game.actors.filter((a) => targetIDs?.includes(a.ID))
+  const { context: t_context } = useGetTargets(context)
+  const actors = game.actors.filter((a) => t_context?.target_actor_IDs?.includes(a.ID))
   const has_queued_action = game.queued_actions[context.source_actor_ID ?? '']
 
   if (!!staged) {

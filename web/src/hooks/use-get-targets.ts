@@ -4,8 +4,8 @@ import { sendContextMessage, subscribeSocketMessages } from "#/lib/stores/socket
 import { Store, useStore } from "@tanstack/react-store"
 import { useEffect } from "react"
 
-const getTargetsStore = new Store<{ targetIDs: string[] | null, loading: boolean }>({
-  targetIDs: null,
+const getTargetsStore = new Store<{ context: Context | null, loading: boolean }>({
+  context: null,
   loading: false,
 })
 
@@ -14,11 +14,11 @@ function useGetTargets(context: Context, prompt_ID?: string) {
   const store = useStore(getTargetsStore, s => s)
 
   useEffect(() => {
-    getTargetsStore.setState(() => ({ targetIDs: null, loading: false }))
+    getTargetsStore.setState(() => ({ context: null, loading: false }))
     return subscribeSocketMessages((_, message) => {
       if (message?.type !== 'target-IDs') return
       getTargetsStore.setState(() => ({
-        targetIDs: message.target_IDs,
+        context: message.context,
         loading: false,
       }))
     })

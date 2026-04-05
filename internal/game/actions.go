@@ -77,6 +77,7 @@ var Switch = Action{
 		Name:        "Switch",
 		Description: "Switches user out and target ally into battle.",
 	},
+	Locked:          true,
 	TargetType:      TargetActorID,
 	TargetPredicate: ComposeAF(TeamFilter, InactiveFilter, AliveFilter),
 	ContextValidate: TargetLengthFilter(1),
@@ -106,6 +107,7 @@ func SwitchIn(count int) Action {
 		Config: ActionConfig{
 			Name: "Switch In",
 		},
+		Locked:          true,
 		TargetType:      TargetActorID,
 		TargetPredicate: ComposeAF(TeamFilter, InactiveFilter, AliveFilter),
 		ContextValidate: TargetLengthFilter(count),

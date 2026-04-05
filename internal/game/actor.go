@@ -214,16 +214,21 @@ func (ra ResolvedActor) GetActionByID(actionID uuid.UUID) (Action, bool) {
 	return Action{}, false
 }
 
-// TODO make actions selectable
-func MakeActor(def ActorDef, playerID uuid.UUID, experience int, ACTIONS map[uuid.UUID]Action) Actor {
+func makeActions(actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) []Action {
 	actions := make([]Action, 0)
-	for _, id := range def.ActionIDs {
+	for _, id := range actionIDs {
 		a, ok := ACTIONS[id]
 		if !ok {
 			continue
 		}
 		actions = append(actions, a)
 	}
+
+	return actions
+}
+
+func MakeActor(def ActorDef, playerID uuid.UUID, experience int, actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) Actor {
+	actions := makeActions(actionIDs, ACTIONS)
 	return Actor{
 		ActorDef:   def,
 		ID:         uuid.New(),
@@ -256,6 +261,10 @@ func (a Actor) IsActive() bool {
 	return a.PositionID != nil
 }
 
+func (a *Actor) SetActions(actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) {
+	a.Actions = makeActions(actionIDs, ACTIONS)
+}
+
 func (a *Actor) SetActionCooldown(actionID uuid.UUID, cooldown int) {
 	for i := range a.Actions {
 		if a.Actions[i].ID == actionID {
@@ -284,7 +293,7 @@ func (a *Actor) RecoverStamina(g Game, ratio float64) {
 func (a Actor) GetFocusModifier(stat ActorStat) float64 {
 	stats, ok := ActorFocuses[a.Focus]
 	if !ok || len(stats) != 2 {
-		return 0.0
+		return 1.0
 	}
 
 	if stats[0] == stat {
@@ -523,7 +532,6 @@ func resolveActor(actor Actor, g Game, mtransactions []Transaction[Modifier], at
 		resolved.ResolvedNatureDamage[nature] = GetStabModifier(resolved, &ns)
 	}
 
-	resolved.ActionIDs = []uuid.UUID{}
 	return resolved
 }
 

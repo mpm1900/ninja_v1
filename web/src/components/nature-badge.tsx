@@ -21,6 +21,7 @@ const variants = cva<t>(
         water: 'bg-blue-500',
         yang: 'bg-neutral-300',
         yin: 'bg-indigo-900',
+        ice: 'bg-cyan-700 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
         explosion:
           'bg-rose-900 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
         storm:

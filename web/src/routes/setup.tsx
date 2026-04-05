@@ -14,6 +14,7 @@ import { PromptController } from '#/components/prompt-controller'
 import { ActorThumbnail } from '#/components/actor-thumbnail'
 import { cn } from '#/lib/utils'
 import { AppHeader } from '#/components/app-header'
+import { actionsQuery } from '#/lib/queries/actions'
 
 export const Route = createFileRoute('/setup')({
   beforeLoad: ({ context }) => {
@@ -23,6 +24,7 @@ export const Route = createFileRoute('/setup')({
   },
   component: App,
   loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData(actionsQuery)
     await context.queryClient.ensureQueryData(actorsQuery)
     await context.queryClient.ensureQueryData(instancesQuery)
   },

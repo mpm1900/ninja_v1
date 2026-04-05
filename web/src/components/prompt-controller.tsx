@@ -33,7 +33,7 @@ function PromptControl({
   const { valid } = useValidateContext(context, prompt?.ID)
 
   const client = useStore(clientsStore, (c) => c.me!)
-  const { targetIDs } = useGetTargets(context)
+  const { context: t_context } = useGetTargets(context, prompt?.ID)
 
 
   return (
@@ -41,7 +41,7 @@ function PromptControl({
       {action && (
         <div className="p-2 flex flex-wrap gap-2">
           {game.actors
-            .filter((a) => targetIDs?.includes(a.ID))
+            .filter((a) => t_context?.target_actor_IDs?.includes(a.ID))
             .map((a) => (
               <TargetButton
                 key={a.ID}

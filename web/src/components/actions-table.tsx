@@ -2,9 +2,12 @@ import type { Action } from '#/lib/game/action'
 import {
   createColumnHelper,
   flexRender,
+  functionalUpdate,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
   type Row,
+  type RowSelectionState,
 } from '@tanstack/react-table'
 import {
   Table,
@@ -16,88 +19,100 @@ import {
 } from './ui/table'
 import { Fragment } from 'react/jsx-runtime'
 import { NatureBadge } from './nature-badge'
-import { Circle, CircleCheck, CircleX } from 'lucide-react'
-import type { ReactNode } from 'react'
-import type { Actor } from '#/lib/game/actor'
+import { memo, useMemo, useState, type ReactNode } from 'react'
 import { StatBadge } from './stat-badge'
+import { Checkbox } from './ui/checkbox'
+import { Button } from './ui/button'
 
 const helper = createColumnHelper<Action>()
-const columns = (
-  selected: string | undefined,
-) => [
-    helper.display({
-      id: 'select',
-      cell: ({ row }) =>
-        !row.getCanSelect() ? (
-          <CircleX className="size-4 opacity-0" />
-        ) : row.original.ID === selected ? (
-          <CircleCheck className="size-4 text-muted-foreground" />
-        ) : (
-          <Circle className="size-4 text-muted-foreground/40" />
-        ),
-    }),
-    helper.accessor('config.name', {
-      header: 'name',
-    }),
-    helper.accessor('config.nature', {
-      header: 'nature',
-      cell: ({ row }) =>
-        row.original.config.nature ? (
-          <NatureBadge nature={row.original.config.nature} />
-        ) : (
-          '-'
-        ),
-    }),
-    helper.accessor('config.stat', {
-      header: 'stat',
-      cell: ({ row }) =>
-        row.original.config.stat ? (
-          <StatBadge
-            stat={row.original.config.stat}
-            contentProps={{ side: 'right' }}
-          />
-        ) : (
-          '-'
-        ),
-    }),
-    helper.accessor('config.power', {
-      header: 'power',
-      cell: ({ row }) => row.original.config.power ?? '-',
-    }),
-    helper.accessor('config.accuracy', {
-      header: 'accuracy',
-      cell: ({ row }) =>
-        row.original.config.accuracy ? `${row.original.config.accuracy}%` : '-',
-    }),
-    helper.accessor('config.cooldown', {
-      header: 'cooldown',
-      cell: ({ row }) => row.original.config.cooldown ?? '-',
-    }),
-    helper.accessor('cooldown', {
-      header: 'active cooldown',
-      cell: ({ row }) => row.original.cooldown ?? '-',
-    }),
-  ]
+const columns = [
+  helper.display({
+    id: 'select',
+    cell: ({ row }) => (
+      <Checkbox checked={row.getIsSelected()} disabled={row.original.locked || !row.getCanSelect()} />
+    ),
+  }),
+  helper.accessor('config.name', {
+    header: ({ column }) => <Button
+      className="-ml-4"
+      variant="ghost"
+      onClick={() => column.toggleSorting()}
+    >
+      Name
+    </Button>
+  }),
+  helper.accessor('config.nature', {
+    header: 'nature',
+    cell: ({ row }) =>
+      row.original.config.nature ? (
+        <NatureBadge nature={row.original.config.nature} />
+      ) : (
+        '-'
+      ),
+  }),
+  helper.accessor('config.stat', {
+    header: 'stat',
+    cell: ({ row }) =>
+      row.original.config.stat ? (
+        <StatBadge
+          stat={row.original.config.stat}
+          contentProps={{ side: 'right' }}
+        />
+      ) : (
+        '-'
+      ),
+  }),
+  helper.accessor('config.power', {
+    header: 'power',
+    cell: ({ row }) => row.original.config.power ?? '-',
+  }),
+  helper.accessor('config.accuracy', {
+    header: 'accuracy',
+    cell: ({ row }) =>
+      row.original.config.accuracy ? `${row.original.config.accuracy}%` : '-',
+  }),
+  helper.accessor('config.cooldown', {
+    header: 'cooldown',
+    cell: ({ row }) => row.original.config.cooldown ?? '-',
+  }),
+  helper.accessor('cooldown', {
+    header: 'active cooldown',
+    cell: ({ row }) => row.original.cooldown ?? '-',
+  }),
+]
 
 function ActionsTable({
   data,
   enabled,
-  selected,
-  onSelectedChange,
+  rowSelection,
+  onRowSelectionChange,
   subRow,
 }: {
   data: Action[]
   enabled: boolean
-  selected: string | undefined
-  onSelectedChange: (selected: string) => void
+  rowSelection: RowSelectionState
+  onRowSelectionChange: (rowSelection: RowSelectionState) => void
   subRow?: (props: { row: Row<Action> }) => ReactNode
 }) {
+  const [sorting, setSorting] = useState([{ id: 'config_name', desc: false }])
+
   const table = useReactTable({
     data,
-    columns: columns(selected),
+    columns,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     enableRowSelection: enabled,
+    onRowSelectionChange: (updater) => {
+      onRowSelectionChange(functionalUpdate(updater, rowSelection))
+    },
+    onSortingChange: updater => {
+      setSorting(functionalUpdate(updater, sorting))
+    },
     getRowId: (a) => a.ID,
+    state: {
+      rowSelection,
+      sorting,
+    },
   })
 
   return (
@@ -120,10 +135,11 @@ function ActionsTable({
         {table.getRowModel().rows.map((row) => (
           <Fragment key={row.id}>
             <TableRow
-              onClick={() => {
-                if (!enabled) return
-                onSelectedChange(row.original.ID)
-              }}
+              onClick={
+                enabled
+                  ? () => row.toggleSelected()
+                  : undefined
+              }
             >
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>
@@ -131,7 +147,7 @@ function ActionsTable({
                 </TableCell>
               ))}
             </TableRow>
-            {subRow && row.getCanSelect() && row.original.ID === selected && (
+            {subRow && row.getCanSelect() && row.getIsSelected() && (
               <tr>
                 <td colSpan={row.getAllCells().length}>{subRow({ row })}</td>
               </tr>
@@ -143,4 +159,6 @@ function ActionsTable({
   )
 }
 
-export { ActionsTable }
+const MemoizedActionsTable = memo(ActionsTable)
+
+export { MemoizedActionsTable as ActionsTable }

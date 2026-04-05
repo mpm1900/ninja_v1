@@ -4,6 +4,7 @@ import { gameStore } from './game'
 import type { Game } from '../game/game'
 import type { Context } from '../game/context'
 import { setContextPlayer } from './battle-context'
+import type { ActorFocus } from '../game/actor'
 
 type SocketStatus =
   | 'idle'
@@ -23,23 +24,24 @@ type SocketState = {
 type SocketRequestType =
   | 'add-actor'
   | 'remove-actor'
+  | 'update-actor'
   | 'push-action'
   | 'remove-action'
-  | 'set-actor-player'
-  | 'set-actor-position'
   | 'run-game-actions'
+  | 'resolve-prompt'
   | 'validate-state'
   | 'validate-context'
-  | 'resolve-prompt'
   | 'get-targets'
 
 type SocketRequest = {
   type: SocketRequestType
   prompt_ID?: string
-  context: Context
   client_ID: string
-  modifier_ID?: string
-  position_index?: number
+  context: Context
+  actor_config?: {
+    action_IDs?: Array<string>
+    focus?: ActorFocus
+  }
 }
 
 type SocketResponse = {
@@ -48,7 +50,6 @@ type SocketResponse = {
   clients: Array<Client> | null
   context: Context | null
   valid: boolean | null
-  target_IDs: Array<string> | null
 }
 
 type SocketMessageSubscriber = (

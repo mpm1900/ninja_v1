@@ -17,12 +17,11 @@ const (
 )
 
 type Response struct {
-	Type      ResponseType   `json:"type"`
-	State     *game.GameJSON `json:"state"`
-	Clients   []*Client      `json:"clients"`
-	Valid     *bool          `json:"valid"`
-	Context   *game.Context  `json:"context"`
-	TargetIDs []uuid.UUID    `json:"target_IDs"`
+	Type    ResponseType   `json:"type"`
+	State   *game.GameJSON `json:"state"`
+	Clients []*Client      `json:"clients"`
+	Valid   *bool          `json:"valid"`
+	Context *game.Context  `json:"context"`
 }
 
 func NewGameMessage(client *Client, state *game.Game) Response {
@@ -64,10 +63,10 @@ func PostRegisterMessage(client *Client, state *game.Game) Response {
 }
 
 func TargetIDsResponse(client *Client, context game.Context, targetIDs []uuid.UUID) Response {
+	context.TargetActorIDs = targetIDs
 	return Response{
-		Type:      ResponseTypeTargetIDs,
-		Context:   &context,
-		TargetIDs: targetIDs,
+		Type:    ResponseTypeTargetIDs,
+		Context: &context,
 	}
 }
 

@@ -17,6 +17,28 @@ type ActorBaseStat = ActorNatureStat | 'hp' | 'stamina'
 type ActorStats<T> = Record<ActorBaseStat, T>
 type NatureStats<T> = Record<Nature, T>
 
+const actorFocuses = [
+  'none',
+  'aggressive',
+  'relentless',
+  'reckless',
+  'heavy',
+  'patient',
+  'hardened',
+  'tough',
+  'steadfast',
+  'intelligent',
+  'volatile',
+  'intense',
+  'calculated',
+  'agile',
+  'hasty',
+  'impulsive',
+  'alert',
+] as const
+
+type ActorFocus = (typeof actorFocuses)[number]
+
 type ActorDef = {
   actor_ID: string
   sprite_url: string
@@ -42,13 +64,13 @@ type ActorState = {
   seen: boolean
 }
 
-type Actor = Omit<ActorDef, 'action_IDs'> &
+type Actor = ActorDef &
   ActorState & {
     ID: string
     player_ID: string
     level: number
     experience: number
-    focus: string
+    focus: ActorFocus
     base_stats: ActorStats<number>
     staged_stats: ActorStats<number>
     pre_stats: ActorStats<number>
@@ -57,26 +79,6 @@ type Actor = Omit<ActorDef, 'action_IDs'> &
     resolved_nature_resistance: NatureStats<number>
     resolved_nature_damage: NatureStats<number>
   }
-
-const actorFocuses = [
-  "none",
-  "aggressive",
-  "relentless",
-  "reckless",
-  "heavy",
-  "patient",
-  "patient",
-  "tough",
-  "steadfast",
-  "intelligent",
-  "volatile",
-  "intense",
-  "calculated",
-  "agile",
-  "hasty",
-  "impulsive",
-  "alert"
-] as const
 
 function checkActorStat(actor: Actor, key: ActorBaseStat) {
   const stat = actor.stats[key]
@@ -96,6 +98,7 @@ function getTotalBaseStats(actor: ActorDef) {
 export type {
   ActorDef,
   Actor,
+  ActorFocus,
   ActorAttackStat,
   ActorDefenseStat,
   ActorBaseStat,

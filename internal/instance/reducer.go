@@ -24,13 +24,28 @@ func Reducer(instance *Instance, request Request) int {
 				return none
 			}
 			action = tx.Mutation
+		} else {
+			actor, ok := instance.Game.GetSource(request.Context)
+			if !ok {
+				instance.ValidateContextResponse(request.ClientID, request.Context, false)
+				return none
+			}
+
+			a, ok := actor.GetActionByID(instance.Game, *request.Context.ActionID)
+			if !ok {
+				// if it's not on the source, do a root look up
+				// this is probably due to something like recharing or a
+				// non-stored, special action
+				a, ok = data.ACTIONS[*request.Context.ActionID]
+				if !ok {
+					instance.TargetIDsResponse(request.ClientID, request.Context, nil)
+					return none
+				}
+			}
+
+			action = a
 		}
 
-		action, ok := data.ACTIONS[*request.Context.ActionID]
-		if !ok {
-			instance.TargetIDsResponse(request.ClientID, request.Context, nil)
-			return none
-		}
 		targets := instance.Game.GetActors(func(a game.Actor) bool {
 			return action.TargetPredicate(instance.Game, a, request.Context)
 		})
@@ -75,6 +90,10 @@ func Reducer(instance *Instance, request Request) int {
 		instance.ValidateContextResponse(request.ClientID, request.Context, valid)
 		return none
 	case AddActor:
+		if request.Context.SourceActorID == nil {
+			return none
+		}
+
 		def, ok := data.ACTORS[*request.Context.SourceActorID]
 		if !ok {
 			return none
@@ -89,7 +108,7 @@ func Reducer(instance *Instance, request Request) int {
 		if len(actors) >= player.TeamCapacity {
 			return none
 		}
-		actor := game.MakeActor(def, request.ClientID /* 24 13824 */, 1000000, data.ACTIONS)
+		actor := game.MakeActor(def, request.ClientID /* 24 13824 */, 1000000, def.ActionIDs, data.ACTIONS)
 		instance.Game.AddActor(actor)
 		return state
 	case RemoveActor:
@@ -104,6 +123,23 @@ func Reducer(instance *Instance, request Request) int {
 		actor := instance.Game.Actors[index]
 		instance.Game.SetPosition(actor, nil)
 		instance.Game.RemoveActor(actor.ID)
+		return state
+	case UpdateActor:
+		if request.Context.SourceActorID == nil || request.ActorConfig == nil {
+			return none
+		}
+
+		config := *request.ActorConfig
+		instance.Game.UpdateActor(*request.Context.SourceActorID, func(a game.Actor) game.Actor {
+			if config.ActionIDs != nil {
+				a.SetActions(config.ActionIDs, data.ACTIONS)
+			}
+			if config.Focus != nil {
+				a.Focus = *config.Focus
+			}
+			return a
+		})
+
 		return state
 
 	case PushAction:
@@ -167,42 +203,6 @@ func Reducer(instance *Instance, request Request) int {
 		}
 
 		instance.RunGameActions()
-		return state
-
-	case SetActorPlayer:
-		targets := instance.Game.GetTargets(request.Context)
-
-		if len(targets) == 0 {
-			return none
-		}
-
-		target := targets[0]
-		player, ok := instance.Game.GetPlayerByID(*request.Context.SourcePlayerID)
-		if !ok {
-			return none
-		}
-
-		instance.Game.SetPosition(target, nil)
-		instance.Game.UpdatePlayer(player.ID, func(p game.Player) game.Player {
-			p.AddPosition(&target.ID)
-			return p
-		})
-		instance.Game.UpdateActor(target.ID, func(a game.Actor) game.Actor {
-			a.PlayerID = player.ID
-			return a
-		})
-
-		return state
-
-	case SetActorPosition:
-		targets := instance.Game.GetTargets(request.Context)
-
-		if len(targets) == 0 || request.PositionIndex == nil {
-			return none
-		}
-
-		target := targets[0]
-		instance.Game.SetActorPlayerIndex(target, request.PositionIndex)
 		return state
 
 	default:
