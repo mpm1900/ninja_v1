@@ -13,7 +13,7 @@ var WaterAbsorb game.Modifier = game.Modifier{
 	Name:     "Water Absorb",
 	GroupID:  &waterAbsorbID,
 	Duration: game.ModifierDurationInf,
-	Mutations: []game.ActorMutation{
+	ActorMutations: []game.ActorMutation{
 		{
 			ModifierGroupID: &waterAbsorbID,
 			Mutation: game.Mutation[game.Game, game.Actor, game.Actor]{

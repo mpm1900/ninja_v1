@@ -402,7 +402,7 @@ func getContext(actor Actor, transactions []Transaction[Modifier], mutation Acto
 func getMutations(transactions []Transaction[Modifier]) []ActorMutation {
 	mutations := make([]ActorMutation, 0)
 	for _, transaction := range transactions {
-		for _, mut := range transaction.Mutation.Mutations {
+		for _, mut := range transaction.Mutation.ActorMutations {
 			mut.TransactionID = &transaction.ID
 			mutations = append(mutations, mut)
 		}

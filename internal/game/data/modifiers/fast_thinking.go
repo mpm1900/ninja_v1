@@ -12,7 +12,7 @@ var FastThinking = game.Modifier{
 	Name:     "Fast Thinking",
 	GroupID:  &fastThinkingID,
 	Duration: 0,
-	Mutations: []game.ActorMutation{
+	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&fastThinkingID,
 			game.MutPriorityDefault,

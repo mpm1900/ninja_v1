@@ -24,16 +24,21 @@ const (
 	GameStatusWaiting GameStatus = "waiting"
 )
 
+type GameState struct {
+}
+
 /**
  * Game is the main state container state for a game instance
  */
 type Game struct {
-	Status        GameStatus              `json:"status"`
-	Turn          Turn                    `json:"turn"`
-	ActiveContext *Context                `json:"active_context"`
-	Players       []Player                `json:"players"`
-	Actors        []Actor                 `json:"actors"`
-	Modifiers     []Transaction[Modifier] `json:"modifiers"`
+	Status        GameStatus `json:"status"`
+	Turn          Turn       `json:"turn"`
+	ActiveContext *Context   `json:"active_context"`
+	Players       []Player   `json:"players"`
+
+	State     GameState               `json:"state"`
+	Actors    []Actor                 `json:"actors"`
+	Modifiers []Transaction[Modifier] `json:"modifiers"`
 
 	Tick time.Duration `json:"-"`
 
@@ -95,6 +100,7 @@ func NewGame(actionRegistry map[uuid.UUID]Action) Game {
 			Count: 0,
 			Phase: TurnInit,
 		},
+		State:         GameState{},
 		ActiveContext: nil,
 		Players:       make([]Player, 0),
 		Actors:        make([]Actor, 0),

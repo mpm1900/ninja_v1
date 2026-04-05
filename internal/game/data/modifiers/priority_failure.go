@@ -12,7 +12,7 @@ var PriorityFailure = game.Modifier{
 	Name:     "Priority Failure",
 	GroupID:  &priorityFailureID,
 	Duration: 0,
-	Mutations: []game.ActorMutation{
+	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&priorityFailureID,
 			game.MutPriorityDefault,

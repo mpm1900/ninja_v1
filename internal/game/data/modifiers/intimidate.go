@@ -45,7 +45,7 @@ var Intimidate game.Modifier = game.Modifier{
 	GroupID:  &intimidateID,
 	Name:     "Intimidate",
 	Duration: game.ModifierDurationInf,
-	Mutations: []game.ActorMutation{
+	ActorMutations: []game.ActorMutation{
 		game.NewNoopSource(&intimidateID),
 	},
 	Triggers: []game.Trigger{

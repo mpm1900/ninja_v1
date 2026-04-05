@@ -28,7 +28,7 @@ func NewStageDelta(
 		ID:       uuid.New(),
 		GroupID:  groupID,
 		Duration: game.ModifierDurationInf,
-		Mutations: []game.ActorMutation{
+		ActorMutations: []game.ActorMutation{
 			mut,
 		},
 	}
@@ -55,7 +55,7 @@ func NewStatMult(
 		ID:       uuid.New(),
 		GroupID:  groupID,
 		Duration: game.ModifierDurationInf,
-		Mutations: []game.ActorMutation{
+		ActorMutations: []game.ActorMutation{
 			mut,
 		},
 	}
@@ -105,7 +105,7 @@ var Haze game.Modifier = game.Modifier{
 	GroupID:  &hazeID,
 	Name:     "Haze",
 	Duration: game.ModifierDurationInf,
-	Mutations: []game.ActorMutation{
+	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&hazeID,
 			game.MutPrioritySet,

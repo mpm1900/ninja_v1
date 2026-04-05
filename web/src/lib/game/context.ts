@@ -1,4 +1,6 @@
 import z from 'zod'
+import type { Game } from './game'
+import type { Actor } from './actor'
 
 const ContextSchema = z.object({
   action_ID: z.string().nullable(),
@@ -7,14 +9,24 @@ const ContextSchema = z.object({
   parent_actor_ID: z.string().nullable(),
   source_actor_ID: z.string().nullable(),
 
-  target_actor_IDs: z.array(z.string()),
-  target_position_IDs: z.array(z.string()),
+  target_actor_IDs: z.array(z.string()).nullable(),
+  target_position_IDs: z.array(z.string()).nullable(),
 })
 
 type Context = z.output<typeof ContextSchema>
 
 function contextToString(c: Context): string {
-  return `${c.action_ID}.${c.parent_actor_ID}.${c.source_actor_ID}.${c.source_player_ID}.${c.target_actor_IDs.join('+')}.${c.target_position_IDs.join('+')}`
+  return `${c.action_ID}.${c.parent_actor_ID}.${c.source_actor_ID}.${c.source_player_ID}.${c.target_actor_IDs?.join('+')}.${c.target_position_IDs?.join('+')}`
+}
+
+function getTargets(game: Game, context: Context): Actor[] {
+  const t_targets = game.actors.filter((a) =>
+    context.target_actor_IDs?.includes(a.ID)
+  )
+  const p_targets = game.actors.filter((a) =>
+    context.target_position_IDs?.includes(a.position_ID)
+  )
+  return [...t_targets, ...p_targets]
 }
 
 const NULL_CONTEXT: Context = {
@@ -26,5 +38,5 @@ const NULL_CONTEXT: Context = {
   target_position_IDs: [],
 }
 
-export { ContextSchema, contextToString, NULL_CONTEXT }
+export { ContextSchema, contextToString, getTargets, NULL_CONTEXT }
 export type { Context }

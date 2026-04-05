@@ -68,8 +68,8 @@ func AddLogs(logs ...GameLog) GameMutation {
 }
 
 /**
- * Modifier Mutations
- * [GameMutation]
+ * Actor Mutations
+ * [ActorMutation]
  */
 type ActorMutation struct {
 	Mutation[Game, Actor, Actor]
@@ -92,3 +92,9 @@ func MakeActorMutation(
 		},
 	}
 }
+
+/**
+ * GameState Mutations
+ * [GameStateMutation]
+ */
+type GameStateMutation Mutation[Game, GameState, GameState]

@@ -12,7 +12,7 @@ var Stunned = game.Modifier{
 	Name:     "Stunned",
 	GroupID:  &stunnedID,
 	Duration: 0,
-	Mutations: []game.ActorMutation{
+	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&stunnedID,
 			game.MutPriorityDefault,

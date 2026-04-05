@@ -1,10 +1,11 @@
-import { ActorThumbnail } from '#/components/actor-thumbnail'
 import { AppHeader } from '#/components/app-header'
 import { BattleActions } from '#/components/battle-actions'
 import { BattleContextController } from '#/components/battle-context-controller'
 import { GameLogList } from '#/components/game-log'
 import { PlayerPositions } from '#/components/player-positions'
+import { PlayerThumbnails } from '#/components/player-thumbnails'
 import { PromptController } from '#/components/prompt-controller'
+import { RunningContext } from '#/components/running-context'
 import {
   Accordion,
   AccordionContent,
@@ -15,7 +16,6 @@ import { ScrollArea } from '#/components/ui/scroll-area'
 import { battleContext, setContextSource } from '#/lib/stores/battle-context'
 import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
-import { cn } from '#/lib/utils'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useStore } from '@tanstack/react-store'
 
@@ -33,6 +33,8 @@ function RouteComponent() {
   const client = useStore(clientsStore, (c) => c.me)
   const context = useStore(battleContext, (c) => c)
   const actor = game.actors.find((a) => a.ID === context.source_actor_ID)
+  const players = game.players.filter((p) => p.ID === client?.ID)
+  const enemies = game.players.filter((p) => p.ID !== client?.ID)
 
   return (
     <>
@@ -43,33 +45,14 @@ function RouteComponent() {
         <div className="flex flex-col flex-1 relative overflow-auto">
           <div>
             <div className="fixed top-12 px-4 flex right-0 z-10">
-              {game.players
-                .filter((p) => p.ID !== client?.ID)
-                .map((player) => (
-                  <PlayerPositions key={player.ID} flip player_ID={player.ID} />
-                ))}
+              {enemies.map((player) => (
+                <PlayerPositions key={player.ID} flip player_ID={player.ID} />
+              ))}
             </div>
             <div className="fixed top-12 px-4 left-0 z-10">
-              {game.players
-                .filter((p) => p.ID !== client?.ID)
-                .map((player) => (
-                  <div key={player.ID} className="flex gap-2 py-2">
-                    {game.actors
-                      .filter((a) => a.player_ID === player.ID)
-                      .map((a, i) => (
-                        <ActorThumbnail
-                          key={a.ID}
-                          actor={a}
-                          index={i}
-                          hidden={!a.seen && !a.position_ID}
-                          showRing
-                          className={cn({
-                            'opacity-40': !a.position_ID,
-                          })}
-                        />
-                      ))}
-                  </div>
-                ))}
+              {enemies.map((player) => (
+                <PlayerThumbnails key={player.ID} player_ID={player.ID} />
+              ))}
               <Accordion
                 defaultValue={['log']}
                 type="multiple"
@@ -88,62 +71,29 @@ function RouteComponent() {
           </div>
           <div className="flex-1 grid place-items-center overflow-hidden relative">
             {actor && <BattleActions actor={actor} />}
-            {game.status === 'running' &&
-              game.active_context?.source_actor_ID && (
-                <div className="absolute">
-                  <div>
-                    {game.active_context?.source_actor_ID} uses{' '}
-                    {game.active_context?.action_ID}
-                  </div>
-                  <div>
-                    on{' '}
-                    {game.active_context?.target_actor_IDs?.concat(
-                      game.active_context?.target_position_IDs
-                    )}
-                  </div>
-                </div>
-              )}
+            {game.status === 'running' && game.active_context && (
+              <RunningContext context={game.active_context} />
+            )}
           </div>
           <div className="fixed bottom-0 px-4 flex left-0 z-10">
-            {game.players
-              .filter((p) => p.ID === client?.ID)
-              .map((player) => (
-                <PlayerPositions
-                  key={player.ID}
-                  flip={false}
-                  player_ID={player.ID}
-                  selected={
-                    game.status === 'idle'
-                      ? (context.source_actor_ID ?? '')
-                      : ''
-                  }
-                  onSelectedChange={(actor_ID) =>
-                    setContextSource(actor_ID, game)
-                  }
-                />
-              ))}
+            {players.map((player) => (
+              <PlayerPositions
+                key={player.ID}
+                flip={false}
+                player_ID={player.ID}
+                selected={
+                  game.status === 'idle' ? (context.source_actor_ID ?? '') : ''
+                }
+                onSelectedChange={(actor_ID) =>
+                  setContextSource(actor_ID, game)
+                }
+              />
+            ))}
           </div>
           <div className="fixed bottom-0 px-4 flex right-0 z-10">
-            {game.players
-              .filter((p) => p.ID === client?.ID)
-              .map((player) => (
-                <div key={player.ID} className="flex gap-2 py-2">
-                  {game.actors
-                    .filter((a) => a.player_ID === player.ID)
-                    .map((a, i) => (
-                      <ActorThumbnail
-                        key={a.ID}
-                        actor={a}
-                        index={i}
-                        showHealthBar
-                        showRing
-                        className={cn({
-                          'opacity-40': !a.position_ID,
-                        })}
-                      />
-                    ))}
-                </div>
-              ))}
+            {players.map((player) => (
+              <PlayerThumbnails key={player.ID} player_ID={player.ID} />
+            ))}
           </div>
         </div>
       </main>

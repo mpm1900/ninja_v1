@@ -12,7 +12,7 @@ var Protected = game.Modifier{
 	Name:     "Protected",
 	GroupID:  &protectedID,
 	Duration: 0,
-	Mutations: []game.ActorMutation{
+	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&protectedID,
 			game.MutPriorityDefault,
