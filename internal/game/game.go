@@ -28,10 +28,10 @@ const (
  * Game is the main state container state for a game instance
  */
 type Game struct {
-	Status        GameStatus `json:"status"`
-	Turn          Turn       `json:"turn"`
-	ActiveContext *Context   `json:"active_context"`
-	Players       []Player   `json:"players"`
+	Status            GameStatus           `json:"status"`
+	Turn              Turn                 `json:"turn"`
+	ActiveTransaction *Transaction[Action] `json:"active_transaction"`
+	Players           []Player             `json:"players"`
 
 	State     GameState               `json:"state"`
 	Actors    []Actor                 `json:"actors"`
@@ -97,18 +97,18 @@ func NewGame(actionRegistry map[uuid.UUID]Action) Game {
 			Count: 0,
 			Phase: TurnInit,
 		},
-		State:         GameState{},
-		ActiveContext: nil,
-		Players:       make([]Player, 0),
-		Actors:        make([]Actor, 0),
-		Modifiers:     make([]Transaction[Modifier], 0),
-		Tick:          time.Second / 2,
-		Transactions:  MakeQueue[GameTransaction](),
-		Actions:       MakeQueue[Transaction[Action]](),
-		Prompts:       MakeQueue[Transaction[Action]](),
-		Triggers:      MakeQueue[Transaction[Trigger]](),
-		QueuedActions: make(map[uuid.UUID]Transaction[uuid.UUID]),
-		Log:           []GameLog{},
+		State:             GameState{},
+		ActiveTransaction: nil,
+		Players:           make([]Player, 0),
+		Actors:            make([]Actor, 0),
+		Modifiers:         make([]Transaction[Modifier], 0),
+		Tick:              time.Second / 2,
+		Transactions:      MakeQueue[GameTransaction](),
+		Actions:           MakeQueue[Transaction[Action]](),
+		Prompts:           MakeQueue[Transaction[Action]](),
+		Triggers:          MakeQueue[Transaction[Trigger]](),
+		QueuedActions:     make(map[uuid.UUID]Transaction[uuid.UUID]),
+		Log:               []GameLog{},
 
 		ActionRegistry: actionRegistry,
 	}
@@ -252,29 +252,21 @@ func (g Game) GetPromptTxByID(ID uuid.UUID) (Transaction[Action], bool) {
 
 	return Transaction[Action]{}, false
 }
-func (g Game) GetActiveAction() (Action, bool) {
-	if g.ActiveContext == nil || g.ActiveContext.ActionID == nil {
-		return Action{}, false
-	}
-
-	source, ok := g.GetSource(*g.ActiveContext)
-	if !ok {
-		return Action{}, false
-	}
-
-	var action *Action
-	for i := range source.Actions {
-		if source.Actions[i].ID == *g.ActiveContext.ActionID {
-			action = &source.Actions[i]
-			break
+func (g Game) GetQueuedAction(context Context) (Action, bool) {
+	for _, action := range g.Actions {
+		if action.Mutation.ID == *context.ActionID && action.Context.SourceActorID == context.SourceActorID {
+			return action.Mutation, true
 		}
 	}
 
-	if action == nil {
-		return Action{}, false
+	return Action{}, false
+}
+func (g Game) GetActiveAction() (Action, bool) {
+	if g.ActiveTransaction != nil {
+		return g.ActiveTransaction.Mutation, true
 	}
 
-	return *action, true
+	return Action{}, false
 }
 func (g Game) WithActor(actor Actor) Game {
 	next := g
@@ -625,11 +617,11 @@ func (g *Game) NextTurn() {
 }
 
 type GameJSON struct {
-	Status        GameStatus      `json:"status"`
-	Turn          Turn            `json:"turn"`
-	ActiveContext *Context        `json:"active_context"`
-	Players       []Player        `json:"players"`
-	Actors        []ResolvedActor `json:"actors"`
+	Status            GameStatus           `json:"status"`
+	Turn              Turn                 `json:"turn"`
+	ActiveTransaction *Transaction[Action] `json:"active_transaction"`
+	Players           []Player             `json:"players"`
+	Actors            []ResolvedActor      `json:"actors"`
 
 	Modifiers    []Transaction[Modifier]     `json:"modifiers"`
 	Transactions []Transaction[GameMutation] `json:"-"`
@@ -671,18 +663,18 @@ func (g Game) ToJSON(playerID *uuid.UUID) GameJSON {
 	}
 
 	return GameJSON{
-		Status:        status,
-		Turn:          g.Turn,
-		ActiveContext: g.ActiveContext,
-		Players:       g.Players,
-		Actors:        resolved,
-		Modifiers:     g.Modifiers,
-		Transactions:  g.Transactions,
-		Actions:       g.Actions,
-		Prompt:        prompt,
-		Triggers:      g.Triggers,
-		Log:           getLastN(g.Log, 30),
-		QueuedActions: g.QueuedActions,
+		Status:            status,
+		Turn:              g.Turn,
+		ActiveTransaction: g.ActiveTransaction,
+		Players:           g.Players,
+		Actors:            resolved,
+		Modifiers:         g.Modifiers,
+		Transactions:      g.Transactions,
+		Actions:           g.Actions,
+		Prompt:            prompt,
+		Triggers:          g.Triggers,
+		Log:               getLastN(g.Log, 30),
+		QueuedActions:     g.QueuedActions,
 	}
 }
 

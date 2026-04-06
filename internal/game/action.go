@@ -191,3 +191,11 @@ func MakeAccuracyCheck(g *Game, action ActionConfig, source ResolvedActor, targe
 		Success: roll <= accuracy,
 	}
 }
+
+func GetActiveActionConfig(g Game, fallback ActionConfig) ActionConfig {
+	if g.ActiveTransaction == nil {
+		return fallback
+	}
+
+	return g.ActiveTransaction.Mutation.Config
+}

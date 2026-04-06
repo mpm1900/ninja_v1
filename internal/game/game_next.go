@@ -105,35 +105,37 @@ func (g *Game) NextAction() bool {
 	g.SortActions()
 	transaction, err := g.Actions.Dequeue()
 	if err != nil {
-		g.ActiveContext = nil
+		g.ActiveTransaction = nil
 		return false
 	}
 
 	source, ok := g.GetSource(transaction.Context)
 	if !ok {
-		g.ActiveContext = nil
+		g.ActiveTransaction = nil
 		return false
 	}
 
 	resolved := source.Resolve(*g)
 	action, ok := resolved.GetActionByID(transaction.Mutation.ID)
 	if ok {
+		queuedConfig := transaction.Mutation.Config
+		action.Config = queuedConfig
 		transaction.Mutation = action
 	}
 
-	g.ActiveContext = &transaction.Context
 	if transaction.Mutation.MapContext != nil {
-		c := transaction.Mutation.MapContext(*g, *g.ActiveContext)
-		g.ActiveContext = &c
+		c := transaction.Mutation.MapContext(*g, transaction.Context)
+		transaction.Context = c
 	}
 
+	g.ActiveTransaction = &transaction
 	g.RunAction(transaction)
 	return true
 }
 
 func (g *Game) NextPrompt() bool {
 	transaction, err := g.Prompts.Dequeue()
-	g.ActiveContext = &transaction.Context
+	g.ActiveTransaction = &transaction
 	if err != nil {
 		return false
 	}
@@ -144,7 +146,9 @@ func (g *Game) NextPrompt() bool {
 
 func (g *Game) NextTrigger() bool {
 	transaction, err := g.Triggers.Dequeue()
-	g.ActiveContext = &transaction.Context
+	a_tx := Transaction[Action]{}
+	a_tx.Context = transaction.Context
+	g.ActiveTransaction = &a_tx
 	if err != nil {
 		return false
 	}
@@ -188,7 +192,7 @@ func (g *Game) Next() bool {
 	}
 
 	g.Tick = time.Second / 2
-	g.ActiveContext = nil
+	g.ActiveTransaction = nil
 	g.NextPhase()
 
 	return false

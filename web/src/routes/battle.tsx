@@ -57,8 +57,8 @@ function RouteComponent() {
           </div>
           <div className="flex-1 grid place-items-center overflow-hidden relative">
             {actor && <BattleActions actor={actor} />}
-            {game.status === 'running' && game.active_context && (
-              <RunningContext context={game.active_context} />
+            {game.status === 'running' && game.active_transaction?.context && (
+              <RunningContext context={game.active_transaction?.context} />
             )}
           </div>
           <div className="fixed bottom-0 px-4 flex left-0 z-10">

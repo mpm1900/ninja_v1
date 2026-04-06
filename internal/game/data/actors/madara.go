@@ -37,7 +37,7 @@ var Madara = game.ActorDef{
 	ActionCount:     6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
-		actions.Coercion.ID,
+		actions.Glare.ID,
 		actions.Protect.ID,
 		actions.GreatTreeSpear.ID,
 		actions.DragonDance.ID,

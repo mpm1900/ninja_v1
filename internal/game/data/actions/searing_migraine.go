@@ -55,6 +55,7 @@ func MakeSearingMigrane() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
+				conf := game.GetActiveActionConfig(g, config)
 				add_mut := mutations.AddModifiers(false, modifiers.AddNature(game.NsFire, 0))
 				add_tx := game.MakeTransaction(add_mut, context)
 				transactions = append(transactions, add_tx)
@@ -65,7 +66,7 @@ func MakeSearingMigrane() game.Action {
 					damage_context.TargetPositionIDs = append(damage_context.TargetPositionIDs, *t.PositionID)
 				}
 
-				damages := mutations.NewDamage(config, game.NewDamageConfig(1, 1))
+				damages := mutations.NewDamage(conf, game.NewDamageConfig(1, 1))
 				transactions = append(
 					transactions,
 					mutations.MakeDamageTransactions(damage_context, damages)...,

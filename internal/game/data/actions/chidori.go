@@ -36,7 +36,8 @@ func MakeChidori() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				damages := mutations.NewDamage(config, game.NewDamageConfig(1, 1))
+				conf := game.GetActiveActionConfig(g, config)
+				damages := mutations.NewDamage(conf, game.NewDamageConfig(1, 1))
 				transactions = append(
 					transactions,
 					mutations.MakeDamageTransactions(context, damages)...,

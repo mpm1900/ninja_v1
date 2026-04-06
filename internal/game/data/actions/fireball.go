@@ -47,8 +47,9 @@ func MakeFireball() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				crit_mod := game.GetCriticalModifier(config)
-				damages := mutations.NewDamage(config, game.NewDamageConfig(crit_mod, 1))
+				conf := game.GetActiveActionConfig(g, config)
+				crit_mod := game.GetCriticalModifier(conf)
+				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_mod, 1))
 				transactions = append(
 					transactions,
 					mutations.MakeDamageTransactions(context, damages)...,

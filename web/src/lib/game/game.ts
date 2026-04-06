@@ -11,7 +11,7 @@ type Game = {
     count: number,
     phase: 'init' | 'start' | 'main' | 'end' | 'cleanup'
   },
-  active_context: Context | null
+  active_transaction: ActionTransaction | null
   actors: Actor[]
   modifiers: ModifierTransaction[]
   players: Player[]

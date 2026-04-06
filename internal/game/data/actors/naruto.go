@@ -38,8 +38,7 @@ var Naruto = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
 		actions.Rasengan.ID,
-		actions.Chidori.ID,
-		actions.DragonDance.ID,
+		actions.PowerBoost.ID,
 		actions.ToadSong.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,

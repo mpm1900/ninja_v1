@@ -8,13 +8,13 @@ import (
 	"github.com/google/uuid"
 )
 
-var Coercion = MakeCoercion()
+var Glare = MakeGlare()
 
-func MakeCoercion() game.Action {
+func MakeGlare() game.Action {
 	cooldown := 1
 	nature := game.NsYin
 	config := game.ActionConfig{
-		Name:        "Sharingan: Coercion",
+		Name:        "Sharingan: Glare",
 		Nature:      &nature,
 		Cooldown:    &cooldown,
 		Jutsu:       game.Genjutsu,

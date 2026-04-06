@@ -21,8 +21,9 @@ function PlayerPositions({
   const client = useStore(clientsStore, (c) => c.me)
   const player = game.players.find((p) => p.ID === player_ID)
   const coef = flip ? -1 : 1
-  const target_IDs = game.active_context?.target_actor_IDs
-  const pos_IDs = game.active_context?.target_position_IDs
+  const context = game.active_transaction?.context
+  const target_IDs = context?.target_actor_IDs
+  const pos_IDs = context?.target_position_IDs
 
   if (!player) return null
 
@@ -45,7 +46,7 @@ function PlayerPositions({
                   opacity: 1,
                   scale:
                     selected === pos.actor_ID ||
-                    game.active_context?.source_actor_ID === pos.actor_ID
+                      context?.source_actor_ID === pos.actor_ID
                       ? 1.1
                       : 1,
                 }}
@@ -64,7 +65,7 @@ function PlayerPositions({
                     game={game}
                     selected={selected === pos.actor_ID}
                     source={
-                      game.active_context?.source_actor_ID === pos.actor_ID
+                      context?.source_actor_ID === pos.actor_ID
                         ? 'source'
                         : undefined
                     }
