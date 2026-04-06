@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"math"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/mutations"
 
@@ -82,7 +81,7 @@ var LeechSeedTrigger game.Trigger = game.Trigger{
 			targets := g.GetTargets(context)
 			for _, target := range targets {
 				ratio := 0.125
-				hp_loss := int(math.Floor(float64(resolved_parent.Stats[game.StatHP]) * ratio))
+				hp_loss := game.Round(float64(resolved_parent.Stats[game.StatHP]) * ratio)
 				hp_loss_ctx := context
 				hp_loss_ctx.TargetActorIDs = []uuid.UUID{resolved_parent.ID}
 				hp_loss_ctx.TargetPositionIDs = []uuid.UUID{}

@@ -1,7 +1,6 @@
 package modifiers
 
 import (
-	"math"
 	"ninja_v1/internal/game"
 
 	"github.com/google/uuid"
@@ -17,10 +16,10 @@ var VesselOfPain game.Modifier = game.Modifier{
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&vesselOfPainID,
-			game.MutPriorityDefault,
+			game.MutPriorityPostStagedStats,
 			game.ComposeAF(game.OtherFilter, game.ActiveFilter),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {
-				actor.Stats[game.StatChakraAttack] = int(math.Floor(float64(actor.Stats[game.StatChakraAttack]) * 0.75))
+				actor.Stats[game.StatChakraAttack] = game.Round(float64(actor.Stats[game.StatChakraAttack]) * 0.75)
 				return actor
 			},
 		),

@@ -11,8 +11,8 @@ const getActions = createServerFn().handler(async () => {
 const actionsQuery = queryOptions({
   queryKey: ['actions'],
   queryFn: () => getActions(),
-  staleTime: Infinity,
-  gcTime: Infinity,
+  staleTime: 60000,
+  gcTime: 60000,
 })
 
 export { actionsQuery, getActions }

@@ -4,6 +4,19 @@ import (
 	"github.com/google/uuid"
 )
 
+func NotNewlyInactiveFilter(game Game, actor Actor, context Context) bool {
+	return actor.InactiveTurns > 0
+}
+
+func SwitchFilter(game Game, actor Actor, context Context) bool {
+	possible := game.GetActorsFilters(context, ComposeAF(TeamFilter, InactiveFilter, AliveFilter, NotNewlyInactiveFilter))
+	if len(possible) == 0 {
+		return true
+	}
+
+	return NotNewlyInactiveFilter(game, actor, context)
+}
+
 func NewNoopSource(groupID *uuid.UUID) ActorMutation {
 	return MakeActorMutation(
 		groupID,
@@ -79,7 +92,7 @@ var Switch = Action{
 	},
 	Locked:          true,
 	TargetType:      TargetActorID,
-	TargetPredicate: ComposeAF(TeamFilter, InactiveFilter, AliveFilter),
+	TargetPredicate: ComposeAF(TeamFilter, InactiveFilter, AliveFilter, SwitchFilter),
 	ContextValidate: TargetLengthFilter(1),
 	ActionMutation: ActionMutation{
 		Priority: ActionPrioritySwitch,
@@ -109,7 +122,7 @@ func SwitchIn(count int) Action {
 		},
 		Locked:          true,
 		TargetType:      TargetActorID,
-		TargetPredicate: ComposeAF(TeamFilter, InactiveFilter, AliveFilter),
+		TargetPredicate: ComposeAF(TeamFilter, InactiveFilter, AliveFilter, SwitchFilter),
 		ContextValidate: TargetLengthFilter(count),
 		ActionMutation: ActionMutation{
 			Priority: ActionPrioritySwitch,

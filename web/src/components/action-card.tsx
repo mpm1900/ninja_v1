@@ -56,7 +56,7 @@ function ActionCard({
               <NatureBadge nature={action.config.nature} />
             )}
             <div className="-space-y-1">
-              <div className="truncate text-sm font-semibold">
+              <div className="truncate text-xs font-semibold">
                 {action.config.name}
               </div>
               {action.cooldown !== null ? (
@@ -64,7 +64,7 @@ function ActionCard({
                   on cooldown
                 </div>
               ) : (
-                <div className="text-[10px] uppercase tracking-wide text-white/60">
+                <div className="text-[10px] uppercase tracking-wide text-white/50">
                   {action.config.jutsu || '-'}
                 </div>
               )}
@@ -72,7 +72,7 @@ function ActionCard({
           </div>
 
           {action.config.cost && (
-            <div className="text-white/90 font-black nanum-brush-script-regular text-4xl h-8 -mt-0.5">
+            <div className="text-white/90 font-black nanum-brush-script-regular text-4xl h-8 w-8 -mt-0.5">
               {action.config.cost ?? 0}
             </div>
           )}

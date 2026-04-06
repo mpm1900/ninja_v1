@@ -1,7 +1,6 @@
 package modifiers
 
 import (
-	"math"
 	"ninja_v1/internal/game"
 
 	"github.com/google/uuid"
@@ -46,7 +45,7 @@ func NewStatMult(
 		priority,
 		filter,
 		func(g game.Game, actor game.Actor, context game.Context) game.Actor {
-			actor.Stats[stat] = int(math.Floor(float64(actor.Stats[stat]) * mult))
+			actor.Stats[stat] = game.Round(float64(actor.Stats[stat]) * mult)
 			return actor
 		},
 	)

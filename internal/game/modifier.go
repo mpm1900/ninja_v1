@@ -18,6 +18,10 @@ type Modifier struct {
 }
 
 func ResolveTrigger(game Game, transaction Transaction[Trigger]) []Transaction[GameMutation] {
+	if transaction.Mutation.Delta == nil {
+		return []Transaction[GameMutation]{}
+	}
+
 	return transaction.Mutation.Delta(game, game, transaction.Context)
 }
 

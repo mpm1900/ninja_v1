@@ -2,7 +2,6 @@ package mutations
 
 import (
 	"fmt"
-	"math"
 	"ninja_v1/internal/game"
 
 	"github.com/google/uuid"
@@ -29,11 +28,25 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 		return
 	}
 
+	sub_damage := false
+	sub_destroyed := false
 	hp := target.Stats[game.StatHP]
 
 	g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
-		a.Damage += damage // clamped
-		a.Alive = hp > a.Damage
+		if a.ActorState.SubstituteHP != nil && *a.ActorState.SubstituteHP > 0 {
+			sub_damage = true
+			new := clampDamage(*a.ActorState.SubstituteHP - damage)
+			if new > 0 {
+				a.ActorState.SubstituteHP = &damage
+			} else {
+				a.ActorState.SubstituteHP = nil
+				sub_destroyed = true
+			}
+		} else {
+			a.Damage += damage
+			a.Alive = hp > a.Damage
+		}
+
 		if updater == nil {
 			return a
 		}
@@ -46,8 +59,16 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 	log_ctx.ParentActorID = &target.ID
 	log_ctx.SourceActorID = &target.ID
 	ratio := int(float64(damage) * 100 / float64(hp))
+
 	if ratio > 0 {
-		g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ lost %d%% HP.", ratio), log_ctx))
+		if sub_damage {
+			g.PushLog(game.NewLogContext(">>> $source$'s substitute took the attack.", log_ctx))
+			if sub_destroyed {
+				g.PushLog(game.NewLogContext(">>> $source$'s substitute was destroyed.", log_ctx))
+			}
+		} else {
+			g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ lost %d%% HP.", ratio), log_ctx))
+		}
 	} else {
 		g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %d%% HP.", ratio*-1), log_ctx))
 	}
@@ -83,7 +104,7 @@ func RatioDamageWith(ratio float64, updater func(game.Actor) game.Actor) game.Ga
 			targets := g.GetTargets(context)
 			for _, t := range targets {
 				target := t.Resolve(g)
-				damage := int(math.Floor(float64(target.Stats[game.StatHP]) * ratio))
+				damage := game.Round(float64(target.Stats[game.StatHP]) * ratio)
 				ApplyDamageWith(&g, target, damage, updater)
 			}
 
@@ -202,14 +223,14 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 			sideEffectTransactions := make([]game.GameTransaction, 0)
 
 			if total > 0 && action.LifeSteal != nil && *action.LifeSteal > 0.0 && context.SourceActorID != nil {
-				amount := int(math.Floor(*action.LifeSteal * float64(total)))
+				amount := game.Round(*action.LifeSteal * float64(total))
 				healMut := PureHeal(amount)
 				damageTx := game.MakeTransaction(healMut, selfContext)
 				sideEffectTransactions = append(sideEffectTransactions, damageTx)
 			}
 
 			if total > 0 && action.Recoil != nil && *action.Recoil > 0.0 && context.SourceActorID != nil {
-				amount := int(math.Floor(*action.Recoil * float64(total)))
+				amount := game.Round(*action.Recoil * float64(total))
 				damageMut := PureDamage(amount, false)
 				damageTx := game.MakeTransaction(damageMut, selfContext)
 				sideEffectTransactions = append(sideEffectTransactions, damageTx)
@@ -290,7 +311,7 @@ func ApplyHealRaw(g *game.Game, targetID uuid.UUID, amount int) int {
 	return ApplyHealRawWith(g, targetID, amount, nil)
 }
 func ApplyHealRatioWith(g *game.Game, target game.ResolvedActor, ratio float64, updater func(game.Actor) game.Actor) int {
-	amount := int(math.Floor(float64(target.Stats[game.StatHP]) * ratio))
+	amount := game.Round(float64(target.Stats[game.StatHP]) * ratio)
 	return ApplyHealRawWith(g, target.ID, amount, updater)
 }
 func ApplyHealRatio(g *game.Game, target game.ResolvedActor, ratio float64) int {

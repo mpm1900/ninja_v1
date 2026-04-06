@@ -14,7 +14,7 @@ var IntimidateTrigger game.Trigger = game.Trigger{
 	On:         game.OnActorEnter,
 	Check:      game.Match__SourceActor_SourceActor,
 	ActionMutation: game.ActionMutation{
-		Priority: 0,
+		Priority: game.ActionPriorityDefault,
 		Filter:   game.TrueGameFilter,
 		Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 			transactions := []game.GameTransaction{}

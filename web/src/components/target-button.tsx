@@ -22,8 +22,8 @@ function TargetButton({
 }) {
   const includes =
     targetType === 'target-actor-id'
-      ? context.target_actor_IDs.includes(actor.ID)
-      : context.target_position_IDs.includes(actor.position_ID)
+      ? context.target_actor_IDs?.includes(actor.ID)
+      : context.target_position_IDs?.includes(actor.position_ID)
 
   return (
     <Button
@@ -34,8 +34,8 @@ function TargetButton({
           onContextChange({
             ...context,
             target_actor_IDs: includes
-              ? context.target_actor_IDs.filter((id) => id !== actor.ID)
-              : [...context.target_actor_IDs, actor.ID],
+              ? context.target_actor_IDs?.filter((id) => id !== actor.ID) ?? null
+              : [...context.target_actor_IDs ?? [], actor.ID],
           })
         }
 
@@ -43,10 +43,10 @@ function TargetButton({
           onContextChange({
             ...context,
             target_position_IDs: includes
-              ? context.target_position_IDs.filter(
-                  (id) => id !== actor.position_ID
-                )
-              : [...context.target_position_IDs, actor.position_ID],
+              ? context.target_position_IDs?.filter(
+                (id) => id !== actor.position_ID
+              ) ?? null
+              : [...(context.target_position_IDs ?? []), actor.position_ID],
           })
         }
       }}

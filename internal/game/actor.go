@@ -132,7 +132,8 @@ type ActorDef struct {
  * - the commonly modified fields
  */
 type ActorState struct {
-	ActiveTurns int `json:"active_turns"`
+	ActiveTurns   int `json:"active_turns"`
+	InactiveTurns int `json:"inactive_turns"`
 	// [Alive] whether or not the actor is alive, could
 	// - could be computed, but this is here to not have to call .Resolve() on filters
 	Alive bool `json:"alive"`
@@ -148,6 +149,8 @@ type ActorState struct {
 	Reflect       float64 `json:"reflect"`
 	Seen          bool    `json:"seen"`
 	StaminaDamage int     `json:"stamina_damage"`
+	Status        bool    `json:"status"`
+	SubstituteHP  *int    `json:"substitute_HP"`
 	// [Stunned] whether or not an actor _can act_
 	// - stunned units cannot push actions
 	// - stunned units cannot resolve actions (if the status was added during running)
@@ -189,11 +192,11 @@ const (
 )
 
 func GetLevel(experience int) int {
-	return int(math.Floor(math.Cbrt(float64(experience))))
+	return Round(math.Cbrt(float64(experience)))
 }
 
 func GetBaseExperience(level int) int {
-	return int(math.Floor(math.Pow(float64(level), 3)))
+	return Round(math.Pow(float64(level), 3))
 }
 
 func GetExperienceToNextLevel(level, exp int) int {
@@ -203,6 +206,9 @@ func GetExperienceToNextLevel(level, exp int) int {
 func (a Actor) GetActionByID(g Game, actionID uuid.UUID) (Action, bool) {
 	ra := a.Resolve(g)
 	return ra.GetActionByID(actionID)
+}
+func (a Actor) IsActive() bool {
+	return a.PositionID != nil
 }
 func (ra ResolvedActor) GetActionByID(actionID uuid.UUID) (Action, bool) {
 	for _, action := range ra.Actions {
@@ -227,6 +233,8 @@ func makeActions(actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) []Action {
 	return actions
 }
 
+var hp = 12
+
 func MakeActor(def ActorDef, playerID uuid.UUID, experience int, actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) Actor {
 	actions := makeActions(actionIDs, ACTIONS)
 	return Actor{
@@ -237,10 +245,18 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, actionIDs []uui
 		Experience: experience,
 		Focus:      FocusNone,
 		ActorState: ActorState{
-			Alive:      true,
-			Damage:     0,
-			PositionID: nil,
-			Reflect:    0.0,
+			ActiveTurns:   0,
+			Alive:         true,
+			Damage:        0,
+			InactiveTurns: 0,
+			PositionID:    nil,
+			Protected:     false,
+			Reflect:       0.0,
+			Seen:          false,
+			StaminaDamage: 0,
+			Status:        false,
+			SubstituteHP:  &hp,
+			Stunned:       false,
 		},
 		Stages: map[ActorStat]int{
 			StatHP:            0,
@@ -257,14 +273,18 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, actionIDs []uui
 	}
 }
 
-func (a Actor) IsActive() bool {
-	return a.PositionID != nil
-}
-
 func (a *Actor) SetActions(actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) {
 	a.Actions = makeActions(actionIDs, ACTIONS)
 }
-
+func (a *Actor) SetPosition(positionID *uuid.UUID) {
+	a.PositionID = positionID
+	if positionID != nil {
+		a.ActiveTurns = 0
+		a.Seen = true
+	} else {
+		a.InactiveTurns = 0
+	}
+}
 func (a *Actor) SetActionCooldown(actionID uuid.UUID, cooldown int) {
 	for i := range a.Actions {
 		if a.Actions[i].ID == actionID {
@@ -286,7 +306,7 @@ func (a *Actor) DecrementCooldowns() {
 }
 func (a *Actor) RecoverStamina(g Game, ratio float64) {
 	resolved := a.Resolve(g)
-	amount := int(math.Floor(float64(resolved.Stats[StatStamina]) * ratio))
+	amount := Round(float64(resolved.Stats[StatStamina]) * ratio)
 	a.StaminaDamage = max(a.StaminaDamage-amount, 0)
 }
 
@@ -318,7 +338,7 @@ func MapBaseStat(stat, level int, focus float64) int {
 	base := float64((stat * 2) + 15)
 	ev := 0.0 // TODO
 	ratio := float64((base+(ev/4))*float64(level)) / 100
-	return int(math.Floor((ratio + 5) * focus))
+	return Round((ratio + 5) * focus)
 }
 
 func MapResourceStat(stat, level int, focus float64) int {
@@ -356,7 +376,7 @@ func MapStagedStat(stat, stage, mod int) int {
 		m = float64(mod) / float64(-stage+mod)
 	}
 
-	return int(math.Floor(float64(stat) * m))
+	return Round(float64(stat) * m)
 }
 
 func (actor *Actor) MapStaged(stat ActorStat, mod int) {

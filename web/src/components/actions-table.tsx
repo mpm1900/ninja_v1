@@ -19,7 +19,7 @@ import {
 } from './ui/table'
 import { Fragment } from 'react/jsx-runtime'
 import { NatureBadge } from './nature-badge'
-import { memo, useMemo, useState, type ReactNode } from 'react'
+import { memo, useState, type ReactNode } from 'react'
 import { StatBadge } from './stat-badge'
 import { Checkbox } from './ui/checkbox'
 import { Button } from './ui/button'
@@ -74,10 +74,6 @@ const columns = [
   helper.accessor('config.cooldown', {
     header: 'cooldown',
     cell: ({ row }) => row.original.config.cooldown ?? '-',
-  }),
-  helper.accessor('cooldown', {
-    header: 'active cooldown',
-    cell: ({ row }) => row.original.cooldown ?? '-',
   }),
 ]
 

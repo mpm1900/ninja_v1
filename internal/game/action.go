@@ -2,7 +2,6 @@ package game
 
 import (
 	"fmt"
-	"math"
 	"math/rand"
 
 	"github.com/google/uuid"
@@ -184,7 +183,7 @@ func MakeAccuracyCheck(g *Game, action ActionConfig, source ResolvedActor, targe
 		}
 	}
 
-	accuracy := int(math.Floor(base_accuracy * float64(*action.Accuracy)))
+	accuracy := Round(base_accuracy * float64(*action.Accuracy))
 	roll := MakeActionRoll()
 	return ChanceResult{
 		Chance:  accuracy,

@@ -3,7 +3,6 @@ package game
 import (
 	"fmt"
 	"maps"
-	"math"
 	"slices"
 )
 
@@ -46,7 +45,7 @@ func DamageEquation(terms DamageTerms) int {
 		"(((%d * %d / %d) * ((2 * %d / 5) + 2) / 50 + 2) * (%f * %f * %f * %f)  = %f \n",
 		terms.Power, terms.Attack, terms.Defense, terms.Level, terms.Nature, terms.STAB, terms.Targets, terms.Random, raw,
 	)
-	return int(math.Floor(raw)) + terms.Offset
+	return Round(raw) + terms.Offset
 }
 
 func GetStabModifier(source ResolvedActor, nature *NatureSet) float64 {
@@ -84,7 +83,7 @@ func GetDamage(
 
 	a_base := float64(source.Stats[ActorStat(attack)])
 	a_mod := 1.0
-	attack_value := int(math.Floor(a_base * a_mod))
+	attack_value := Round(a_base * a_mod)
 	targets_mod := 1.0
 	if targetsCount > 1 {
 		targets_mod = 0.75
@@ -93,7 +92,7 @@ func GetDamage(
 	for i, target := range targets {
 		d_base := float64(target.Stats[ActorStat(defense)])
 		d_mod := 1.0
-		defense_value := int(math.Floor(d_base * d_mod))
+		defense_value := Round(d_base * d_mod)
 
 		var natures []Nature
 		if nature != nil {

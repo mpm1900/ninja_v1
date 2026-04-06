@@ -43,6 +43,8 @@ var END_OF_TURN_TRIGGER Trigger = Trigger{
 						}
 						if a.IsActive() {
 							g.Actors[i].ActiveTurns++
+						} else {
+							g.Actors[i].InactiveTurns++
 						}
 					}
 
