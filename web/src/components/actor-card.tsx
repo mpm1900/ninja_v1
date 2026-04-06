@@ -36,6 +36,27 @@ const actorVariants = cva(
   }
 )
 
+function parseSummon(summon: Actor['summon'], parent: Actor): Actor['summon'] {
+  if (!summon) return summon
+  if (summon.proxy) {
+    return {
+      ...summon,
+      ...parent,
+      ID: summon.ID,
+      stats: {
+        ...parent.stats,
+        hp: summon.stats.hp,
+      },
+      damage: summon.damage,
+      sprite_url: summon.sprite_url,
+      applied_modifiers: {},
+      summon: undefined,
+    }
+  }
+
+  return summon
+}
+
 function ActorCard({
   actor,
   client_ID,
@@ -76,7 +97,7 @@ function ActorCard({
       {actor?.summon && (
         <ActorCard
           summon
-          actor={actor?.summon}
+          actor={parseSummon(actor.summon, actor)}
           client_ID={client_ID}
           game={game}
           selected={selected}
