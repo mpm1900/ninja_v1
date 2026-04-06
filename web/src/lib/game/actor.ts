@@ -63,7 +63,6 @@ type ActorState = {
   seen: boolean
   stamina_damage: number
   stunned: boolean
-
 }
 
 type Actor = ActorDef &
@@ -80,6 +79,7 @@ type Actor = ActorDef &
     actions: Array<Action>
     resolved_nature_resistance: NatureStats<number>
     resolved_nature_damage: NatureStats<number>
+    summon?: (Actor & { proxy: boolean })
   }
 
 function checkActorStat(actor: Actor, key: ActorBaseStat) {

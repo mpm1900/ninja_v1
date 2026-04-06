@@ -46,5 +46,6 @@ var Hashirama = game.ActorDef{
 		actions.Haze.ID,
 		actions.GreatTreeSpear.ID,
 		actions.LeafJab.ID,
+		actions.Substitution.ID,
 	},
 }

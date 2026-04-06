@@ -63,24 +63,29 @@ const (
 	FocusAlert     ActorFocus = "alert"     // -C.DEF
 )
 
-var ActorFocuses map[ActorFocus][]ActorStat = map[ActorFocus][]ActorStat{
-	FocusNone:        nil,
-	FocusAggressive:  {StatAttack, StatDefense},
-	FocusRelentless:  {StatAttack, StatChakraAttack},
-	FocusReckless:    {StatAttack, StatChakraDefense},
-	FocusHeavy:       {StatAttack, StatSpeed},
-	FocusPatient:     {StatDefense, StatAttack},
-	FocusHardened:    {StatDefense, StatChakraAttack},
-	FocusTough:       {StatDefense, StatChakraDefense},
-	FocusSteadfast:   {StatDefense, StatSpeed},
-	FocusIntelligent: {StatChakraAttack, StatAttack},
-	FocusVolatile:    {StatChakraAttack, StatDefense},
-	FocusIntense:     {StatChakraAttack, StatChakraDefense},
-	FocusCalculated:  {StatChakraAttack, StatSpeed},
-	FocusAgile:       {StatSpeed, StatAttack},
-	FocusHasty:       {StatSpeed, StatDefense},
-	FocusImpulsive:   {StatSpeed, StatChakraDefense},
-	FocusAlert:       {StatSpeed, StatChakraDefense},
+type FocusStatDelta struct {
+	Up   ActorStat
+	Down ActorStat
+}
+
+var ActorFocuses = map[ActorFocus]FocusStatDelta{
+	FocusNone:        {},
+	FocusAggressive:  {Up: StatAttack, Down: StatDefense},
+	FocusRelentless:  {Up: StatAttack, Down: StatChakraAttack},
+	FocusReckless:    {Up: StatAttack, Down: StatChakraDefense},
+	FocusHeavy:       {Up: StatAttack, Down: StatSpeed},
+	FocusPatient:     {Up: StatDefense, Down: StatAttack},
+	FocusHardened:    {Up: StatDefense, Down: StatChakraAttack},
+	FocusTough:       {Up: StatDefense, Down: StatChakraDefense},
+	FocusSteadfast:   {Up: StatDefense, Down: StatSpeed},
+	FocusIntelligent: {Up: StatChakraAttack, Down: StatAttack},
+	FocusVolatile:    {Up: StatChakraAttack, Down: StatDefense},
+	FocusIntense:     {Up: StatChakraAttack, Down: StatChakraDefense},
+	FocusCalculated:  {Up: StatChakraAttack, Down: StatSpeed},
+	FocusAgile:       {Up: StatSpeed, Down: StatAttack},
+	FocusHasty:       {Up: StatSpeed, Down: StatDefense},
+	FocusImpulsive:   {Up: StatSpeed, Down: StatChakraAttack},
+	FocusAlert:       {Up: StatSpeed, Down: StatChakraDefense},
 }
 
 const (
@@ -150,11 +155,16 @@ type ActorState struct {
 	Seen          bool    `json:"seen"`
 	StaminaDamage int     `json:"stamina_damage"`
 	Status        bool    `json:"status"`
-	SubstituteHP  *int    `json:"substitute_HP"`
 	// [Stunned] whether or not an actor _can act_
 	// - stunned units cannot push actions
 	// - stunned units cannot resolve actions (if the status was added during running)
 	Stunned bool `json:"stunned"`
+}
+
+type Summon struct {
+	Actor
+	Parent *Actor `json:"-"`
+	Proxy  bool   `json:"proxy"`
 }
 
 type Actor struct {
@@ -167,6 +177,7 @@ type Actor struct {
 	Focus      ActorFocus        `json:"focus"`
 	Stages     map[ActorStat]int `json:"staged_stats"`
 	Actions    []Action          `json:"actions"`
+	Summon     *Summon           `json:"summon,omitempty"`
 }
 
 type ResolvedActor struct {
@@ -221,7 +232,7 @@ func (ra ResolvedActor) GetActionByID(actionID uuid.UUID) (Action, bool) {
 }
 
 func makeActions(actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) []Action {
-	actions := make([]Action, 0)
+	actions := make([]Action, 0, len(actionIDs))
 	for _, id := range actionIDs {
 		a, ok := ACTIONS[id]
 		if !ok {
@@ -233,12 +244,31 @@ func makeActions(actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) []Action {
 	return actions
 }
 
-var hp = 12
+func cloneActorDef(def ActorDef) ActorDef {
+	cloned := def
+
+	cloned.Affiliations = slices.Clone(def.Affiliations)
+	cloned.Stats = maps.Clone(def.Stats)
+	cloned.NatureDamage = maps.Clone(def.NatureDamage)
+	cloned.NatureResistance = maps.Clone(def.NatureResistance)
+
+	cloned.Natures = make(map[NatureSet][]Nature, len(def.Natures))
+	for k, v := range def.Natures {
+		cloned.Natures[k] = slices.Clone(v)
+	}
+
+	cloned.InnateModifiers = slices.Clone(def.InnateModifiers)
+	cloned.ActionIDs = slices.Clone(def.ActionIDs)
+
+	return cloned
+}
 
 func MakeActor(def ActorDef, playerID uuid.UUID, experience int, actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) Actor {
 	actions := makeActions(actionIDs, ACTIONS)
+	clonedDef := cloneActorDef(def)
+
 	return Actor{
-		ActorDef:   def,
+		ActorDef:   clonedDef,
 		ID:         uuid.New(),
 		PlayerID:   playerID,
 		Level:      GetLevel(experience),
@@ -255,7 +285,6 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, actionIDs []uui
 			Seen:          false,
 			StaminaDamage: 0,
 			Status:        false,
-			SubstituteHP:  &hp,
 			Stunned:       false,
 		},
 		Stages: map[ActorStat]int{
@@ -270,6 +299,7 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, actionIDs []uui
 			StatAccuracy:      0,
 		},
 		Actions: actions,
+		Summon:  nil,
 	}
 }
 
@@ -283,7 +313,27 @@ func (a *Actor) SetPosition(positionID *uuid.UUID) {
 		a.Seen = true
 	} else {
 		a.InactiveTurns = 0
+		a.SetSummon(nil)
 	}
+}
+func (a *Actor) SetSummon(summon *Summon) {
+	if summon != nil {
+		summon.Parent = a
+	}
+	a.Summon = summon
+}
+func (a *Actor) SetSummonFromActor(actor *Actor, proxy bool) {
+	if actor == nil {
+		a.Summon = nil
+		return
+	}
+
+	summon := Summon{
+		Actor:  *actor,
+		Parent: a,
+		Proxy:  proxy,
+	}
+	a.SetSummon(&summon)
 }
 func (a *Actor) SetActionCooldown(actionID uuid.UUID, cooldown int) {
 	for i := range a.Actions {
@@ -311,15 +361,15 @@ func (a *Actor) RecoverStamina(g Game, ratio float64) {
 }
 
 func (a Actor) GetFocusModifier(stat ActorStat) float64 {
-	stats, ok := ActorFocuses[a.Focus]
-	if !ok || len(stats) != 2 {
+	delta, ok := ActorFocuses[a.Focus]
+	if !ok {
 		return 1.0
 	}
 
-	if stats[0] == stat {
+	if delta.Up == stat {
 		return 1.1
 	}
-	if stats[1] == stat {
+	if delta.Down == stat {
 		return 0.9
 	}
 
@@ -395,6 +445,16 @@ func MapStagedStats(actor Actor) Actor {
 	return actor
 }
 
+func newActorContext(actor Actor) Context {
+	return Context{
+		SourcePlayerID:    &actor.PlayerID,
+		SourceActorID:     &actor.ID,
+		ParentActorID:     &actor.ID,
+		TargetActorIDs:    []uuid.UUID{},
+		TargetPositionIDs: []uuid.UUID{},
+	}
+}
+
 func GetActorModifiers(game Game) []Transaction[Modifier] {
 	var modifiers []Transaction[Modifier]
 	activeActors := game.GetActorsFilters(
@@ -403,13 +463,7 @@ func GetActorModifiers(game Game) []Transaction[Modifier] {
 	)
 
 	for _, actor := range activeActors {
-		context := Context{
-			SourcePlayerID:    &actor.PlayerID,
-			SourceActorID:     &actor.ID,
-			ParentActorID:     &actor.ID,
-			TargetActorIDs:    []uuid.UUID{},
-			TargetPositionIDs: []uuid.UUID{},
-		}
+		context := newActorContext(actor)
 		for _, modifier := range actor.InnateModifiers {
 			transaction := MakeTransaction(modifier, context)
 			modifiers = append(modifiers, transaction)
@@ -419,7 +473,7 @@ func GetActorModifiers(game Game) []Transaction[Modifier] {
 	return modifiers
 }
 
-var SPECIAL_MUTATIONS []ActorMutation = []ActorMutation{
+var specialMutations = []ActorMutation{
 	MakeActorMutation(
 		nil,
 		MutPriorityMapBaseStats,
@@ -454,13 +508,7 @@ func (a Actor) Clone() Actor {
 }
 
 func getContext(actor Actor, transactions []Transaction[Modifier], mutation ActorMutation) Context {
-	context := Context{
-		SourcePlayerID:    &actor.PlayerID,
-		SourceActorID:     &actor.ID,
-		ParentActorID:     &actor.ID,
-		TargetActorIDs:    []uuid.UUID{},
-		TargetPositionIDs: []uuid.UUID{},
-	}
+	context := newActorContext(actor)
 
 	if mutation.TransactionID == nil {
 		return context
@@ -484,7 +532,7 @@ func getMutations(transactions []Transaction[Modifier]) []ActorMutation {
 		}
 	}
 
-	return append(mutations, SPECIAL_MUTATIONS...)
+	return append(mutations, specialMutations...)
 }
 
 func applyModifierMutation(gi Game, actor Actor, transactions []Transaction[Modifier], mutation ActorMutation) (Actor, bool) {
@@ -508,7 +556,7 @@ func resolveActor(actor Actor, g Game, mtransactions []Transaction[Modifier], at
 
 	mutations := getMutations(transactions)
 
-	sort.Slice(mutations, func(i, j int) bool {
+	sort.SliceStable(mutations, func(i, j int) bool {
 		return mutations[i].Priority < mutations[j].Priority
 	})
 

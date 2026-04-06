@@ -23,6 +23,15 @@ func (g *Game) Validate() bool {
 				continue
 			}
 
+			if actor.Summon != nil {
+				if !actor.Summon.Alive {
+					g.UpdateActor(actor.ID, func(a Actor) Actor {
+						a.SetSummon(nil)
+						return a
+					})
+				}
+			}
+
 			if !actor.Alive {
 				missing_pos = append(missing_pos, pos.ID)
 				context := WithTargetIDs(NewContext(), []uuid.UUID{actor.ID})

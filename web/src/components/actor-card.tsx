@@ -16,13 +16,14 @@ import { StageBadge } from './stage-badge'
 const actorVariants = cva(
   cn(
     'group/item flex flex-wrap items-center rounded-md border text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50',
-    'p-2 w-86',
+    'p-2 w-86'
   ),
   {
     variants: {
       player: {
         player: 'bg-gray-900 border-gray-700',
         enemy: 'border-transparent',
+        summon: 'bg-stone-600! border-stone-400!',
       },
       selected: {
         selected: 'bg-mist-700! border-gray-400!',
@@ -43,7 +44,8 @@ function ActorCard({
   source,
   targeted,
   className,
-  ...props
+  summon,
+  ...rest
 }: React.ComponentProps<typeof Item> & {
   actor: Actor | undefined
   client_ID?: string
@@ -51,10 +53,11 @@ function ActorCard({
   selected?: boolean
   targeted?: 'targeted'
   source?: 'source'
+  summon?: boolean
 }) {
   const modifiers = (game.modifiers ?? [])
     .map((m) => m.mutation)
-    .concat(game.actors.flatMap(a => a.innate_modifiers))
+    .concat(game.actors.flatMap((a) => a.innate_modifiers))
 
   const is_player = actor?.player_ID === client_ID
   const action_tx = game.actions.find(
@@ -63,8 +66,26 @@ function ActorCard({
   const has_queued_action = game.queued_actions[actor?.ID ?? '']
 
   return (
-    <div className={cn('flex flex-col', className)}>
-      <div className="flex flex-wrap gap-3">
+    <div
+      className={cn(
+        summon ? 'pointer-events-none' : 'relative',
+        'flex flex-col',
+        className
+      )}
+    >
+      {actor?.summon && (
+        <ActorCard
+          summon
+          actor={actor?.summon}
+          client_ID={client_ID}
+          game={game}
+          selected={selected}
+          targeted={targeted}
+          source={source}
+          className="absolute bottom-2 left-2 z-20"
+        />
+      )}
+      <div className="relative flex flex-wrap gap-3 z-30">
         {Object.entries(actor?.applied_modifiers ?? {}).map(([ID, count]) => (
           <span key={ID}>
             {modifiers.find((m) => m.group_ID === ID)?.name}
@@ -75,10 +96,10 @@ function ActorCard({
       <div
         className={actorVariants({
           className: cn(is_player && 'cursor-pointer', 'gap-2'),
-          player: is_player ? 'player' : 'enemy',
+          player: summon ? 'summon' : is_player ? 'player' : 'enemy',
           selected: selected ? 'selected' : source ? source : targeted,
         })}
-        {...props}
+        {...rest}
       >
         {actor && (
           <div className="relative">
@@ -93,7 +114,7 @@ function ActorCard({
             <div className="flex justify-between items-end gap-4">
               <ItemTitle>
                 <span
-                  className={cn({
+                  className={cn('text-shadow-[1px_1px_0px_#000000]', {
                     'text-blue-300': actor.player_ID === client_ID,
                     'text-red-400': actor.player_ID !== client_ID,
                     'text-foregroud': selected,

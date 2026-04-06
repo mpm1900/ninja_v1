@@ -28,23 +28,27 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 		return
 	}
 
-	sub_damage := false
-	sub_destroyed := false
+	log_ctx := game.NewContext()
+	log_ctx.ParentActorID = &target.ID
+	log_ctx.SourceActorID = &target.ID
+
 	hp := target.Stats[game.StatHP]
 
 	g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
-		if a.ActorState.SubstituteHP != nil && *a.ActorState.SubstituteHP > 0 {
-			sub_damage = true
-			new := clampDamage(*a.ActorState.SubstituteHP - damage)
-			if new > 0 {
-				a.ActorState.SubstituteHP = &damage
-			} else {
-				a.ActorState.SubstituteHP = nil
-				sub_destroyed = true
-			}
+		if a.Summon != nil && a.Summon.Alive {
+			summon_hp := a.Summon.Stats[game.StatHP]
+			a.Summon.Damage += damage
+			a.Summon.Alive = summon_hp > a.Summon.Damage
+			g.PushLog(game.NewLogContext(">>> $source$'s substitute took the attack.", log_ctx))
 		} else {
 			a.Damage += damage
 			a.Alive = hp > a.Damage
+			ratio := int(float64(damage) * 100 / float64(hp))
+			if ratio > 0 {
+				g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ lost %d%% HP.", ratio), log_ctx))
+			} else {
+				g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %d%% HP.", ratio*-1), log_ctx))
+			}
 		}
 
 		if updater == nil {
@@ -54,24 +58,6 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 		u := updater
 		return u(a)
 	})
-
-	log_ctx := game.NewContext()
-	log_ctx.ParentActorID = &target.ID
-	log_ctx.SourceActorID = &target.ID
-	ratio := int(float64(damage) * 100 / float64(hp))
-
-	if ratio > 0 {
-		if sub_damage {
-			g.PushLog(game.NewLogContext(">>> $source$'s substitute took the attack.", log_ctx))
-			if sub_destroyed {
-				g.PushLog(game.NewLogContext(">>> $source$'s substitute was destroyed.", log_ctx))
-			}
-		} else {
-			g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ lost %d%% HP.", ratio), log_ctx))
-		}
-	} else {
-		g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %d%% HP.", ratio*-1), log_ctx))
-	}
 }
 func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) {
 	ApplyDamageWith(g, target, damage, nil)
