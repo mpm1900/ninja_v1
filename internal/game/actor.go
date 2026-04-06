@@ -199,6 +199,7 @@ const (
 	MutPriorityPostStagedStats = 11
 	MutPriorityZero            = 19
 	MutPrioritySet             = 20
+	MutPriorityPostSet 		   = 21 // toad song
 )
 
 func GetLevel(experience int) int {

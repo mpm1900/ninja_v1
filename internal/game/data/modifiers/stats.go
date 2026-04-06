@@ -78,10 +78,9 @@ func MakeStatDeltaAll(stat game.ActorStat, name string, groupID *uuid.UUID, delt
 	return modifier
 }
 
-func MakeStatMultTeam(stat game.ActorStat, name string, groupID *uuid.UUID, mult float64) game.Modifier {
-	modifier := NewStatMult(stat, groupID, game.ComposeAF(game.ActiveFilter, game.TeamFilter), game.MutPriorityPostStagedStats, mult)
+func MakeStatMultTeam(stat game.ActorStat, name string, groupID *uuid.UUID, mult float64, priority int) game.Modifier {
+	modifier := NewStatMult(stat, groupID, game.ComposeAF(game.ActiveFilter, game.TeamFilter), priority, mult)
 	modifier.Name = name
-	modifier.Delay = 2
 	return modifier
 }
 
@@ -96,7 +95,10 @@ var SpeedUpAll = MakeStatDeltaAll(game.StatSpeed, "Speed Up", nil, 1)
 
 // NAMED STAT UPS
 var TailwindID = uuid.New()
-var Tailwind = MakeStatMultTeam(game.StatSpeed, "Tailwind", &TailwindID, 2.0)
+var Tailwind = MakeStatMultTeam(game.StatSpeed, "Tailwind", &TailwindID, 2.0, game.MutPriorityPostStagedStats)
+
+var ToadSongID = uuid.New()
+var ToadSong = MakeStatMultTeam(game.StatSpeed, "Toad Song", &ToadSongID, -1, game.MutPriorityPostSet)
 
 // HAZE
 var hazeID = uuid.New()

@@ -40,4 +40,5 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.Recover.ID:      actions.Recover,
 	actions.LeechSeed.ID:    actions.LeechSeed,
 	actions.Substitution.ID: actions.Substitution,
+	actions.ToadSong.ID:     actions.ToadSong,
 }

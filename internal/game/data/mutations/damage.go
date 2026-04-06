@@ -44,6 +44,9 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 			a.Damage += damage
 			a.Alive = hp > a.Damage
 			ratio := int(float64(damage) * 100 / float64(hp))
+			if ratio > 100 {
+				ratio = 100
+			}
 			if ratio > 0 {
 				g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ lost %d%% HP.", ratio), log_ctx))
 			} else {

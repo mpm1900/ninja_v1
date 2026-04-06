@@ -80,7 +80,7 @@ function RouteComponent() {
             <Accordion
               defaultValue={['log']}
               type="multiple"
-              className="bg-black/20 px-3 border border-zinc-900 min-w-60"
+              className="bg-black/70 px-3 border border-zinc-900 min-w-60"
             >
               <AccordionItem value="log">
                 <AccordionTrigger>Log</AccordionTrigger>

@@ -40,6 +40,7 @@ var Naruto = game.ActorDef{
 		actions.Rasengan.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
+		actions.ToadSong.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,
 	},

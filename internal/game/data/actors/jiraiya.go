@@ -38,7 +38,7 @@ var Jiraiya = game.ActorDef{
 		game.Switch.ID,
 		actions.Rasengan.ID,
 		actions.Haze.ID,
-		actions.DragonDance.ID,
+		actions.ToadSong.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,
 	},

@@ -13,6 +13,7 @@ var MODIFIERS = map[uuid.UUID]game.Modifier{
 	modifiers.Stunned.ID:                 modifiers.Stunned,
 	modifiers.Rage.ID:                    modifiers.Rage,
 	modifiers.Haze.ID:                    modifiers.Haze,
+	modifiers.ToadSong.ID:                modifiers.ToadSong,
 	modifiers.PriorityFailure.ID:         modifiers.PriorityFailure,
 	modifiers.AttackUpSource.ID:          modifiers.AttackUpSource,
 	modifiers.ChakraAttackUpSource.ID:    modifiers.ChakraAttackUpSource,
