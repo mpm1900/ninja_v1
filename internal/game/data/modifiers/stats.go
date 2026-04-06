@@ -81,6 +81,7 @@ func MakeStatDeltaAll(stat game.ActorStat, name string, groupID *uuid.UUID, delt
 func MakeStatMultTeam(stat game.ActorStat, name string, groupID *uuid.UUID, mult float64) game.Modifier {
 	modifier := NewStatMult(stat, groupID, game.ComposeAF(game.ActiveFilter, game.TeamFilter), game.MutPriorityPostStagedStats, mult)
 	modifier.Name = name
+	modifier.Delay = 2
 	return modifier
 }
 

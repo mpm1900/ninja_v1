@@ -194,8 +194,10 @@ func (g Game) GetTriggers(on TriggerOn, context *Context) []Transaction[Trigger]
 	triggers := []Transaction[Trigger]{
 		MakeTransaction(END_OF_TURN_TRIGGER, ctx),
 	}
-	modifiers := make([]Transaction[Modifier], 0, len(g.Modifiers))
-	modifiers = append(modifiers, g.Modifiers...)
+
+	transactions := g.GetModifiers()
+	modifiers := make([]Transaction[Modifier], 0, len(transactions))
+	modifiers = append(modifiers, transactions...)
 	modifiers = append(modifiers, GetActorModifiers(g)...)
 
 	for _, tx := range modifiers {
@@ -217,14 +219,26 @@ func (g Game) GetTriggers(on TriggerOn, context *Context) []Transaction[Trigger]
 
 	return triggers
 }
+func (g Game) GetModifiers() []Transaction[Modifier] {
+	var transactions []Transaction[Modifier] = []Transaction[Modifier]{}
+	for _, tx := range g.Modifiers {
+		if tx.Mutation.Delay <= 0 {
+			transactions = append(transactions, tx)
+		}
+	}
+
+	return transactions
+}
+
 func (g Game) GetModifierByID(ID uuid.UUID) (Modifier, bool) {
+
 	modifiers := make([]Transaction[Modifier], 0, len(g.Modifiers))
 	modifiers = append(modifiers, g.Modifiers...)
 	modifiers = append(modifiers, GetActorModifiers(g)...)
 
 	for _, m := range modifiers {
 		if m.Mutation.ID == ID {
-			return m.Mutation, true
+			return m.Mutation, m.Mutation.Delay <= 0
 		}
 	}
 	return Modifier{}, false
@@ -478,7 +492,7 @@ func (g *Game) SortActions() {
 
 func (g *Game) PushAction(transaction Transaction[Action]) bool {
 	for _, t := range g.Actions {
-		if *t.Context.SourceActorID == *transaction.Context.SourceActorID {
+		if *t.Context.ParentActorID == *transaction.Context.ParentActorID {
 			return false
 		}
 	}
@@ -571,7 +585,6 @@ func (g *Game) RunTrigger(transaction Transaction[Trigger]) {
 	modifier, ok := g.GetModifierByID(transaction.Mutation.ModifierID)
 	if ok {
 		text := fmt.Sprintf("[%s]: %s", transaction.Mutation.On, modifier.Name)
-		fmt.Println(text)
 		g.PushLog(NewLog(text))
 	}
 	transactions := ResolveTrigger(*g, transaction)

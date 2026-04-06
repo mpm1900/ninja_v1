@@ -358,6 +358,14 @@ func (a *Actor) RecoverStamina(g Game, ratio float64) {
 	a.StaminaDamage = max(a.StaminaDamage-amount, 0)
 }
 
+func (a *Actor) IncrementTurns() {
+	if a.IsActive() {
+		a.ActiveTurns++
+	} else {
+		a.InactiveTurns++
+	}
+}
+
 func (a Actor) GetFocusModifier(stat ActorStat) float64 {
 	delta, ok := ActorFocuses[a.Focus]
 	if !ok {
@@ -602,7 +610,7 @@ func resolveActor(actor Actor, g Game, mtransactions []Transaction[Modifier], at
 }
 
 func (a Actor) Resolve(g Game) ResolvedActor {
-	resolved := resolveActor(a, g, g.Modifiers, GetActorModifiers(g))
+	resolved := resolveActor(a, g, g.GetModifiers(), GetActorModifiers(g))
 	pre := resolveActor(a, g, []Transaction[Modifier]{}, []Transaction[Modifier]{})
 	resolved.PreStats = maps.Clone(pre.Stats)
 

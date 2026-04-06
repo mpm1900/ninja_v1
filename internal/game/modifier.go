@@ -15,11 +15,19 @@ type Modifier struct {
 	ID       uuid.UUID  `json:"ID"`
 	GroupID  *uuid.UUID `json:"group_ID"`
 	Name     string     `json:"name"`
+	Delay    int        `json:"delay"`
 	Duration int        `json:"duration"`
 
 	ActorMutations     []ActorMutation     `json:"-"`
 	GameStateMutations []GameStateMutation `json:"-"`
 	Triggers           []Trigger           `json:"-"`
+}
+
+func (m *Modifier) DecrementTimers() {
+	m.Duration -= 1
+	if m.Delay > 0 {
+		m.Delay -= 1
+	}
 }
 
 func ResolveTrigger(game Game, transaction Transaction[Trigger]) []Transaction[GameMutation] {

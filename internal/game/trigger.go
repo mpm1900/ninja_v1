@@ -41,11 +41,7 @@ var END_OF_TURN_TRIGGER Trigger = Trigger{
 							g.Actors[i].DecrementCooldowns()
 							g.Actors[i].RecoverStamina(g, 0.08)
 						}
-						if a.IsActive() {
-							g.Actors[i].ActiveTurns++
-						} else {
-							g.Actors[i].InactiveTurns++
-						}
+						a.IncrementTurns()
 					}
 
 					if t > 0 {
@@ -54,7 +50,7 @@ var END_OF_TURN_TRIGGER Trigger = Trigger{
 						})
 
 						for i, _ := range g.Modifiers {
-							g.Modifiers[i].Mutation.Duration -= 1
+							g.Modifiers[i].Mutation.DecrementTimers()
 						}
 					}
 
