@@ -1,8 +1,8 @@
 package actions
 
 import (
-	"fmt"
 	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -34,15 +34,17 @@ func MakeSubstitution() game.Action {
 					return transactions
 				}
 				source := s.Resolve(g)
+				damage := mutations.RatioDamage(0.25)
+				damage_context := game.WithTargetIDs(game.NewContext(), []uuid.UUID{*context.SourceActorID})
 
 				mut := game.GameMutation{
 					Delta: func(mp, mg game.Game, mc game.Context) game.Game {
 						mg.UpdateActor(*mc.SourceActorID, func(a game.Actor) game.Actor {
 							hp := game.Round(float64(source.Stats[game.StatHP]) * 0.25)
 							summon := game.MakeActor(game.ActorDef{
-								ActorID: uuid.New(),
+								ActorID:   uuid.New(),
 								SpriteURL: "/sprites/sub_64.png",
-								Name:    fmt.Sprintf("Substitute (%d)", hp),
+								Name:      "Substitute",
 								Stats: map[game.ActorStat]int{
 									game.StatHP: hp,
 								},
@@ -54,7 +56,11 @@ func MakeSubstitution() game.Action {
 					},
 				}
 
-				transactions = append(transactions, game.MakeTransaction(mut, context))
+				transactions = append(
+					transactions,
+					game.MakeTransaction(damage, damage_context),
+					game.MakeTransaction(mut, context),
+				)
 
 				return transactions
 			},
