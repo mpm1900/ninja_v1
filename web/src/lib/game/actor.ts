@@ -94,7 +94,7 @@ function getTotalBaseStats(actor: ActorDef) {
     accuracy: 0,
     evasion: 0,
   }
-  return Math.floor((Object.values(stats).reduce((p, c) => p + c, 0) * 6) / 7)
+  return Math.floor((Object.values(stats).reduce((p, c) => p + c, 0)) - stats.stamina)
 }
 
 export type {

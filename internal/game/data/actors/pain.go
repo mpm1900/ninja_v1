@@ -16,13 +16,13 @@ var Pain = game.ActorDef{
 	Affiliations: []string{game.AffAkatsuki, game.AffAme},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            80,
+		game.StatHP:            106,
 		game.StatStamina:       120,
-		game.StatAttack:        100,
-		game.StatDefense:       110,
+		game.StatAttack:        90,
+		game.StatDefense:       100,
 		game.StatChakraAttack:  130,
-		game.StatChakraDefense: 110,
-		game.StatSpeed:         110,
+		game.StatChakraDefense: 144,
+		game.StatSpeed:         100,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},

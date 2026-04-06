@@ -24,7 +24,7 @@ func MakePowerBoost() game.Action {
 		TargetPredicate: game.ComposeAF(game.TeamFilter, game.OtherFilter, game.ActiveFilter, game.AliveFilter),
 		ContextValidate: game.TargetLengthFilter(1),
 		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityDefault,
+			Priority: game.ActionPriorityP1,
 			Filter: game.ComposeGF(
 				game.SourceIsAlive,
 			),

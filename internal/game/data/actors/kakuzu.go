@@ -14,13 +14,13 @@ var Kakuzu = game.ActorDef{
 	Affiliations: []string{game.AffAkatsuki, game.AffTaki},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            110,
+		game.StatHP:            80,
 		game.StatStamina:       80,
-		game.StatAttack:        108,
+		game.StatAttack:        110,
 		game.StatDefense:       125,
-		game.StatChakraAttack:  120,
-		game.StatChakraDefense: 79,
-		game.StatSpeed:         90,
+		game.StatChakraAttack:  125,
+		game.StatChakraDefense: 80,
+		game.StatSpeed:         80,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},

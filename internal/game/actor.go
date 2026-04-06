@@ -157,7 +157,8 @@ type ActorState struct {
 	// [Stunned] whether or not an actor _can act_
 	// - stunned units cannot push actions
 	// - stunned units cannot resolve actions (if the status was added during running)
-	Stunned bool `json:"stunned"`
+	Stunned  bool `json:"stunned"`
+	Statused bool `json:"statused"`
 }
 
 type Summon struct {
@@ -199,7 +200,7 @@ const (
 	MutPriorityPostStagedStats = 11
 	MutPriorityZero            = 19
 	MutPrioritySet             = 20
-	MutPriorityPostSet 		   = 21 // toad song
+	MutPriorityPostSet         = 21 // toad song
 )
 
 func GetLevel(experience int) int {
@@ -285,6 +286,7 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, actionIDs []uui
 			Seen:          false,
 			StaminaDamage: 0,
 			Stunned:       false,
+			Statused:      false,
 		},
 		Stages: map[ActorStat]int{
 			StatHP:            0,

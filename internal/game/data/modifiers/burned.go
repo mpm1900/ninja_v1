@@ -1,7 +1,6 @@
 package modifiers
 
 import (
-	"fmt"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/mutations"
 
@@ -21,7 +20,6 @@ var BurnedTrigger game.Trigger = game.Trigger{
 		Priority: game.ActionPriorityDefault,
 		Filter:   game.TrueGameFilter,
 		Delta: func(p game.Game, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
-			fmt.Printf("%+v \n", context)
 			context.TargetPositionIDs = []uuid.UUID{}
 			context.TargetActorIDs = []uuid.UUID{*context.SourceActorID}
 			mut := mutations.RatioDamage(0.125)
@@ -43,6 +41,11 @@ var Burned game.Modifier = game.Modifier{
 			game.MutPriorityPostStagedStats,
 			game.ComposeAF(game.SourceFilter, game.ActiveFilter),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {
+				if actor.Statused {
+					return actor
+				}
+
+				actor.Statused = true
 				actor.Stats[game.StatAttack] = game.Round(float64(actor.Stats[game.StatAttack]) * 0.5)
 				return actor
 			},

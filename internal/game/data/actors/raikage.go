@@ -16,11 +16,11 @@ var Raikage = game.ActorDef{
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            80,
 		game.StatStamina:       80,
-		game.StatAttack:        130,
+		game.StatAttack:        135,
 		game.StatDefense:       100,
 		game.StatChakraAttack:  90,
 		game.StatChakraDefense: 60,
-		game.StatSpeed:         180,
+		game.StatSpeed:         150,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},

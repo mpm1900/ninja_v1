@@ -15,6 +15,8 @@ import { ActorThumbnail } from '#/components/actor-thumbnail'
 import { cn } from '#/lib/utils'
 import { AppHeader } from '#/components/app-header'
 import { actionsQuery } from '#/lib/queries/actions'
+import { PlayerPositions } from '#/components/player-positions'
+import { PlayerThumbnails } from '#/components/player-thumbnails'
 
 export const Route = createFileRoute('/setup')({
   beforeLoad: ({ context }) => {
@@ -35,6 +37,8 @@ function App() {
   const status = useStore(socketStore, (s) => s.status)
   const client = useStore(clientsStore, (c) => c.me)
   const game = useStore(gameStore, (g) => g)
+  const players = game.players.filter((p) => p.ID === client?.ID)
+  const enemies = game.players.filter((p) => p.ID !== client?.ID)
 
   return (
     <ClientOnly>
@@ -45,38 +49,31 @@ function App() {
           <div className="min-w-0 space-y-2 flex-1 overflow-auto">
             <ActionQueue />
 
-            <div>
-              {game.players.map((player, i) => (
-                <div
-                  key={player.ID}
-                  className={cn('space-y-2', {
-                    'border-b pb-4 mb-4': i !== game.players.length - 1,
-                  })}
-                >
-                  <div className="flex gap-2 px-4">
-                    {game.actors
-                      .filter((a) => a.player_ID === player.ID)
-                      .map((a, i) => (
-                        <ActorThumbnail key={a.ID} actor={a} index={i} />
-                      ))}
-                  </div>
-                  <div className="flex items-end gap-2">
-                    {game.actors
-                      .filter(
-                        (a) => !!a.position_ID && a.player_ID == player.ID
-                      )
-                      .map((a) => (
-                        <ActorCard
-                          key={a.ID}
-                          actor={a}
-                          client_ID={client?.ID}
-                          game={game}
-                          selected={false}
-                        />
-                      ))}
-                  </div>
+            <div className='flex justify-between'>
+              <div className='flex flex-col'>
+                <div className="px-4 left-0 z-10">
+                  {players.map((player) => (
+                    <PlayerThumbnails key={player.ID} player_ID={player.ID} />
+                  ))}
                 </div>
-              ))}
+                <div className="px-4 flex right-0 z-10">
+                  {players.map((player) => (
+                    <PlayerPositions key={player.ID} flip player_ID={player.ID} />
+                  ))}
+                </div>
+              </div>
+              <div className='flex flex-col items-end'>
+                <div className="px-4 left-0 z-10">
+                  {enemies.map((player) => (
+                    <PlayerThumbnails key={player.ID} player_ID={player.ID} />
+                  ))}
+                </div>
+                <div className="px-4 flex right-0 z-10">
+                  {enemies.map((player) => (
+                    <PlayerPositions key={player.ID} flip player_ID={player.ID} />
+                  ))}
+                </div>
+              </div>
             </div>
 
             <ActorsTable

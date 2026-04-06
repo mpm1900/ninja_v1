@@ -15,7 +15,7 @@ var Kisame = game.ActorDef{
 	Affiliations: []string{game.AffAkatsuki, game.AffKuri},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            110,
+		game.StatHP:            120,
 		game.StatStamina:       130,
 		game.StatAttack:        110,
 		game.StatDefense:       90,

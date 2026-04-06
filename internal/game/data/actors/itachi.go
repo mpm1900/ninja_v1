@@ -16,11 +16,11 @@ var Itachi = game.ActorDef{
 	Affiliations: []string{game.AffAkatsuki, game.AffKonoha},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            65,
+		game.StatHP:            60,
 		game.StatStamina:       80,
-		game.StatAttack:        95,
-		game.StatDefense:       70,
-		game.StatChakraAttack:  150,
+		game.StatAttack:        80,
+		game.StatDefense:       60,
+		game.StatChakraAttack:  145,
 		game.StatChakraDefense: 130,
 		game.StatSpeed:         130,
 		game.StatEvasion:       100,

@@ -17,13 +17,13 @@ var Guy = game.ActorDef{
 	},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            80,
+		game.StatHP:            87,
 		game.StatStamina:       80,
 		game.StatAttack:        145,
-		game.StatDefense:       120,
-		game.StatChakraAttack:  80,
-		game.StatChakraDefense: 70,
-		game.StatSpeed:         125,
+		game.StatDefense:       92,
+		game.StatChakraAttack:  75,
+		game.StatChakraDefense: 86,
+		game.StatSpeed:         115,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},

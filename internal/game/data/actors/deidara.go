@@ -14,7 +14,7 @@ var Deidara = game.ActorDef{
 	Affiliations: []string{game.AffAkatsuki, game.AffIwa},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            90,
+		game.StatHP:            100,
 		game.StatStamina:       110,
 		game.StatAttack:        60,
 		game.StatDefense:       80,

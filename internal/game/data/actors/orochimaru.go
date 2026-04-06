@@ -14,13 +14,13 @@ var Orochimaru = game.ActorDef{
 	Affiliations: []string{game.AffAkatsuki, game.AffOto},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            100,
+		game.StatHP:            92,
 		game.StatStamina:       90,
-		game.StatAttack:        90,
+		game.StatAttack:        105,
 		game.StatDefense:       90,
-		game.StatChakraAttack:  130,
-		game.StatChakraDefense: 128,
-		game.StatSpeed:         91,
+		game.StatChakraAttack:  125,
+		game.StatChakraDefense: 90,
+		game.StatSpeed:         98,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},
