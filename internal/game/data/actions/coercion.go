@@ -27,7 +27,7 @@ func MakeCoercion() game.Action {
 		TargetPredicate: game.ComposeAF(game.OtherTeamFilter, game.ActiveFilter),
 		ContextValidate: game.PositionsLengthFilter(1),
 		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityProtect,
+			Priority: game.ActionPriorityP3,
 			Filter: game.ComposeGF(
 				game.SourceIsAlive,
 				game.SourceIsActionOffCooldown,
@@ -36,7 +36,7 @@ func MakeCoercion() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				mutation := mutations.AddModifiers(modifiers.Stunned)
+				mutation := mutations.AddModifiers(true, modifiers.Stunned)
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)
 

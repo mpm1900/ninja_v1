@@ -6,6 +6,11 @@ import (
 
 const ModifierDurationInf = -1
 
+type ModifierMetadata struct {
+	Hazard bool
+	Status bool
+}
+
 type Modifier struct {
 	ID       uuid.UUID  `json:"ID"`
 	GroupID  *uuid.UUID `json:"group_ID"`

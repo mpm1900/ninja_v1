@@ -154,7 +154,6 @@ type ActorState struct {
 	Reflect       float64 `json:"reflect"`
 	Seen          bool    `json:"seen"`
 	StaminaDamage int     `json:"stamina_damage"`
-	Status        bool    `json:"status"`
 	// [Stunned] whether or not an actor _can act_
 	// - stunned units cannot push actions
 	// - stunned units cannot resolve actions (if the status was added during running)
@@ -284,7 +283,6 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, actionIDs []uui
 			Reflect:       0.0,
 			Seen:          false,
 			StaminaDamage: 0,
-			Status:        false,
 			Stunned:       false,
 		},
 		Stages: map[ActorStat]int{

@@ -137,7 +137,7 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 				missed := false
 				for ti, target := range resolved {
 					if target.Protected {
-						g.PushLog(game.NewLog(fmt.Sprintf("%s was protected.", target.Name)))
+						g.PushLog(game.NewLogContext(">>> $source$ was protected.", context.WithSource(target.ID)))
 						continue
 					}
 

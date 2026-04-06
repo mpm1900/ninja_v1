@@ -30,7 +30,7 @@ var IntimidateTrigger game.Trigger = game.Trigger{
 					SourceActorID:  &target.ID,
 					ParentActorID:  &target.ID,
 				}
-				mutation := mutations.AddModifiers(AttackDownSource)
+				mutation := mutations.AddModifiers(false, AttackDownSource)
 				transaction := game.MakeTransaction(mutation, mut_ctx)
 				transactions = append(transactions, transaction)
 			}

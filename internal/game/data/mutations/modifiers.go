@@ -7,20 +7,29 @@ import (
 	"github.com/google/uuid"
 )
 
-func AddModifiers(modifiers ...game.Modifier) game.GameMutation {
+func AddModifiers(checkProtect bool, modifiers ...game.Modifier) game.GameMutation {
 	return game.GameMutation{
 		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			for _, modifier := range modifiers {
 				mod_tx := game.MakeTransaction(modifier, context)
-				g.Modifiers = append(g.Modifiers, mod_tx)
 
 				// logs
 				for _, actor := range g.GetActionableActors() {
+					resolved := actor.Resolve(g)
+					if game.CheckModifierForActor(mod_tx, g, actor) && checkProtect && resolved.Protected {
+						mod_tx.Context.FilterOutTarget(actor)
+						context.SourceActorID = &actor.ID
+						g.PushLog(game.NewLogContext(">>> $source$ was protected.", context))
+						continue
+					}
+
 					if game.CheckModifierForActor(mod_tx, g, actor) {
 						context.SourceActorID = &actor.ID
-						g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %s", modifier.Name), context))
+						g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %s.", modifier.Name), context))
 					}
 				}
+
+				g.Modifiers = append(g.Modifiers, mod_tx)
 			}
 
 			return g

@@ -55,7 +55,7 @@ func MakeSearingMigrane() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				add_mut := mutations.AddModifiers(modifiers.AddNature(game.NsFire, 0))
+				add_mut := mutations.AddModifiers(false, modifiers.AddNature(game.NsFire, 0))
 				add_tx := game.MakeTransaction(add_mut, context)
 				transactions = append(transactions, add_tx)
 

@@ -22,10 +22,24 @@ func NewContext() Context {
 	}
 }
 
-func WithTargetIDs(context Context, targetActorIDs []uuid.UUID) Context {
-	c := context
+func (c Context) WithSource(sourceID uuid.UUID) Context {
+	c.SourceActorID = &sourceID
+	return c
+}
+func (c Context) WithTargetIDs(targetActorIDs []uuid.UUID) Context {
 	c.TargetActorIDs = targetActorIDs
 	return c
+}
+
+func (c *Context) FilterOutTarget(actor Actor) {
+	c.TargetActorIDs = slices.DeleteFunc(c.TargetActorIDs, func(ID uuid.UUID) bool {
+		return ID == actor.ID
+	})
+	if actor.PositionID != nil {
+		c.TargetPositionIDs = slices.DeleteFunc(c.TargetActorIDs, func(posID uuid.UUID) bool {
+			return posID == *actor.PositionID
+		})
+	}
 }
 
 func (g Game) GetTargets(context Context) []Actor {

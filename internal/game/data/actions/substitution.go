@@ -35,7 +35,7 @@ func MakeSubstitution() game.Action {
 				}
 				source := s.Resolve(g)
 				damage := mutations.RatioDamage(0.25)
-				damage_context := game.WithTargetIDs(game.NewContext(), []uuid.UUID{*context.SourceActorID})
+				damage_context := game.NewContext().WithTargetIDs([]uuid.UUID{*context.SourceActorID})
 
 				mut := game.GameMutation{
 					Delta: func(mp, mg game.Game, mc game.Context) game.Game {
@@ -44,7 +44,7 @@ func MakeSubstitution() game.Action {
 							summon := game.MakeActor(game.ActorDef{
 								ActorID:   uuid.New(),
 								SpriteURL: "/sprites/sub_64.png",
-								Name:      "Substitute",
+								Name:      source.Name,
 								Stats: map[game.ActorStat]int{
 									game.StatHP: hp,
 								},

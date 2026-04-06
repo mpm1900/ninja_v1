@@ -36,7 +36,7 @@ func MakeDragonDance() game.Action {
 					tju,
 					su,
 				}
-				mutation := mutations.AddModifiers(modifiers...)
+				mutation := mutations.AddModifiers(false, modifiers...)
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)
 
