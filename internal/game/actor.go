@@ -647,9 +647,12 @@ func resolveActor(actor Actor, g Game, mtransactions []Transaction[Modifier], at
 	return resolved
 }
 
+func (a Actor) ResolveModifierless(g Game) ResolvedActor {
+	return resolveActor(a, g, []Transaction[Modifier]{}, []Transaction[Modifier]{})
+}
 func (a Actor) Resolve(g Game) ResolvedActor {
 	resolved := resolveActor(a, g, g.GetModifiers(), GetActorModifiers(g))
-	pre := resolveActor(a, g, []Transaction[Modifier]{}, []Transaction[Modifier]{})
+	pre := a.ResolveModifierless(g)
 	resolved.PreStats = maps.Clone(pre.Stats)
 
 	return resolved

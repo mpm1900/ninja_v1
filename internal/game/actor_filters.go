@@ -1,6 +1,8 @@
 package game
 
-import "slices"
+import (
+	"slices"
+)
 
 /**
  * Actor Filters
@@ -94,19 +96,27 @@ func OtherTeamFilter(game Game, actor Actor, context Context) bool {
 	return actor.PlayerID != *context.SourcePlayerID
 }
 
+func IsAtOrBelowHealthRatio(ratio float64) func(Game, Actor, Context) bool {
+	return func(game Game, actor Actor, context Context) bool {
+		hp := float64(actor.Stats[StatHP])
+		damage := float64(actor.Damage)
+		return ratio >= (hp-damage)/hp
+	}
+}
+
 /**
  * RESOLVED FILTERS
  * These filters required modifiers to be resolved to check things like
  * protected, chakra amount, and things that can change with modifers
  */
-func HasChakraFilter(game Game, amount int) func(Actor, Context) bool {
-	return func(actor Actor, context Context) bool {
+func HasChakraFilter(amount int) func(Game, Actor, Context) bool {
+	return func(game Game, actor Actor, context Context) bool {
 		resolved := actor.Resolve(game)
 		return resolved.HasChakra(amount)
 	}
 }
-func IsProtectedFilter(game Game, protected bool) func(Actor, Context) bool {
-	return func(actor Actor, context Context) bool {
+func IsProtectedFilter(protected bool) func(Game, Actor, Context) bool {
+	return func(game Game, actor Actor, context Context) bool {
 		resolved := actor.Resolve(game)
 		return resolved.Protected == protected
 	}
