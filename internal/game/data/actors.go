@@ -17,6 +17,7 @@ var ACTORS map[uuid.UUID]game.ActorDef = map[uuid.UUID]game.ActorDef{
 	actors.Hidan.ActorID:      actors.Hidan,
 	actors.Deidara.ActorID:    actors.Deidara,
 	actors.Hashirama.ActorID:  actors.Hashirama,
+	actors.Tobirama.ActorID:   actors.Tobirama,
 	actors.Naruto.ActorID:     actors.Naruto,
 	actors.Minato.ActorID:     actors.Minato,
 	actors.Pain.ActorID:       actors.Pain,
@@ -29,4 +30,5 @@ var ACTORS map[uuid.UUID]game.ActorDef = map[uuid.UUID]game.ActorDef{
 	actors.Kakashi.ActorID:    actors.Kakashi,
 	actors.Shikamaru.ActorID:  actors.Shikamaru,
 	actors.Kabuto.ActorID:     actors.Kabuto,
+	actors.Choji.ActorID:      actors.Choji,
 }

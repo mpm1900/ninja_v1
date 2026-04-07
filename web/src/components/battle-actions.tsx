@@ -57,7 +57,7 @@ function BattleActions({ actor }: { actor: Actor }) {
                   enabled={
                     game.status === 'idle' &&
                     !!actor.position_ID &&
-                    action.cooldown == null
+                    action.cooldown == null && !action.disabled
                   }
                   context={context}
                   onContextChange={setContext}
@@ -136,7 +136,7 @@ function BattleActions({ actor }: { actor: Actor }) {
                     >
                       <ActionCard
                         action={a}
-                        disabled={!!staged && !selected}
+                        disabled={!!staged && !selected || a.disabled}
                         selected={selected}
                         onClick={() => setContextAction(a.ID)}
                         style={{

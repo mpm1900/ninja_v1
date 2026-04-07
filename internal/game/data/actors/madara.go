@@ -35,14 +35,14 @@ var Madara = game.ActorDef{
 	}),
 
 	InnateModifiers: []game.Modifier{
-		modifiers.AddImmunities(modifiers.AttackUpID),
+		modifiers.Taunted,
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
 		actions.Glare.ID,
 		actions.Protect.ID,
-		actions.GreatTreeSpear.ID,
+		actions.Taunt.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,

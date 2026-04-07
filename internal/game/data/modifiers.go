@@ -11,6 +11,7 @@ import (
 var MODIFIERS = map[uuid.UUID]game.Modifier{
 	modifiers.Protected.ID:               modifiers.Protected,
 	modifiers.Stunned.ID:                 modifiers.Stunned,
+	modifiers.Taunted.ID:                 modifiers.Taunted,
 	modifiers.Rage.ID:                    modifiers.Rage,
 	modifiers.Haze.ID:                    modifiers.Haze,
 	modifiers.ToadSong.ID:                modifiers.ToadSong,

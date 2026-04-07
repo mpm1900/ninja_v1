@@ -10,9 +10,9 @@ var addImmunitiesID = uuid.New()
 
 func AddImmunities(ids ...uuid.UUID) game.Modifier {
 	return game.Modifier{
-		ID:      addImmunitiesID,
+		ID:      uuid.New(),
 		GroupID: &addImmunitiesID,
-		Name:    "Add Immunity",
+		Name:    "",
 		ActorMutations: []game.ActorMutation{
 			game.MakeActorMutation(
 				&addImmunitiesID,

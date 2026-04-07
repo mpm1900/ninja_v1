@@ -18,6 +18,7 @@ type Action = {
   }
   locked: boolean
   cooldown: number | null
+  disabled: boolean
   priority: number
   target_type: 'target-actor-id' | 'target-position-type'
 }

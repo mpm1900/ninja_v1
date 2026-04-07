@@ -63,7 +63,9 @@ function ActionCard({
                 <div className="text-[10px] uppercase tracking-wide text-destructive">
                   on cooldown
                 </div>
-              ) : (
+              ) : disabled ? <div className="text-[10px] uppercase tracking-wide text-destructive">
+                disabled
+              </div> : (
                 <div className="text-[10px] uppercase tracking-wide text-white/50">
                   {action.config.jutsu || '-'}
                 </div>

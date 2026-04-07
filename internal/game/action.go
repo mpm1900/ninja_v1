@@ -88,7 +88,8 @@ type Action struct {
 
 func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransaction {
 	action := transaction.Mutation
-	if !action.Disabled && !action.Filter(*game, *game, transaction.Context) {
+
+	if action.Disabled || !action.Filter(*game, *game, transaction.Context) {
 		context := transaction.Context
 		context.ActionID = &action.ID
 		logStart := NewLogContext("$source$ used $action$", context)
