@@ -136,7 +136,7 @@ function BattleActions({ actor }: { actor: Actor }) {
                     >
                       <ActionCard
                         action={a}
-                        disabled={!!staged && !selected || a.disabled}
+                        disabled={!!staged && !selected || a.disabled || a.cooldown != null}
                         selected={selected}
                         onClick={() => setContextAction(a.ID)}
                         style={{

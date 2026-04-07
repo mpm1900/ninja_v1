@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -40,8 +41,10 @@ var Kakashi = game.ActorDef{
 		game.NsYin,
 	}),
 
-	InnateModifiers: []game.Modifier{},
-	ActionCount:     6,
+	InnateModifiers: []game.Modifier{
+		modifiers.AccuracyUpSource,
+	},
+	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
 		actions.Chidori.ID,

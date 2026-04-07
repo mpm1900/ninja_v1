@@ -550,23 +550,11 @@ func (g *Game) RunPrompt(transaction Transaction[Action]) {
 
 func (g *Game) RunAction(transaction Transaction[Action]) {
 	if transaction.Context.SourceActorID != nil {
-		s, ok := g.GetActorByID(*transaction.Context.SourceActorID)
-		if !ok {
-			return
-		}
-
-		source := s.Resolve(*g)
-		if source.Stunned {
-			g.PushLog(NewLog(fmt.Sprintf("%s was stunned", source.Name)))
-			return
-		}
-
 		cost := transaction.Mutation.Cost
 		if cost.Delta != nil {
 			costTx := MakeTransaction(cost, transaction.Context)
 			g.Transactions = append(g.Transactions, costTx)
 		}
-
 	}
 
 	transactions := ResolveAction(g, transaction)

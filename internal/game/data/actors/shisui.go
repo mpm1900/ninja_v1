@@ -36,6 +36,7 @@ var Shisui = game.ActorDef{
 
 	InnateModifiers: []game.Modifier{
 		modifiers.PriorityFailure,
+		modifiers.EvasionUpSource,
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{

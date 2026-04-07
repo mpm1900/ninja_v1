@@ -88,9 +88,28 @@ type Action struct {
 
 func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransaction {
 	action := transaction.Mutation
+	context := transaction.Context
+	source, ok := game.GetSource(context)
+	if !ok && context.SourceActorID != nil {
+		return []GameTransaction{}
+	}
 
+	/**
+	 * Source Can-Act Checks
+	 */
+	if ok {
+		resolved := source.Resolve(*game)
+		if resolved.Stunned {
+			log := NewLogContext("$source$ was stunned", context)
+			game.PushLog(log)
+			return []GameTransaction{}
+		}
+	}
+
+	/**
+	 * Action Can-Act Checks
+	 */
 	if action.Disabled || !action.Filter(*game, *game, transaction.Context) {
-		context := transaction.Context
 		context.ActionID = &action.ID
 		logStart := NewLogContext("$source$ used $action$", context)
 		logFail := NewLogContext("$action$ failed.", context)
@@ -111,12 +130,10 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 		)
 	}
 
-	context := transaction.Context
 	if action.MapContext != nil {
 		context = action.MapContext(*game, context)
 	}
 
-	source, ok := game.GetSource(context)
 	if ok {
 		log := NewLogContext("$source$ used $action$", context)
 		if action.Config.LogSuccessF != nil {
@@ -139,6 +156,7 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 
 func GetAccuracy(game Game, source ResolvedActor, target ResolvedActor) float64 {
 	ratio := float64(source.Stats[StatAccuracy]) / float64(target.Stats[StatEvasion])
+	fmt.Printf("ACC = %d / %d = %f \n", source.Stats[StatAccuracy], target.Stats[StatEvasion], ratio)
 	return ratio
 }
 

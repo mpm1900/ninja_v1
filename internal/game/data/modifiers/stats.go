@@ -94,6 +94,11 @@ var SpeedUpSource = MakeStatDeltaSource(game.StatSpeed, "Speed Up", nil, 1)
 var SpeedUpTeam = MakeStatDeltaTeam(game.StatSpeed, "Speed Up", nil, 1)
 var SpeedUpAll = MakeStatDeltaAll(game.StatSpeed, "Speed Up", nil, 1)
 
+var EvasionUpID = uuid.New()
+var EvasionUpSource = MakeStatDeltaSource(game.StatEvasion, "Evasion Up", &EvasionUpID, 1)
+var AccuracyUpID = uuid.New()
+var AccuracyUpSource = MakeStatDeltaSource(game.StatAccuracy, "Accuracy Up", &AccuracyUpID, 1)
+
 // NAMED STAT UPS
 var TailwindID = uuid.New()
 var Tailwind = MakeStatMultTeam(game.StatSpeed, "Tailwind", &TailwindID, 2.0, game.MutPriorityPostStagedStats)

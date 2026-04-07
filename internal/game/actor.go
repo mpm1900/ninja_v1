@@ -157,8 +157,16 @@ type ActorState struct {
 	// [Stunned] whether or not an actor _can act_
 	// - stunned units cannot push actions
 	// - stunned units cannot resolve actions (if the status was added during running)
-	Stunned  bool `json:"stunned"`
-	Statused bool `json:"statused"`
+	Stunned bool `json:"stunned"`
+	/**
+	 * Statuses
+	 * Made the choice for the core to not reference status modifiers by name,
+	 *  rather, have both reference keys in ActorState below. For example,
+	 *  ResolveAction will no check if the source has a modifier "Paralysis,"
+	 *  It instead check the flag set by Paralysis here.
+	 */
+	Statused  bool `json:"statused"`
+	Paralyzed bool `json:"paralyzed"`
 }
 
 type Summon struct {
