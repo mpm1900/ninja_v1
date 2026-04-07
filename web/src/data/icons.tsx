@@ -1,4 +1,4 @@
-import { GiFlamer, GiShieldcomb, GiStarSwirl } from 'react-icons/gi'
+import { GiFlamer, GiLightningTrio, GiShieldcomb, GiStarSwirl } from 'react-icons/gi'
 import type { IconType } from 'react-icons/lib'
 
 const Anger: IconType = (props) => (
@@ -67,12 +67,14 @@ const SHINOBI_ICONS: Record<string, IconType> = {
 
 const MODIFIER_ICONS: Record<string, IconType> = {
   burned: GiFlamer,
+  paralyzed: GiLightningTrio,
   protected: GiShieldcomb,
   stunned: GiStarSwirl,
   taunted: Anger,
 }
 const MODIFIER_CLASSES: Record<string, string> = {
   burned: 'text-orange-400',
+  paralyzed: 'text-yellow-400',
   protected: '',
 }
 

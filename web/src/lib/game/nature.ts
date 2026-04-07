@@ -37,6 +37,7 @@ const natureNames: Partial<Record<NatureSet, string>> = {
   storm: '嵐',
   wood: '木',
   yinyang: '陰陽',
+  particle: '塵',
   jashin: '邪',
 }
 

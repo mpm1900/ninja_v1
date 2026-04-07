@@ -97,7 +97,7 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 	/**
 	 * Source Can-Act Checks
 	 */
-	if ok {
+	if ok && action.ID != Switch.ID {
 		resolved := source.Resolve(*game)
 		if !resolved.CanAct(game, context) {
 			return []GameTransaction{}

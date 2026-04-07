@@ -31,4 +31,6 @@ var ACTORS map[uuid.UUID]game.ActorDef = map[uuid.UUID]game.ActorDef{
 	actors.Shikamaru.ActorID:  actors.Shikamaru,
 	actors.Kabuto.ActorID:     actors.Kabuto,
 	actors.Choji.ActorID:      actors.Choji,
+	actors.Kimimaro.ActorID:   actors.Kimimaro,
+	actors.Onoki.ActorID:      actors.Onoki,
 }

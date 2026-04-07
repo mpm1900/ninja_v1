@@ -1,0 +1,49 @@
+package actors
+
+import (
+	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
+
+	"github.com/google/uuid"
+)
+
+var Kimimaro = game.ActorDef{
+	ActorID:   uuid.New(),
+	SpriteURL: "/sprites/kimimaro_64.png",
+	Name:      "Kimimaro Kaguya",
+	Affiliations: []string{
+		game.AffKonoha,
+	},
+
+	Stats: map[game.ActorStat]int{
+		game.StatHP:            76,
+		game.StatStamina:       70,
+		game.StatAttack:        147,
+		game.StatDefense:       90,
+		game.StatChakraAttack:  60,
+		game.StatChakraDefense: 70,
+		game.StatSpeed:         97,
+		game.StatEvasion:       100,
+		game.StatAccuracy:      100,
+	},
+	NatureDamage:     game.NewNatureSetValues(),
+	NatureResistance: game.NewNatureSetValues(),
+	Natures: game.MapNatures([]game.NatureSet{
+		game.NsTai,
+		game.NsEarth,
+	}),
+
+	InnateModifiers: []game.Modifier{
+		modifiers.Rage,
+	},
+	ActionCount: 6,
+	ActionIDs: []uuid.UUID{
+		game.Switch.ID,
+		actions.LuckyStrikes.ID,
+		actions.Chidori.ID,
+		actions.DragonDance.ID,
+		actions.Fireball.ID,
+		actions.LeafJab.ID,
+	},
+}

@@ -14,13 +14,13 @@ var Yamato = game.ActorDef{
 	Affiliations: []string{game.AffKonoha},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            90,
+		game.StatHP:            80,
 		game.StatStamina:       101,
 		game.StatAttack:        80,
-		game.StatDefense:       120,
-		game.StatChakraAttack:  120,
-		game.StatChakraDefense: 90,
-		game.StatSpeed:         84,
+		game.StatDefense:       100,
+		game.StatChakraAttack:  95,
+		game.StatChakraDefense: 135,
+		game.StatSpeed:         70,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},

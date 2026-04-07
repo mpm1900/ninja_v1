@@ -666,6 +666,7 @@ func (r ResolvedActor) CanAct(game *Game, context Context) bool {
 			return false
 		}
 	}
+
 	return true
 }
 func (r ResolvedActor) HasChakra(amount int) bool {

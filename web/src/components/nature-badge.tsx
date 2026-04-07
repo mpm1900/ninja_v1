@@ -29,6 +29,7 @@ const variants = cva<t>(
         wood: 'bg-olive-600 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
         yinyang:
           'bg-[linear-gradient(135deg,theme(colors.indigo.900)_0%,theme(colors.indigo.900)_50%,theme(colors.neutral.300)_50%,theme(colors.neutral.300)_100%)] text-amber-300! shadow-[inset_0_0_0_1px_theme(colors.amber.300)]',
+        particle: 'bg-mauve-500 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300',
         jashin:
           'bg-mauve-950 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
       },
