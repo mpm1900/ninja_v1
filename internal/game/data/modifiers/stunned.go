@@ -10,6 +10,7 @@ var stunnedID = uuid.New()
 var Stunned = game.Modifier{
 	ID:       uuid.New(),
 	Name:     "Stunned",
+	Icon:     "stunned",
 	GroupID:  &stunnedID,
 	Duration: 0,
 	ActorMutations: []game.ActorMutation{

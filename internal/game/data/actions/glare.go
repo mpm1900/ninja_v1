@@ -24,7 +24,7 @@ func MakeGlare() game.Action {
 		ID:              uuid.New(),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
-		TargetPredicate: game.ComposeAF(game.OtherTeamFilter, game.ActiveFilter),
+		TargetPredicate: game.ComposeAF(game.OtherFilter, game.ActiveFilter),
 		ContextValidate: game.PositionsLengthFilter(1),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityP3,

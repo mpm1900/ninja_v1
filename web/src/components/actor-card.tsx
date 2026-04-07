@@ -12,6 +12,7 @@ import { sendContextMessage } from '#/lib/stores/socket'
 import { NULL_CONTEXT } from '#/lib/game/context'
 import { ActorThumbnail } from './actor-thumbnail'
 import { StageBadge } from './stage-badge'
+import { ActorModifiers } from './actor-modifiers'
 
 const actorVariants = cva(
   cn(
@@ -106,14 +107,7 @@ function ActorCard({
           className="absolute bottom-2 left-2 z-20"
         />
       )}
-      <div className="relative flex flex-wrap gap-3 z-30">
-        {Object.entries(actor?.applied_modifiers ?? {}).map(([ID, count]) => (
-          <span key={ID}>
-            {modifiers.find((m) => m.group_ID === ID)?.name}
-            {count > 1 ? ` (${count})` : null}
-          </span>
-        ))}
-      </div>
+      {actor && <ActorModifiers actor={actor} modifiers={modifiers} />}
       <div
         className={actorVariants({
           className: cn(is_player && 'cursor-pointer', 'gap-2'),

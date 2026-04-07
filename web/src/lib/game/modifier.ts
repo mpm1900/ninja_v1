@@ -1,10 +1,11 @@
-import type { Context } from "./context"
+import type { Context } from './context'
 
 type Modifier = {
   ID: string
   group_ID: string
   name: string
   duration: number | null
+  icon?: string
 }
 
 type ModifierTransaction = {

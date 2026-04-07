@@ -10,6 +10,7 @@ var tauntedID = uuid.New()
 var Taunted = game.Modifier{
 	ID:       uuid.New(),
 	Name:     "Taunted",
+	Icon:     "taunted",
 	GroupID:  &tauntedID,
 	Duration: 4,
 	ActorMutations: []game.ActorMutation{

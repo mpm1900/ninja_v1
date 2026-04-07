@@ -99,9 +99,7 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 	 */
 	if ok {
 		resolved := source.Resolve(*game)
-		if resolved.Stunned {
-			log := NewLogContext("$source$ was stunned", context)
-			game.PushLog(log)
+		if !resolved.CanAct(game, context) {
 			return []GameTransaction{}
 		}
 	}

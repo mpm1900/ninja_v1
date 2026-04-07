@@ -17,9 +17,10 @@ type Modifier struct {
 	Name     string     `json:"name"`
 	Delay    int        `json:"delay"`
 	Duration int        `json:"duration"`
+	Icon     string     `json:"icon"`
 
 	ActorMutations     []ActorMutation     `json:"-"`
-	GameStateMutations []GameStateMutation `json:"-"`
+	GameStateMutations []GameStateMutation `json:"-"` // TODO
 	Triggers           []Trigger           `json:"-"`
 }
 

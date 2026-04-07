@@ -3,6 +3,7 @@ package game
 import (
 	"maps"
 	"math"
+	"math/rand"
 	"slices"
 	"sort"
 
@@ -640,6 +641,24 @@ func (a Actor) Resolve(g Game) ResolvedActor {
 	return resolved
 }
 
+func (r ResolvedActor) CanAct(game *Game, context Context) bool {
+	if r.Stunned {
+		log := NewLogContext("$source$ was stunned.", context)
+		game.PushLog(log)
+		return false
+	}
+
+	if r.Paralyzed {
+		// check for 1/4 chance
+		roll := rand.Intn(100)
+		if roll > 75 {
+			log := NewLogContext("$source$ was paralyzed.", context)
+			game.PushLog(log)
+			return false
+		}
+	}
+	return true
+}
 func (r ResolvedActor) HasChakra(amount int) bool {
 	return (r.Stats[StatStamina] - r.StaminaDamage) >= amount
 }
