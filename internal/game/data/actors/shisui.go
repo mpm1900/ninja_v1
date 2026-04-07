@@ -33,11 +33,8 @@ var Shisui = game.ActorDef{
 		game.NsWind,
 		game.NsYin,
 	}),
-
-	InnateModifiers: []game.Modifier{
-		modifiers.PriorityFailure,
-		modifiers.EvasionUpSource,
-	},
+	Abilities:   []game.Modifier{},
+	Ability:     &modifiers.PriorityFailure,
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,

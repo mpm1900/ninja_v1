@@ -12,6 +12,7 @@ import { clientsStore } from '#/lib/stores/clients'
 import { NULL_CONTEXT } from '#/lib/game/context'
 import { useQuery } from '@tanstack/react-query'
 import { actionsQuery } from '#/lib/queries/actions'
+import { AbilitySelect } from './ability-select'
 
 function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
   const game = useStore(gameStore, (g) => g)
@@ -19,7 +20,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
   const player = game.players.find((p) => p.ID == actor.player_ID)
   const actions_query = useQuery({
     ...actionsQuery,
-    select: all => all.filter(a => actor.action_IDs.includes(a.ID))
+    select: (all) => all.filter((a) => actor.action_IDs.includes(a.ID)),
   })
   const { context, onContextChange } = useGameContext(actor, undefined, [game])
 
@@ -53,6 +54,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
                   })
                 }}
               />
+              <AbilitySelect />
             </div>
             <ActorStats actor={actor} />
           </div>
@@ -63,7 +65,9 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
           <ActionsTable
             data={actions_query.data ?? []}
             enabled={enabled && !!player}
-            rowSelection={Object.fromEntries(actor.actions.map(a => [a.ID, true]))}
+            rowSelection={Object.fromEntries(
+              actor.actions.map((a) => [a.ID, true])
+            )}
             onRowSelectionChange={(rowSelection) => {
               sendContextMessage({
                 type: 'update-actor',
@@ -80,10 +84,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
             subRow={() => (
               <ActionControl
                 action={actor.actions.find((a) => a.ID === context.action_ID)}
-                enabled={
-                  enabled &&
-                  !!player
-                }
+                enabled={enabled && !!player}
                 context={context}
                 onContextChange={onContextChange}
               />

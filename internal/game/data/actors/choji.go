@@ -30,9 +30,9 @@ var Choji = game.ActorDef{
 		game.NsEarth,
 		game.NsYang,
 	}),
-
-	InnateModifiers: []game.Modifier{},
-	ActionCount:     6,
+	Abilities:   []game.Modifier{},
+	Ability:     nil,
+	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
 		actions.DragonDance.ID,

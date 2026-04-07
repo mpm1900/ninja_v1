@@ -32,9 +32,9 @@ var Naruto = game.ActorDef{
 		game.NsWind,
 		game.NsYang,
 	}),
-
-	InnateModifiers: []game.Modifier{},
-	ActionCount:     6,
+	Abilities:   []game.Modifier{},
+	Ability:     nil,
+	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
 		actions.Rasengan.ID,

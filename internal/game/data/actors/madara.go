@@ -32,9 +32,9 @@ var Madara = game.ActorDef{
 		game.NsStorm,
 		game.NsYin,
 	}),
-
-	InnateModifiers: []game.Modifier{},
-	ActionCount:     6,
+	Abilities:   []game.Modifier{},
+	Ability:     nil,
+	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
 		actions.Glare.ID,

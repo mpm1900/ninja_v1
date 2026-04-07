@@ -30,10 +30,8 @@ var Kisame = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsWater,
 	}),
-
-	InnateModifiers: []game.Modifier{
-		modifiers.WaterAbsorb,
-	},
+	Abilities:   []game.Modifier{},
+	Ability:     &modifiers.WaterAbsorb,
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,

@@ -32,10 +32,8 @@ var Minato = game.ActorDef{
 		game.NsWind,
 		game.NsLightning,
 	}),
-
-	InnateModifiers: []game.Modifier{
-		modifiers.SpeedBoost,
-	},
+	Abilities:   []game.Modifier{},
+	Ability:     &modifiers.SpeedBoost,
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,

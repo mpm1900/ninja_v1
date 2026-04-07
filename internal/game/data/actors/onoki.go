@@ -33,9 +33,9 @@ var Onoki = game.ActorDef{
 		game.NsWind,
 		game.NsParticle,
 	}),
-
-	InnateModifiers: []game.Modifier{},
-	ActionCount:     6,
+	Abilities:   []game.Modifier{},
+	Ability:     nil,
+	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
 		actions.LuckyStrikes.ID,

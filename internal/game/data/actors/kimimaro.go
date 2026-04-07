@@ -3,7 +3,6 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
-	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -33,10 +32,8 @@ var Kimimaro = game.ActorDef{
 		game.NsTai,
 		game.NsEarth,
 	}),
-
-	InnateModifiers: []game.Modifier{
-		modifiers.Rage,
-	},
+	Abilities:   []game.Modifier{},
+	Ability:     nil,
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,

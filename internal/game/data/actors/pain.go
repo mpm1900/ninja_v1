@@ -31,10 +31,8 @@ var Pain = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsYinYang,
 	}),
-
-	InnateModifiers: []game.Modifier{
-		modifiers.VesselOfPain,
-	},
+	Abilities:   []game.Modifier{},
+	Ability:     &modifiers.VesselOfPain,
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,

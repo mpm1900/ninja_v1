@@ -1,0 +1,29 @@
+import type { Actor } from '#/lib/game/actor'
+import { cn } from '#/lib/utils'
+
+function ActorStatus({ actor }: { actor: Actor }) {
+  return (
+    <div
+      className={cn(
+        'absolute shadow-md shadow- font-bold px-1 h-4 w-full text-center leading-5! rounded whitespace-nowrap -bottom-1 z-10 text-lg nanum-brush-script-regular',
+        'bg-mist-300 text-background',
+        {
+          'bg-orange-200 text-orange-900': actor.burned,
+          'bg-indigo-300 text-indigo-900': actor.sleeping,
+          'bg-yellow-200 text-yellow-900': actor.paralyzed,
+        }
+      )}
+    >
+      {
+        actor.statused ? <span>
+          {actor.sleeping && 'SLEEP'}
+          {actor.paralyzed && 'PARA'}
+          {actor.burned && 'BURN'}
+        </span> : <span>LV {actor.level}</span>
+      }
+
+    </div>
+  )
+}
+
+export { ActorStatus }

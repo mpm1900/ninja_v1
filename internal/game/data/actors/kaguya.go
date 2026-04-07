@@ -30,9 +30,9 @@ var Kaguya = game.ActorDef{
 		game.NsYang,
 		game.NsYinYang,
 	}),
-
-	InnateModifiers: []game.Modifier{},
-	ActionCount:     6,
+	Abilities:   []game.Modifier{},
+	Ability:     nil,
+	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
 		actions.Chidori.ID,

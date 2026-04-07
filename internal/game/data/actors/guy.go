@@ -34,10 +34,8 @@ var Guy = game.ActorDef{
 		game.NsFire,
 		game.NsLightning,
 	}),
-
-	InnateModifiers: []game.Modifier{
-		modifiers.Rage,
-	},
+	Abilities:   []game.Modifier{},
+	Ability:     &modifiers.Rage,
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,

@@ -128,9 +128,10 @@ type ActorDef struct {
 	NatureResistance map[Nature]float64     `json:"nature_resistance"`
 	Natures          map[NatureSet][]Nature `json:"natures"`
 
-	InnateModifiers []Modifier  `json:"innate_modifiers"`
-	ActionIDs       []uuid.UUID `json:"action_IDs,omitempty"`
-	ActionCount     int         `json:"action_count"`
+	Abilities   []Modifier  `json:"abilities"`
+	Ability     *Modifier   `json:"ability"`
+	ActionIDs   []uuid.UUID `json:"action_IDs,omitempty"`
+	ActionCount int         `json:"action_count"`
 }
 
 type ActorStateType string
@@ -175,8 +176,11 @@ type ActorState struct {
 	 *  ResolveAction will no check if the source has a modifier "Paralysis,"
 	 *  It instead check the flag set by Paralysis here.
 	 */
-	Statused  bool `json:"statused"`
-	Paralyzed bool `json:"paralyzed"`
+	Statused     bool `json:"statused"`
+	Burned       bool `json:"burned"`
+	Paralyzed    bool `json:"paralyzed"`
+	Sleeping     bool `json:"sleeping"`
+	SleepCounter int  `json:"-"`
 }
 
 type Summon struct {
@@ -265,28 +269,27 @@ func makeActions(actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) []Action {
 	return actions
 }
 
-func cloneActorDef(def ActorDef) ActorDef {
-	cloned := def
+func (ad ActorDef) Clone() ActorDef {
+	cloned := ad
 
-	cloned.Affiliations = slices.Clone(def.Affiliations)
-	cloned.Stats = maps.Clone(def.Stats)
-	cloned.NatureDamage = maps.Clone(def.NatureDamage)
-	cloned.NatureResistance = maps.Clone(def.NatureResistance)
+	cloned.Affiliations = slices.Clone(ad.Affiliations)
+	cloned.Stats = maps.Clone(ad.Stats)
+	cloned.NatureDamage = maps.Clone(ad.NatureDamage)
+	cloned.NatureResistance = maps.Clone(ad.NatureResistance)
 
-	cloned.Natures = make(map[NatureSet][]Nature, len(def.Natures))
-	for k, v := range def.Natures {
+	cloned.Natures = make(map[NatureSet][]Nature, len(ad.Natures))
+	for k, v := range ad.Natures {
 		cloned.Natures[k] = slices.Clone(v)
 	}
 
-	cloned.InnateModifiers = slices.Clone(def.InnateModifiers)
-	cloned.ActionIDs = slices.Clone(def.ActionIDs)
+	cloned.ActionIDs = slices.Clone(ad.ActionIDs)
 
 	return cloned
 }
 
 func MakeActor(def ActorDef, playerID uuid.UUID, experience int, actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) Actor {
 	actions := makeActions(actionIDs, ACTIONS)
-	clonedDef := cloneActorDef(def)
+	clonedDef := def.Clone()
 
 	return Actor{
 		ActorDef:   clonedDef,
@@ -308,6 +311,9 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, actionIDs []uui
 			StaminaDamage: 0,
 			Stunned:       false,
 			Statused:      false,
+
+			Sleeping:     false,
+			SleepCounter: 0,
 		},
 		Stages: map[ActorStat]int{
 			StatHP:            0,
@@ -500,8 +506,8 @@ func GetActorModifiers(game Game) []Transaction[Modifier] {
 
 	for _, actor := range activeActors {
 		context := newActorContext(actor)
-		for _, modifier := range actor.InnateModifiers {
-			transaction := MakeTransaction(modifier, context)
+		if actor.Ability != nil {
+			transaction := MakeTransaction(*actor.Ability, context)
 			modifiers = append(modifiers, transaction)
 		}
 	}
@@ -537,7 +543,6 @@ func (a Actor) Clone() Actor {
 	b.NatureResistance = maps.Clone(a.NatureResistance)
 
 	b.Natures = maps.Clone(a.Natures)
-	b.InnateModifiers = slices.Clone(a.InnateModifiers)
 	b.Actions = slices.Clone(a.Actions)
 
 	return b
@@ -661,7 +666,27 @@ func (r ResolvedActor) CanAct(game *Game, context Context) bool {
 		// check for 1/4 chance
 		roll := rand.Intn(100)
 		if roll > 75 {
-			log := NewLogContext("$source$ was paralyzed.", context)
+			log := NewLogContext("$source$ could not move.", context)
+			game.PushLog(log)
+			return false
+		}
+	}
+
+	if r.Sleeping {
+		if r.SleepCounter == 0 {
+			game.UpdateActor(r.ID, func(a Actor) Actor {
+				a.Statused = false
+				a.Sleeping = false
+				return a
+			})
+			log := NewLogContext("$source$ woke up.", context)
+			game.PushLog(log)
+		} else {
+			game.UpdateActor(r.ID, func(a Actor) Actor {
+				a.SleepCounter--
+				return a
+			})
+			log := NewLogContext("$source$ was sleeping.", context)
 			game.PushLog(log)
 			return false
 		}

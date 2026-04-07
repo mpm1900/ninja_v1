@@ -30,9 +30,9 @@ var Kabuto = game.ActorDef{
 		game.NsYin,
 		game.NsYang,
 	}),
-
-	InnateModifiers: []game.Modifier{},
-	ActionCount:     6,
+	Abilities:   []game.Modifier{},
+	Ability:     nil,
+	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
 		actions.Haze.ID,

@@ -49,7 +49,7 @@ type ActorDef = {
   natures: Partial<Record<NatureSet, Array<Nature>>>
   nature_damage: NatureStats<number>
   nature_resistance: NatureStats<number>
-  innate_modifiers: Array<Modifier>
+  ability: Modifier | null
   action_count: number
   action_IDs: Array<string>
 }
@@ -63,6 +63,10 @@ type ActorState = {
   seen: boolean
   stamina_damage: number
   stunned: boolean
+  statused: boolean
+  burned: boolean
+  paralyzed: boolean
+  sleeping: boolean
 }
 
 type Actor = ActorDef &
@@ -79,7 +83,7 @@ type Actor = ActorDef &
     actions: Array<Action>
     resolved_nature_resistance: NatureStats<number>
     resolved_nature_damage: NatureStats<number>
-    summon?: (Actor & { proxy: boolean })
+    summon?: Actor & { proxy: boolean }
   }
 
 function checkActorStat(actor: Actor, key: ActorBaseStat) {
@@ -94,7 +98,9 @@ function getTotalBaseStats(actor: ActorDef) {
     accuracy: 0,
     evasion: 0,
   }
-  return Math.floor((Object.values(stats).reduce((p, c) => p + c, 0)) - stats.stamina)
+  return Math.floor(
+    Object.values(stats).reduce((p, c) => p + c, 0) - stats.stamina
+  )
 }
 
 export type {

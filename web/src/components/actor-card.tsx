@@ -13,6 +13,7 @@ import { NULL_CONTEXT } from '#/lib/game/context'
 import { ActorThumbnail } from './actor-thumbnail'
 import { StageBadge } from './stage-badge'
 import { ActorModifiers } from './actor-modifiers'
+import { ActorStatus } from './actor-status'
 
 const actorVariants = cva(
   cn(
@@ -79,7 +80,7 @@ function ActorCard({
 }) {
   const modifiers = (game.modifiers ?? [])
     .map((m) => m.mutation)
-    .concat(game.actors.flatMap((a) => a.innate_modifiers))
+    .concat(game.actors.filter(a => a.ability).map((a) => a.ability!))
 
   const is_player = actor?.player_ID === client_ID
   const action_tx = game.actions.find(
@@ -119,9 +120,7 @@ function ActorCard({
         {actor && (
           <div className="relative">
             <ActorThumbnail actor={actor} size={50} />
-            <div className="absolute shadow-md shadow- font-bold px-1 h-4 leading-5 rounded whitespace-nowrap -bottom-1 z-10 bg-mist-300 text-background text-lg nanum-brush-script-regular">
-              LV {actor.level}
-            </div>
+            <ActorStatus actor={actor} />
           </div>
         )}
         <ItemContent className="relative">

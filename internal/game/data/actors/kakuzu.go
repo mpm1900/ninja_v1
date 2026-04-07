@@ -29,9 +29,9 @@ var Kakuzu = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsEarth,
 	}),
-
-	InnateModifiers: []game.Modifier{},
-	ActionCount:     6,
+	Abilities:   []game.Modifier{},
+	Ability:     nil,
+	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
 		actions.Chidori.ID,
