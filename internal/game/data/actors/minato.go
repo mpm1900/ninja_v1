@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -14,13 +15,13 @@ var Minato = game.ActorDef{
 	Affiliations: []string{game.AffKonoha},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            60,
+		game.StatHP:            80,
 		game.StatStamina:       80,
-		game.StatAttack:        110,
+		game.StatAttack:        130,
 		game.StatDefense:       80,
-		game.StatChakraAttack:  120,
+		game.StatChakraAttack:  130,
 		game.StatChakraDefense: 80,
-		game.StatSpeed:         200,
+		game.StatSpeed:         100,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},
@@ -32,8 +33,10 @@ var Minato = game.ActorDef{
 		game.NsLightning,
 	}),
 
-	InnateModifiers: []game.Modifier{},
-	ActionCount:     6,
+	InnateModifiers: []game.Modifier{
+		modifiers.SpeedBoost,
+	},
+	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
 		actions.Rasengan.ID,
