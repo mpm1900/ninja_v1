@@ -60,8 +60,12 @@ func NewStatMult(
 	}
 }
 
-func MakeStatDeltaSource(stat game.ActorStat, name string, groupID *uuid.UUID, delta int) game.Modifier {
+func MakeStatDeltaSource(stat game.ActorStat, groupID *uuid.UUID, delta int) game.Modifier {
 	modifier := NewStageDelta(stat, groupID, game.ComposeAF(game.ActiveFilter, game.SourceFilter), game.MutPriorityDefault, delta)
+	return modifier
+}
+func MakeStatDeltaSourceWithName(stat game.ActorStat, groupID *uuid.UUID, delta int, name string) game.Modifier {
+	modifier := MakeStatDeltaSource(stat, groupID, delta)
 	modifier.Name = name
 	return modifier
 }
@@ -85,19 +89,40 @@ func MakeStatMultTeam(stat game.ActorStat, name string, groupID *uuid.UUID, mult
 }
 
 var AttackUpID = uuid.New()
-var AttackUpSource = MakeStatDeltaSource(game.StatAttack, "Attack Up", &AttackUpID, 1)
-var AttackDownSource = MakeStatDeltaSource(game.StatAttack, "Attack Down", nil, -1)
-var ChakraAttackUpSource = MakeStatDeltaSource(game.StatChakraAttack, "Chakra Attack Up", nil, 1)
-var ChakraAttackDownSource = MakeStatDeltaSource(game.StatChakraAttack, "Chakra Attack Down", nil, -1)
-var ChakraAttackDown2Source = MakeStatDeltaSource(game.StatChakraAttack, "Chakra Attack Down (2)", nil, -2)
-var SpeedUpSource = MakeStatDeltaSource(game.StatSpeed, "Speed Up", nil, 1)
-var SpeedUpTeam = MakeStatDeltaTeam(game.StatSpeed, "Speed Up", nil, 1)
-var SpeedUpAll = MakeStatDeltaAll(game.StatSpeed, "Speed Up", nil, 1)
+var AttackDownID = uuid.New()
+var AttackUpSource = MakeStatDeltaSource(game.StatAttack, &AttackUpID, 1)
+var AttackUp2Source = MakeStatDeltaSource(game.StatAttack, &AttackUpID, 2)
+var AttackDownSource = MakeStatDeltaSource(game.StatAttack, &AttackDownID, -1)
+var AttackDown2Source = MakeStatDeltaSource(game.StatAttack, &AttackDownID, -2)
+var DefenseUpID = uuid.New()
+var DefenseDownID = uuid.New()
+var DefenseUpSource = MakeStatDeltaSource(game.StatDefense, &DefenseUpID, 1)
+var DefenseUp2Source = MakeStatDeltaSource(game.StatDefense, &DefenseUpID, 2)
+var DefenseDownSource = MakeStatDeltaSource(game.StatDefense, &DefenseDownID, -1)
+var DefenseDown2Source = MakeStatDeltaSource(game.StatDefense, &DefenseDownID, -2)
+var ChakraAttackUpID = uuid.New()
+var ChakraAttackDownID = uuid.New()
+var ChakraAttackUpSource = MakeStatDeltaSource(game.StatChakraAttack, &ChakraAttackUpID, 1)
+var ChakraAttackUp2Source = MakeStatDeltaSource(game.StatChakraAttack, &ChakraAttackUpID, 2)
+var ChakraAttackDownSource = MakeStatDeltaSource(game.StatChakraAttack, &ChakraAttackDownID, -1)
+var ChakraAttackDown2Source = MakeStatDeltaSource(game.StatChakraAttack, &ChakraAttackDownID, -2)
+var ChakraDefenseUpID = uuid.New()
+var ChakraDefenseDownID = uuid.New()
+var ChakraDefenseUpSource = MakeStatDeltaSource(game.StatChakraDefense, &ChakraDefenseUpID, 1)
+var ChakraDefenseUp2Source = MakeStatDeltaSource(game.StatChakraDefense, &ChakraDefenseUpID, 2)
+var ChakraDefenseDownSource = MakeStatDeltaSource(game.StatChakraDefense, &ChakraDefenseDownID, -1)
+var ChakraDefenseDown2Source = MakeStatDeltaSource(game.StatChakraDefense, &ChakraDefenseDownID, -2)
+var SpeedUpID = uuid.New()
+var SpeedDownID = uuid.New()
+var SpeedUpSource = MakeStatDeltaSource(game.StatSpeed, &SpeedUpID, 1)
+var SpeedUp2Source = MakeStatDeltaSource(game.StatSpeed, &SpeedUpID, 2)
+var SpeedDownSource = MakeStatDeltaSource(game.StatSpeed, &SpeedDownID, -1)
+var SpeedDown2Source = MakeStatDeltaSource(game.StatSpeed, &SpeedDownID, -2)
 
 var EvasionUpID = uuid.New()
-var EvasionUpSource = MakeStatDeltaSource(game.StatEvasion, "Evasion Up", &EvasionUpID, 1)
+var EvasionUpSource = MakeStatDeltaSourceWithName(game.StatEvasion, &EvasionUpID, 1, "Evasion Up")
 var AccuracyUpID = uuid.New()
-var AccuracyUpSource = MakeStatDeltaSource(game.StatAccuracy, "Accuracy Up", &AccuracyUpID, 1)
+var AccuracyUpSource = MakeStatDeltaSourceWithName(game.StatAccuracy, &AccuracyUpID, 1, "Accuracy Up")
 
 // NAMED STAT UPS
 var TailwindID = uuid.New()
