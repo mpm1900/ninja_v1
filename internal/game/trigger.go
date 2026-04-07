@@ -10,6 +10,8 @@ const (
 	OnActorEnter    TriggerOn = "on-actor-enter"
 	OnActorLeave    TriggerOn = "on-actor-leave"
 	OnDamageRecieve TriggerOn = "on-damage-recieve"
+	OnDeath         TriggerOn = "on-death"
+	OnKill          TriggerOn = "on-kill"
 	OnTurnEnd       TriggerOn = "on-turn-end"
 )
 

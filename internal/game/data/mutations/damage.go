@@ -23,9 +23,11 @@ func resolveTargets(g game.Game, context game.Context) []game.ResolvedActor {
 	return resolved
 }
 
-func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, updater func(game.Actor) game.Actor) {
+// returns if target is still alive after
+func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, updater func(game.Actor) game.Actor) bool {
+	alive := target.Alive
 	if !target.Alive {
-		return
+		return alive
 	}
 
 	log_ctx := game.NewContext()
@@ -43,10 +45,8 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 		} else {
 			a.Damage += damage
 			a.Alive = hp > a.Damage
-			ratio := int(float64(damage) * 100 / float64(hp))
-			if ratio > 100 {
-				ratio = 100
-			}
+			alive = a.Alive
+			ratio := min(int(float64(damage)*100/float64(hp)), 100)
 			if ratio > 0 {
 				g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ lost %d%% HP.", ratio), log_ctx))
 			} else {
@@ -61,9 +61,13 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 		u := updater
 		return u(a)
 	})
+
+	return alive
 }
-func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) {
-	ApplyDamageWith(g, target, damage, nil)
+
+// returns if target is still alive after
+func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) bool {
+	return ApplyDamageWith(g, target, damage, nil)
 }
 
 func PureDamageWith(damage int, trigger bool, updater func(game.Actor) game.Actor) game.GameMutation {
@@ -168,12 +172,19 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 
 					for _, damage := range damages {
 						if !config.Repeat {
-							ApplyDamage(&g, target, damage)
+							alive := ApplyDamage(&g, target, damage)
 							if damage > 0 {
 								g.On(game.OnDamageRecieve, &context)
 							}
 							if config.Critical > 1.0 {
 								g.PushLog(game.NewLog(fmt.Sprintf("Critical Hit! (x%f)", config.Critical)))
+							}
+
+							if !alive {
+								death_context := game.NewContext().WithSource(target.ID)
+								kill_context := game.NewContext().WithSource(source.ID).WithTargetIDs([]uuid.UUID{target.ID})
+								g.On(game.OnDeath, &death_context)
+								g.On(game.OnKill, &kill_context)
 							}
 
 							total += clampDamage(damage)
