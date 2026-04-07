@@ -1,0 +1,42 @@
+package actors
+
+import (
+	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/actions"
+
+	"github.com/google/uuid"
+)
+
+var Kabuto = game.ActorDef{
+	ActorID:      uuid.New(),
+	SpriteURL:    "/sprites/kabuto_64.png",
+	Name:         "Kabuto Yakushi",
+	Affiliations: []string{game.AffOto},
+
+	Stats: map[game.ActorStat]int{
+		game.StatHP:            55,
+		game.StatStamina:       100,
+		game.StatAttack:        20,
+		game.StatDefense:       35,
+		game.StatChakraAttack:  20,
+		game.StatChakraDefense: 45,
+		game.StatSpeed:         75,
+		game.StatEvasion:       100,
+		game.StatAccuracy:      100,
+	},
+	NatureDamage:     game.NewNatureSetValues(),
+	NatureResistance: game.NewNatureSetValues(),
+	Natures: game.MapNatures([]game.NatureSet{
+		game.NsYin,
+		game.NsYang,
+	}),
+
+	InnateModifiers: []game.Modifier{},
+	ActionCount:     6,
+	ActionIDs: []uuid.UUID{
+		game.Switch.ID,
+		actions.Haze.ID,
+		actions.Tailwind.ID,
+		actions.FollowMe.ID,
+	},
+}

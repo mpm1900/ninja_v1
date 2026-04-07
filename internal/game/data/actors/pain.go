@@ -29,8 +29,7 @@ var Pain = game.ActorDef{
 	NatureDamage:     game.NewNatureSetValues(),
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsYin,
-		game.NsWater,
+		game.NsYinYang,
 	}),
 
 	InnateModifiers: []game.Modifier{

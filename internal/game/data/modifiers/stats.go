@@ -84,7 +84,8 @@ func MakeStatMultTeam(stat game.ActorStat, name string, groupID *uuid.UUID, mult
 	return modifier
 }
 
-var AttackUpSource = MakeStatDeltaSource(game.StatAttack, "Attack Up", nil, 1)
+var AttackUpID = uuid.New()
+var AttackUpSource = MakeStatDeltaSource(game.StatAttack, "Attack Up", &AttackUpID, 1)
 var AttackDownSource = MakeStatDeltaSource(game.StatAttack, "Attack Down", nil, -1)
 var ChakraAttackUpSource = MakeStatDeltaSource(game.StatChakraAttack, "Chakra Attack Up", nil, 1)
 var ChakraAttackDownSource = MakeStatDeltaSource(game.StatChakraAttack, "Chakra Attack Down", nil, -1)

@@ -177,6 +177,7 @@ type Actor struct {
 	Focus      ActorFocus        `json:"focus"`
 	Stages     map[ActorStat]int `json:"staged_stats"`
 	Actions    []Action          `json:"actions"`
+	Immunities []uuid.UUID       `json:"immunities"`
 	Summon     *Summon           `json:"summon,omitempty"`
 }
 
@@ -190,6 +191,7 @@ type ResolvedActor struct {
 }
 
 const (
+	MutPriorityImmunity        = -30
 	MutPriorityStateChanges    = -20
 	MutPriorityPreBaseStats    = -11
 	MutPriorityMapBaseStats    = -10
@@ -275,6 +277,7 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, actionIDs []uui
 		Level:      GetLevel(experience),
 		Experience: experience,
 		Focus:      FocusNone,
+		Immunities: []uuid.UUID{},
 		ActorState: ActorState{
 			ActiveTurns:   0,
 			Alive:         true,
@@ -316,6 +319,12 @@ func (a *Actor) SetPosition(positionID *uuid.UUID) {
 		a.InactiveTurns = 0
 		a.SetSummon(nil)
 	}
+}
+func (a *Actor) PushImmunities(ids ...uuid.UUID) {
+	a.Immunities = append(a.Immunities, ids...)
+}
+func (a Actor) HasImmunity(id uuid.UUID) bool {
+	return slices.Contains(a.Immunities, id)
 }
 func (a *Actor) SetSummon(summon *Summon) {
 	if summon != nil {
@@ -545,6 +554,9 @@ func getMutations(transactions []Transaction[Modifier]) []ActorMutation {
 }
 
 func applyModifierMutation(gi Game, actor Actor, transactions []Transaction[Modifier], mutation ActorMutation) (Actor, bool) {
+	if mutation.ModifierGroupID != nil && actor.HasImmunity(*mutation.ModifierGroupID) {
+		return actor, false
+	}
 	context := getContext(actor, transactions, mutation)
 	g := gi.WithActor(actor)
 

@@ -1,6 +1,8 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react'
 import type { Actor } from '#/lib/game/actor'
+import { useStore } from '@tanstack/react-store'
+import { gameStore } from '#/lib/stores/game'
 
 function clamp(value: number) {
   return Math.max(0, Math.min(1, value))
@@ -13,6 +15,9 @@ function HealthBar({
   actor: Actor
   selected?: boolean
 }) {
+  const turn = useStore(gameStore, g => g.turn.count)
+  const prevTurnRef = useRef(turn)
+
   const maxHp = Math.max(1, actor.stats.hp)
   const maxStamina = Math.max(1, actor.stats.stamina)
 
@@ -29,8 +34,14 @@ function HealthBar({
   useEffect(() => {
     hpTarget.set(hpRatio * 100)
     staminaTarget.set(staminaRatio * 100)
-    hpGhostTarget.set(hpRatio * 100)
-  }, [hpRatio, staminaRatio, hpTarget, staminaTarget, hpGhostTarget])
+  }, [hpRatio, staminaRatio, hpTarget, staminaTarget])
+
+  useEffect(() => {
+    if (prevTurnRef.current !== turn) {
+      prevTurnRef.current = turn
+      hpGhostTarget.set(hpRatio * 100)
+    }
+  }, [turn, hpRatio, hpGhostTarget])
 
   const hpWidth = useTransform(
     useSpring(hpTarget, { stiffness: 280, damping: 30, mass: 0.8 }),

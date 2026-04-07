@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -33,8 +34,10 @@ var Madara = game.ActorDef{
 		game.NsYin,
 	}),
 
-	InnateModifiers: []game.Modifier{},
-	ActionCount:     6,
+	InnateModifiers: []game.Modifier{
+		modifiers.AddImmunities(modifiers.AttackUpID),
+	},
+	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
 		actions.Glare.ID,
