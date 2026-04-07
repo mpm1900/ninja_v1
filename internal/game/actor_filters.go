@@ -50,19 +50,26 @@ func SourceFilter(game Game, actor Actor, context Context) bool {
 	if context.SourceActorID == nil {
 		return false
 	}
-	if !ActiveFilter(game, actor, context) {
-		return false
-	}
 	return actor.ID == *context.SourceActorID
 }
 func ParentFilter(game Game, actor Actor, context Context) bool {
 	if context.ParentActorID == nil {
 		return false
 	}
-	if !ActiveFilter(game, actor, context) {
-		return false
-	}
 	return actor.ID == *context.ParentActorID
+}
+func TargetableFilter(game Game, actor Actor, context Context) bool {
+	return ComposeAF(
+		AliveFilter,
+		ActiveFilter,
+		func(game Game, actor Actor, context Context) bool {
+			resolved := actor.Resolve(game)
+			if resolved.State == ActorStateIncorporeal {
+				return false
+			}
+			return true
+		},
+	)(game, actor, context)
 }
 func TargetFilter(game Game, actor Actor, context Context) bool {
 	if slices.Contains(context.TargetActorIDs, actor.ID) {

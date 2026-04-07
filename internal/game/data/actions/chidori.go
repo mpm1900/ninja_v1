@@ -28,7 +28,7 @@ func MakeChidori() game.Action {
 		ID:              uuid.New(),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
-		TargetPredicate: game.ComposeAF(game.OtherTeamFilter, game.ActiveFilter, game.AliveFilter),
+		TargetPredicate: game.ComposeAF(game.OtherTeamFilter, game.TargetableFilter),
 		ContextValidate: game.PositionsLengthFilter(1),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,

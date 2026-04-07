@@ -28,7 +28,7 @@ func MakeLuckyStrikes() game.Action {
 		ID:              uuid.New(),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
-		TargetPredicate: game.ComposeAF(game.OtherFilter, game.ActiveFilter, game.AliveFilter),
+		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
 		ContextValidate: game.PositionsLengthFilter(1),
 		Cost:            mutations.UseStaminaSource(chakraCost),
 		ActionMutation: game.ActionMutation{

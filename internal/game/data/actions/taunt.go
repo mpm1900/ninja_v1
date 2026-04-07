@@ -22,7 +22,7 @@ func MakeTaunt() game.Action {
 		ID:              uuid.New(),
 		Config:          config,
 		TargetType:      game.TargetActorID,
-		TargetPredicate: game.ComposeAF(game.ActiveFilter, game.AliveFilter),
+		TargetPredicate: game.ComposeAF(game.ActiveFilter, game.TargetableFilter),
 		ContextValidate: game.TargetLengthFilter(1),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,

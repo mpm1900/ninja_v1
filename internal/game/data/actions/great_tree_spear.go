@@ -33,7 +33,7 @@ func MakeGreatTreeSpear() game.Action {
 		ID:              ID,
 		Config:          config,
 		TargetType:      game.TargetPositionID,
-		TargetPredicate: game.ComposeAF(game.OtherFilter, game.ActiveFilter),
+		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
 		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
 		Cost:            mutations.UseStaminaSource(chakraCost),
 		ActionMutation: game.ActionMutation{

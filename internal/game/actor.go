@@ -133,13 +133,22 @@ type ActorDef struct {
 	ActionCount     int         `json:"action_count"`
 }
 
+type ActorStateType string
+
+const (
+	ActorStateFlying      ActorStateType = "flying"
+	ActorStateGrounded    ActorStateType = "grounded"
+	ActorStateIncorporeal ActorStateType = "incorporeal"
+)
+
 /**
  * [ActorState]
  * - the commonly modified fields
  */
 type ActorState struct {
-	ActiveTurns   int `json:"active_turns"`
-	InactiveTurns int `json:"inactive_turns"`
+	State         ActorStateType `json:"state"`
+	ActiveTurns   int            `json:"active_turns"`
+	InactiveTurns int            `json:"inactive_turns"`
 	// [Alive] whether or not the actor is alive, could
 	// - could be computed, but this is here to not have to call .Resolve() on filters
 	Alive bool `json:"alive"`

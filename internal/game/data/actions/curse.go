@@ -20,7 +20,7 @@ func MakeCurse() game.Action {
 		ID:              uuid.New(),
 		Config:          config,
 		TargetType:      game.TargetActorID,
-		TargetPredicate: game.ComposeAF(game.OtherFilter, game.ActiveFilter, game.AliveFilter),
+		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
 		ContextValidate: game.TargetLengthFilter(1),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,

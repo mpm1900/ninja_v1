@@ -25,7 +25,7 @@ func MakeLeechSeed() game.Action {
 		ID:              uuid.New(),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
-		TargetPredicate: game.ComposeAF(game.ActiveFilter),
+		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
 		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
 		Cost:            mutations.UseStaminaSource(chakraCost),
 		ActionMutation: game.ActionMutation{
