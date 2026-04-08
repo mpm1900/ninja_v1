@@ -11,6 +11,8 @@ const getActors = createServerFn().handler(async () => {
 const actorsQuery = queryOptions({
   queryKey: ['actors'],
   queryFn: () => getActors(),
+  staleTime: 60000,
+  gcTime: 60000,
 })
 
 export { actorsQuery, getActors }

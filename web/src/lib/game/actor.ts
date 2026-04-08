@@ -58,7 +58,10 @@ type ActorState = {
   alive: boolean
   damage: number
   position_ID: string
+  last_used_action_ID: string | null
+  action_locked: boolean
   seen: boolean
+  stunned: boolean
   stamina_damage: number
   statused: boolean
   burned: boolean

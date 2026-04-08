@@ -92,6 +92,18 @@ func SourceHasActiveTurns(turns int) func(Game, Game, Context) bool {
 		return source.ActiveTurns == turns
 	}
 }
+func SourceIsAtOrBelowHealth(ratio float64) func(Game, Game, Context) bool {
+	return func(parent, g Game, context Context) bool {
+		source, ok := g.GetSource(context)
+		if !ok {
+			return false
+		}
+		resolved := source.Resolve(g)
+		hp := float64(resolved.Stats[StatHP])
+		damage := float64(resolved.Damage)
+		return ratio >= (hp-damage)/hp
+	}
+}
 func TargetsIsOneAlive(parent Game, game Game, context Context) bool {
 	targets := game.GetTargets(context)
 	for _, target := range targets {
@@ -113,6 +125,23 @@ func SourceHasHpRatio(ratio float64) func(Game, Game, Context) bool {
 	}
 }
 
+/**
+ * Trigger filters
+ */
+
+type TriggerFilter = func(Game, Game, Context, Transaction[Modifier]) bool
+
+func ComposeTF(filters ...TriggerFilter) TriggerFilter {
+	return func(parent Game, game Game, context Context, tx Transaction[Modifier]) bool {
+		for _, filter := range filters {
+			if !filter(parent, game, context, tx) {
+				return false
+			}
+		}
+
+		return true
+	}
+}
 func Match__TargetActor_SourceActor(parent Game, game Game, context Context, modifier_tx Transaction[Modifier]) bool {
 	targets := game.GetTargets(context)
 	if len(targets) == 0 || modifier_tx.Context.SourceActorID == nil {
@@ -132,4 +161,9 @@ func Match__SourceActor_SourceActor(parent Game, game Game, context Context, mod
 	}
 
 	return *context.SourceActorID == *modifier_tx.Context.SourceActorID
+}
+func Source__IsAtOrBelowHealth(ratio float64) TriggerFilter {
+	return func(parent Game, game Game, context Context, modifier_tx Transaction[Modifier]) bool {
+		return SourceIsAtOrBelowHealth(ratio)(parent, game, modifier_tx.Context)
+	}
 }

@@ -41,7 +41,6 @@ func (g *Game) Validate() bool {
 		}
 
 		if len(missing_pos) > 0 {
-			fmt.Printf("%s needs %v\n", player.ID, missing_pos)
 			action := SwitchIn(len(missing_pos))
 
 			context := NewContext()

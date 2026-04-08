@@ -24,6 +24,7 @@ const (
 
 type ActorConfig struct {
 	AbilityID *uuid.UUID       `json:"ability_ID"`
+	ItemID    *uuid.UUID       `json:"item_ID"`
 	ActionIDs []uuid.UUID      `json:"action_IDs"`
 	Focus     *game.ActorFocus `json:"focus"`
 }

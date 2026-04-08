@@ -146,9 +146,10 @@ const (
  * - the commonly modified fields
  */
 type ActorState struct {
-	State         ActorStateType `json:"state"`
-	ActiveTurns   int            `json:"-"`
-	InactiveTurns int            `json:"-"`
+	State            ActorStateType `json:"state"`
+	ActiveTurns      int            `json:"-"`
+	InactiveTurns    int            `json:"-"`
+	LastUsedActionID *uuid.UUID     `json:"last_used_action_ID"`
 	// [Alive] whether or not the actor is alive, could
 	// - could be computed, but this is here to not have to call .Resolve() on filters
 	Alive bool `json:"alive"`
@@ -160,14 +161,22 @@ type ActorState struct {
 	// - protected units cannot be damaged by actions
 	// - protected units cannot be targeted by enemy actions
 	Protected bool `json:"protected"`
+	/**
+	 * PSEUDO STATS
+	 */
 	// [Reflect] how much damage is reflected (PureDamage not affected)
 	Reflect       float64 `json:"-"`
+	DamageMult    float64 `json:"-"`
 	Seen          bool    `json:"seen"`
 	StaminaDamage int     `json:"stamina_damage"`
+	// [ActionLocked]
+	// - action locked units must use their last used action
+	// - if there there is no last used action, any action can be chosen
+	ActionLocked bool `json:"action_locked"`
 	// [Stunned] whether or not an actor _can act_
 	// - stunned units cannot push actions
 	// - stunned units cannot resolve actions (if the status was added during running)
-	Stunned bool `json:"-"`
+	Stunned bool `json:"stunned"`
 	/**
 	 * Statuses
 	 * Made the choice for the core to not reference status modifiers by name,
@@ -318,20 +327,22 @@ func MakeActor(
 		Ability:    ability,
 		Immunities: []uuid.UUID{},
 		ActorState: ActorState{
-			ActiveTurns:   0,
-			Alive:         true,
-			Damage:        0,
-			InactiveTurns: 0,
-			PositionID:    nil,
-			Protected:     false,
-			Reflect:       0.0,
-			Seen:          false,
-			StaminaDamage: 0,
-			Stunned:       false,
-			Statused:      false,
-
-			Sleeping:     false,
-			SleepCounter: 0,
+			ActiveTurns:      0,
+			Alive:            true,
+			Damage:           0,
+			InactiveTurns:    0,
+			PositionID:       nil,
+			LastUsedActionID: nil,
+			ActionLocked:     false,
+			Protected:        false,
+			DamageMult:       1.0,
+			Reflect:          0.0,
+			Seen:             false,
+			StaminaDamage:    0,
+			Stunned:          false,
+			Statused:         false,
+			Sleeping:         false,
+			SleepCounter:     0,
 		},
 		Stages: map[ActorStat]int{
 			StatHP:            0,
@@ -358,6 +369,7 @@ func (a *Actor) SetPosition(positionID *uuid.UUID) {
 		a.ActiveTurns = 0
 		a.Seen = true
 	} else {
+		a.LastUsedActionID = nil
 		a.InactiveTurns = 0
 		a.SetSummon(nil)
 	}

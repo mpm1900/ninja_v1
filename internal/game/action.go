@@ -133,6 +133,10 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 	}
 
 	if ok {
+		game.UpdateActor(source.ID, func(a Actor) Actor {
+			a.LastUsedActionID = &action.ID
+			return a
+		})
 		log := NewLogContext("$source$ used $action$", context)
 		if action.Config.LogSuccessF != nil {
 			log = NewLog(fmt.Sprintf(*action.Config.LogSuccessF, source.Name, action.Config.Name))

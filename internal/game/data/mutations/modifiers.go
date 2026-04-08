@@ -55,3 +55,18 @@ func RemoveModifierTxByID(ID uuid.UUID) game.GameMutation {
 		},
 	}
 }
+
+var ConsumeItem game.GameMutation = game.GameMutation{
+	Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
+		if context.SourceActorID == nil {
+			return g
+		}
+
+		g.UpdateActor(*context.SourceActorID, func(a game.Actor) game.Actor {
+			a.Item = nil
+			return a
+		})
+
+		return g
+	},
+}

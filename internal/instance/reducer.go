@@ -1,6 +1,7 @@
 package instance
 
 import (
+	"fmt"
 	"ninja_v1/internal/game"
 	data "ninja_v1/internal/game/data"
 	"slices"
@@ -159,6 +160,12 @@ func Reducer(instance *Instance, request Request) int {
 					}
 				}
 			}
+			if config.ItemID != nil {
+				item, ok := data.ITEMS[*config.ItemID]
+				if ok {
+					a.Item = &item
+				}
+			}
 
 			return a
 		})
@@ -178,6 +185,14 @@ func Reducer(instance *Instance, request Request) int {
 		action, ok := actor.GetActionByID(instance.Game, *request.Context.ActionID)
 		if !ok {
 			return none
+		}
+
+		fmt.Println(actor.ActionLocked, actor.LastUsedActionID)
+		if action.ID != game.Switch.ID && actor.ActionLocked && actor.LastUsedActionID != nil {
+			fmt.Println(actor.ActionLocked, *actor.LastUsedActionID)
+			if *request.Context.ActionID != *actor.LastUsedActionID {
+				return none
+			}
 		}
 
 		transaction := game.MakeTransaction(action, request.Context)

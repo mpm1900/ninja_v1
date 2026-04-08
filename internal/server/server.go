@@ -31,6 +31,7 @@ func NewServer(ctx context.Context, queries *db.Queries) *Server {
 
 	api.HandleFunc("GET /actions", dataHandler.HandleGetActions)
 	api.HandleFunc("GET /actors", dataHandler.HandleGetActors)
+	api.HandleFunc("GET /items", dataHandler.HandleGetItems)
 
 	api.HandleFunc("GET /instances", instancesHandler.HandleGetGames)
 

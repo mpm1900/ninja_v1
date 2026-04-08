@@ -20,6 +20,7 @@ function BattleActions({ actor }: { actor: Actor }) {
   const staged = game.actions.find(
     (tx) => tx.context.source_actor_ID === actor.ID
   )
+  const action_locked = actor.action_locked && actor.last_used_action_ID != null
 
   return (
     <LayoutGroup id="battle-actions">
@@ -136,7 +137,7 @@ function BattleActions({ actor }: { actor: Actor }) {
                     >
                       <ActionCard
                         action={a}
-                        disabled={!!staged && !selected || a.disabled || a.cooldown != null}
+                        disabled={!!staged && !selected || a.disabled || a.cooldown != null || (action_locked && actor.last_used_action_ID !== a.ID && a.config.name != 'Switch')}
                         selected={selected}
                         onClick={() => setContextAction(a.ID)}
                         style={{

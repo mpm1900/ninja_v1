@@ -13,6 +13,7 @@ import { NULL_CONTEXT } from '#/lib/game/context'
 import { useQuery } from '@tanstack/react-query'
 import { actionsQuery } from '#/lib/queries/actions'
 import { AbilitySelect } from './ability-select'
+import { ItemSelect } from './item-select'
 
 function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
   const game = useStore(gameStore, (g) => g)
@@ -55,6 +56,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
                 }}
               />
               <AbilitySelect actor={actor} />
+              <ItemSelect actor={actor} />
             </div>
             <ActorStats actor={actor} />
           </div>

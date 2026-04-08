@@ -42,8 +42,8 @@ func DamageEquation(terms DamageTerms) int {
 	base := (pow_ad*level_mod)/50 + 2
 	raw := (base * terms.Critical * terms.Nature * terms.STAB * terms.Targets * terms.Random * terms.Other)
 	fmt.Printf(
-		"(((%d * %d / %d) * ((2 * %d / 5) + 2) / 50 + 2) * (%f * %f * %f * %f)  = %f \n",
-		terms.Power, terms.Attack, terms.Defense, terms.Level, terms.Nature, terms.STAB, terms.Targets, terms.Random, raw,
+		"(((%d * %d / %d) * ((2 * %d / 5) + 2) / 50 + 2) * (%f * %f * %f * %f * %f)  = %f \n",
+		terms.Power, terms.Attack, terms.Defense, terms.Level, terms.Nature, terms.STAB, terms.Targets, terms.Random, terms.Other, raw,
 	)
 	return Round(raw) + terms.Offset
 }
@@ -108,7 +108,7 @@ func GetDamage(
 			Level:    source.Level,
 			Nature:   nature_mod,
 			Offset:   0,
-			Other:    1.00,
+			Other:    source.DamageMult,
 			Power:    power,
 			Random:   random,
 			STAB:     stab_mod,

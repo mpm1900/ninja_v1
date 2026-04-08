@@ -81,6 +81,7 @@ function ActorCard({
   const modifiers = (game.modifiers ?? [])
     .map((m) => m.mutation)
     .concat(game.actors.filter(a => a.ability).map((a) => a.ability!))
+    .concat(game.actors.filter(a => a.item).map((a) => a.item!))
 
   const is_player = actor?.player_ID === client_ID
   const action_tx = game.actions.find(

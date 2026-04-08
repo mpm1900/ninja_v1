@@ -42,6 +42,7 @@ type SocketRequest = {
     ability_ID?: string
     action_IDs?: Array<string>
     focus?: ActorFocus
+    item_ID?: string
   }
 }
 
