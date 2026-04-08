@@ -12,7 +12,7 @@ func AddImmunities(ids ...uuid.UUID) game.Modifier {
 	return game.Modifier{
 		ID:      uuid.New(),
 		GroupID: &addImmunitiesID,
-		Name:    "",
+		Show:    false,
 		ActorMutations: []game.ActorMutation{
 			game.MakeActorMutation(
 				&addImmunitiesID,

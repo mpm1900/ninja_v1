@@ -40,8 +40,9 @@ var Kakashi = game.ActorDef{
 		game.NsEarth,
 		game.NsYin,
 	}),
-	Abilities:   []game.Modifier{},
-	Ability:     &modifiers.AccuracyUpSource,
+	Abilities: []game.Modifier{
+		modifiers.AccuracyUpSource,
+	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,

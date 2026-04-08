@@ -33,8 +33,9 @@ var Tobirama = game.ActorDef{
 		game.NsLightning,
 		game.NsYin,
 	}),
-	Abilities:   []game.Modifier{},
-	Ability:     &modifiers.ConsumeChakra,
+	Abilities: []game.Modifier{
+		modifiers.ConsumeChakra,
+	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,

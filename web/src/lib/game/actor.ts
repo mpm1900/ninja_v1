@@ -49,20 +49,17 @@ type ActorDef = {
   natures: Partial<Record<NatureSet, Array<Nature>>>
   nature_damage: NatureStats<number>
   nature_resistance: NatureStats<number>
-  ability: Modifier | null
+  abilities: Array<Modifier>
   action_count: number
   action_IDs: Array<string>
 }
 
 type ActorState = {
-  active_turns: number
   alive: boolean
   damage: number
-  inactive_turns: number
   position_ID: string
   seen: boolean
   stamina_damage: number
-  stunned: boolean
   statused: boolean
   burned: boolean
   paralyzed: boolean
@@ -84,6 +81,8 @@ type Actor = ActorDef &
     resolved_nature_resistance: NatureStats<number>
     resolved_nature_damage: NatureStats<number>
     summon?: Actor & { proxy: boolean }
+    ability: Modifier | null
+    item: Modifier | null
   }
 
 function checkActorStat(actor: Actor, key: ActorBaseStat) {

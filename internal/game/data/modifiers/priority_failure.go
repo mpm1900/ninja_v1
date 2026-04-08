@@ -10,6 +10,7 @@ var priorityFailureID = uuid.New()
 var PriorityFailure = game.Modifier{
 	ID:       uuid.New(),
 	Name:     "Priority Failure",
+	Show:     true,
 	GroupID:  &priorityFailureID,
 	Duration: 0,
 	ActorMutations: []game.ActorMutation{

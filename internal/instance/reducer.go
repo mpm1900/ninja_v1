@@ -108,7 +108,22 @@ func Reducer(instance *Instance, request Request) int {
 		if len(actors) >= player.TeamCapacity {
 			return none
 		}
-		actor := game.MakeActor(def, request.ClientID /* 24 13824 */, 1000000, def.ActionIDs, data.ACTIONS)
+
+		var ability *game.Modifier = nil
+		if len(def.Abilities) > 0 {
+			ability = &def.Abilities[0]
+		}
+
+		actor := game.MakeActor(
+			def,
+			request.ClientID,
+			/* 24 13824 */ 1000000,
+			ability,
+			uuid.New(),
+			data.ITEMS,
+			def.ActionIDs,
+			data.ACTIONS,
+		)
 		instance.Game.AddActor(actor)
 		return state
 	case RemoveActor:
@@ -137,6 +152,14 @@ func Reducer(instance *Instance, request Request) int {
 			if config.Focus != nil {
 				a.Focus = *config.Focus
 			}
+			if config.AbilityID != nil {
+				for _, ability := range a.Abilities {
+					if ability.ID == *config.AbilityID {
+						a.Ability = &ability
+					}
+				}
+			}
+
 			return a
 		})
 

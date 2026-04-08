@@ -10,6 +10,7 @@ var fastThinkingID = uuid.New()
 var FastThinking = game.Modifier{
 	ID:       uuid.New(),
 	Name:     "Fast Thinking",
+	Show:     true,
 	GroupID:  &fastThinkingID,
 	Duration: 0,
 	ActorMutations: []game.ActorMutation{

@@ -9,7 +9,7 @@ import (
 type Mutation[P any, I any, O any] struct {
 	Delta    func(parent P, input I, context Context) O    `json:"-"`
 	Filter   func(parent P, input I, context Context) bool `json:"-"`
-	Priority int                                           `json:"priority"`
+	Priority int                                           `json:"-"`
 }
 
 /**

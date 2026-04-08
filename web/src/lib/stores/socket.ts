@@ -39,6 +39,7 @@ type SocketRequest = {
   client_ID: string
   context: Context
   actor_config?: {
+    ability_ID?: string
     action_IDs?: Array<string>
     focus?: ActorFocus
   }

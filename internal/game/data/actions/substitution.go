@@ -41,14 +41,23 @@ func MakeSubstitution() game.Action {
 					Delta: func(mp, mg game.Game, mc game.Context) game.Game {
 						mg.UpdateActor(*mc.SourceActorID, func(a game.Actor) game.Actor {
 							hp := game.Round(float64(source.Stats[game.StatHP]) * 0.25)
-							summon := game.MakeActor(game.ActorDef{
-								ActorID:   uuid.New(),
-								SpriteURL: "/sprites/sub_64.png",
-								Name:      source.Name,
-								Stats: map[game.ActorStat]int{
-									game.StatHP: hp,
+							summon := game.MakeActor(
+								game.ActorDef{
+									ActorID:   uuid.New(),
+									SpriteURL: "/sprites/sub_64.png",
+									Name:      source.Name,
+									Stats: map[game.ActorStat]int{
+										game.StatHP: hp,
+									},
 								},
-							}, a.PlayerID, a.Experience, []uuid.UUID{}, map[uuid.UUID]game.Action{})
+								a.PlayerID,
+								a.Experience,
+								nil,
+								uuid.New(),
+								map[uuid.UUID]game.Modifier{},
+								[]uuid.UUID{},
+								map[uuid.UUID]game.Action{},
+							)
 							a.SetSummonFromActor(&summon, true)
 							return a
 						})

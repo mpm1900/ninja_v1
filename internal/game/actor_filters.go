@@ -95,7 +95,6 @@ func OtherTeamFilter(game Game, actor Actor, context Context) bool {
 	}
 	return actor.PlayerID != *context.SourcePlayerID
 }
-
 func IsAtOrBelowHealthRatio(ratio float64) func(Game, Actor, Context) bool {
 	return func(game Game, actor Actor, context Context) bool {
 		hp := float64(actor.Stats[StatHP])
@@ -109,13 +108,13 @@ func IsAtOrBelowHealthRatio(ratio float64) func(Game, Actor, Context) bool {
  * These filters required modifiers to be resolved to check things like
  * protected, chakra amount, and things that can change with modifers
  */
-func HasChakraFilter(amount int) func(Game, Actor, Context) bool {
+func RHasChakraFilter(amount int) func(Game, Actor, Context) bool {
 	return func(game Game, actor Actor, context Context) bool {
 		resolved := actor.Resolve(game)
 		return resolved.HasChakra(amount)
 	}
 }
-func IsProtectedFilter(protected bool) func(Game, Actor, Context) bool {
+func RIsProtectedFilter(protected bool) func(Game, Actor, Context) bool {
 	return func(game Game, actor Actor, context Context) bool {
 		resolved := actor.Resolve(game)
 		return resolved.Protected == protected

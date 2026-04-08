@@ -32,8 +32,9 @@ var Itachi = game.ActorDef{
 		game.NsFire,
 		game.NsYin,
 	}),
-	Abilities:   []game.Modifier{},
-	Ability:     &modifiers.Intimidate,
+	Abilities: []game.Modifier{
+		modifiers.Intimidate,
+	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,

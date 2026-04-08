@@ -31,8 +31,9 @@ var Shikamaru = game.ActorDef{
 		game.NsEarth,
 		game.NsYin,
 	}),
-	Abilities:   []game.Modifier{},
-	Ability:     &modifiers.FastThinking,
+	Abilities: []game.Modifier{
+		modifiers.FastThinking,
+	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,

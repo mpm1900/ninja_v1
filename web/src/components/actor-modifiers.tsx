@@ -11,7 +11,7 @@ function ActorModifier({
   count: number
   modifier: Modifier | undefined
 }) {
-  if (!modifier || !modifier.name) return null
+  if (!modifier || !modifier.show) return null
   const Icon = modifier?.icon ? MODIFIER_ICONS[modifier.icon] : undefined
   return (
     <span>

@@ -54,7 +54,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
                   })
                 }}
               />
-              <AbilitySelect />
+              <AbilitySelect actor={actor} />
             </div>
             <ActorStats actor={actor} />
           </div>

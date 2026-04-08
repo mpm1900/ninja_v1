@@ -33,8 +33,9 @@ var Shisui = game.ActorDef{
 		game.NsWind,
 		game.NsYin,
 	}),
-	Abilities:   []game.Modifier{},
-	Ability:     &modifiers.PriorityFailure,
+	Abilities: []game.Modifier{
+		modifiers.PriorityFailure,
+	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,

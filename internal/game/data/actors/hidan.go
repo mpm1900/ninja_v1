@@ -30,7 +30,6 @@ var Hidan = game.ActorDef{
 		game.NsJashin,
 	}),
 	Abilities:   []game.Modifier{},
-	Ability:     nil,
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,

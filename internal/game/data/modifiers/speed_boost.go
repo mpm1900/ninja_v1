@@ -32,6 +32,7 @@ var SpeedBoost game.Modifier = game.Modifier{
 	ID:       speedBoostID,
 	GroupID:  &speedBoostID,
 	Name:     "Speed Boost",
+	Show:     true,
 	Duration: game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.NewNoopSource(&speedBoostID),

@@ -11,6 +11,7 @@ var waterAbsorbID = uuid.New()
 var WaterAbsorb game.Modifier = game.Modifier{
 	ID:       waterAbsorbID,
 	Name:     "Water Absorb",
+	Show:     true,
 	GroupID:  &waterAbsorbID,
 	Duration: game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{

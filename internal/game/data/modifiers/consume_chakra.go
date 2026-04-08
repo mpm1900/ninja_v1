@@ -33,6 +33,7 @@ var ConsumeChakra game.Modifier = game.Modifier{
 	ID:       consumeChakraID,
 	GroupID:  &consumeChakraID,
 	Name:     "Consume Chakra",
+	Show:     true,
 	Duration: game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.NewNoopSource(&consumeChakraID),

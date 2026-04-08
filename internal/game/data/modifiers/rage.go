@@ -43,6 +43,7 @@ var Rage game.Modifier = game.Modifier{
 	ID:       rageID,
 	GroupID:  &rageID,
 	Name:     "Rage",
+	Show:     true,
 	Duration: game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.NewNoopSource(&rageID),

@@ -31,8 +31,10 @@ var Pain = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsYinYang,
 	}),
-	Abilities:   []game.Modifier{},
-	Ability:     &modifiers.VesselOfPain,
+	Abilities: []game.Modifier{
+		modifiers.VesselOfPain,
+		modifiers.SpeedBoost,
+	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,

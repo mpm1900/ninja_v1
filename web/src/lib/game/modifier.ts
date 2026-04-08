@@ -6,6 +6,7 @@ type Modifier = {
   name: string
   duration: number | null
   icon?: string
+  show: boolean
 }
 
 type ModifierTransaction = {

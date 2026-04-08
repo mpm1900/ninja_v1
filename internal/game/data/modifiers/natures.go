@@ -13,6 +13,7 @@ func AddNature(nature game.NatureSet, duration int) game.Modifier {
 	return game.Modifier{
 		ID:       addNatureID,
 		Name:     fmt.Sprintf("Add Nature: %s", nature),
+		Show:     false,
 		Duration: duration,
 		ActorMutations: []game.ActorMutation{
 			game.MakeActorMutation(
@@ -33,7 +34,8 @@ var removeNatureID = uuid.New()
 func RemoveNature(nature game.NatureSet) game.Modifier {
 	return game.Modifier{
 		ID:       removeNatureID,
-		Name:     fmt.Sprintf("Add Nature: %s", nature),
+		Name:     fmt.Sprintf("Remove Nature: %s", nature),
+		Show:     false,
 		Duration: 0,
 		ActorMutations: []game.ActorMutation{
 			game.MakeActorMutation(

@@ -13,6 +13,7 @@ var Paralysis game.Modifier = game.Modifier{
 	GroupID:  &paralysisID,
 	Name:     "Paralyzed",
 	Icon:     "paralyzed",
+	Show:     true,
 	Duration: game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(

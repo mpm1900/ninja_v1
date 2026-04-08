@@ -35,6 +35,7 @@ var Burned game.Modifier = game.Modifier{
 	GroupID:  &burnedID,
 	Name:     "Burned",
 	Icon:     "burned",
+	Show:     true,
 	Duration: game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(

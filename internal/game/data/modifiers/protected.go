@@ -11,6 +11,7 @@ var Protected = game.Modifier{
 	ID:       uuid.New(),
 	Name:     "Protected",
 	Icon:     "protected",
+	Show:     true,
 	GroupID:  &protectedID,
 	Duration: 0,
 	ActorMutations: []game.ActorMutation{

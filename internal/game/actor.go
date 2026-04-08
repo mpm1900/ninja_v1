@@ -129,7 +129,6 @@ type ActorDef struct {
 	Natures          map[NatureSet][]Nature `json:"natures"`
 
 	Abilities   []Modifier  `json:"abilities"`
-	Ability     *Modifier   `json:"ability"`
 	ActionIDs   []uuid.UUID `json:"action_IDs,omitempty"`
 	ActionCount int         `json:"action_count"`
 }
@@ -148,8 +147,8 @@ const (
  */
 type ActorState struct {
 	State         ActorStateType `json:"state"`
-	ActiveTurns   int            `json:"active_turns"`
-	InactiveTurns int            `json:"inactive_turns"`
+	ActiveTurns   int            `json:"-"`
+	InactiveTurns int            `json:"-"`
 	// [Alive] whether or not the actor is alive, could
 	// - could be computed, but this is here to not have to call .Resolve() on filters
 	Alive bool `json:"alive"`
@@ -162,13 +161,13 @@ type ActorState struct {
 	// - protected units cannot be targeted by enemy actions
 	Protected bool `json:"protected"`
 	// [Reflect] how much damage is reflected (PureDamage not affected)
-	Reflect       float64 `json:"reflect"`
+	Reflect       float64 `json:"-"`
 	Seen          bool    `json:"seen"`
 	StaminaDamage int     `json:"stamina_damage"`
 	// [Stunned] whether or not an actor _can act_
 	// - stunned units cannot push actions
 	// - stunned units cannot resolve actions (if the status was added during running)
-	Stunned bool `json:"stunned"`
+	Stunned bool `json:"-"`
 	/**
 	 * Statuses
 	 * Made the choice for the core to not reference status modifiers by name,
@@ -197,9 +196,11 @@ type Actor struct {
 	Level      int               `json:"level"`
 	Experience int               `json:"experience"`
 	Focus      ActorFocus        `json:"focus"`
+	Ability    *Modifier         `json:"ability"`
+	Item       *Modifier         `json:"item"`
 	Stages     map[ActorStat]int `json:"staged_stats"`
 	Actions    []Action          `json:"actions"`
-	Immunities []uuid.UUID       `json:"immunities"`
+	Immunities []uuid.UUID       `json:"-"`
 	Summon     *Summon           `json:"summon,omitempty"`
 }
 
@@ -287,9 +288,24 @@ func (ad ActorDef) Clone() ActorDef {
 	return cloned
 }
 
-func MakeActor(def ActorDef, playerID uuid.UUID, experience int, actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) Actor {
+func MakeActor(
+	def ActorDef,
+	playerID uuid.UUID,
+	experience int,
+	ability *Modifier,
+	itemID uuid.UUID,
+	ITEMS map[uuid.UUID]Modifier,
+	actionIDs []uuid.UUID,
+	ACTIONS map[uuid.UUID]Action,
+) Actor {
 	actions := makeActions(actionIDs, ACTIONS)
 	clonedDef := def.Clone()
+
+	var item *Modifier
+	found, ok := ITEMS[itemID]
+	if ok {
+		item = &found
+	}
 
 	return Actor{
 		ActorDef:   clonedDef,
@@ -298,6 +314,8 @@ func MakeActor(def ActorDef, playerID uuid.UUID, experience int, actionIDs []uui
 		Level:      GetLevel(experience),
 		Experience: experience,
 		Focus:      FocusNone,
+		Item:       item,
+		Ability:    ability,
 		Immunities: []uuid.UUID{},
 		ActorState: ActorState{
 			ActiveTurns:   0,
@@ -417,6 +435,17 @@ func (a Actor) GetFocusModifier(stat ActorStat) float64 {
 
 	return 1.0
 }
+func (a Actor) GetModifiers() []Modifier {
+	modifiers := make([]Modifier, 0)
+	if a.Ability != nil {
+		modifiers = append(modifiers, *a.Ability)
+	}
+	if a.Item != nil {
+		modifiers = append(modifiers, *a.Item)
+	}
+
+	return modifiers
+}
 
 func resolve(actor Actor, pre Actor) ResolvedActor {
 	return ResolvedActor{
@@ -506,8 +535,10 @@ func GetActorModifiers(game Game) []Transaction[Modifier] {
 
 	for _, actor := range activeActors {
 		context := newActorContext(actor)
-		if actor.Ability != nil {
-			transaction := MakeTransaction(*actor.Ability, context)
+		a_modifiers := actor.GetModifiers()
+
+		for _, mod := range a_modifiers {
+			transaction := MakeTransaction(mod, context)
 			modifiers = append(modifiers, transaction)
 		}
 	}

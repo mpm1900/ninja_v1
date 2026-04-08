@@ -32,7 +32,6 @@ var Deidara = game.ActorDef{
 		game.NsExplosion,
 	}),
 	Abilities:   []game.Modifier{},
-	Ability:     nil,
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,

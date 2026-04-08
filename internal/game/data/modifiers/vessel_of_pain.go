@@ -12,6 +12,7 @@ var VesselOfPain game.Modifier = game.Modifier{
 	ID:       vesselOfPainID,
 	GroupID:  &vesselOfPainID,
 	Name:     "Vessel of Pain",
+	Show:     true,
 	Duration: game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(

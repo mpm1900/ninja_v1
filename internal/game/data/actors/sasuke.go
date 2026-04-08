@@ -33,7 +33,6 @@ var Sasuke = game.ActorDef{
 		game.NsYin,
 	}),
 	Abilities:   []game.Modifier{},
-	Ability:     nil,
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		game.Switch.ID,
