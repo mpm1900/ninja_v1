@@ -12,6 +12,7 @@ func AddModifiers(checkProtect bool, modifiers ...game.Modifier) game.GameMutati
 		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			for _, modifier := range modifiers {
 				mod_tx := game.MakeTransaction(modifier, context)
+				mod_tx.Context.ModifierID = &mod_tx.ID
 
 				// logs
 				for _, actor := range g.GetActionableActors() {

@@ -229,7 +229,30 @@ func (g Game) GetModifiers() []Transaction[Modifier] {
 
 	return transactions
 }
+func (g Game) GetModifierTxByID(txID uuid.UUID) (Transaction[Modifier], bool) {
+	modifiers := make([]Transaction[Modifier], 0, len(g.Modifiers))
+	modifiers = append(modifiers, g.Modifiers...)
+	modifiers = append(modifiers, GetActorModifiers(g)...)
 
+	for _, m := range modifiers {
+		if m.ID == txID {
+			return m, m.Mutation.Delay <= 0
+		}
+	}
+	return Transaction[Modifier]{}, false
+}
+func (g Game) GetModifierByTxID(txID uuid.UUID) (Modifier, bool) {
+	modifiers := make([]Transaction[Modifier], 0, len(g.Modifiers))
+	modifiers = append(modifiers, g.Modifiers...)
+	modifiers = append(modifiers, GetActorModifiers(g)...)
+
+	for _, m := range modifiers {
+		if m.ID == txID {
+			return m.Mutation, m.Mutation.Delay <= 0
+		}
+	}
+	return Modifier{}, false
+}
 func (g Game) GetModifierByID(ID uuid.UUID) (Modifier, bool) {
 
 	modifiers := make([]Transaction[Modifier], 0, len(g.Modifiers))

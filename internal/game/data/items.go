@@ -8,6 +8,7 @@ import (
 )
 
 var ITEMS map[uuid.UUID]game.Modifier = map[uuid.UUID]game.Modifier{
+	modifiers.BodyProtectionSeal.ID:  modifiers.BodyProtectionSeal,
 	modifiers.CurseMarkOfChakra.ID:   modifiers.CurseMarkOfChakra,
 	modifiers.CurseMarkOfSpeed.ID:    modifiers.CurseMarkOfSpeed,
 	modifiers.CurseMarkOfStrength.ID: modifiers.CurseMarkOfStrength,

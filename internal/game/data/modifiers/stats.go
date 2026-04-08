@@ -122,8 +122,10 @@ var SpeedDownSource = MakeStatDeltaSource(game.StatSpeed, &SpeedDownID, -1, "Spe
 var SpeedDown2Source = MakeStatDeltaSource(game.StatSpeed, &SpeedDownID, -2, "Speed Down (2)")
 
 var EvasionUpID = uuid.New()
+var EvasionDownID = uuid.New()
 var EvasionUpSource = MakeStatDeltaSourceWithShow(game.StatEvasion, &EvasionUpID, 1, "Evasion Up")
 var AccuracyUpID = uuid.New()
+var AccuracyDownID = uuid.New()
 var AccuracyUpSource = MakeStatDeltaSourceWithShow(game.StatAccuracy, &AccuracyUpID, 1, "Accuracy Up")
 
 // NAMED STAT UPS
