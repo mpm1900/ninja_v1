@@ -209,6 +209,7 @@ type Actor struct {
 	Ability           *Modifier              `json:"ability"`
 	Item              *Modifier              `json:"item"`
 	Stages            map[ActorStat]int      `json:"staged_stats"`
+	AuxStats          map[ActorStat]int      `json:"aux_stats"`
 	DamageMultipliers map[AttackStat]float64 `json:"-"`
 	DamageReduction   map[AttackStat]float64 `json:"-"`
 	Actions           []Action               `json:"actions"`
@@ -306,20 +307,10 @@ func MakeActor(
 	playerID uuid.UUID,
 	experience int,
 	ability *Modifier,
-	itemID uuid.UUID,
-	ITEMS map[uuid.UUID]Modifier,
-	actionIDs []uuid.UUID,
-	ACTIONS map[uuid.UUID]Action,
+	item *Modifier,
+	actions []Action,
 ) Actor {
-	actions := makeActions(actionIDs, ACTIONS)
 	clonedDef := def.Clone()
-
-	var item *Modifier
-	found, ok := ITEMS[itemID]
-	if ok {
-		item = &found
-	}
-
 	return Actor{
 		ActorDef:   clonedDef,
 		ID:         uuid.New(),
@@ -366,6 +357,15 @@ func MakeActor(
 			StatSpeed:         0,
 			StatEvasion:       0,
 			StatAccuracy:      0,
+		},
+		AuxStats: map[ActorStat]int{
+			StatHP:            0,
+			StatStamina:       0,
+			StatAttack:        0,
+			StatDefense:       0,
+			StatChakraAttack:  0,
+			StatChakraDefense: 0,
+			StatSpeed:         0,
 		},
 		Actions: actions,
 		Summon:  nil,
@@ -479,23 +479,22 @@ func resolve(actor Actor, pre Actor) ResolvedActor {
 	}
 }
 
-func MapBaseStat(stat, level int, focus float64) int {
+func MapBaseStat(stat, level int, focus float64, ev int) int {
 	base := float64((stat * 2) + 15)
-	ev := 0.0 // TODO
-	ratio := float64((base+(ev/4))*float64(level)) / 100
+	ratio := float64((base+(float64(ev)))*float64(level)) / 100
 	return Round((ratio + 5) * focus)
 }
 
-func MapResourceStat(stat, level int, focus float64) int {
-	return MapBaseStat(stat, level, focus) + level + 5
+func MapResourceStat(stat, level int, focus float64, ev int) int {
+	return MapBaseStat(stat, level, focus, ev) + level + 5
 }
 
 func (actor *Actor) MapBase(stat ActorStat) {
-	actor.Stats[stat] = MapBaseStat(actor.Stats[stat], actor.Level, actor.GetFocusModifier(stat))
+	actor.Stats[stat] = MapBaseStat(actor.Stats[stat], actor.Level, actor.GetFocusModifier(stat), 0)
 }
 
 func (actor *Actor) MapResource(stat ActorStat) {
-	actor.Stats[stat] = MapResourceStat(actor.Stats[stat], actor.Level, 1.0)
+	actor.Stats[stat] = MapResourceStat(actor.Stats[stat], actor.Level, 1.0, actor.AuxStats[stat])
 }
 
 func MapBaseStats(actor Actor) Actor {
@@ -526,7 +525,6 @@ func MapStagedStat(stat, stage, mod int) int {
 
 func (actor *Actor) MapStaged(stat ActorStat, mod int) {
 	actor.Stats[stat] = MapStagedStat(actor.Stats[stat], actor.Stages[stat], mod)
-
 }
 
 func MapStagedStats(actor Actor) Actor {
@@ -594,6 +592,7 @@ func (a Actor) Clone() Actor {
 
 	b.Stats = maps.Clone(a.Stats)
 	b.Stages = maps.Clone(a.Stages)
+	b.AuxStats = maps.Clone(a.AuxStats)
 	b.NatureDamage = maps.Clone(a.NatureDamage)
 	b.NatureResistance = maps.Clone(a.NatureResistance)
 	b.DamageMultipliers = maps.Clone(a.DamageMultipliers)

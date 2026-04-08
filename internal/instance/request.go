@@ -2,6 +2,7 @@ package instance
 
 import (
 	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data"
 
 	"github.com/google/uuid"
 )
@@ -23,10 +24,11 @@ const (
 )
 
 type ActorConfig struct {
-	AbilityID *uuid.UUID       `json:"ability_ID"`
-	ItemID    *uuid.UUID       `json:"item_ID"`
-	ActionIDs []uuid.UUID      `json:"action_IDs"`
-	Focus     *game.ActorFocus `json:"focus"`
+	AbilityID *uuid.UUID             `json:"ability_ID"`
+	ActionIDs []uuid.UUID            `json:"action_IDs"`
+	Focus     *game.ActorFocus       `json:"focus"`
+	ItemID    *uuid.UUID             `json:"item_ID"`
+	AuxStats  map[game.ActorStat]int `json:"aux_stats"`
 }
 
 type Request struct {
@@ -35,4 +37,52 @@ type Request struct {
 	PromptID    *uuid.UUID   `json:"prompt_ID"`
 	Context     game.Context `json:"context"`
 	ActorConfig *ActorConfig `json:"actor_config"`
+}
+
+type HydratedActorConfig struct {
+	Ability  *game.Modifier
+	Actions  []game.Action
+	Focus    *game.ActorFocus
+	Item     *game.Modifier
+	AuxStats map[game.ActorStat]int `json:"aux_stats"`
+}
+
+func HydrateActorConfig(config ActorConfig, abilities []game.Modifier) HydratedActorConfig {
+	var ability *game.Modifier = nil
+	if config.AbilityID != nil {
+		for _, a := range abilities {
+			if a.ID == *config.AbilityID {
+				ability = &a
+			}
+		}
+	} else {
+		if len(abilities) > 0 {
+			ability = &abilities[0]
+		}
+	}
+
+	actions := make([]game.Action, 0, len(config.ActionIDs))
+	for _, id := range config.ActionIDs {
+		action, ok := data.ACTIONS[id]
+		if !ok {
+			continue
+		}
+		actions = append(actions, action)
+	}
+
+	var item *game.Modifier = nil
+	if config.ItemID != nil {
+		i, ok := data.ITEMS[*config.ItemID]
+		if ok {
+			item = &i
+		}
+	}
+
+	return HydratedActorConfig{
+		Ability:  ability,
+		Actions:  actions,
+		AuxStats: config.AuxStats,
+		Focus:    config.Focus,
+		Item:     item,
+	}
 }

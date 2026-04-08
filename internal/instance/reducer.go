@@ -99,6 +99,15 @@ func Reducer(instance *Instance, request Request) int {
 			return none
 		}
 
+		config := ActorConfig{
+			AbilityID: nil,
+			ActionIDs: def.ActionIDs,
+			AuxStats:  map[game.ActorStat]int{},
+			ItemID:    nil,
+			Focus:     nil,
+		}
+
+		hydrated := HydrateActorConfig(config, def.Abilities)
 		player, ok := instance.Game.GetPlayerByID(request.ClientID)
 		if !ok {
 			return none
@@ -119,10 +128,8 @@ func Reducer(instance *Instance, request Request) int {
 			request.ClientID,
 			/* 24 13824 */ 1000000,
 			ability,
-			uuid.New(),
-			data.ITEMS,
-			def.ActionIDs,
-			data.ACTIONS,
+			hydrated.Item,
+			hydrated.Actions,
 		)
 		instance.Game.AddActor(actor)
 		return state
@@ -146,25 +153,18 @@ func Reducer(instance *Instance, request Request) int {
 
 		config := *request.ActorConfig
 		instance.Game.UpdateActor(*request.Context.SourceActorID, func(a game.Actor) game.Actor {
+			hydrated := HydrateActorConfig(config, a.Abilities)
+
 			if config.ActionIDs != nil {
 				a.SetActions(config.ActionIDs, data.ACTIONS)
 			}
-			if config.Focus != nil {
-				a.Focus = *config.Focus
+			if hydrated.Focus != nil {
+				a.Focus = *hydrated.Focus
 			}
-			if config.AbilityID != nil {
-				for _, ability := range a.Abilities {
-					if ability.ID == *config.AbilityID {
-						a.Ability = &ability
-					}
-				}
-			}
-			if config.ItemID != nil {
-				item, ok := data.ITEMS[*config.ItemID]
-				if ok {
-					a.Item = &item
-				}
-			}
+
+			a.Ability = hydrated.Ability
+			a.Item = hydrated.Item
+			a.AuxStats = hydrated.AuxStats
 
 			return a
 		})

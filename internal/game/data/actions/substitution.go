@@ -53,10 +53,8 @@ func MakeSubstitution() game.Action {
 								a.PlayerID,
 								a.Experience,
 								nil,
-								uuid.New(),
-								map[uuid.UUID]game.Modifier{},
-								[]uuid.UUID{},
-								map[uuid.UUID]game.Action{},
+								nil,
+								[]game.Action{},
 							)
 							a.SetSummonFromActor(&summon, true)
 							return a
