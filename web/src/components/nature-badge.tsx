@@ -7,7 +7,7 @@ import { cn } from '#/lib/utils'
 type t = Record<string, Partial<Record<NatureSet | 'none', ClassValue>>>
 
 const variants = cva<t>(
-  'text-sm text-white px-1 py-0.5 rounded text-shadow-[1px_1px_0px_#000000] shadow-[1px_1px_0_rgba(0,0,0,1)] mx-px text-nowrap',
+  'text-sm text-white px-1 py-0.5 rounded text-shadow-[1px_1px_0px_#000000] text-nowrap',
   {
     variants: {
       variant: {
@@ -29,7 +29,8 @@ const variants = cva<t>(
         wood: 'bg-olive-600 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
         yinyang:
           'bg-[linear-gradient(135deg,theme(colors.indigo.900)_0%,theme(colors.indigo.900)_50%,theme(colors.neutral.300)_50%,theme(colors.neutral.300)_100%)] text-amber-300! shadow-[inset_0_0_0_1px_theme(colors.amber.300)]',
-        particle: 'bg-mauve-500 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300',
+        particle:
+          'bg-mauve-500 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300',
         jashin:
           'bg-mauve-950 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
       },
@@ -50,10 +51,12 @@ function NatureBadge({
       <TooltipTrigger asChild>
         <span
           data-role="nature"
-          className={cn(variants({ variant: nature }), className)}
+          className="shadow-[1px_1px_0_rgba(0,0,0,1)] mx-px rounded"
           {...props}
         >
-          {natureNames[nature] ?? nature}
+          <span className={cn(variants({ variant: nature }), className)}>
+            {natureNames[nature] ?? nature}
+          </span>
         </span>
       </TooltipTrigger>
       <TooltipContent>{nature}</TooltipContent>

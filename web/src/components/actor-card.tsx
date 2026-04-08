@@ -18,20 +18,23 @@ import { ActorStatus } from './actor-status'
 const actorVariants = cva(
   cn(
     'group/item flex flex-wrap items-center rounded-md border text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50',
-    'p-2 w-86'
+    'p-2 w-92'
   ),
   {
     variants: {
       player: {
         player: 'border-transparent', //'bg-gray-900 border-gray-700',
         enemy: 'border-transparent',
-        summon: 'bg-stone-600! border-stone-400!',
+        summon: 'bg-stone-600! border-stone-400! shadow-xs',
       },
       selected: {
-        selected: 'bg-mist-700! border-gray-400!',
+        selected:
+          'bg-gray-600! border-gray-400! shadow-[2px_2px_10px_rgba(0,0,0,0.8)]',
         // source: 'scale-105 bg-blue-900! border-blue-300/40',
-        targeted: 'bg-red-900! border-red-300/40',
-        source: 'bg-yellow-900! border-yellow-300/40',
+        targeted:
+          'bg-red-900! border-red-300/40! shadow-[2px_2px_10px_rgba(0,0,0,0.8)]',
+        source:
+          'bg-yellow-900! border-yellow-300/40 shadow-[2px_2px_10px_rgba(0,0,0,0.8)]',
       },
     },
     defaultVariants: {},
@@ -80,8 +83,8 @@ function ActorCard({
 }) {
   const modifiers = (game.modifiers ?? [])
     .map((m) => m.mutation)
-    .concat(game.actors.filter(a => a.ability).map((a) => a.ability!))
-    .concat(game.actors.filter(a => a.item).map((a) => a.item!))
+    .concat(game.actors.filter((a) => a.ability).map((a) => a.ability!))
+    .concat(game.actors.filter((a) => a.item).map((a) => a.item!))
 
   const is_player = actor?.player_ID === client_ID
   const action_tx = game.actions.find(
@@ -124,22 +127,33 @@ function ActorCard({
             <ActorStatus actor={actor} />
           </div>
         )}
-        <ItemContent className="relative">
+        <ItemContent className="relative gap-0">
           {actor && (
             <div className="flex justify-between items-end gap-4">
-              <ItemTitle>
+              <ItemTitle
+                className={cn('px-2 pb-2 -mb-2 rounded-t', {
+                  //'bg-white': actor.player_ID === client_ID,
+                  // 'bg-black/80': !selected, //actor.player_ID !== client_ID,
+                })}
+              >
                 <span
-                  className={cn('text-shadow-[1px_1px_0px_#000000]', {
-                    'text-blue-300': actor.player_ID === client_ID,
-                    'text-red-400': actor.player_ID !== client_ID,
-                    'text-foregroud': selected,
-                  })}
+                  className={cn(
+                    'font-semibold text-lg text-shadow-[1px_1px_0px_#000000]',
+                    {
+                      'text-foreground':
+                        actor.player_ID === client_ID ||
+                        selected ||
+                        targeted ||
+                        source,
+                      'text-red-300': actor.player_ID !== client_ID,
+                    }
+                  )}
                 >
                   {actor.name}
                 </span>
               </ItemTitle>
               {!action_tx || !is_player || game.status === 'running' ? (
-                <ItemActions className="gap-0">
+                <ItemActions className="gap-px pb-1">
                   {(Object.keys(actor.natures) as Array<NatureSet>)
                     .sort((a, b) => natureIndexes[a] - natureIndexes[b])
                     .map((nature) => (

@@ -5,8 +5,8 @@ function ActorStatus({ actor }: { actor: Actor }) {
   return (
     <div
       className={cn(
-        'absolute shadow-md shadow- font-bold px-1 h-4 w-full text-center leading-5! rounded whitespace-nowrap -bottom-1 z-10 text-lg nanum-brush-script-regular',
-        'bg-mist-300 text-background',
+        'absolute shadow- font-bold px-1 h-4 w-full text-center leading-5! rounded whitespace-nowrap -bottom-1 z-10 text-lg nanum-brush-script-regular',
+        'bg-mist-300 text-background shadow-[0px_0px_5px_rgba(0,0,0,1)]',
         {
           'bg-orange-200 text-orange-900': actor.burned,
           'bg-indigo-300 text-indigo-900': actor.sleeping,
@@ -14,14 +14,15 @@ function ActorStatus({ actor }: { actor: Actor }) {
         }
       )}
     >
-      {
-        actor.statused ? <span>
+      {actor.statused ? (
+        <span>
           {actor.sleeping && 'SLEEP'}
           {actor.paralyzed && 'PARA'}
           {actor.burned && 'BURN'}
-        </span> : <span>LV {actor.level}</span>
-      }
-
+        </span>
+      ) : (
+        <span>LV {actor.level}</span>
+      )}
     </div>
   )
 }

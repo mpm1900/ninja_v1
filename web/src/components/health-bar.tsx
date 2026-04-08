@@ -15,7 +15,7 @@ function HealthBar({
   actor: Actor
   selected?: boolean
 }) {
-  const turn = useStore(gameStore, g => g.turn.count)
+  const turn = useStore(gameStore, (g) => g.turn.count)
   const prevTurnRef = useRef(turn)
 
   const maxHp = Math.max(1, actor.stats.hp)
@@ -80,7 +80,7 @@ function HealthBar({
         <div className="pointer-events-none absolute -inset-1 rounded-sm bg-gradient-to-r from-cyan-400/15 via-indigo-400/10 to-red-500/15 blur-md" />
       )}
 
-      <div className="relative h-6 overflow-hidden rounded-sm border border-white/10 bg-slate-900/95">
+      <div className="relative h-6 overflow-hidden rounded-sm border border-transparent bg-black">
         {/* CHAKRA LAYER (behind, border-like energy shell) */}
         <div className="absolute inset-0 bg-slate-800" />
         <motion.div

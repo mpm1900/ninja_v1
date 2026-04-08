@@ -106,6 +106,7 @@ var LeechSeedModifier game.Modifier = game.Modifier{
 	ID:       leechSeedModifierID,
 	GroupID:  &leechSeedModifierID,
 	Name:     "Seeded",
+	Show:     true,
 	Duration: game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.NewNoopParent(&leechSeedModifierID),

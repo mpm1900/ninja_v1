@@ -2,28 +2,28 @@ import type { ActorBaseStat } from '#/lib/game/actor'
 import { cn } from '#/lib/utils'
 
 const stageCoef = {
-  [-6]: 'x0.25',
-  [-5]: 'x0.28',
-  [-4]: 'x0.33',
-  [-3]: 'x0.4',
-  [-2]: 'x0.5',
-  [-1]: 'x0.66',
-  [0]: 'x1',
-  [1]: 'x1.5',
-  [2]: 'x2.0',
-  [3]: 'x2.5',
-  [4]: 'x3.0',
-  [5]: 'x3.5',
-  [6]: 'x4.0',
+  [-6]: '0.25',
+  [-5]: '0.28',
+  [-4]: '0.33',
+  [-3]: '0.4',
+  [-2]: '0.5',
+  [-1]: '0.66',
+  [0]: '1',
+  [1]: '1.5',
+  [2]: '2.0',
+  [3]: '2.5',
+  [4]: '3.0',
+  [5]: '3.5',
+  [6]: '4.0',
 }
 
 const statName: Record<ActorBaseStat, string> = {
   hp: 'HP',
   stamina: 'STA',
   accuracy: 'ACC',
-  attack: 'P.ATK',
+  attack: 'ATK',
   chakra_attack: 'C.ATK',
-  defense: 'P.DEF',
+  defense: 'DEF',
   chakra_defense: 'C.DEF',
   speed: 'SPE',
   evasion: 'EVA',
@@ -49,7 +49,7 @@ function StageBadge({
         }
       )}
     >
-      {stageCoef[stage]} {statName[stat]}
+      x{stageCoef[stage]} <span className='opacity-70'>{statName[stat]}</span>
     </span>
   )
 }

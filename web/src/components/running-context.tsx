@@ -30,7 +30,7 @@ function RunningContext({ context }: { context: Context }) {
           </span>
         </div>
       )}
-      {has_targets && <div>on {targets.map((t) => t.name).join(', ')}</div>}
+      {has_targets && source && <div>on {targets.map((t) => t.name).join(', ')}</div>}
     </div>
   )
 }
