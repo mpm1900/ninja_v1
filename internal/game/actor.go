@@ -5,7 +5,6 @@ import (
 	"math"
 	"math/rand"
 	"slices"
-	"sort"
 
 	"github.com/google/uuid"
 )
@@ -168,8 +167,6 @@ type ActorState struct {
 	 */
 	// [Reflect] how much damage is reflected (PureDamage not affected)
 	Reflect float64 `json:"-"`
-	// [DamageMult] is a flat damage mult passed to the damage eq
-	DamageMult float64 `json:"-"`
 	// [ActionLocked]
 	// - action locked units must use their last used action
 	// - if there there is no last used action, any action can be chosen
@@ -204,17 +201,19 @@ type Summon struct {
 type Actor struct {
 	ActorDef
 	ActorState
-	ID         uuid.UUID         `json:"ID"`
-	PlayerID   uuid.UUID         `json:"player_ID"`
-	Level      int               `json:"level"`
-	Experience int               `json:"experience"`
-	Focus      ActorFocus        `json:"focus"`
-	Ability    *Modifier         `json:"ability"`
-	Item       *Modifier         `json:"item"`
-	Stages     map[ActorStat]int `json:"staged_stats"`
-	Actions    []Action          `json:"actions"`
-	Immunities []uuid.UUID       `json:"-"`
-	Summon     *Summon           `json:"summon,omitempty"`
+	ID                uuid.UUID              `json:"ID"`
+	PlayerID          uuid.UUID              `json:"player_ID"`
+	Level             int                    `json:"level"`
+	Experience        int                    `json:"experience"`
+	Focus             ActorFocus             `json:"focus"`
+	Ability           *Modifier              `json:"ability"`
+	Item              *Modifier              `json:"item"`
+	Stages            map[ActorStat]int      `json:"staged_stats"`
+	DamageMultipliers map[AttackStat]float64 `json:"-"`
+	DamageReduction   map[AttackStat]float64 `json:"-"`
+	Actions           []Action               `json:"actions"`
+	Immunities        []uuid.UUID            `json:"-"`
+	Summon            *Summon                `json:"summon,omitempty"`
 }
 
 type ResolvedActor struct {
@@ -227,6 +226,7 @@ type ResolvedActor struct {
 }
 
 const (
+	MutPriorityGameState0      = -40
 	MutPriorityImmunity        = -30
 	MutPriorityStateChanges    = -20
 	MutPriorityPreBaseStats    = -11
@@ -340,7 +340,6 @@ func MakeActor(
 			ActionLocked:     false,
 			SwitchLocked:     false,
 			Protected:        false,
-			DamageMult:       1.0,
 			Reflect:          0.0,
 			Seen:             false,
 			StaminaDamage:    0,
@@ -348,6 +347,14 @@ func MakeActor(
 			Statused:         false,
 			Sleeping:         false,
 			SleepCounter:     0,
+		},
+		DamageMultipliers: map[AttackStat]float64{
+			Attack:       1.0,
+			ChakraAttack: 1.0,
+		},
+		DamageReduction: map[AttackStat]float64{
+			Attack:       1.0,
+			ChakraAttack: 1.0,
 		},
 		Stages: map[ActorStat]int{
 			StatHP:            0,
@@ -589,6 +596,8 @@ func (a Actor) Clone() Actor {
 	b.Stages = maps.Clone(a.Stages)
 	b.NatureDamage = maps.Clone(a.NatureDamage)
 	b.NatureResistance = maps.Clone(a.NatureResistance)
+	b.DamageMultipliers = maps.Clone(a.DamageMultipliers)
+	b.DamageReduction = maps.Clone(a.DamageReduction)
 
 	b.Natures = maps.Clone(a.Natures)
 	b.Actions = slices.Clone(a.Actions)
@@ -598,30 +607,7 @@ func (a Actor) Clone() Actor {
 
 func getContext(actor Actor, transactions []Transaction[Modifier], mutation ActorMutation) Context {
 	context := newActorContext(actor)
-
-	if mutation.TransactionID == nil {
-		return context
-	}
-
-	for _, transaction := range transactions {
-		if transaction.ID == *mutation.TransactionID {
-			return transaction.Context
-		}
-	}
-
-	return context
-}
-
-func getMutations(transactions []Transaction[Modifier]) []ActorMutation {
-	mutations := make([]ActorMutation, 0)
-	for _, transaction := range transactions {
-		for _, mut := range transaction.Mutation.ActorMutations {
-			mut.TransactionID = &transaction.ID
-			mutations = append(mutations, mut)
-		}
-	}
-
-	return append(mutations, specialMutations...)
+	return ResolveModifierTransactionContext(context, transactions, mutation.TransactionID)
 }
 
 func applyModifierMutation(gi Game, actor Actor, transactions []Transaction[Modifier], mutation ActorMutation) (Actor, bool) {
@@ -640,19 +626,11 @@ func applyModifierMutation(gi Game, actor Actor, transactions []Transaction[Modi
 	return next, true
 }
 
-func resolveActor(actor Actor, g Game, mtransactions []Transaction[Modifier], atransactions []Transaction[Modifier]) ResolvedActor {
+func resolveActor(actor Actor, g Game, bypassModifiers bool) ResolvedActor {
 	applied := make(map[uuid.UUID]int)
-	transactions := []Transaction[Modifier]{}
-	transactions = append(transactions, atransactions...)
-	transactions = append(transactions, mtransactions...)
-
-	mutations := getMutations(transactions)
-
-	sort.SliceStable(mutations, func(i, j int) bool {
-		return mutations[i].Priority < mutations[j].Priority
-	})
-
+	mutations, transactions := GetAllActorMutations(g, bypassModifiers)
 	mapped := actor.Clone()
+
 	for _, mutation := range mutations {
 		next, apply := applyModifierMutation(g, mapped, transactions, mutation)
 		if !apply {
@@ -696,10 +674,10 @@ func resolveActor(actor Actor, g Game, mtransactions []Transaction[Modifier], at
 }
 
 func (a Actor) ResolveModifierless(g Game) ResolvedActor {
-	return resolveActor(a, g, []Transaction[Modifier]{}, []Transaction[Modifier]{})
+	return resolveActor(a, g, true)
 }
 func (a Actor) Resolve(g Game) ResolvedActor {
-	resolved := resolveActor(a, g, g.GetModifiers(), GetActorModifiers(g))
+	resolved := resolveActor(a, g, false)
 	pre := a.ResolveModifierless(g)
 	resolved.PreStats = maps.Clone(pre.Stats)
 

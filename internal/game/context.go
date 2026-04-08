@@ -23,6 +23,24 @@ func NewContext() Context {
 	}
 }
 
+func ResolveModifierTransactionContext(
+	fallback Context,
+	transactions []Transaction[Modifier],
+	transactionID *uuid.UUID,
+) Context {
+	if transactionID == nil {
+		return fallback
+	}
+
+	for _, transaction := range transactions {
+		if transaction.ID == *transactionID {
+			return transaction.Context
+		}
+	}
+
+	return fallback
+}
+
 func (c Context) WithSource(sourceID uuid.UUID) Context {
 	c.SourceActorID = &sourceID
 	return c

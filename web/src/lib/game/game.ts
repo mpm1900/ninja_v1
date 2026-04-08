@@ -15,6 +15,10 @@ type Game = {
   actors: Actor[]
   modifiers: ModifierTransaction[]
   players: Player[]
+  state: {
+    terrain: string
+    weather: string
+  }
 
   actions: ActionTransaction[]
   prompt: ActionTransaction | null

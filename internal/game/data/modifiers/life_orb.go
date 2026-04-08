@@ -46,7 +46,8 @@ var LifeOrb game.Modifier = game.Modifier{
 					return actor
 				}
 
-				actor.DamageMult += 0.3
+				actor.DamageMultipliers[game.Attack] += 0.3
+				actor.DamageMultipliers[game.ChakraAttack] += 0.3
 				return actor
 			},
 		),

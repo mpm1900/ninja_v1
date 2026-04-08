@@ -170,6 +170,7 @@ type ChanceResult struct {
 	Chance  int
 	Roll    int
 	Success bool
+	Ratio   float64
 }
 
 func MakeCriticalCheck(action ActionConfig) ChanceResult {
@@ -181,19 +182,18 @@ func MakeCriticalCheck(action ActionConfig) ChanceResult {
 
 	accuracy := int(*action.CritChance)
 	roll := MakeActionRoll()
+	success := roll <= accuracy
+	ratio := 1.0
+	if success {
+		ratio = action.CritMod
+	}
+
 	return ChanceResult{
 		Chance:  accuracy,
 		Roll:    roll,
-		Success: roll <= accuracy,
+		Success: success,
+		Ratio:   ratio,
 	}
-}
-func GetCriticalModifier(action ActionConfig) float64 {
-	result := MakeCriticalCheck(action)
-	if result.Success {
-		return action.CritMod
-	}
-
-	return 1.0
 }
 
 func MakeAccuracyCheck(g *Game, action ActionConfig, source ResolvedActor, target ResolvedActor) ChanceResult {

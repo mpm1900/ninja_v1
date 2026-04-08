@@ -53,6 +53,9 @@ function RouteComponent() {
               {enemies.map((player) => (
                 <PlayerThumbnails key={player.ID} player_ID={player.ID} />
               ))}
+              <div>
+                <pre>{JSON.stringify(game.state, null, 2)}</pre>
+              </div>
             </div>
           </div>
           <div className="flex-1 grid place-items-center overflow-hidden relative">

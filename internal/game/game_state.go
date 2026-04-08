@@ -1,11 +1,17 @@
 package game
 
 type GameWeather string
+type GameTerrain string
 
 const (
 	GameWeatherNone     GameWeather = "none"
 	GameWeatherRain     GameWeather = "rain"
 	GameWeatherSunlight GameWeather = "sunlight"
+)
+
+const (
+	GameTerrainNone    GameTerrain = "none"
+	GameTerrainHealing GameTerrain = "healing"
 )
 
 /**
@@ -20,5 +26,25 @@ const (
  * the design space does overlap a bit with modifiers if not for the singular nature
  */
 type GameState struct {
-	weather GameWeather
+	Weather GameWeather `json:"weather"`
+	Terrain GameTerrain `json:"terrain"`
+}
+
+func NewGameState() GameState {
+	return GameState{
+		Terrain: GameTerrainNone,
+		Weather: GameWeatherNone,
+	}
+}
+
+func GS_TrueFilter(g Game, gs GameState, c Context) bool {
+	return true
+}
+func GS_SourceIsActiveFilter(g Game, gs GameState, context Context) bool {
+	source, ok := g.GetSource(context)
+	if !ok {
+		return false
+	}
+
+	return source.IsActive()
 }

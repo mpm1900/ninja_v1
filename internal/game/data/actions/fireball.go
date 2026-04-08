@@ -11,24 +11,19 @@ var Fireball = MakeFireball()
 
 func MakeFireball() game.Action {
 	ID := uuid.New()
-	accuracy := 100
-	power := 80
-	nature := game.NsFire
-	stat := game.ChakraAttack
-	targetCount := 1
-	chakraCost := 30
-	cooldown := 1
 
 	config := game.ActionConfig{
 		Name:        "Fireball",
-		Nature:      &nature,
-		Accuracy:    &accuracy,
-		Power:       &power,
-		Stat:        &stat,
-		TargetCount: &targetCount,
-		Cost:        &chakraCost,
-		Cooldown:    &cooldown,
+		Nature:      game.Ptr(game.NsFire),
+		Accuracy:    game.Ptr(100),
+		Power:       game.Ptr(80),
+		Stat:        game.Ptr(game.ChakraAttack),
+		TargetCount: game.Ptr(1),
+		Cost:        game.Ptr(30),
+		Cooldown:    game.Ptr(1),
 		Jutsu:       game.Ninjutsu,
+		CritChance:  game.Ptr(50),
+		CritMod:     1.5,
 	}
 
 	return game.Action{
@@ -37,7 +32,7 @@ func MakeFireball() game.Action {
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
 		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseStaminaSource(chakraCost),
+		Cost:            mutations.UseStaminaSource(*config.Cost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter: game.ComposeGF(
@@ -48,8 +43,8 @@ func MakeFireball() game.Action {
 				transactions := []game.GameTransaction{}
 
 				conf := game.GetActiveActionConfig(g, config)
-				crit_mod := game.GetCriticalModifier(conf)
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_mod, 1))
+				crit_result := game.MakeCriticalCheck(conf)
+				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, 1))
 				transactions = append(
 					transactions,
 					mutations.MakeDamageTransactions(context, damages)...,

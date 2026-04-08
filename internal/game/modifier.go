@@ -1,6 +1,9 @@
 package game
 
 import (
+	"slices"
+	"sort"
+
 	"github.com/google/uuid"
 )
 
@@ -49,4 +52,39 @@ func CheckModifierForActor(tx Transaction[Modifier], game Game, actor Actor) boo
 	}
 
 	return false
+}
+
+func GetAllActorMutations(g Game, bypassModifiers bool) ([]ActorMutation, []Transaction[Modifier]) {
+	var transactions []Transaction[Modifier] = []Transaction[Modifier]{}
+	if !bypassModifiers {
+		transactions = slices.Concat(g.GetModifiers(), GetActorModifiers(g))
+	}
+	mutations := make([]ActorMutation, 0)
+	for _, transaction := range transactions {
+		for _, mut := range transaction.Mutation.ActorMutations {
+			mut.TransactionID = &transaction.ID
+			mutations = append(mutations, mut)
+		}
+	}
+	sort.SliceStable(mutations, func(i, j int) bool {
+		return mutations[i].Priority < mutations[j].Priority
+	})
+
+	return append(mutations, specialMutations...), transactions
+}
+
+func GetAllGameStateMutations(g Game) ([]GameStateMutation, []Transaction[Modifier]) {
+	transactions := slices.Concat(g.GetModifiers(), GetActorModifiers(g))
+	mutations := make([]GameStateMutation, 0)
+	for _, transaction := range transactions {
+		for _, mut := range transaction.Mutation.GameStateMutations {
+			mut.TransactionID = &transaction.ID
+			mutations = append(mutations, mut)
+		}
+	}
+	sort.SliceStable(mutations, func(i, j int) bool {
+		return mutations[i].Priority < mutations[j].Priority
+	})
+
+	return mutations, transactions
 }

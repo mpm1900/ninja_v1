@@ -34,6 +34,7 @@ var Pain = game.ActorDef{
 	Abilities: []game.Modifier{
 		modifiers.VesselOfPain,
 		modifiers.SpeedBoost,
+		modifiers.HeavyRain,
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
@@ -42,5 +43,6 @@ var Pain = game.ActorDef{
 		actions.Protect.ID,
 		actions.Tailwind.ID,
 		actions.LeafJab.ID,
+		actions.Surf.ID,
 	},
 }

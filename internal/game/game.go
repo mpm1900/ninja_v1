@@ -33,7 +33,7 @@ type Game struct {
 	ActiveTransaction *Transaction[Action] `json:"active_transaction"`
 	Players           []Player             `json:"players"`
 
-	State     GameState               `json:"state"`
+	state     GameState
 	Actors    []Actor                 `json:"actors"`
 	Modifiers []Transaction[Modifier] `json:"modifiers"`
 
@@ -97,7 +97,7 @@ func NewGame(actionRegistry map[uuid.UUID]Action) Game {
 			Count: 0,
 			Phase: TurnInit,
 		},
-		State:             GameState{},
+		state:             NewGameState(),
 		ActiveTransaction: nil,
 		Players:           make([]Player, 0),
 		Actors:            make([]Actor, 0),
@@ -290,6 +290,19 @@ func (g Game) GetActiveAction() (Action, bool) {
 	}
 
 	return Action{}, false
+}
+func (g Game) GetState(context Context) GameState {
+	mutations, transactions := GetAllGameStateMutations(g)
+	state := g.state
+	for _, mut := range mutations {
+		mutContext := ResolveModifierTransactionContext(context, transactions, mut.TransactionID)
+		tx := MakeTransaction(mut.Mutation, mutContext)
+		s, ok := ResolveTransaction(g, state, tx, state)
+		if ok {
+			state = s
+		}
+	}
+	return state
 }
 func (g Game) WithActor(actor Actor) Game {
 	next := g
@@ -633,6 +646,7 @@ type GameJSON struct {
 	ActiveTransaction *Transaction[Action] `json:"active_transaction"`
 	Players           []Player             `json:"players"`
 	Actors            []ResolvedActor      `json:"actors"`
+	State             GameState            `json:"state"`
 
 	Modifiers    []Transaction[Modifier]     `json:"modifiers"`
 	Transactions []Transaction[GameMutation] `json:"-"`
@@ -679,6 +693,7 @@ func (g Game) ToJSON(playerID *uuid.UUID) GameJSON {
 		ActiveTransaction: g.ActiveTransaction,
 		Players:           g.Players,
 		Actors:            resolved,
+		State:             g.GetState(NewContext()),
 		Modifiers:         g.Modifiers,
 		Transactions:      g.Transactions,
 		Actions:           g.Actions,

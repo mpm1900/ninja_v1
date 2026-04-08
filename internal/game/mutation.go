@@ -97,4 +97,24 @@ func MakeActorMutation(
  * GameState Mutations
  * [GameStateMutation]
  */
-type GameStateMutation Mutation[Game, GameState, GameState]
+type GameStateMutation struct {
+	Mutation[Game, GameState, GameState]
+	ModifierGroupID *uuid.UUID
+	TransactionID   *uuid.UUID
+}
+
+func MakeGameStateMutation(
+	modifierGroupID *uuid.UUID,
+	priority int,
+	filter func(Game, GameState, Context) bool,
+	delta func(Game, GameState, Context) GameState,
+) GameStateMutation {
+	return GameStateMutation{
+		ModifierGroupID: modifierGroupID,
+		Mutation: Mutation[Game, GameState, GameState]{
+			Filter:   filter,
+			Delta:    delta,
+			Priority: priority,
+		},
+	}
+}
