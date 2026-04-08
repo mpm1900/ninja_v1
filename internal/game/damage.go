@@ -29,8 +29,8 @@ type DamageConfig struct {
 
 func NewDamageConfig(critical float64, random float64) DamageConfig {
 	return DamageConfig{
-		Critical:  1.0,
-		Random:    1.0,
+		Critical:  critical,
+		Random:    random,
 		Repeat:    false,
 		RepeatMax: 0,
 	}
@@ -91,6 +91,12 @@ func GetDamage(
 
 	for i, target := range targets {
 		d_base := float64(target.Stats[ActorStat(defense)])
+		/**
+		 * This piece is important. Critical hits ignore target stat changes.
+		 */
+		if critical > 1.0 {
+			d_base = float64(target.PreStats[ActorStat(defense)])
+		}
 		d_mod := 1.0
 		defense_value := Round(d_base * d_mod)
 

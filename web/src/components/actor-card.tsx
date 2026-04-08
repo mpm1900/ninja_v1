@@ -23,7 +23,7 @@ const actorVariants = cva(
   {
     variants: {
       player: {
-        player: 'bg-gray-900 border-gray-700',
+        player: 'border-transparent', //'bg-gray-900 border-gray-700',
         enemy: 'border-transparent',
         summon: 'bg-stone-600! border-stone-400!',
       },

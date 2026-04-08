@@ -14,7 +14,7 @@ function ActorModifier({
   if (!modifier || !modifier.show) return null
   const Icon = modifier?.icon ? MODIFIER_ICONS[modifier.icon] : undefined
   return (
-    <span>
+    <span className='text-shadow-[1px_1px_0px_#000000]'>
       {Icon ? (
         <Tooltip>
           <TooltipTrigger asChild>
