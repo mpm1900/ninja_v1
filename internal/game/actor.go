@@ -150,11 +150,13 @@ type ActorState struct {
 	ActiveTurns      int            `json:"-"`
 	InactiveTurns    int            `json:"-"`
 	LastUsedActionID *uuid.UUID     `json:"last_used_action_ID"`
+	Seen             bool           `json:"seen"`
 	// [Alive] whether or not the actor is alive, could
 	// - could be computed, but this is here to not have to call .Resolve() on filters
 	Alive bool `json:"alive"`
 	// [Damage] how much damage this actor has recieved
-	Damage int `json:"damage"`
+	Damage        int `json:"damage"`
+	StaminaDamage int `json:"stamina_damage"`
 	// [PositionID] current position, nil if not active
 	PositionID *uuid.UUID `json:"position_ID"`
 	// [Protected]
@@ -165,14 +167,16 @@ type ActorState struct {
 	 * PSEUDO STATS
 	 */
 	// [Reflect] how much damage is reflected (PureDamage not affected)
-	Reflect       float64 `json:"-"`
-	DamageMult    float64 `json:"-"`
-	Seen          bool    `json:"seen"`
-	StaminaDamage int     `json:"stamina_damage"`
+	Reflect float64 `json:"-"`
+	// [DamageMult] is a flat damage mult passed to the damage eq
+	DamageMult float64 `json:"-"`
 	// [ActionLocked]
 	// - action locked units must use their last used action
 	// - if there there is no last used action, any action can be chosen
 	ActionLocked bool `json:"action_locked"`
+	// [SwitchLocked]
+	// - swiched locked units cannot use Switch, to switch out, but other means are fine
+	SwitchLocked bool `json:"switch_locked"`
 	// [Stunned] whether or not an actor _can act_
 	// - stunned units cannot push actions
 	// - stunned units cannot resolve actions (if the status was added during running)
@@ -334,6 +338,7 @@ func MakeActor(
 			PositionID:       nil,
 			LastUsedActionID: nil,
 			ActionLocked:     false,
+			SwitchLocked:     false,
 			Protected:        false,
 			DamageMult:       1.0,
 			Reflect:          0.0,

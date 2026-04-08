@@ -29,6 +29,7 @@ func AddModifiers(checkProtect bool, modifiers ...game.Modifier) game.GameMutati
 					}
 				}
 
+				g.On(game.OnModifierAdd, &mod_tx.Context)
 				g.Modifiers = append(g.Modifiers, mod_tx)
 			}
 

@@ -12,6 +12,7 @@ const (
 	OnDamageRecieve TriggerOn = "on-damage-recieve"
 	OnDeath         TriggerOn = "on-death"
 	OnKill          TriggerOn = "on-kill"
+	OnModifierAdd   TriggerOn = "on-modifier-add"
 	OnTurnEnd       TriggerOn = "on-turn-end"
 )
 

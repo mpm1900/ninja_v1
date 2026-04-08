@@ -1,7 +1,6 @@
 package instance
 
 import (
-	"fmt"
 	"ninja_v1/internal/game"
 	data "ninja_v1/internal/game/data"
 	"slices"
@@ -187,9 +186,11 @@ func Reducer(instance *Instance, request Request) int {
 			return none
 		}
 
-		fmt.Println(actor.ActionLocked, actor.LastUsedActionID)
+		if action.ID == game.Switch.ID && actor.SwitchLocked {
+			return none
+		}
+
 		if action.ID != game.Switch.ID && actor.ActionLocked && actor.LastUsedActionID != nil {
-			fmt.Println(actor.ActionLocked, *actor.LastUsedActionID)
 			if *request.Context.ActionID != *actor.LastUsedActionID {
 				return none
 			}

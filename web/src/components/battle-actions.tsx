@@ -58,7 +58,14 @@ function BattleActions({ actor }: { actor: Actor }) {
                   enabled={
                     game.status === 'idle' &&
                     !!actor.position_ID &&
-                    action.cooldown == null && !action.disabled
+                    action.cooldown == null &&
+                    !action.disabled &&
+                    !(
+                      (action_locked &&
+                        actor.last_used_action_ID !== action.ID &&
+                        action.config.name != 'Switch') ||
+                      (actor.switch_locked && action.config.name == 'Switch')
+                    )
                   }
                   context={context}
                   onContextChange={setContext}
@@ -137,7 +144,15 @@ function BattleActions({ actor }: { actor: Actor }) {
                     >
                       <ActionCard
                         action={a}
-                        disabled={!!staged && !selected || a.disabled || a.cooldown != null || (action_locked && actor.last_used_action_ID !== a.ID && a.config.name != 'Switch')}
+                        disabled={
+                          (!!staged && !selected) ||
+                          a.disabled ||
+                          a.cooldown != null ||
+                          (action_locked &&
+                            actor.last_used_action_ID !== a.ID &&
+                            a.config.name != 'Switch') ||
+                          (actor.switch_locked && a.config.name == 'Switch')
+                        }
                         selected={selected}
                         onClick={() => setContextAction(a.ID)}
                         style={{

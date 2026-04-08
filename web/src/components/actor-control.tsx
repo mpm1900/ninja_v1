@@ -29,7 +29,7 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
     <Card className="grid grid-cols-2 rounded-t-none border-t-0 mx-2 mb-2 py-2 gap-0">
       <div>
         <CardContent className="px-2 flex flex-col gap-2">
-          <div className="flex gap-2">
+          <div className="grid grid-cols-2 gap-2">
             <div className="space-y-4">
               <div className="h-16 w-16 overflow-hidden">
                 <img
