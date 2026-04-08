@@ -15,4 +15,5 @@ var ITEMS map[uuid.UUID]game.Modifier = map[uuid.UUID]game.Modifier{
 	modifiers.Leftovers.ID:           modifiers.Leftovers,
 	modifiers.LifeOrb.ID:             modifiers.LifeOrb,
 	modifiers.Onigiri.ID:             modifiers.Onigiri,
+	modifiers.ShinobiVest.ID:         modifiers.ShinobiVest,
 }

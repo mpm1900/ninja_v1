@@ -11,6 +11,7 @@ const getItems = createServerFn().handler(async () => {
 const itemsQuery = queryOptions({
   queryKey: ['items'],
   queryFn: () => getItems(),
+  select: (items) => items.sort((a, b) => a.name.localeCompare(b.name)),
   staleTime: 60000,
   gcTime: 60000,
 })
