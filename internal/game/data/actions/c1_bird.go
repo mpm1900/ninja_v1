@@ -10,7 +10,7 @@ import (
 var C1Bird = MakeC1Bird()
 
 func MakeC1Bird() game.Action {
-	ID := uuid.New()
+	ID := uuid.MustParse("9e8ecd72-8df3-5551-9672-0040d622beb1")
 	accuracy := 100
 	power := 70
 	nature := game.NsExplosion

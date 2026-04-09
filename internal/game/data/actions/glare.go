@@ -21,7 +21,7 @@ func MakeGlare() game.Action {
 		Description: "Stuns the target this turn. Fails unless it is the user's first turn switched in.",
 	}
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("5cf69985-6785-56a6-b879-e02cb6207960"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),

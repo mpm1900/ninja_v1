@@ -10,7 +10,7 @@ import (
 var GreatTreeSpear = MakeGreatTreeSpear()
 
 func MakeGreatTreeSpear() game.Action {
-	ID := uuid.New()
+	ID := uuid.MustParse("00888b4b-973f-5bf5-9a41-bba1c9b629b8")
 	accuracy := 70
 	power := 120
 	nature := game.NsWood

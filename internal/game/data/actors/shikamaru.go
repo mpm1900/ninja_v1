@@ -9,7 +9,7 @@ import (
 )
 
 var Shikamaru = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("4d0ad337-2685-5ac1-be21-d62a2e23f678"),
 	SpriteURL:    "/sprites/shikamaru_64.png",
 	Name:         "Shikamaru Nara",
 	Affiliations: []string{game.AffKonoha},
@@ -36,7 +36,6 @@ var Shikamaru = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Haze.ID,
 		actions.Tailwind.ID,
 		actions.FollowMe.ID,

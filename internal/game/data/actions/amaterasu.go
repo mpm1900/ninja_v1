@@ -11,7 +11,7 @@ import (
 var Amaterasu = MakeAmaterasu()
 
 func MakeAmaterasu() game.Action {
-	ID := uuid.New()
+	ID := uuid.MustParse("d103e605-9381-52fd-9cb8-450b7315a9f9")
 	nature := game.NsYin
 
 	config := game.ActionConfig{

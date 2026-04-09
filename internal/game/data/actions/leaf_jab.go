@@ -25,7 +25,7 @@ func MakeLeafJab() game.Action {
 		Jutsu:    game.Taijutsu,
 	}
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("b23ace96-eb09-5bf7-b884-7ef8e8fc544d"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),

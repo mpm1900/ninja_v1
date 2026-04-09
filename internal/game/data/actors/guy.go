@@ -9,7 +9,7 @@ import (
 )
 
 var Guy = game.ActorDef{
-	ActorID:   uuid.New(),
+	ActorID:   uuid.MustParse("bf98da03-0afb-54c9-9b0a-0636552cb32d"),
 	SpriteURL: "/sprites/guy_64.png",
 	Name:      "Might Guy",
 	Affiliations: []string{
@@ -39,7 +39,6 @@ var Guy = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.LuckyStrikes.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,

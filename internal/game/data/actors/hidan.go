@@ -8,7 +8,7 @@ import (
 )
 
 var Hidan = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("735c88e7-9c5a-5a99-9605-0feeea1ccdb5"),
 	SpriteURL:    "/sprites/hidan_64.png",
 	Name:         "Hidan",
 	Affiliations: []string{game.AffAkatsuki, game.AffYuga},
@@ -32,7 +32,6 @@ var Hidan = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.FollowMe.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,

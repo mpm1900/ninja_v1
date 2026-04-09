@@ -8,7 +8,7 @@ import (
 )
 
 var Sasuke = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("2c7025a3-77c8-57b7-9120-e99b473f669f"),
 	Name:         "Sasuke Uchiha",
 	SpriteURL:    "/sprites/sasuke_64.png",
 	Clan:         game.ClanUchiha,
@@ -35,7 +35,6 @@ var Sasuke = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,

@@ -9,7 +9,7 @@ import (
 )
 
 var Naruto = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("7b8d8818-ebb3-5c79-8d67-20c5df3d026d"),
 	SpriteURL:    "/sprites/naruto_64.png",
 	Name:         "Naruto Uzumaki",
 	Clan:         game.ClanUzumaki,
@@ -38,7 +38,6 @@ var Naruto = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Rasengan.ID,
 		actions.PowerBoost.ID,
 		actions.ToadSong.ID,

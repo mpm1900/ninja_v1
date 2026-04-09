@@ -10,7 +10,7 @@ import (
 var Fireball = MakeFireball()
 
 func MakeFireball() game.Action {
-	ID := uuid.New()
+	ID := uuid.MustParse("aaf5174b-f386-54b1-84c4-0c062937c770")
 
 	config := game.ActionConfig{
 		Name:        "Fireball",

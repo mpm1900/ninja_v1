@@ -8,7 +8,7 @@ import (
 )
 
 var Yamato = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("aec1edee-f092-5422-a669-fe8eb73b556f"),
 	SpriteURL:    "/sprites/yamato_64.png",
 	Name:         "Yamato",
 	Affiliations: []string{game.AffKonoha},
@@ -34,7 +34,6 @@ var Yamato = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,

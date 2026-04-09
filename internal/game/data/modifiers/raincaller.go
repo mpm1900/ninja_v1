@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
-var heavyRainID = uuid.New()
+var heavyRainID = uuid.MustParse("b28933cd-ad6a-5b83-acff-4dd084dad6e5")
 
 func HeavyRain() game.Modifier {
 	return game.Modifier{
@@ -32,10 +32,10 @@ func HeavyRain() game.Modifier {
 	}
 }
 
-var raincallerID = uuid.New()
+var raincallerID = uuid.MustParse("912e5e72-263e-5f6f-8f9f-32d1a746cc49")
 
 var RaincallerTrigger game.Trigger = game.Trigger{
-	ID:         uuid.New(),
+	ID:         uuid.MustParse("21121daa-3823-5613-ae0d-c26f7f97fece"),
 	ModifierID: raincallerID,
 	On:         game.OnActorEnter,
 	Check:      game.Match__SourceActor_SourceActor,

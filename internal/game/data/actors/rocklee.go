@@ -8,16 +8,16 @@ import (
 )
 
 var RockLee = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("f7189c34-fb21-54d6-be14-28a473d36c53"),
 	SpriteURL:    "/sprites/rocklee_64.png",
 	Name:         "Rock Lee",
 	Affiliations: []string{game.AffKonoha},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            70,
+		game.StatHP:            50,
 		game.StatStamina:       80,
 		game.StatAttack:        150,
-		game.StatDefense:       90,
+		game.StatDefense:       80,
 		game.StatChakraAttack:  20,
 		game.StatChakraDefense: 70,
 		game.StatSpeed:         105,
@@ -32,7 +32,6 @@ var RockLee = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.LuckyStrikes.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,

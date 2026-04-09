@@ -4,15 +4,7 @@ import { gameStore } from './game'
 import type { Game } from '../game/game'
 import type { Context } from '../game/context'
 import { setContextPlayer } from './battle-context'
-import type { ActorFocus, ActorStats } from '../game/actor'
-
-type ActorConfig = {
-  ability_ID?: string
-  action_IDs?: Array<string>
-  aux_stats?: ActorStats<number>
-  focus?: ActorFocus
-  item_ID?: string
-}
+import type { ActorConfig, TeamConfig } from './config'
 
 type SocketStatus =
   | 'idle'
@@ -30,6 +22,7 @@ type SocketState = {
 }
 
 type SocketRequestType =
+  | 'set-team'
   | 'add-actor'
   | 'remove-actor'
   | 'update-actor'
@@ -46,7 +39,8 @@ type SocketRequest = {
   prompt_ID?: string
   client_ID: string
   context: Context
-  actor_config?: ActorConfig
+  actor_config?: Partial<ActorConfig>
+  team_config?: TeamConfig
 }
 
 type SocketResponse = {

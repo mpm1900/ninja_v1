@@ -56,6 +56,12 @@ const (
 	FocusVolatile    ActorFocus = "volatile"    // -P.DEF
 	FocusIntense     ActorFocus = "intense"     // -C.DEF
 	FocusCalculated  ActorFocus = "calculated"  // -SPE
+	// +P.DEF
+	FocusComposed ActorFocus = "composed" // -P.ATK
+	FocusMindful  ActorFocus = "mindful"  // -P.DEF
+	FocusReserved ActorFocus = "reserved" // -C.ATK
+	FocusedStoic  ActorFocus = "stoic"    // -SPE
+
 	// +SPE
 	FocusAgile     ActorFocus = "agile"     // -P.ATK
 	FocusHasty     ActorFocus = "hasty"     // -P.DEF
@@ -310,8 +316,10 @@ func MakeActor(
 	ability *Modifier,
 	item *Modifier,
 	actions []Action,
+	auxStats map[ActorStat]int,
 ) Actor {
 	clonedDef := def.Clone()
+	actions = append(actions, Switch)
 	return Actor{
 		ActorDef:   clonedDef,
 		ID:         uuid.New(),
@@ -361,15 +369,7 @@ func MakeActor(
 			StatEvasion:       0,
 			StatAccuracy:      0,
 		},
-		AuxStats: map[ActorStat]int{
-			StatHP:            0,
-			StatStamina:       0,
-			StatAttack:        0,
-			StatDefense:       0,
-			StatChakraAttack:  0,
-			StatChakraDefense: 0,
-			StatSpeed:         0,
-		},
+		AuxStats: maps.Clone(auxStats),
 		Actions: actions,
 		Summon:  nil,
 	}

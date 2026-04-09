@@ -19,7 +19,7 @@ func MakeDragonDance() game.Action {
 		Description: "Raises the user's Speed and Physical Attack stats.",
 	}
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("435490c1-ede2-5875-9edf-1c36d4917741"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.NoneFilter,

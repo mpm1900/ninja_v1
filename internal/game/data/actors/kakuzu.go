@@ -8,7 +8,7 @@ import (
 )
 
 var Kakuzu = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("9a273c6c-d268-5d54-9667-4c264d5192d8"),
 	SpriteURL:    "/sprites/kakuzu_64.png",
 	Name:         "Kakuzu",
 	Affiliations: []string{game.AffAkatsuki, game.AffTaki},
@@ -32,7 +32,6 @@ var Kakuzu = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.SearingMigrane.ID,

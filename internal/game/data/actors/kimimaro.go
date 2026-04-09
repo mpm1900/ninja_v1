@@ -8,7 +8,7 @@ import (
 )
 
 var Kimimaro = game.ActorDef{
-	ActorID:   uuid.New(),
+	ActorID:   uuid.MustParse("ced6b910-2207-5982-9202-fc41804c5071"),
 	SpriteURL: "/sprites/kimimaro_64.png",
 	Name:      "Kimimaro Kaguya",
 	Affiliations: []string{
@@ -35,7 +35,6 @@ var Kimimaro = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.LuckyStrikes.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,

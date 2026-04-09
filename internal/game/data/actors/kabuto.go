@@ -8,7 +8,7 @@ import (
 )
 
 var Kabuto = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("a94c7c47-4211-53e4-8821-49a12e308840"),
 	SpriteURL:    "/sprites/kabuto_64.png",
 	Name:         "Kabuto Yakushi",
 	Affiliations: []string{game.AffOto},
@@ -33,7 +33,6 @@ var Kabuto = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Haze.ID,
 		actions.Tailwind.ID,
 		actions.FollowMe.ID,

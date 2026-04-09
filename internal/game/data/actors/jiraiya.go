@@ -8,7 +8,7 @@ import (
 )
 
 var Jiraiya = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("fbf88375-8f7c-5380-97b9-2f2748581e76"),
 	SpriteURL:    "/sprites/jiraiya_64.png",
 	Name:         "Jiraiya",
 	Affiliations: []string{game.AffKonoha},
@@ -34,7 +34,6 @@ var Jiraiya = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Rasengan.ID,
 		actions.Haze.ID,
 		actions.ToadSong.ID,

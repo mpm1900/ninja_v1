@@ -90,6 +90,39 @@ func Reducer(instance *Instance, request Request) int {
 		valid := action.ContextValidate(request.Context)
 		instance.ValidateContextResponse(request.ClientID, request.Context, valid)
 		return none
+	case SetTeam:
+		if request.TeamConfig == nil {
+			return none
+		}
+		player, ok := instance.Game.GetPlayerByID(request.ClientID)
+		if !ok {
+			return none
+		}
+
+		for _, actor := range request.TeamConfig.Actors {
+			def, ok := data.ACTORS[actor.ActorID]
+			if !ok {
+				return none
+			}
+
+			hydrated := HydrateActorConfig(actor.Config, def.Abilities)
+			actors := instance.Game.GetActorsByPlayer(player.ID)
+			if len(actors) >= player.TeamCapacity {
+				return none
+			}
+
+			actor := game.MakeActor(
+				def,
+				request.ClientID,
+				/* 24 13824 */ 1000000,
+				hydrated.Ability,
+				hydrated.Item,
+				hydrated.Actions,
+				hydrated.AuxStats,
+			)
+			instance.Game.AddActor(actor)
+		}
+		return state
 	case AddActor:
 		if request.Context.SourceActorID == nil {
 			return none
@@ -131,6 +164,7 @@ func Reducer(instance *Instance, request Request) int {
 			ability,
 			hydrated.Item,
 			hydrated.Actions,
+			hydrated.AuxStats,
 		)
 		instance.Game.AddActor(actor)
 		return state

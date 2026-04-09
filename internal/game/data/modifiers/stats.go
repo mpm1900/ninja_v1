@@ -24,7 +24,7 @@ func NewStageDelta(
 	)
 
 	return game.Modifier{
-		ID:       uuid.New(),
+		ID:       uuid.MustParse("a27a82f5-2a33-5113-82a6-8821edfaa999"),
 		GroupID:  groupID,
 		Duration: game.ModifierDurationInf,
 		ActorMutations: []game.ActorMutation{
@@ -51,7 +51,7 @@ func NewStatMult(
 	)
 
 	return game.Modifier{
-		ID:       uuid.New(),
+		ID:       uuid.MustParse("87017c41-e542-55c3-947f-281d4c2f2dcf"),
 		GroupID:  groupID,
 		Duration: game.ModifierDurationInf,
 		ActorMutations: []game.ActorMutation{
@@ -90,53 +90,53 @@ func MakeStatMultTeam(stat game.ActorStat, name string, groupID *uuid.UUID, mult
 	return modifier
 }
 
-var AttackUpID = uuid.New()
-var AttackDownID = uuid.New()
+var AttackUpID = uuid.MustParse("ad74e7f2-2b26-50f7-a27a-24b24cb403bb")
+var AttackDownID = uuid.MustParse("ec4383a0-e6c2-5302-a63b-cfe988e88291")
 var AttackUpSource = MakeStatDeltaSource(game.StatAttack, &AttackUpID, 1, "Attack Up")
 var AttackUp2Source = MakeStatDeltaSource(game.StatAttack, &AttackUpID, 2, "Attack Up (2)")
 var AttackDownSource = MakeStatDeltaSource(game.StatAttack, &AttackDownID, -1, "Attack Down")
 var AttackDown2Source = MakeStatDeltaSource(game.StatAttack, &AttackDownID, -2, "Attack Down (2)")
-var DefenseUpID = uuid.New()
-var DefenseDownID = uuid.New()
+var DefenseUpID = uuid.MustParse("215a8ec8-3b79-528e-89a7-f99759652315")
+var DefenseDownID = uuid.MustParse("dd82e0f3-43e0-581e-a471-894801fb3d47")
 var DefenseUpSource = MakeStatDeltaSource(game.StatDefense, &DefenseUpID, 1, "Defense Up")
 var DefenseUp2Source = MakeStatDeltaSource(game.StatDefense, &DefenseUpID, 2, "Defense Up (2)")
 var DefenseDownSource = MakeStatDeltaSource(game.StatDefense, &DefenseDownID, -1, "Defense Down")
 var DefenseDown2Source = MakeStatDeltaSource(game.StatDefense, &DefenseDownID, -2, "Defense Down (2)")
-var ChakraAttackUpID = uuid.New()
-var ChakraAttackDownID = uuid.New()
+var ChakraAttackUpID = uuid.MustParse("f88afbce-a618-5f5d-a557-aa359287cfc9")
+var ChakraAttackDownID = uuid.MustParse("870c93e5-121d-5bb2-869b-a39e443dc4b7")
 var ChakraAttackUpSource = MakeStatDeltaSource(game.StatChakraAttack, &ChakraAttackUpID, 1, "Chakra Attack Up")
 var ChakraAttackUp2Source = MakeStatDeltaSource(game.StatChakraAttack, &ChakraAttackUpID, 2, "Chakra Attack Up (2)")
 var ChakraAttackDownSource = MakeStatDeltaSource(game.StatChakraAttack, &ChakraAttackDownID, -1, "Chakra Attack Down")
 var ChakraAttackDown2Source = MakeStatDeltaSource(game.StatChakraAttack, &ChakraAttackDownID, -2, "Chakra Attack Down (2)")
-var ChakraDefenseUpID = uuid.New()
-var ChakraDefenseDownID = uuid.New()
+var ChakraDefenseUpID = uuid.MustParse("5160744e-9d6c-50e6-836c-9ad7f4e7b9e5")
+var ChakraDefenseDownID = uuid.MustParse("73d3ea68-4b6d-52f8-9f83-5123abe824bb")
 var ChakraDefenseUpSource = MakeStatDeltaSource(game.StatChakraDefense, &ChakraDefenseUpID, 1, "Chakra Defense Up")
 var ChakraDefenseUp2Source = MakeStatDeltaSource(game.StatChakraDefense, &ChakraDefenseUpID, 2, "Chakra Defense Up (2)")
 var ChakraDefenseDownSource = MakeStatDeltaSource(game.StatChakraDefense, &ChakraDefenseDownID, -1, "Chakra Defense Down")
 var ChakraDefenseDown2Source = MakeStatDeltaSource(game.StatChakraDefense, &ChakraDefenseDownID, -2, "Chakra Defense Down (2)")
-var SpeedUpID = uuid.New()
-var SpeedDownID = uuid.New()
+var SpeedUpID = uuid.MustParse("d7622698-9639-563e-b4d1-e7411247453f")
+var SpeedDownID = uuid.MustParse("a843a341-f9f2-564a-8b8c-1dd2db7555f3")
 var SpeedUpSource = MakeStatDeltaSource(game.StatSpeed, &SpeedUpID, 1, "Speed Up")
 var SpeedUp2Source = MakeStatDeltaSource(game.StatSpeed, &SpeedUpID, 2, "Speed Up (2)")
 var SpeedDownSource = MakeStatDeltaSource(game.StatSpeed, &SpeedDownID, -1, "Speed Down")
 var SpeedDown2Source = MakeStatDeltaSource(game.StatSpeed, &SpeedDownID, -2, "Speed Down (2)")
 
-var EvasionUpID = uuid.New()
-var EvasionDownID = uuid.New()
+var EvasionUpID = uuid.MustParse("4067fc87-e8a8-58bb-bfa1-5e852b2296b6")
+var EvasionDownID = uuid.MustParse("160398fa-03b7-5370-a7a1-b7780c2f943d")
 var EvasionUpSource = MakeStatDeltaSourceWithShow(game.StatEvasion, &EvasionUpID, 1, "Evasion Up")
-var AccuracyUpID = uuid.New()
-var AccuracyDownID = uuid.New()
+var AccuracyUpID = uuid.MustParse("79566281-477e-5bce-b2b4-b878b11f2882")
+var AccuracyDownID = uuid.MustParse("0915300e-72d3-5b0c-b5d1-41f894a7d394")
 var AccuracyUpSource = MakeStatDeltaSourceWithShow(game.StatAccuracy, &AccuracyUpID, 1, "Accuracy Up")
 
 // NAMED STAT UPS
-var TailwindID = uuid.New()
+var TailwindID = uuid.MustParse("cd2010e6-90d8-530f-be90-79634690e33d")
 var Tailwind = MakeStatMultTeam(game.StatSpeed, "Tailwind", &TailwindID, 2.0, game.MutPriorityPostStagedStats)
 
-var ToadSongID = uuid.New()
+var ToadSongID = uuid.MustParse("764b5ee9-9136-5994-b598-40c3881e79dc")
 var ToadSong = MakeStatMultTeam(game.StatSpeed, "Toad Song", &ToadSongID, -1, game.MutPriorityPostSet)
 
 // HAZE
-var hazeID = uuid.New()
+var hazeID = uuid.MustParse("1f9dc965-2621-5e04-aa5e-6484bcf9a723")
 var Haze game.Modifier = game.Modifier{
 	ID:       hazeID,
 	GroupID:  &hazeID,

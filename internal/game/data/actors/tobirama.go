@@ -9,7 +9,7 @@ import (
 )
 
 var Tobirama = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("057322de-bf24-5b4a-b6df-53a0817e93cf"),
 	SpriteURL:    "/sprites/tobirama_64.png",
 	Name:         "Tobirama Senju",
 	Clan:         game.ClanSenju,
@@ -38,7 +38,6 @@ var Tobirama = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Protect.ID,
 		actions.Tailwind.ID,
 		actions.LeechSeed.ID,

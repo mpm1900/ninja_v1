@@ -9,7 +9,7 @@ import (
 )
 
 var Pain = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("f344914c-26d5-5e7b-8673-ad73d5b8f334"),
 	SpriteURL:    "/sprites/pain_64.png",
 	Name:         "Pain",
 	Clan:         game.ClanUzumaki,
@@ -38,7 +38,6 @@ var Pain = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Sekiryoku.ID,
 		actions.Protect.ID,
 		actions.Tailwind.ID,

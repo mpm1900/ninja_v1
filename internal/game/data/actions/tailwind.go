@@ -19,7 +19,7 @@ func MakeTailwind() game.Action {
 		Description: "Doubles the speed of the user's party for 4 turns. This effect cannot stack.",
 	}
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("f0e7a99d-93ff-502a-b07c-6479f9a1fc30"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.NoneFilter,

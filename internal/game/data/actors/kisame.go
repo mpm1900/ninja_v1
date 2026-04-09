@@ -9,7 +9,7 @@ import (
 )
 
 var Kisame = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("e34e2dec-6b2b-59f5-92c4-afb7e473f3e9"),
 	Name:         "Kisame Hoshigaki",
 	SpriteURL:    "/sprites/kisame_64.png",
 	Affiliations: []string{game.AffAkatsuki, game.AffKuri},
@@ -35,7 +35,6 @@ var Kisame = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Surf.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,

@@ -10,7 +10,7 @@ import (
 var Surf = MakeSurf()
 
 func MakeSurf() game.Action {
-	ID := uuid.New()
+	ID := uuid.MustParse("74d5a7d7-cb62-58b4-9ace-e80bf7f0fd40")
 	accuracy := 100
 	power := 90
 	nature := game.NsWater

@@ -1,8 +1,10 @@
+import { AbilitySelect } from '#/components/ability-select'
 import { ActionsTable } from '#/components/actions-table'
 import { ActorCombobox } from '#/components/actor-combobox'
-import { ActorsTable } from '#/components/actors-table'
 import { AppHeader } from '#/components/app-header'
 import { FocusSelect } from '#/components/focus-select'
+import { ItemSelect } from '#/components/item-select'
+import { TeamBuilderStat } from '#/components/team-builder-stat'
 import { Button } from '#/components/ui/button'
 import { Field, FieldContent } from '#/components/ui/field'
 import { Input } from '#/components/ui/input'
@@ -18,19 +20,109 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarSeparator,
 } from '#/components/ui/sidebar'
+import { NULL_CONTEXT } from '#/lib/game/context'
 import { actionsQuery } from '#/lib/queries/actions'
 import { actorsQuery } from '#/lib/queries/actors'
 import { instancesQuery } from '#/lib/queries/instances'
-import type { ActorConfig } from '#/lib/stores/socket'
-import { useForm } from '@tanstack/react-form'
+import { clientsStore } from '#/lib/stores/clients'
+import {
+  TeamSchema,
+  type TeamActor,
+  type TeamConfig,
+} from '#/lib/stores/config'
+import { sendContextMessage } from '#/lib/stores/socket'
+import { useForm, useStore } from '@tanstack/react-form'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, redirect } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 
-type TeamActor = {
-  actor_ID: string
-  config: ActorConfig
+const SAVED_TEAMS_KEY = 'team-builder:saved-teams'
+
+const DEFAULT_AUX_STATS: TeamActor['config']['aux_stats'] = {
+  hp: 0,
+  stamina: 0,
+  speed: 0,
+  attack: 0,
+  defense: 0,
+  chakra_attack: 0,
+  chakra_defense: 0,
+}
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null
+
+const toBoundedStat = (value: unknown) => {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return 0
+  return Math.max(0, Math.min(31, Math.floor(value)))
+}
+
+const hydrateSavedTeam = (value: unknown): TeamConfig | null => {
+  if (!isRecord(value)) return null
+
+  const name =
+    typeof value.name === 'string' && value.name.trim().length > 0
+      ? value.name.trim()
+      : 'Team'
+
+  const actors = Array.isArray(value.actors)
+    ? value.actors
+        .map((actor): TeamActor | null => {
+          if (!isRecord(actor) || typeof actor.actor_ID !== 'string') {
+            return null
+          }
+
+          const config = isRecord(actor.config) ? actor.config : {}
+          const auxStats = isRecord(config.aux_stats) ? config.aux_stats : {}
+
+          return {
+            actor_ID: actor.actor_ID,
+            config: {
+              ability_ID:
+                typeof config.ability_ID === 'string'
+                  ? config.ability_ID
+                  : null,
+              item_ID:
+                typeof config.item_ID === 'string' ? config.item_ID : null,
+              action_IDs: Array.isArray(config.action_IDs)
+                ? config.action_IDs.filter(
+                    (id): id is string => typeof id === 'string'
+                  )
+                : [],
+              focus: (typeof config.focus === 'string'
+                ? config.focus
+                : 'none') as TeamActor['config']['focus'],
+              aux_stats: {
+                hp: toBoundedStat(auxStats.hp),
+                stamina: toBoundedStat(auxStats.stamina),
+                speed: toBoundedStat(auxStats.speed),
+                attack: toBoundedStat(auxStats.attack),
+                defense: toBoundedStat(auxStats.defense),
+                chakra_attack: toBoundedStat(auxStats.chakra_attack),
+                chakra_defense: toBoundedStat(auxStats.chakra_defense),
+              },
+            },
+          }
+        })
+        .filter((actor): actor is TeamActor => actor !== null)
+    : []
+
+  const rawSelectedIndex =
+    typeof value.selected_index === 'number' &&
+    Number.isFinite(value.selected_index)
+      ? Math.floor(value.selected_index)
+      : 0
+
+  const selected_index = Math.max(
+    0,
+    Math.min(rawSelectedIndex, Math.max(actors.length - 1, 0))
+  )
+
+  return {
+    name,
+    actors,
+    selected_index,
+  }
 }
 
 export const Route = createFileRoute('/team-builder')({
@@ -48,14 +140,90 @@ export const Route = createFileRoute('/team-builder')({
 })
 
 function RouteComponent() {
-  const actors = useSuspenseQuery(actorsQuery)
+  const nav = Route.useNavigate()
+  const client = useStore(clientsStore, (s) => s.me)
+  const query = useSuspenseQuery(actorsQuery)
   const actions = useSuspenseQuery(actionsQuery)
   const form = useForm({
     defaultValues: {
+      name: 'Team',
       selected_index: 0,
-      team_actors: [null, null, null, null, null, null] as (TeamActor | null)[],
+      actors: [] as TeamActor[],
+    },
+    validators: {
+      onMount: TeamSchema,
+      onChange: TeamSchema,
+    },
+    onSubmit: ({ value }) => {
+      if (!client) return
+      sendContextMessage({
+        type: 'set-team',
+        client_ID: client.ID,
+        team_config: value,
+        context: NULL_CONTEXT,
+      })
+      nav({ to: '/setup' })
     },
   })
+
+  const [savedTeams, setSavedTeams] = useState<TeamConfig[]>([])
+
+  useEffect(() => {
+    const raw = localStorage.getItem(SAVED_TEAMS_KEY)
+    if (!raw) return
+
+    try {
+      const parsed = JSON.parse(raw)
+      if (!Array.isArray(parsed)) return
+
+      const hydratedTeams = parsed
+        .map(hydrateSavedTeam)
+        .filter((team): team is TeamConfig => team !== null)
+
+      setSavedTeams(hydratedTeams)
+    } catch {
+      // Ignore malformed local storage data
+    }
+  }, [])
+
+  const persistSavedTeams = (teams: TeamConfig[]) => {
+    setSavedTeams(teams)
+    localStorage.setItem(SAVED_TEAMS_KEY, JSON.stringify(teams))
+  }
+
+  const saveTeam = (team: TeamConfig) => {
+    const hydratedTeam = hydrateSavedTeam(team)
+    if (!hydratedTeam) return
+
+    const name = hydratedTeam.name.trim()
+    if (!name) return
+
+    const normalizedTeam: TeamConfig = {
+      ...hydratedTeam,
+      name,
+    }
+
+    const nextTeams = [
+      normalizedTeam,
+      ...savedTeams.filter((saved) => saved.name !== name),
+    ]
+
+    persistSavedTeams(nextTeams)
+  }
+
+  const loadSavedTeam = (team: TeamConfig) => {
+    const loadedTeam: TeamConfig = JSON.parse(JSON.stringify(team))
+    form.setFieldValue('name', loadedTeam.name)
+    form.setFieldValue('actors', loadedTeam.actors)
+    form.setFieldValue(
+      'selected_index',
+      Math.min(
+        loadedTeam.selected_index,
+        Math.max(loadedTeam.actors.length - 1, 0)
+      )
+    )
+  }
+
   return (
     <main className="flex h-screen flex-col overflow-hidden">
       <AppHeader />
@@ -80,23 +248,30 @@ function RouteComponent() {
               </SidebarMenu>
             </SidebarHeader>
 
-            <SidebarSeparator />
-
             <SidebarContent>
               <SidebarGroup>
                 <SidebarGroupLabel>Teams</SidebarGroupLabel>
                 <SidebarGroupContent>
                   <SidebarMenu className="gap-1">
-                    <SidebarMenuItem>
-                      <SidebarMenuButton>
-                        <span>Team 1</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton>
-                        <span>Team 2</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    {savedTeams.length === 0 ? (
+                      <SidebarMenuItem>
+                        <SidebarMenuButton disabled>
+                          <span className="text-muted-foreground">
+                            No saved teams
+                          </span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ) : (
+                      savedTeams.map((team) => (
+                        <SidebarMenuItem key={team.name}>
+                          <SidebarMenuButton
+                            onClick={() => loadSavedTeam(team)}
+                          >
+                            <span>{team.name}</span>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))
+                    )}
                   </SidebarMenu>
                 </SidebarGroupContent>
               </SidebarGroup>
@@ -104,37 +279,83 @@ function RouteComponent() {
           </Sidebar>
 
           <SidebarInset className="min-h-0">
-            <div className="flex h-full min-h-0 flex-row-reverse items-start p-4 gap-8">
+            <div className="flex h-full min-h-0 flex-row-reverse items-stretch p-4 gap-8">
               <div>
                 <div className="mb-4 flex items-center justify-between gap-6">
-                  <Field>
-                    <FieldContent>
-                      <Input placeholder="Team Name" />
-                    </FieldContent>
-                  </Field>
-                  <div>
-                    <Button>Save Team</Button>
-                  </div>
+                  <form.Field name="name">
+                    {(field) => (
+                      <Field>
+                        <FieldContent>
+                          <Input
+                            placeholder="Team Name"
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                          />
+                        </FieldContent>
+                      </Field>
+                    )}
+                  </form.Field>
+                  <form.Subscribe>
+                    {({ isValid, isSubmitting, isValidating, values }) => {
+                      return (
+                        <div className="flex gap-2">
+                          <Button
+                            disabled={!values.name.trim()}
+                            onClick={() => saveTeam(values as TeamConfig)}
+                          >
+                            Save Team
+                          </Button>
+                          <Button
+                            disabled={!isValid || isSubmitting || isValidating}
+                            onClick={form.handleSubmit}
+                          >
+                            Load Team
+                          </Button>
+                        </div>
+                      )
+                    }}
+                  </form.Subscribe>
                 </div>
-                <form.Field name="team_actors" mode="array">
+                <form.Field name="actors" mode="array">
                   {(field) => (
                     <form.Subscribe
-                      selector={(state) =>
-                        state.values.team_actors
-                          .filter((a) => !!a?.actor_ID)
-                          .map((a) => a?.actor_ID!)
-                      }
+                      selector={(state) => ({
+                        selected: state.values.actors.map((a) => a.actor_ID!),
+                        active:
+                          state.values.actors[state.values.selected_index]
+                            ?.actor_ID,
+                      })}
                     >
-                      {(selected) => (
+                      {({ selected, active }) => (
                         <div className="space-y-2">
+                          <div className="">Team: {selected.length}/6</div>
                           {field.state.value.map((_, i) => (
-                            <form.Field name={`team_actors[${i}].actor_ID`}>
-                              {(actor_ID) => (
+                            <form.Field key={i} name={`actors[${i}]`}>
+                              {(actorID) => (
                                 <ActorCombobox
+                                  active={active}
                                   selected={selected}
-                                  value={actor_ID.state.value}
-                                  onValueChange={(v) => {
-                                    actor_ID.handleChange(v)
+                                  value={actorID.state.value?.actor_ID}
+                                  onValueChange={(actor) => {
+                                    actorID.handleChange({
+                                      actor_ID: actor.actor_ID,
+                                      config: {
+                                        ability_ID:
+                                          actor.abilities[0]?.ID ?? null,
+                                        item_ID: null,
+                                        action_IDs: [],
+                                        focus: 'none',
+                                        aux_stats: {
+                                          hp: 0,
+                                          stamina: 0,
+                                          speed: 0,
+                                          attack: 0,
+                                          defense: 0,
+                                          chakra_attack: 0,
+                                          chakra_defense: 0,
+                                        },
+                                      },
+                                    })
                                     form.setFieldValue('selected_index', i)
                                   }}
                                   onClick={() =>
@@ -144,6 +365,37 @@ function RouteComponent() {
                               )}
                             </form.Field>
                           ))}
+                          {selected.length < 6 && (
+                            <ActorCombobox
+                              active={active}
+                              selected={selected}
+                              value={undefined}
+                              onValueChange={(actor) => {
+                                form.pushFieldValue('actors', {
+                                  actor_ID: actor.actor_ID,
+                                  config: {
+                                    ability_ID: null,
+                                    item_ID: null,
+                                    action_IDs: [],
+                                    focus: 'none',
+                                    aux_stats: {
+                                      hp: 0,
+                                      stamina: 0,
+                                      speed: 0,
+                                      attack: 0,
+                                      defense: 0,
+                                      chakra_attack: 0,
+                                      chakra_defense: 0,
+                                    },
+                                  },
+                                })
+                                form.setFieldValue(
+                                  'selected_index',
+                                  selected.length
+                                )
+                              }}
+                            />
+                          )}
                         </div>
                       )}
                     </form.Subscribe>
@@ -154,16 +406,16 @@ function RouteComponent() {
               <form.Subscribe
                 selector={(state) => ({
                   selected_index: state.values.selected_index,
-                  team_actors: state.values.team_actors,
+                  actors: state.values.actors,
                 })}
               >
-                {({ selected_index, team_actors }) => {
-                  const teamActor =
+                {({ selected_index, actors }) => {
+                  const actor =
                     selected_index === null
                       ? null
-                      : (team_actors[selected_index] ?? null)
+                      : (actors[selected_index] ?? null)
 
-                  if (selected_index === null || !teamActor) {
+                  if (selected_index === null || !actor) {
                     return (
                       <div className="flex-1 text-sm text-muted-foreground">
                         Select a shinobi portrait to edit config
@@ -171,40 +423,203 @@ function RouteComponent() {
                     )
                   }
 
-                  const baseActor = actors.data.find(
-                    (a) => a.actor_ID === teamActor.actor_ID
+                  const def = query.data.find(
+                    (a) => a.actor_ID === actor.actor_ID
                   )
 
+                  if (!def) return null
+
                   return (
-                    <div className="flex-1 space-y-4">
+                    <div className="flex-1 space-y-4 overflow-auto">
                       <div className="text-sm font-medium">
-                        Editing slot {selected_index + 1}
+                        Editing {def.name}
                       </div>
 
-                      <div className="grid grid-cols-2">
-                        <div>
+                      <div className="flex gap-4">
+                        <div className="flex flex-col gap-2 min-w-1/4">
+                          <img
+                            src={def.sprite_url}
+                            className="object-cover size-16"
+                          />
                           <FocusSelect
-                            value={teamActor.config?.focus ?? 'none'}
+                            value={actor.config?.focus ?? 'none'}
                             onValueChange={(focus) => {
                               form.setFieldValue(
-                                `team_actors[${selected_index}].config.focus`,
+                                `actors[${selected_index}].config.focus`,
                                 focus
                               )
                             }}
                           />
+                          <AbilitySelect
+                            options={def.abilities}
+                            value={actor.config?.ability_ID ?? null}
+                            onValueChange={(ability_ID) => {
+                              form.setFieldValue(
+                                `actors[${selected_index}].config.ability_ID`,
+                                ability_ID
+                              )
+                            }}
+                          />
+                          <ItemSelect
+                            value={actor.config?.item_ID ?? null}
+                            onValueChange={(item_ID) => {
+                              form.setFieldValue(
+                                `actors[${selected_index}].config.item_ID`,
+                                item_ID
+                              )
+                            }}
+                          />
                         </div>
-                        {baseActor && (
-                          <div>
+
+                        <form.Subscribe
+                          selector={(s) =>
+                            Object.values(
+                              s.values.actors[s.values.selected_index]?.config
+                                .aux_stats ?? {}
+                            ).reduce((sum, value) => sum + value, 0)
+                          }
+                        >
+                          {(total) => (
+                            <table className="flex-1">
+                              <tbody>
+                                <tr>
+                                  <td colSpan={3}>Stats</td>
+                                  <td
+                                    colSpan={2}
+                                    className={
+                                      total > 64 ? 'text-destructive' : ''
+                                    }
+                                  >
+                                    {total}
+                                    /64
+                                  </td>
+                                </tr>
+
+                                <TeamBuilderStat
+                                  total={total}
+                                  focus={actor.config.focus}
+                                  base={def}
+                                  stat="hp"
+                                  config={actor.config}
+                                  onConfigChange={(config) => {
+                                    form.setFieldValue(
+                                      `actors[${selected_index}].config`,
+                                      config
+                                    )
+                                  }}
+                                />
+                                <TeamBuilderStat
+                                  total={total}
+                                  focus={actor.config.focus}
+                                  base={def}
+                                  stat="stamina"
+                                  config={actor.config}
+                                  onConfigChange={(config) => {
+                                    form.setFieldValue(
+                                      `actors[${selected_index}].config`,
+                                      config
+                                    )
+                                  }}
+                                />
+
+                                <TeamBuilderStat
+                                  total={total}
+                                  focus={actor.config.focus}
+                                  base={def}
+                                  stat="attack"
+                                  config={actor.config}
+                                  onConfigChange={(config) => {
+                                    form.setFieldValue(
+                                      `actors[${selected_index}].config`,
+                                      config
+                                    )
+                                  }}
+                                />
+                                <TeamBuilderStat
+                                  total={total}
+                                  focus={actor.config.focus}
+                                  base={def}
+                                  stat="defense"
+                                  config={actor.config}
+                                  onConfigChange={(config) => {
+                                    form.setFieldValue(
+                                      `actors[${selected_index}].config`,
+                                      config
+                                    )
+                                  }}
+                                />
+                                <TeamBuilderStat
+                                  total={total}
+                                  focus={actor.config.focus}
+                                  base={def}
+                                  stat="chakra_attack"
+                                  config={actor.config}
+                                  onConfigChange={(config) => {
+                                    form.setFieldValue(
+                                      `actors[${selected_index}].config`,
+                                      config
+                                    )
+                                  }}
+                                />
+                                <TeamBuilderStat
+                                  total={total}
+                                  focus={actor.config.focus}
+                                  base={def}
+                                  stat="chakra_defense"
+                                  config={actor.config}
+                                  onConfigChange={(config) => {
+                                    form.setFieldValue(
+                                      `actors[${selected_index}].config`,
+                                      config
+                                    )
+                                  }}
+                                />
+                                <TeamBuilderStat
+                                  total={total}
+                                  focus={actor.config.focus}
+                                  base={def}
+                                  stat="speed"
+                                  config={actor.config}
+                                  onConfigChange={(config) => {
+                                    form.setFieldValue(
+                                      `actors[${selected_index}].config`,
+                                      config
+                                    )
+                                  }}
+                                />
+                              </tbody>
+                            </table>
+                          )}
+                        </form.Subscribe>
+                      </div>
+                      <div>
+                        <form.Subscribe
+                          selector={(state) => ({
+                            selected_index: state.values.selected_index,
+                            actors: state.values.actors,
+                          })}
+                        >
+                          {({ selected_index, actors }) => (
                             <ActionsTable
+                              total={def.action_count}
                               data={actions.data.filter((a) =>
-                                baseActor.action_IDs.includes(a.ID)
+                                def.action_IDs.includes(a.ID)
                               )}
                               enabled
-                              rowSelection={{}}
-                              onRowSelectionChange={() => {}}
+                              rowSelection={Object.fromEntries(
+                                actors[selected_index]?.config.action_IDs?.map(
+                                  (id) => [id, true]
+                                ) ?? []
+                              )}
+                              onRowSelectionChange={(selection) => {
+                                form.setFieldValue(
+                                  `actors[${selected_index}].config.action_IDs`,
+                                  Object.keys(selection)
+                                )
+                              }}
                             />
-                          </div>
-                        )}
+                          )}
+                        </form.Subscribe>
                       </div>
                     </div>
                   )

@@ -7,9 +7,9 @@ import (
 	"github.com/google/uuid"
 )
 
-var onigiriID = uuid.New()
+var onigiriID = uuid.MustParse("0f737c71-12e9-5dae-94ce-9fbe02a2a2db")
 var OnigiriIDTrigger game.Trigger = game.Trigger{
-	ID:         uuid.New(),
+	ID:         uuid.MustParse("59a4d8f3-18df-5300-a3ff-d5c2c61bbfec"),
 	ModifierID: onigiriID,
 	On:         game.OnDamageRecieve,
 	Check:      game.ComposeTF(game.Match__TargetActor_SourceActor, game.Source__IsAtOrBelowHealth(0.5)),

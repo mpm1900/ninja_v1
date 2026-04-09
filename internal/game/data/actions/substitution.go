@@ -19,7 +19,7 @@ func MakeSubstitution() game.Action {
 	}
 
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("e2a1768a-fb9a-5891-a703-a20cf8bcbd6e"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.NoneFilter,
@@ -55,6 +55,7 @@ func MakeSubstitution() game.Action {
 								nil,
 								nil,
 								[]game.Action{},
+								map[game.ActorStat]int{},
 							)
 							a.SetSummonFromActor(&summon, true)
 							return a

@@ -19,7 +19,7 @@ func MakeHaze() game.Action {
 		Description: "Nullified all stat ups/downs.",
 	}
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("63db7718-b73b-5f31-8b1f-c2dfa5bd5c65"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.NoneFilter,

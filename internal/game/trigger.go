@@ -31,7 +31,7 @@ type Trigger struct {
 }
 
 var END_OF_TURN_TRIGGER Trigger = Trigger{
-	ID:    uuid.New(),
+	ID:    uuid.MustParse("f63aefeb-02cf-4dbd-93f9-8f1908f99d4f"),
 	On:    OnTurnEnd,
 	Check: func(p Game, g Game, context Context, tx Transaction[Modifier]) bool { return true },
 	ActionMutation: ActionMutation{

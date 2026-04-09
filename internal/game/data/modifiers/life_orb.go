@@ -7,10 +7,10 @@ import (
 	"github.com/google/uuid"
 )
 
-var lifeOrbID = uuid.New()
+var lifeOrbID = uuid.MustParse("7dd1029f-aac8-5802-9fae-3873e507b57d")
 
 var LifeOrbTrigger game.Trigger = game.Trigger{
-	ID:         uuid.New(),
+	ID:         uuid.MustParse("8ddae3f7-dffd-5a57-b3fc-eb3b50e01f96"),
 	ModifierID: lifeOrbID,
 	On:         game.OnTurnEnd,
 	Check: func(p, g game.Game, context game.Context, tx game.Transaction[game.Modifier]) bool {

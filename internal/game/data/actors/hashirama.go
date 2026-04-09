@@ -8,7 +8,7 @@ import (
 )
 
 var Hashirama = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("6955b478-2b59-520a-afa3-e995d3cba9e9"),
 	SpriteURL:    "/sprites/hashirama_64.png",
 	Name:         "Hashirama Senju",
 	Clan:         game.ClanSenju,
@@ -35,7 +35,6 @@ var Hashirama = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Protect.ID,
 		actions.Tailwind.ID,
 		//actions.LeechSeed.ID,

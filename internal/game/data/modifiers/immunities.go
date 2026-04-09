@@ -6,11 +6,11 @@ import (
 	"github.com/google/uuid"
 )
 
-var addImmunitiesID = uuid.New()
+var addImmunitiesID = uuid.MustParse("b4680929-95b5-599d-8a11-d4c08a87512f")
 
 func AddImmunities(ids ...uuid.UUID) game.Modifier {
 	return game.Modifier{
-		ID:      uuid.New(),
+		ID:      uuid.MustParse("451cca1b-8b8a-5ee7-8e05-320d88e1a343"),
 		GroupID: &addImmunitiesID,
 		Show:    false,
 		ActorMutations: []game.ActorMutation{

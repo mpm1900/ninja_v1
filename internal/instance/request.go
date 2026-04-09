@@ -10,6 +10,7 @@ import (
 type RequestType = string
 
 const (
+	SetTeam        RequestType = "set-team"
 	AddActor       RequestType = "add-actor"
 	RemoveActor    RequestType = "remove-actor" //TEMP
 	UpdateActor    RequestType = "update-actor"
@@ -31,12 +32,23 @@ type ActorConfig struct {
 	AuxStats  map[game.ActorStat]int `json:"aux_stats"`
 }
 
+type TeamActor struct {
+	ActorID uuid.UUID   `json:"actor_ID"`
+	Config  ActorConfig `json:"config"`
+}
+
+type TeamConfig struct {
+	Actors []TeamActor `json:"actors"`
+	Name   string      `json:"name"`
+}
+
 type Request struct {
 	Type        RequestType  `json:"type"`
 	ClientID    uuid.UUID    `json:"client_ID"`
 	PromptID    *uuid.UUID   `json:"prompt_ID"`
 	Context     game.Context `json:"context"`
 	ActorConfig *ActorConfig `json:"actor_config"`
+	TeamConfig  *TeamConfig  `json:"team_config"`
 }
 
 type HydratedActorConfig struct {

@@ -7,9 +7,9 @@ import (
 	"github.com/google/uuid"
 )
 
-var speedBoostID = uuid.New()
+var speedBoostID = uuid.MustParse("557f72c6-142b-5195-a24e-09851e14223b")
 var SpeedBoostTrigger game.Trigger = game.Trigger{
-	ID:         uuid.New(),
+	ID:         uuid.MustParse("a6cd5955-5996-5fa1-844d-54a1cfdf243e"),
 	ModifierID: speedBoostID,
 	On:         game.OnTurnEnd,
 	Check: func(g1, g2 game.Game, ctx game.Context, t game.Transaction[game.Modifier]) bool {

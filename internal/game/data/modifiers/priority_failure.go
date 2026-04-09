@@ -6,9 +6,9 @@ import (
 	"github.com/google/uuid"
 )
 
-var priorityFailureID = uuid.New()
+var priorityFailureID = uuid.MustParse("7fdf20ca-b003-5082-8980-a0c6990169d0")
 var PriorityFailure = game.Modifier{
-	ID:       uuid.New(),
+	ID:       uuid.MustParse("20070a28-dc4d-5aa8-a45c-27d952d221a6"),
 	Name:     "Priority Failure",
 	Show:     true,
 	GroupID:  &priorityFailureID,

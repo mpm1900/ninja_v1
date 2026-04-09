@@ -21,7 +21,7 @@ func MakeProtect() game.Action {
 		Description: "Protects the user from actions this turn. 1 turn cooldown.",
 	}
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("d3765608-4b30-5c4c-b5a9-f4132f0bbb7c"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.NoneFilter,

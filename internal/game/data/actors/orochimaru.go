@@ -8,7 +8,7 @@ import (
 )
 
 var Orochimaru = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("2e9d220b-be84-524b-b7a3-b078c226fa2d"),
 	SpriteURL:    "/sprites/orochimaru_64.png",
 	Name:         "Orochimaru",
 	Affiliations: []string{game.AffAkatsuki, game.AffOto},
@@ -34,7 +34,6 @@ var Orochimaru = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,

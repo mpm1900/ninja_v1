@@ -6,9 +6,9 @@ import (
 	"github.com/google/uuid"
 )
 
-var cmoChakraID = uuid.New()
-var cmoSpeedID = uuid.New()
-var cmoStrengthID = uuid.New()
+var cmoChakraID = uuid.MustParse("f0dcf295-6321-5694-a55e-b3bf8afcc508")
+var cmoSpeedID = uuid.MustParse("f5655358-ad5a-57ab-bf0b-83695b8b5185")
+var cmoStrengthID = uuid.MustParse("4d1ea730-f18b-5e72-843c-fe5845fc9acf")
 
 var CurseMarkOfChakra game.Modifier = game.Modifier{
 	ID:       cmoChakraID,

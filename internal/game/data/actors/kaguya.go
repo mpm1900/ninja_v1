@@ -8,7 +8,7 @@ import (
 )
 
 var Kaguya = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("47f76e4c-edaa-5cd7-ba31-8a1803213d9e"),
 	Name:         "Kaguya Ōtsutsuki",
 	Affiliations: []string{},
 
@@ -33,7 +33,6 @@ var Kaguya = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,

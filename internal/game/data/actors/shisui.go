@@ -9,7 +9,7 @@ import (
 )
 
 var Shisui = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("3b9a402f-9ac1-5e47-8d56-37ec1ed287ff"),
 	SpriteURL:    "/sprites/shisui_64.png",
 	Name:         "Shisui Uchiha",
 	Clan:         game.ClanUchiha,
@@ -38,7 +38,6 @@ var Shisui = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.FollowMe.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,

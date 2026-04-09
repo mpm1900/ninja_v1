@@ -9,7 +9,7 @@ import (
 )
 
 var Itachi = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("52713900-6202-50f5-9b3d-23dc408e3c63"),
 	SpriteURL:    "/sprites/itachi_64.png",
 	Name:         "Itachi Uchiha",
 	Clan:         game.ClanUchiha,
@@ -37,7 +37,6 @@ var Itachi = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.FollowMe.ID,
 		actions.Glare.ID,
 		actions.MirageCrow.ID,

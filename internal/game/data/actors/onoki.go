@@ -8,7 +8,7 @@ import (
 )
 
 var Onoki = game.ActorDef{
-	ActorID:   uuid.New(),
+	ActorID:   uuid.MustParse("94b7b9d0-bf5d-5b4f-b29c-61779635177e"),
 	SpriteURL: "/sprites/onoki_64.png",
 	Name:      "Ōnoki",
 	Affiliations: []string{
@@ -36,7 +36,6 @@ var Onoki = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.LuckyStrikes.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,

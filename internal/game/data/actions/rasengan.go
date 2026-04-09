@@ -27,7 +27,7 @@ func MakeRasengan() game.Action {
 		Jutsu:       game.Ninjutsu,
 	}
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("e0874a45-2f62-5544-a4a2-f440644407db"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
@@ -62,7 +62,7 @@ func MakeRasenganRecharge() game.Action {
 		LogSuccessF: &logf,
 	}
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("2eaa6398-06a5-56fe-b90d-e9db6f044744"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.NoneFilter,

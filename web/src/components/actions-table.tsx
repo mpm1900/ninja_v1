@@ -28,6 +28,8 @@ const helper = createColumnHelper<Action>()
 const columns = [
   helper.display({
     id: 'select',
+    header: ({ table }) =>
+      `${table.getSelectedRowModel().rows.length}/${(table.options.meta as any).total}`,
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
@@ -83,12 +85,14 @@ const columns = [
 ]
 
 function ActionsTable({
+  total,
   data,
   enabled,
   rowSelection,
   onRowSelectionChange,
   subRow,
 }: {
+  total: number
   data: Action[]
   enabled: boolean
   rowSelection: RowSelectionState
@@ -102,7 +106,7 @@ function ActionsTable({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    enableRowSelection: enabled,
+    enableRowSelection: enabled && total > Object.keys(rowSelection).length,
     onRowSelectionChange: (updater) => {
       onRowSelectionChange(functionalUpdate(updater, rowSelection))
     },
@@ -113,6 +117,9 @@ function ActionsTable({
     state: {
       rowSelection,
       sorting,
+    },
+    meta: {
+      total,
     },
   })
 

@@ -6,9 +6,9 @@ import (
 	"github.com/google/uuid"
 )
 
-var fastThinkingID = uuid.New()
+var fastThinkingID = uuid.MustParse("7a77c7ae-7027-5f3c-9822-7e4406f38891")
 var FastThinking = game.Modifier{
-	ID:       uuid.New(),
+	ID:       uuid.MustParse("757200f0-fe4d-5b7d-8de9-1342872a0f2b"),
 	Name:     "Fast Thinking",
 	Show:     true,
 	GroupID:  &fastThinkingID,

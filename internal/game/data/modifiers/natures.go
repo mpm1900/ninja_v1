@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
-var addNatureID = uuid.New()
+var addNatureID = uuid.MustParse("0cac062a-b0be-5ad3-8f82-e51433b66bed")
 
 func AddNature(nature game.NatureSet, duration int) game.Modifier {
 	return game.Modifier{
@@ -29,7 +29,7 @@ func AddNature(nature game.NatureSet, duration int) game.Modifier {
 	}
 }
 
-var removeNatureID = uuid.New()
+var removeNatureID = uuid.MustParse("be5ce975-cda5-59e2-b03c-7bdcb3db2e33")
 
 func RemoveNature(nature game.NatureSet) game.Modifier {
 	return game.Modifier{

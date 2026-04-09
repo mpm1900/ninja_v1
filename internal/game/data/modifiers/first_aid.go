@@ -7,10 +7,10 @@ import (
 	"github.com/google/uuid"
 )
 
-var firstAidID = uuid.New()
+var firstAidID = uuid.MustParse("4186b062-e930-51cd-b838-12c618b790c0")
 
 var FirstAidTrigger game.Trigger = game.Trigger{
-	ID:         uuid.New(),
+	ID:         uuid.MustParse("7d6c4561-b6e8-5107-8e8b-3d69b18cb93f"),
 	ModifierID: firstAidID,
 	On:         game.OnTurnEnd,
 	Check: func(p, g game.Game, context game.Context, tx game.Transaction[game.Modifier]) bool {

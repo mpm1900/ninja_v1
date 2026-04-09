@@ -22,7 +22,7 @@ func MakeRecover() game.Action {
 	}
 
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("c0756ddc-2611-5eef-82cc-c2bc03f9f01c"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.ComposeAF(game.ActiveFilter),

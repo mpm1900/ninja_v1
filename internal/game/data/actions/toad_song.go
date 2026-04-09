@@ -19,7 +19,7 @@ func MakeToadSong() game.Action {
 		Description: "Inverts the speed of all active shinobi.",
 	}
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("02796a9b-add5-5a5c-a01b-5bc6e26d0135"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.NoneFilter,

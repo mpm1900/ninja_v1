@@ -8,7 +8,7 @@ import (
 )
 
 var Raikage = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("e92a1675-7ea0-52c7-a43c-f2bb2068e365"),
 	SpriteURL:    "/sprites/4_raikage_64.png",
 	Name:         "A (4th Raikage)",
 	Affiliations: []string{game.AffKumo},
@@ -33,7 +33,6 @@ var Raikage = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,

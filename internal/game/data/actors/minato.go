@@ -9,7 +9,7 @@ import (
 )
 
 var Minato = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("dce0fef4-265e-5dc8-9d81-700ed3fc4877"),
 	SpriteURL:    "/sprites/minato_64.png",
 	Name:         "Minato Namikaze",
 	Affiliations: []string{game.AffKonoha},
@@ -37,7 +37,6 @@ var Minato = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Rasengan.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,

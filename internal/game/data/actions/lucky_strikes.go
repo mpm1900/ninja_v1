@@ -25,7 +25,7 @@ func MakeLuckyStrikes() game.Action {
 		Jutsu:    game.Taijutsu,
 	}
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("4ac4894c-2ff3-5142-b087-a8924837cefc"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),

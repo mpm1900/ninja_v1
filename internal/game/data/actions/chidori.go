@@ -25,7 +25,7 @@ func MakeChidori() game.Action {
 		Jutsu:    game.Ninjutsu,
 	}
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("c1502330-764c-56f8-9c9e-f41b933a90f0"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherTeamFilter, game.TargetableFilter),

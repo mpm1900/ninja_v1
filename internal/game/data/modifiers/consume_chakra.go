@@ -7,10 +7,10 @@ import (
 	"github.com/google/uuid"
 )
 
-var consumeChakraID = uuid.New()
+var consumeChakraID = uuid.MustParse("01bd3c19-92d2-5424-8eb0-c6132fe31062")
 
 var ConsumeChakraTrigger game.Trigger = game.Trigger{
-	ID:         uuid.New(),
+	ID:         uuid.MustParse("88e0a742-50c1-53b3-a873-4c3945fdd270"),
 	ModifierID: consumeChakraID,
 	On:         game.OnKill,
 	Check:      game.Match__SourceActor_SourceActor,

@@ -31,6 +31,10 @@ const actorFocuses = [
   'volatile',
   'intense',
   'calculated',
+  'composed',
+  'mindful',
+  'reserved',
+  'stoic',
   'agile',
   'hasty',
   'impulsive',
@@ -38,6 +42,34 @@ const actorFocuses = [
 ] as const
 
 type ActorFocus = (typeof actorFocuses)[number]
+type ActorFocusDetail = {
+  up: ActorNatureStat | null
+  down: ActorNatureStat | null
+}
+
+const ACTOR_FOCUS_DETAILS: Record<ActorFocus, ActorFocusDetail> = {
+  none: { up: null, down: null },
+  aggressive: { up: 'attack', down: 'defense' },
+  relentless: { up: 'attack', down: 'chakra_attack' },
+  reckless: { up: 'attack', down: 'chakra_defense' },
+  heavy: { up: 'attack', down: 'speed' },
+  patient: { up: 'defense', down: 'attack' },
+  hardened: { up: 'defense', down: 'chakra_attack' },
+  tough: { up: 'defense', down: 'attack' },
+  steadfast: { up: 'defense', down: 'attack' },
+  intelligent: { up: 'chakra_attack', down: 'attack' },
+  volatile: { up: 'chakra_attack', down: 'defense' },
+  intense: { up: 'chakra_attack', down: 'chakra_defense' },
+  calculated: { up: 'chakra_attack', down: 'speed' },
+  composed: { up: 'chakra_defense', down: 'attack' },
+  mindful: { up: 'chakra_defense', down: 'defense' },
+  reserved: { up: 'chakra_defense', down: 'chakra_attack' },
+  stoic: { up: 'chakra_defense', down: 'attack' },
+  agile: { up: 'defense', down: 'attack' },
+  hasty: { up: 'defense', down: 'defense' },
+  impulsive: { up: 'defense', down: 'chakra_attack' },
+  alert: { up: 'defense', down: 'chakra_defense' },
+}
 
 type ActorDef = {
   actor_ID: string
@@ -115,6 +147,7 @@ export type {
   ActorDefenseStat,
   ActorBaseStat,
   ActorStats,
+  ActorNatureStat,
   NatureStats,
 }
-export { checkActorStat, getTotalBaseStats, actorFocuses }
+export { checkActorStat, getTotalBaseStats, actorFocuses, ACTOR_FOCUS_DETAILS }

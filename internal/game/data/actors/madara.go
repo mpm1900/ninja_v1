@@ -8,7 +8,7 @@ import (
 )
 
 var Madara = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("87096d92-2694-5262-bfa3-59f23600be6b"),
 	SpriteURL:    "/sprites/madara_64.png",
 	Name:         "Madara Uchiha",
 	Clan:         game.ClanUchiha,
@@ -35,7 +35,6 @@ var Madara = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Glare.ID,
 		actions.Protect.ID,
 		actions.Taunt.ID,

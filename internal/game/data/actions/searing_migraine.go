@@ -11,7 +11,7 @@ import (
 var SearingMigrane = MakeSearingMigrane()
 
 func MakeSearingMigrane() game.Action {
-	ID := uuid.New()
+	ID := uuid.MustParse("dc6edab6-535f-508f-b791-e197283eae86")
 	accuracy := 100
 	power := 70
 	nature := game.NsFire

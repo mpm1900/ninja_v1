@@ -10,7 +10,7 @@ import (
 var Sekiryoku = MakeSekiryoku()
 
 func MakeSekiryoku() game.Action {
-	ID := uuid.New()
+	ID := uuid.MustParse("ebb162b4-ead0-5601-afea-4948f147604c")
 	nature := game.NsPure
 	targetCount := 1
 	chakraCost := 30

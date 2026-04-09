@@ -6,9 +6,9 @@ import (
 	"github.com/google/uuid"
 )
 
-var stunnedID = uuid.New()
+var stunnedID = uuid.MustParse("3f2d768d-3ed7-5b53-8655-d738e2ca3a11")
 var Stunned = game.Modifier{
-	ID:       uuid.New(),
+	ID:       uuid.MustParse("fa664a75-2a11-53e9-9704-3a30a38d4076"),
 	Name:     "Stunned",
 	Icon:     "stunned",
 	Show:     true,

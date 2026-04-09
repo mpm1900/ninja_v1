@@ -18,7 +18,7 @@ func MakePowerBoost() game.Action {
 		Description: "Powers up target's attacks this turn.",
 	}
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("fa0a4e99-9b26-5962-9ed0-fc88a6e73cb5"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.ComposeAF(game.TeamFilter, game.OtherFilter, game.TargetableFilter),

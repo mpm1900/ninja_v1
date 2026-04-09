@@ -7,9 +7,9 @@ import (
 	"github.com/google/uuid"
 )
 
-var bpsID = uuid.New()
+var bpsID = uuid.MustParse("096e2442-b231-53da-9892-91b0dea908b9")
 var BodyProtectionSealTrigger game.Trigger = game.Trigger{
-	ID:         uuid.New(),
+	ID:         uuid.MustParse("0a179ac1-8811-5319-9c4b-bb23c1f57ed8"),
 	ModifierID: bpsID,
 	On:         game.OnModifierAdd,
 	Check:      game.Match__SourceActor_SourceActor,

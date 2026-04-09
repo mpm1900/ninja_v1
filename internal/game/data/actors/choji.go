@@ -8,7 +8,7 @@ import (
 )
 
 var Choji = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("00f5a224-63ce-5cd7-87d9-5623dca59e92"),
 	SpriteURL:    "/sprites/choji_64.png",
 	Name:         "Choji Akimichi",
 	Affiliations: []string{game.AffKonoha},
@@ -33,7 +33,6 @@ var Choji = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,

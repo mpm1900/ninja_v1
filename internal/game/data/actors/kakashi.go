@@ -16,7 +16,7 @@ func getKakashiResistances() map[game.Nature]float64 {
 }
 
 var Kakashi = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("aa9a6360-5efe-5c51-9125-385547a97b41"),
 	SpriteURL:    "/sprites/kakashi_64.png",
 	Name:         "Kakashi Hatake",
 	Clan:         game.ClanHatake,
@@ -44,7 +44,6 @@ var Kakashi = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,

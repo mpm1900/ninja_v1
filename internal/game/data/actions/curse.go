@@ -17,7 +17,7 @@ func MakeCurse() game.Action {
 		Jutsu:  game.Fuinjutsu,
 	}
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("79b92672-ecc5-5b29-b8f2-035879182bda"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),

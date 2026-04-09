@@ -11,7 +11,7 @@ import (
 var MirageCrow = MakeMirageCrow()
 
 func MakeMirageCrow() game.Action {
-	ID := uuid.New()
+	ID := uuid.MustParse("355753f0-5332-5ee4-b438-899d1a71c184")
 	nature := game.NsYin
 	targetCount := 1
 	chakraCost := 30

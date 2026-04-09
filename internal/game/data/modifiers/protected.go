@@ -6,9 +6,9 @@ import (
 	"github.com/google/uuid"
 )
 
-var protectedID = uuid.New()
+var protectedID = uuid.MustParse("753f21af-6b67-50ff-a386-40528a73e62e")
 var Protected = game.Modifier{
-	ID:       uuid.New(),
+	ID:       uuid.MustParse("fa58e0c1-01aa-58ef-b42d-0af89ee4555c"),
 	Name:     "Protected",
 	Icon:     "protected",
 	Show:     true,

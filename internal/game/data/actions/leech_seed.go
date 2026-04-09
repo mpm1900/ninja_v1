@@ -22,7 +22,7 @@ func MakeLeechSeed() game.Action {
 	}
 
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("9ad36f89-03c5-5b52-9f50-66864b06ca03"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
@@ -58,10 +58,10 @@ func MakeLeechSeed() game.Action {
 	}
 }
 
-var leechSeedModifierID = uuid.New()
+var leechSeedModifierID = uuid.MustParse("531ca1a4-40af-5de4-a3c6-99f8468cd368")
 
 var LeechSeedTrigger game.Trigger = game.Trigger{
-	ID:         uuid.New(),
+	ID:         uuid.MustParse("e02419ec-50f8-5e75-bbaf-43b233e9aaa7"),
 	ModifierID: leechSeedModifierID,
 	On:         game.OnTurnEnd,
 	Check: func(p game.Game, g game.Game, ctx game.Context, t game.Transaction[game.Modifier]) bool {

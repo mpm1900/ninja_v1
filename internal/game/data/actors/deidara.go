@@ -8,7 +8,7 @@ import (
 )
 
 var Deidara = game.ActorDef{
-	ActorID:      uuid.New(),
+	ActorID:      uuid.MustParse("d069a1f9-376e-56ce-9edf-0924a6fed8f1"),
 	SpriteURL:    "/sprites/deidara_64.png",
 	Name:         "Deidara",
 	Affiliations: []string{game.AffAkatsuki, game.AffIwa},
@@ -34,7 +34,6 @@ var Deidara = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		game.Switch.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,

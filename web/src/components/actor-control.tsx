@@ -6,7 +6,6 @@ import type { Actor } from '#/lib/game/actor'
 import { ActionsTable } from './actions-table'
 import { useGameContext } from '#/hooks/use-game-context'
 import { ActorStats } from './actor-stats'
-import { FocusSelect } from './focus-select'
 import { sendContextMessage } from '#/lib/stores/socket'
 import { clientsStore } from '#/lib/stores/clients'
 import { NULL_CONTEXT } from '#/lib/game/context'
@@ -37,11 +36,44 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
               height={64}
             />
           </div>
-          <AbilitySelect actor={actor} />
-          <ItemSelect actor={actor} />
+          <AbilitySelect
+            options={actor.abilities}
+            value={actor.ability?.ID ?? null}
+            onValueChange={(ability_ID) => {
+              sendContextMessage({
+                type: 'update-actor',
+                actor_config: {
+                  ability_ID,
+                },
+                context: {
+                  ...NULL_CONTEXT,
+                  source_actor_ID: actor.ID,
+                },
+                client_ID: client.ID,
+              })
+            }}
+          />
+          <ItemSelect
+            value={actor.item?.ID ?? null}
+            onValueChange={(item_ID) => {
+              if (!item_ID) return
+              sendContextMessage({
+                type: 'update-actor',
+                actor_config: {
+                  item_ID,
+                },
+                context: {
+                  ...NULL_CONTEXT,
+                  source_actor_ID: actor.ID,
+                },
+                client_ID: client.ID,
+              })
+            }}
+          />
         </div>
         <ActorStats actor={actor} />
         <ActionsTable
+          total={actor.action_count}
           data={actions_query.data ?? []}
           enabled={enabled && !!player}
           rowSelection={Object.fromEntries(

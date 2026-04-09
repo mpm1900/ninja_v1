@@ -18,7 +18,7 @@ func MakeFollowMe() game.Action {
 		Description: "Changes the target of enemy actions to this user if able.",
 	}
 	return game.Action{
-		ID:              uuid.New(),
+		ID:              uuid.MustParse("3d0b6e04-f5f0-50db-9eb6-4aede4c11701"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.NoneFilter,

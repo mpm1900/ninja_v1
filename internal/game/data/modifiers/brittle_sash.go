@@ -7,9 +7,9 @@ import (
 	"github.com/google/uuid"
 )
 
-var brittleSashID = uuid.New()
+var brittleSashID = uuid.MustParse("90fb1491-6da8-5828-9fad-45b9c06fff98")
 var BrittleSashTrigger game.Trigger = game.Trigger{
-	ID:         uuid.New(),
+	ID:         uuid.MustParse("e716185d-2825-5399-92dc-2137b8bc2c0b"),
 	ModifierID: brittleSashID,
 	On:         game.OnImmortalSave,
 	Check:      game.ComposeTF(game.Match__SourceActor_SourceActor),

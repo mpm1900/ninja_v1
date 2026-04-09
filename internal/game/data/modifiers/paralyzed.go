@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-var paralysisID = uuid.New()
+var paralysisID = uuid.MustParse("b269dcbc-a6a0-5ea3-9ed5-6e8b5fee8024")
 
 var Paralysis game.Modifier = game.Modifier{
 	ID:       paralysisID,

@@ -12,20 +12,20 @@ import { FocusSelect } from './focus-select'
 
 const AuxStatsSchema = z
   .object({
-    hp: z.number().min(0, 'negative').max(32, 'too big'),
-    attack: z.number().min(0, 'negative').max(32, 'too big'),
-    stamina: z.number().min(0, 'negative').max(32, 'too big'),
-    defense: z.number().min(0, 'negative').max(32, 'too big'),
-    speed: z.number().min(0, 'negative').max(32, 'too big'),
-    chakra_attack: z.number().min(0, 'negative').max(32, 'too big'),
-    chakra_defense: z.number().min(0, 'negative').max(32, 'too big'),
+    hp: z.number().min(0, 'negative').max(31, 'too big'),
+    attack: z.number().min(0, 'negative').max(31, 'too big'),
+    stamina: z.number().min(0, 'negative').max(31, 'too big'),
+    defense: z.number().min(0, 'negative').max(31, 'too big'),
+    speed: z.number().min(0, 'negative').max(31, 'too big'),
+    chakra_attack: z.number().min(0, 'negative').max(31, 'too big'),
+    chakra_defense: z.number().min(0, 'negative').max(31, 'too big'),
   })
   .superRefine((stats, ctx) => {
     const total = Object.values(stats).reduce((sum, value) => sum + value, 0)
-    if (total > 66) {
+    if (total > 64) {
       ctx.addIssue({
         code: 'custom',
-        message: 'Total aux stats cannot exceed 66',
+        message: 'Total aux stats cannot exceed 64',
       })
     }
   })
@@ -68,7 +68,7 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
               <div>Stats</div>
               <div className="text-xl whitespace-nowrap">
                 {Object.values(values).reduce((sum, value) => sum + value, 0)} /
-                66
+                64
               </div>
             </div>
             <FocusSelect
