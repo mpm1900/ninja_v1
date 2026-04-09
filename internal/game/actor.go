@@ -166,7 +166,8 @@ type ActorState struct {
 	// - warded units are immune to the secondary effects of attacking actions
 	Warded bool `json:"warded"`
 	// [Reflect] how much damage is reflected (PureDamage not affected)
-	Reflect float64 `json:"-"`
+	Reflect  float64 `json:"-"`
+	Immortal bool    `json:"immortal"`
 	// [ActionLocked]
 	// - action locked units must use their last used action
 	// - if there there is no last used action, any action can be chosen
@@ -332,6 +333,7 @@ func MakeActor(
 			SwitchLocked:     false,
 			Protected:        false,
 			Reflect:          0.0,
+			Immortal:         false,
 			Seen:             false,
 			StaminaDamage:    0,
 			Stunned:          false,

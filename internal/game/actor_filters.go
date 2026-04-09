@@ -42,6 +42,9 @@ func OtherFilter(game Game, actor Actor, context Context) bool {
 func AliveFilter(game Game, actor Actor, context Context) bool {
 	return actor.Alive
 }
+func FullHealthFilter(game Game, actor Actor, context Context) bool {
+	return actor.Damage == 0
+}
 func ActiveFilter(game Game, actor Actor, context Context) bool {
 	return actor.IsActive()
 }

@@ -20,24 +20,15 @@ var OnigiriIDTrigger game.Trigger = game.Trigger{
 			transactions := []game.GameTransaction{}
 
 			targets := g.GetTargets(context)
-			if len(targets) == 0 {
-				return transactions
-			}
+			for _, target := range targets {
+				mut_ctx := game.MakeContextForActor(target)
 
-			target := targets[0]
-			mut_ctx := game.Context{
-				SourcePlayerID:    &target.PlayerID,
-				SourceActorID:     &target.ID,
-				ParentActorID:     &target.ID,
-				TargetActorIDs:    []uuid.UUID{target.ID},
-				TargetPositionIDs: []uuid.UUID{},
+				heal := mutations.RatioHeal(0.25)
+				heal_tx := game.MakeTransaction(heal, mut_ctx)
+				consume_tx := game.MakeTransaction(mutations.ConsumeItem, mut_ctx)
+				transactions = append(transactions, consume_tx)
+				transactions = append(transactions, heal_tx)
 			}
-
-			heal := mutations.RatioHeal(0.25)
-			heal_tx := game.MakeTransaction(heal, mut_ctx)
-			consume_tx := game.MakeTransaction(mutations.ConsumeItem, mut_ctx)
-			transactions = append(transactions, consume_tx)
-			transactions = append(transactions, heal_tx)
 
 			return transactions
 		},

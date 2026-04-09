@@ -22,6 +22,15 @@ func NewContext() Context {
 		TargetPositionIDs: []uuid.UUID{},
 	}
 }
+func MakeContextForActor(actor Actor) Context {
+	return Context{
+		SourcePlayerID:    &actor.PlayerID,
+		SourceActorID:     &actor.ID,
+		ParentActorID:     &actor.ID,
+		TargetActorIDs:    []uuid.UUID{actor.ID},
+		TargetPositionIDs: []uuid.UUID{},
+	}
+}
 
 func ResolveModifierTransactionContext(
 	fallback Context,

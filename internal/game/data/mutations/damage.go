@@ -43,15 +43,23 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 			a.Summon.Alive = summon_hp > a.Summon.Damage
 			g.PushLog(game.NewLogContext(">>> $source$'s substitute took the attack.", log_ctx))
 		} else {
-			a.Damage += damage
-			a.Alive = hp > a.Damage
-			alive = a.Alive
+			a.Damage += clampDamage(damage)
 			ratio := min(int(float64(damage)*100/float64(hp)), 100)
 			if ratio > 0 {
 				g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ lost %d%% HP.", ratio), log_ctx))
 			} else {
 				g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %d%% HP.", ratio*-1), log_ctx))
 			}
+
+			if target.Immortal {
+				if hp <= a.Damage {
+					g.PushLog(game.NewLogContext(">>> $source$'s survived a fatal attack.", log_ctx))
+					a.Damage = hp - 1
+					g.On(game.OnImmortalSave, &log_ctx)
+				}
+			}
+			a.Alive = hp > a.Damage
+			alive = a.Alive
 		}
 
 		if updater == nil {
