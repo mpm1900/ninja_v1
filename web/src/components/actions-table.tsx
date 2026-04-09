@@ -29,17 +29,22 @@ const columns = [
   helper.display({
     id: 'select',
     cell: ({ row }) => (
-      <Checkbox checked={row.getIsSelected()} disabled={row.original.locked || !row.getCanSelect()} />
+      <Checkbox
+        checked={row.getIsSelected()}
+        disabled={row.original.locked || !row.getCanSelect()}
+      />
     ),
   }),
   helper.accessor('config.name', {
-    header: ({ column }) => <Button
-      className="-ml-4"
-      variant="ghost"
-      onClick={() => column.toggleSorting()}
-    >
-      Name
-    </Button>
+    header: ({ column }) => (
+      <Button
+        className="-ml-4"
+        variant="ghost"
+        onClick={() => column.toggleSorting()}
+      >
+        Name
+      </Button>
+    ),
   }),
   helper.accessor('config.nature', {
     header: 'nature',
@@ -101,7 +106,7 @@ function ActionsTable({
     onRowSelectionChange: (updater) => {
       onRowSelectionChange(functionalUpdate(updater, rowSelection))
     },
-    onSortingChange: updater => {
+    onSortingChange: (updater) => {
       setSorting(functionalUpdate(updater, sorting))
     },
     getRowId: (a) => a.ID,
@@ -131,11 +136,7 @@ function ActionsTable({
         {table.getRowModel().rows.map((row) => (
           <Fragment key={row.id}>
             <TableRow
-              onClick={
-                enabled
-                  ? () => row.toggleSelected()
-                  : undefined
-              }
+              onClick={enabled ? () => row.toggleSelected() : undefined}
             >
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>
@@ -155,6 +156,4 @@ function ActionsTable({
   )
 }
 
-const MemoizedActionsTable = memo(ActionsTable)
-
-export { MemoizedActionsTable as ActionsTable }
+export { ActionsTable }

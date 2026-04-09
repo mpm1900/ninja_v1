@@ -40,7 +40,7 @@ function ActorStat({
   return (
     <span data-role="actor-stat" {...props}>
       <span
-        className={cn({
+        className={cn('whitespace-nowrap', {
           'text-green-400': check === 1,
           'text-red-300': check === -1,
         })}
@@ -85,10 +85,14 @@ function NatureDamageStat({
   const value = actor.resolved_nature_damage[nature]
   return (
     <span data-role="nature-stat" {...props}>
-      <span className={cn({
-        'text-green-400': value > 1,
-        'text-red-300': value < 1,
-      })}>{100 * value}%</span>
+      <span
+        className={cn('whitespace-nowrap', {
+          'text-green-400': value > 1,
+          'text-red-300': value < 1,
+        })}
+      >
+        {100 * value}%
+      </span>
     </span>
   )
 }
@@ -104,10 +108,14 @@ function NatureResistanceStat({
   const value = actor.resolved_nature_resistance[nature]
   return (
     <span data-role="nature-stat" {...props}>
-      <span className={cn({
-        'text-green-400': value > 1 || value < 0,
-        'text-red-300': value < 1 && value > 0,
-      })}>{Math.floor(100 * value)}%</span>
+      <span
+        className={cn('whitespace-nowrap', {
+          'text-green-400': value > 1 || value < 0,
+          'text-red-300': value < 1 && value > 0,
+        })}
+      >
+        {Math.floor(100 * value)}%
+      </span>
     </span>
   )
 }

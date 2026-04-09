@@ -111,7 +111,7 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
         </div>
 
         <div className="flex justify-end items-center gap-2 mb-1">
-          <div className="text-muted-foreground">Attack</div>
+          <div className="text-muted-foreground whitespace-nowrap">Attack</div>
           <div className="whitespace-nowrap">
             <ActorStat actor={actor} showBase={false} stat={'attack'} />
           </div>

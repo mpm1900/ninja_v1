@@ -27,73 +27,49 @@ function ActorControl({ actor, enabled }: { actor: Actor; enabled: boolean }) {
 
   return (
     <Card className="flex flex-row rounded-t-none border-t-0 mx-2 mb-2 py-2 gap-0">
-      <div>
-        <CardContent className="px-2 flex flex-col gap-2">
-          <div className="grid grid-cols-2 gap-2">
-            <div className="space-y-4">
-              <div className="h-16 w-16 overflow-hidden">
-                <img
-                  src={actor.sprite_url}
-                  className="h-full w-full object-cover"
-                  width={64}
-                  height={64}
-                />
-              </div>
-              <FocusSelect
-                value={actor.focus}
-                onValueChange={(focus) => {
-                  sendContextMessage({
-                    type: 'update-actor',
-                    client_ID: client.ID,
-                    context: {
-                      ...NULL_CONTEXT,
-                      source_actor_ID: actor.ID,
-                    },
-                    actor_config: {
-                      focus,
-                    },
-                  })
-                }}
-              />
-              <AbilitySelect actor={actor} />
-              <ItemSelect actor={actor} />
-            </div>
-            <ActorStats actor={actor} />
+      <CardContent className="grid grid-cols-3 w-full">
+        <div className="space-y-4">
+          <div className="h-16 w-16 overflow-hidden">
+            <img
+              src={actor.sprite_url}
+              className="h-full w-full object-cover"
+              width={64}
+              height={64}
+            />
           </div>
-        </CardContent>
-      </div>
-      <div>
-        <CardContent className="px-2">
-          <ActionsTable
-            data={actions_query.data ?? []}
-            enabled={enabled && !!player}
-            rowSelection={Object.fromEntries(
-              actor.actions.map((a) => [a.ID, true])
-            )}
-            onRowSelectionChange={(rowSelection) => {
-              sendContextMessage({
-                type: 'update-actor',
-                client_ID: client.ID,
-                context: {
-                  ...NULL_CONTEXT,
-                  source_actor_ID: actor.ID,
-                },
-                actor_config: {
-                  action_IDs: Object.keys(rowSelection),
-                },
-              })
-            }}
-            subRow={() => (
-              <ActionControl
-                action={actor.actions.find((a) => a.ID === context.action_ID)}
-                enabled={enabled && !!player}
-                context={context}
-                onContextChange={onContextChange}
-              />
-            )}
-          />
-        </CardContent>
-      </div>
+          <AbilitySelect actor={actor} />
+          <ItemSelect actor={actor} />
+        </div>
+        <ActorStats actor={actor} />
+        <ActionsTable
+          data={actions_query.data ?? []}
+          enabled={enabled && !!player}
+          rowSelection={Object.fromEntries(
+            actor.actions.map((a) => [a.ID, true])
+          )}
+          onRowSelectionChange={(rowSelection) => {
+            sendContextMessage({
+              type: 'update-actor',
+              client_ID: client.ID,
+              context: {
+                ...NULL_CONTEXT,
+                source_actor_ID: actor.ID,
+              },
+              actor_config: {
+                action_IDs: Object.keys(rowSelection),
+              },
+            })
+          }}
+          subRow={() => (
+            <ActionControl
+              action={actor.actions.find((a) => a.ID === context.action_ID)}
+              enabled={enabled && !!player}
+              context={context}
+              onContextChange={onContextChange}
+            />
+          )}
+        />
+      </CardContent>
     </Card>
   )
 }
