@@ -89,6 +89,17 @@ type Action struct {
 func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransaction {
 	action := transaction.Mutation
 	context := transaction.Context
+
+	if context.SourceActorID != nil {
+		if queue, ok := game.QueuedActions[*context.SourceActorID]; ok {
+			delete(game.QueuedActions, *context.SourceActorID)
+			if queue.Mutation != transaction.Mutation.ID {
+				fmt.Println("ERROR: INVALID ACTION EXECTUED")
+				return []GameTransaction{}
+			}
+		}
+	}
+
 	source, ok := game.GetSource(context)
 	if !ok && context.SourceActorID != nil {
 		return []GameTransaction{}
@@ -142,15 +153,6 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 			log = NewLog(fmt.Sprintf(*action.Config.LogSuccessF, source.Name, action.Config.Name))
 		}
 		game.PushLog(log)
-	}
-
-	queue, ok := game.QueuedActions[source.ID]
-	if ok {
-		delete(game.QueuedActions, source.ID)
-		if queue.Mutation != transaction.Mutation.ID {
-			fmt.Println("ERROR: INVALID ACTION EXECTUED")
-			return []GameTransaction{}
-		}
 	}
 
 	return action.Delta(*game, *game, context)

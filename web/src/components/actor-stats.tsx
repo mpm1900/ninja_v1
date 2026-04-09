@@ -56,8 +56,13 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
     <div>
       <form.Subscribe>
         {({ values }) => (
-          <div className="flex justify-center">
-            {Object.values(values).reduce((sum, value) => sum + value, 0)} / 66
+          <div className="flex justify-between">
+            <div>
+              stats
+            </div>
+            <div>
+              {Object.values(values).reduce((sum, value) => sum + value, 0)} / 66
+            </div>
           </div>
         )}
       </form.Subscribe>
@@ -71,7 +76,6 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           <form.Field name="hp">
             {(field) => (
               <Input
-                type="number"
                 className="w-16"
                 value={field.state.value}
                 onValueChange={(v) => field.handleChange(Number(v ?? 0))}
@@ -89,7 +93,6 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           <form.Field name="attack">
             {(field) => (
               <Input
-                type="number"
                 className="w-16"
                 value={field.state.value}
                 onValueChange={(v) => field.handleChange(Number(v ?? 0))}
@@ -106,7 +109,6 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           <form.Field name="stamina">
             {(field) => (
               <Input
-                type="number"
                 className="w-16"
                 value={field.state.value}
                 onValueChange={(v) => field.handleChange(Number(v ?? 0))}
@@ -123,7 +125,6 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           <form.Field name="defense">
             {(field) => (
               <Input
-                type="number"
                 className="w-16"
                 value={field.state.value}
                 onValueChange={(v) => field.handleChange(Number(v ?? 0))}
@@ -140,7 +141,6 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           <form.Field name="speed">
             {(field) => (
               <Input
-                type="number"
                 className="w-16"
                 value={field.state.value}
                 onValueChange={(v) => field.handleChange(Number(v ?? 0))}
@@ -157,7 +157,6 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           <form.Field name="chakra_attack">
             {(field) => (
               <Input
-                type="number"
                 className="w-16"
                 value={field.state.value}
                 onValueChange={(v) => field.handleChange(Number(v ?? 0))}
@@ -181,7 +180,6 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           <form.Field name="chakra_defense">
             {(field) => (
               <Input
-                type="number"
                 className="w-16"
                 value={field.state.value}
                 onValueChange={(v) => field.handleChange(Number(v ?? 0))}

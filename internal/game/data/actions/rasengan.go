@@ -58,7 +58,7 @@ func MakeRasengan() game.Action {
 func MakeRasenganRecharge() game.Action {
 	logf := "%s must recharge."
 	config := game.ActionConfig{
-		Name:        "Reacharging...",
+		Name:        "Recharging...",
 		LogSuccessF: &logf,
 	}
 	return game.Action{
