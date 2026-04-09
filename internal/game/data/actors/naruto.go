@@ -34,7 +34,7 @@ var Naruto = game.ActorDef{
 		game.NsYang,
 	}),
 	Abilities: []game.Modifier{
-		modifiers.Leftovers,
+		modifiers.FirstAid,
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{

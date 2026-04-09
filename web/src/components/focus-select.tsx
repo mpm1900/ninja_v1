@@ -12,12 +12,13 @@ import {
 function FocusSelect({
   value,
   onValueChange,
-}: {
+  ...props
+}: React.ComponentProps<typeof Field> & {
   value: ActorFocus
   onValueChange: (value: ActorFocus) => void
 }) {
   return (
-    <Field className="w-40">
+    <Field {...props}>
       <FieldLabel>Focus</FieldLabel>
       <FieldContent>
         <Select value={value} onValueChange={onValueChange}>

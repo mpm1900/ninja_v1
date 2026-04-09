@@ -8,6 +8,7 @@ import { Button } from './ui/button'
 import { NULL_CONTEXT } from '#/lib/game/context'
 import { clientsStore } from '#/lib/stores/clients'
 import { sendContextMessage } from '#/lib/stores/socket'
+import { FocusSelect } from './focus-select'
 
 const AuxStatsSchema = z
   .object({
@@ -37,8 +38,7 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
       // @ts-ignore
       onChange: AuxStatsSchema,
     },
-    onSubmit: ({ value }) => {
-      console.log(value)
+    onSubmit: ({ value, formApi }) => {
       sendContextMessage({
         type: 'update-actor',
         client_ID: client.ID,
@@ -50,19 +50,44 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           aux_stats: value,
         },
       })
+      formApi.reset(value)
     },
   })
   return (
-    <div>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        form.handleSubmit()
+      }}
+    >
       <form.Subscribe>
         {({ values }) => (
-          <div className="flex justify-between">
+          <div className="flex justify-betweenc gap-4 items-start mb-2">
             <div>
-              stats
+              <div>Stats</div>
+              <div className="text-xl whitespace-nowrap">
+                {Object.values(values).reduce((sum, value) => sum + value, 0)} /
+                66
+              </div>
             </div>
-            <div>
-              {Object.values(values).reduce((sum, value) => sum + value, 0)} / 66
-            </div>
+            <FocusSelect
+              className="w-full"
+              value={actor.focus}
+              onValueChange={(focus) => {
+                sendContextMessage({
+                  type: 'update-actor',
+                  client_ID: client.ID,
+                  context: {
+                    ...NULL_CONTEXT,
+                    source_actor_ID: actor.ID,
+                  },
+                  actor_config: {
+                    focus,
+                  },
+                })
+              }}
+            />
           </div>
         )}
       </form.Subscribe>
@@ -76,6 +101,7 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           <form.Field name="hp">
             {(field) => (
               <Input
+                aria-invalid={!field.state.meta.isValid}
                 className="w-16"
                 value={field.state.value}
                 onValueChange={(v) => field.handleChange(Number(v ?? 0))}
@@ -93,6 +119,7 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           <form.Field name="attack">
             {(field) => (
               <Input
+                aria-invalid={!field.state.meta.isValid}
                 className="w-16"
                 value={field.state.value}
                 onValueChange={(v) => field.handleChange(Number(v ?? 0))}
@@ -109,6 +136,7 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           <form.Field name="stamina">
             {(field) => (
               <Input
+                aria-invalid={!field.state.meta.isValid}
                 className="w-16"
                 value={field.state.value}
                 onValueChange={(v) => field.handleChange(Number(v ?? 0))}
@@ -125,6 +153,7 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           <form.Field name="defense">
             {(field) => (
               <Input
+                aria-invalid={!field.state.meta.isValid}
                 className="w-16"
                 value={field.state.value}
                 onValueChange={(v) => field.handleChange(Number(v ?? 0))}
@@ -141,6 +170,7 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           <form.Field name="speed">
             {(field) => (
               <Input
+                aria-invalid={!field.state.meta.isValid}
                 className="w-16"
                 value={field.state.value}
                 onValueChange={(v) => field.handleChange(Number(v ?? 0))}
@@ -157,6 +187,7 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           <form.Field name="chakra_attack">
             {(field) => (
               <Input
+                aria-invalid={!field.state.meta.isValid}
                 className="w-16"
                 value={field.state.value}
                 onValueChange={(v) => field.handleChange(Number(v ?? 0))}
@@ -180,6 +211,7 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           <form.Field name="chakra_defense">
             {(field) => (
               <Input
+                aria-invalid={!field.state.meta.isValid}
                 className="w-16"
                 value={field.state.value}
                 onValueChange={(v) => field.handleChange(Number(v ?? 0))}
@@ -195,17 +227,29 @@ function ActorAuxStats({ actor }: { actor: Actor }) {
           </div>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-2">
           <form.Subscribe>
-            {({ canSubmit }) => (
-              <Button disabled={!canSubmit} onClick={() => form.handleSubmit()}>
-                Save
-              </Button>
+            {({ canSubmit, isDirty }) => (
+              <>
+                {isDirty && (
+                  <Button
+                    type="button"
+                    variant={'outline'}
+                    onClick={() => form.reset()}
+                  >
+                    Reset
+                  </Button>
+                )}
+
+                <Button type="submit" disabled={!canSubmit}>
+                  Save
+                </Button>
+              </>
             )}
           </form.Subscribe>
         </div>
       </div>
-    </div>
+    </form>
   )
 }
 
@@ -213,7 +257,7 @@ function ActorStats({ actor }: { actor: Actor }) {
   return (
     <div className="flex items-start gap-4">
       <ActorAuxStats actor={actor} />
-      <div>
+      <div className="space-y-2">
         <div className="uppercase text-muted-foreground font-bold text-center">
           DMG
         </div>
@@ -231,7 +275,7 @@ function ActorStats({ actor }: { actor: Actor }) {
           </div>
         ))}
       </div>
-      <div>
+      <div className="space-y-2">
         <div className="uppercase text-muted-foreground font-bold text-center">
           RES
         </div>

@@ -7,11 +7,11 @@ import (
 	"github.com/google/uuid"
 )
 
-var leftoversID = uuid.New()
+var firstAidID = uuid.New()
 
-var LeftoversTrigger game.Trigger = game.Trigger{
+var FirstAidTrigger game.Trigger = game.Trigger{
 	ID:         uuid.New(),
-	ModifierID: leftoversID,
+	ModifierID: firstAidID,
 	On:         game.OnTurnEnd,
 	Check: func(p, g game.Game, context game.Context, tx game.Transaction[game.Modifier]) bool {
 		return true
@@ -30,16 +30,16 @@ var LeftoversTrigger game.Trigger = game.Trigger{
 	},
 }
 
-var Leftovers game.Modifier = game.Modifier{
-	ID:       leftoversID,
-	GroupID:  &leftoversID,
-	Name:     "Leftovers",
+var FirstAid game.Modifier = game.Modifier{
+	ID:       firstAidID,
+	GroupID:  &firstAidID,
+	Name:     "First Aid Kit",
 	Show:     true,
 	Duration: game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
-		game.NewNoopSource(&leftoversID),
+		game.NewNoopSource(&firstAidID),
 	},
 	Triggers: []game.Trigger{
-		LeftoversTrigger,
+		FirstAidTrigger,
 	},
 }
