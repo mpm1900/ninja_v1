@@ -31,99 +31,18 @@ import {
   type TeamActor,
   type TeamConfig,
 } from '#/lib/stores/config'
+import {
+  SAVED_TEAMS_KEY,
+  cloneTeamConfig,
+  parseSavedTeamsJSON,
+  serializeSavedTeams,
+  upsertSavedTeam,
+} from '#/lib/team-storage'
 import { sendContextMessage } from '#/lib/stores/socket'
 import { useForm, useStore } from '@tanstack/react-form'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
-
-const SAVED_TEAMS_KEY = 'team-builder:saved-teams'
-
-const DEFAULT_AUX_STATS: TeamActor['config']['aux_stats'] = {
-  hp: 0,
-  stamina: 0,
-  speed: 0,
-  attack: 0,
-  defense: 0,
-  chakra_attack: 0,
-  chakra_defense: 0,
-}
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null
-
-const toBoundedStat = (value: unknown) => {
-  if (typeof value !== 'number' || !Number.isFinite(value)) return 0
-  return Math.max(0, Math.min(31, Math.floor(value)))
-}
-
-const hydrateSavedTeam = (value: unknown): TeamConfig | null => {
-  if (!isRecord(value)) return null
-
-  const name =
-    typeof value.name === 'string' && value.name.trim().length > 0
-      ? value.name.trim()
-      : 'Team'
-
-  const actors = Array.isArray(value.actors)
-    ? value.actors
-        .map((actor): TeamActor | null => {
-          if (!isRecord(actor) || typeof actor.actor_ID !== 'string') {
-            return null
-          }
-
-          const config = isRecord(actor.config) ? actor.config : {}
-          const auxStats = isRecord(config.aux_stats) ? config.aux_stats : {}
-
-          return {
-            actor_ID: actor.actor_ID,
-            config: {
-              ability_ID:
-                typeof config.ability_ID === 'string'
-                  ? config.ability_ID
-                  : null,
-              item_ID:
-                typeof config.item_ID === 'string' ? config.item_ID : null,
-              action_IDs: Array.isArray(config.action_IDs)
-                ? config.action_IDs.filter(
-                    (id): id is string => typeof id === 'string'
-                  )
-                : [],
-              focus: (typeof config.focus === 'string'
-                ? config.focus
-                : 'none') as TeamActor['config']['focus'],
-              aux_stats: {
-                hp: toBoundedStat(auxStats.hp),
-                stamina: toBoundedStat(auxStats.stamina),
-                speed: toBoundedStat(auxStats.speed),
-                attack: toBoundedStat(auxStats.attack),
-                defense: toBoundedStat(auxStats.defense),
-                chakra_attack: toBoundedStat(auxStats.chakra_attack),
-                chakra_defense: toBoundedStat(auxStats.chakra_defense),
-              },
-            },
-          }
-        })
-        .filter((actor): actor is TeamActor => actor !== null)
-    : []
-
-  const rawSelectedIndex =
-    typeof value.selected_index === 'number' &&
-    Number.isFinite(value.selected_index)
-      ? Math.floor(value.selected_index)
-      : 0
-
-  const selected_index = Math.max(
-    0,
-    Math.min(rawSelectedIndex, Math.max(actors.length - 1, 0))
-  )
-
-  return {
-    name,
-    actors,
-    selected_index,
-  }
-}
 
 export const Route = createFileRoute('/team-builder')({
   component: RouteComponent,
@@ -162,57 +81,29 @@ function RouteComponent() {
         team_config: value,
         context: NULL_CONTEXT,
       })
-      nav({ to: '/setup' })
+      nav({ to: '/battle' })
     },
   })
 
   const [savedTeams, setSavedTeams] = useState<TeamConfig[]>([])
 
   useEffect(() => {
-    const raw = localStorage.getItem(SAVED_TEAMS_KEY)
-    if (!raw) return
-
-    try {
-      const parsed = JSON.parse(raw)
-      if (!Array.isArray(parsed)) return
-
-      const hydratedTeams = parsed
-        .map(hydrateSavedTeam)
-        .filter((team): team is TeamConfig => team !== null)
-
-      setSavedTeams(hydratedTeams)
-    } catch {
-      // Ignore malformed local storage data
-    }
+    setSavedTeams(parseSavedTeamsJSON(localStorage.getItem(SAVED_TEAMS_KEY)))
   }, [])
 
   const persistSavedTeams = (teams: TeamConfig[]) => {
     setSavedTeams(teams)
-    localStorage.setItem(SAVED_TEAMS_KEY, JSON.stringify(teams))
+    localStorage.setItem(SAVED_TEAMS_KEY, serializeSavedTeams(teams))
   }
 
   const saveTeam = (team: TeamConfig) => {
-    const hydratedTeam = hydrateSavedTeam(team)
-    if (!hydratedTeam) return
-
-    const name = hydratedTeam.name.trim()
-    if (!name) return
-
-    const normalizedTeam: TeamConfig = {
-      ...hydratedTeam,
-      name,
-    }
-
-    const nextTeams = [
-      normalizedTeam,
-      ...savedTeams.filter((saved) => saved.name !== name),
-    ]
-
+    const nextTeams = upsertSavedTeam(savedTeams, team)
+    if (nextTeams === savedTeams) return
     persistSavedTeams(nextTeams)
   }
 
   const loadSavedTeam = (team: TeamConfig) => {
-    const loadedTeam: TeamConfig = JSON.parse(JSON.stringify(team))
+    const loadedTeam = cloneTeamConfig(team)
     form.setFieldValue('name', loadedTeam.name)
     form.setFieldValue('actors', loadedTeam.actors)
     form.setFieldValue(
