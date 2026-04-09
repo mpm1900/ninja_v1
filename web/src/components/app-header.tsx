@@ -49,7 +49,7 @@ function AppHeader() {
   })
   const activeTab = getActiveTable(pathname)
   return (
-    <header className="flex justify-between p-2 bg-black">
+    <header className="flex justify-between p-2">
       <div className="flex items-center gap-2">
         <Link to="/" className="pl-2">
           <GiNinjaHead />
