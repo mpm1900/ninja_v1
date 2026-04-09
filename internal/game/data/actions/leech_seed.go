@@ -47,7 +47,7 @@ func MakeLeechSeed() game.Action {
 						ParentActorID:     &target.ID,
 						TargetPositionIDs: []uuid.UUID{*source.PositionID},
 					}
-					mutation := mutations.AddModifiers(true, LeechSeedModifier)
+					mutation := mutations.AddModifiers(true, false, LeechSeedModifier)
 					transaction := game.MakeTransaction(mutation, mut_ctx)
 					transactions = append(transactions, transaction)
 				}

@@ -6,6 +6,14 @@ import type { Context } from '../game/context'
 import { setContextPlayer } from './battle-context'
 import type { ActorFocus, ActorStats } from '../game/actor'
 
+type ActorConfig = {
+  ability_ID?: string
+  action_IDs?: Array<string>
+  aux_stats?: ActorStats<number>
+  focus?: ActorFocus
+  item_ID?: string
+}
+
 type SocketStatus =
   | 'idle'
   | 'connecting'
@@ -38,13 +46,7 @@ type SocketRequest = {
   prompt_ID?: string
   client_ID: string
   context: Context
-  actor_config?: {
-    ability_ID?: string
-    action_IDs?: Array<string>
-    aux_stats?: ActorStats<number>
-    focus?: ActorFocus
-    item_ID?: string
-  }
+  actor_config?: ActorConfig
 }
 
 type SocketResponse = {
@@ -225,7 +227,7 @@ function sendContextMessage(request: SocketRequest) {
   return sendSocketMessage(JSON.stringify(request))
 }
 
-export type { SocketResponse, SocketMessageSubscriber }
+export type { SocketResponse, SocketMessageSubscriber, ActorConfig }
 export {
   socketStore,
   connectSocket,

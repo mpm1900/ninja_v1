@@ -20,7 +20,7 @@ var ConsumeChakraTrigger game.Trigger = game.Trigger{
 		Delta: func(p, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
 			transactions := []game.GameTransaction{}
 
-			mutation := mutations.AddModifiers(false, ChakraAttackUpSource)
+			mutation := mutations.AddModifiers(false, false, ChakraAttackUpSource)
 			transaction := game.MakeTransaction(mutation, context)
 			transactions = append(transactions, transaction)
 

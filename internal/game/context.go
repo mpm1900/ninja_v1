@@ -55,7 +55,7 @@ func (c *Context) FilterOutTarget(actor Actor) {
 		return ID == actor.ID
 	})
 	if actor.PositionID != nil {
-		c.TargetPositionIDs = slices.DeleteFunc(c.TargetActorIDs, func(posID uuid.UUID) bool {
+		c.TargetPositionIDs = slices.DeleteFunc(c.TargetPositionIDs, func(posID uuid.UUID) bool {
 			return posID == *actor.PositionID
 		})
 	}

@@ -19,7 +19,7 @@ import {
 } from './ui/table'
 import { Fragment } from 'react/jsx-runtime'
 import { NatureBadge } from './nature-badge'
-import { memo, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { StatBadge } from './stat-badge'
 import { Checkbox } from './ui/checkbox'
 import { Button } from './ui/button'

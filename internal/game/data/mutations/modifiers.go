@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func AddModifiers(checkProtect bool, modifiers ...game.Modifier) game.GameMutation {
+func AddModifiers(checkProtected bool, checkWarded bool, modifiers ...game.Modifier) game.GameMutation {
 	return game.GameMutation{
 		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			for _, modifier := range modifiers {
@@ -18,19 +18,39 @@ func AddModifiers(checkProtect bool, modifiers ...game.Modifier) game.GameMutati
 				if context.SourceActorID == nil && len(modifier.GameStateMutations) > 0 {
 					g.PushLog(game.NewLog(fmt.Sprintf(">>> The battlefield gained %s.", mod_tx.Mutation.Name)))
 				}
+				hasCandidate := false
+				hasApplicableTarget := false
 				for _, actor := range g.GetActionableActors() {
-					if game.CheckModifierForActor(mod_tx, g, actor) {
-						resolved := actor.Resolve(g)
-						if checkProtect && resolved.Protected {
-							mod_tx.Context.FilterOutTarget(actor)
-
-							context.SourceActorID = &actor.ID
-							g.PushLog(game.NewLogContext(">>> $source$ was protected.", context.WithSource(actor.ID)))
-							continue
-						} else {
-							g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %s.", modifier.Name), context.WithSource(actor.ID)))
-						}
+					if !game.CheckModifierForActor(mod_tx, g, actor) {
+						continue
 					}
+
+					hasCandidate = true
+					resolved := actor.Resolve(g)
+
+					/**
+					 * Filtering out via protected or warded check
+					 */
+					if checkProtected && resolved.Protected {
+						mod_tx.Context.FilterOutTarget(actor)
+
+						context.SourceActorID = &actor.ID
+						g.PushLog(game.NewLogContext(">>> $source$ was protected.", context.WithSource(actor.ID)))
+						continue
+					} else if checkWarded && resolved.Warded {
+						mod_tx.Context.FilterOutTarget(actor)
+
+						context.SourceActorID = &actor.ID
+						g.PushLog(game.NewLogContext(">>> $source$ was warded.", context.WithSource(actor.ID)))
+						continue
+					}
+
+					hasApplicableTarget = true
+					g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %s.", modifier.Name), context.WithSource(actor.ID)))
+				}
+
+				if hasCandidate && !hasApplicableTarget {
+					continue
 				}
 
 				g.On(game.OnModifierAdd, &mod_tx.Context)

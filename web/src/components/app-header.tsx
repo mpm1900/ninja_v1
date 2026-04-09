@@ -7,7 +7,15 @@ import {
 } from '#/lib/stores/socket'
 import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
-import { Check, Loader, Loader2, LogOut, Signal, TriangleAlert, Unplug } from 'lucide-react'
+import {
+  Check,
+  Loader,
+  Loader2,
+  LogOut,
+  Signal,
+  TriangleAlert,
+  Unplug,
+} from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { NULL_CONTEXT } from '#/lib/game/context'
@@ -17,6 +25,17 @@ import { useLogout } from '#/lib/mutations/logout'
 import { useUser } from '#/lib/queries/auth'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 import { Badge } from './ui/badge'
+
+function getActiveTable(pathname: string) {
+  switch (pathname) {
+    case '/battle':
+      return 'battle'
+    case '/team-builder':
+      return 'team-builder'
+    default:
+      return 'setup'
+  }
+}
 
 function AppHeader() {
   const { data: user } = useUser()
@@ -28,11 +47,11 @@ function AppHeader() {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   })
-  const activeTab = pathname === '/battle' ? 'battle' : 'setup'
+  const activeTab = getActiveTable(pathname)
   return (
-    <header className="flex justify-between p-2">
+    <header className="flex justify-between p-2 bg-black">
       <div className="flex items-center gap-2">
-        <Link to="/" className='pl-2'>
+        <Link to="/" className="pl-2">
           <GiNinjaHead />
         </Link>
         <div className="flex items-center">
@@ -56,6 +75,9 @@ function AppHeader() {
         )}
         <Tabs value={activeTab}>
           <TabsList>
+            <TabsTrigger value="team-builder" asChild>
+              <Link to="/team-builder">Team Builder</Link>
+            </TabsTrigger>
             <TabsTrigger value="setup" asChild>
               <Link to="/setup">Setup</Link>
             </TabsTrigger>
@@ -64,7 +86,9 @@ function AppHeader() {
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        <Badge>{game.turn.count}: {game.turn.phase}</Badge>
+        <Badge>
+          {game.turn.count}: {game.turn.phase}
+        </Badge>
         {client && (
           <div className="flex gap-2">
             <Button

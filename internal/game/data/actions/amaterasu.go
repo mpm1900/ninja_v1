@@ -13,16 +13,19 @@ var Amaterasu = MakeAmaterasu()
 func MakeAmaterasu() game.Action {
 	ID := uuid.New()
 	nature := game.NsYin
-	targetCount := 1
-	chakraCost := 30
 
 	config := game.ActionConfig{
 		Name:        "Amaterasu",
 		Description: "Burns taraget.",
 		Nature:      &nature,
-		TargetCount: &targetCount,
-		Cost:        &chakraCost,
+		Stat:        game.Ptr(game.ChakraAttack),
+		TargetCount: game.Ptr(1),
+		Accuracy:    game.Ptr(100),
+		Power:       game.Ptr(20),
+		Cost:        game.Ptr(30),
 		Jutsu:       game.Genjutsu,
+		CritChance:  game.Ptr(5),
+		CritMod:     1.5,
 	}
 
 	return game.Action{
@@ -31,7 +34,7 @@ func MakeAmaterasu() game.Action {
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
 		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseStaminaSource(chakraCost),
+		Cost:            mutations.UseStaminaSource(*config.Cost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter: game.ComposeGF(
@@ -40,6 +43,14 @@ func MakeAmaterasu() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
+				conf := game.GetActiveActionConfig(g, config)
+				crit_result := game.MakeCriticalCheck(conf)
+				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, 1))
+				transactions = append(
+					transactions,
+					mutations.MakeDamageTransactions(context, damages)...,
+				)
+
 				targets := g.GetTargets(context)
 				for _, target := range targets {
 					mut_ctx := game.Context{
@@ -47,7 +58,7 @@ func MakeAmaterasu() game.Action {
 						SourceActorID:  &target.ID,
 						ParentActorID:  nil,
 					}
-					mutation := mutations.AddModifiers(true, modifiers.Burned)
+					mutation := mutations.AddModifiers(true, true, modifiers.Burned)
 					transaction := game.MakeTransaction(mutation, mut_ctx)
 					transactions = append(transactions, transaction)
 				}

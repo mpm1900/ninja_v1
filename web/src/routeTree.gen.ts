@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TeamBuilderRouteImport } from './routes/team-builder'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as BattleRouteImport } from './routes/battle'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TeamBuilderRoute = TeamBuilderRouteImport.update({
+  id: '/team-builder',
+  path: '/team-builder',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SetupRoute = SetupRouteImport.update({
   id: '/setup',
   path: '/setup',
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/battle': typeof BattleRoute
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/team-builder': typeof TeamBuilderRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/battle': typeof BattleRoute
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/team-builder': typeof TeamBuilderRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,14 @@ export interface FileRoutesById {
   '/battle': typeof BattleRoute
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/team-builder': typeof TeamBuilderRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/battle' | '/login' | '/setup'
+  fullPaths: '/' | '/battle' | '/login' | '/setup' | '/team-builder'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/battle' | '/login' | '/setup'
-  id: '__root__' | '/' | '/battle' | '/login' | '/setup'
+  to: '/' | '/battle' | '/login' | '/setup' | '/team-builder'
+  id: '__root__' | '/' | '/battle' | '/login' | '/setup' | '/team-builder'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,10 +76,18 @@ export interface RootRouteChildren {
   BattleRoute: typeof BattleRoute
   LoginRoute: typeof LoginRoute
   SetupRoute: typeof SetupRoute
+  TeamBuilderRoute: typeof TeamBuilderRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/team-builder': {
+      id: '/team-builder'
+      path: '/team-builder'
+      fullPath: '/team-builder'
+      preLoaderRoute: typeof TeamBuilderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/setup': {
       id: '/setup'
       path: '/setup'
@@ -107,6 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   BattleRoute: BattleRoute,
   LoginRoute: LoginRoute,
   SetupRoute: SetupRoute,
+  TeamBuilderRoute: TeamBuilderRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

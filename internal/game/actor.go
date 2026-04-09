@@ -162,9 +162,9 @@ type ActorState struct {
 	// - protected units cannot be damaged by actions
 	// - protected units cannot be targeted by enemy actions
 	Protected bool `json:"protected"`
-	/**
-	 * PSEUDO STATS
-	 */
+	// [Warded]
+	// - warded units are immune to the secondary effects of attacking actions
+	Warded bool `json:"warded"`
 	// [Reflect] how much damage is reflected (PureDamage not affected)
 	Reflect float64 `json:"-"`
 	// [ActionLocked]
@@ -338,6 +338,7 @@ func MakeActor(
 			Statused:         false,
 			Sleeping:         false,
 			SleepCounter:     0,
+			Warded:           false,
 		},
 		DamageMultipliers: map[AttackStat]float64{
 			Attack:       1.0,
