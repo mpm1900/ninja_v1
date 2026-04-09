@@ -16,7 +16,7 @@ func AddModifiers(checkProtected bool, checkWarded bool, modifiers ...game.Modif
 
 				// logs
 				if context.SourceActorID == nil && len(modifier.GameStateMutations) > 0 {
-					g.PushLog(game.NewLog(fmt.Sprintf(">>> The battlefield gained %s.", mod_tx.Mutation.Name)))
+					g.PushLog(game.NewLog(fmt.Sprintf("| The battlefield gained %s.", mod_tx.Mutation.Name)))
 				}
 				hasCandidate := false
 				hasApplicableTarget := false
@@ -35,18 +35,18 @@ func AddModifiers(checkProtected bool, checkWarded bool, modifiers ...game.Modif
 						mod_tx.Context.FilterOutTarget(actor)
 
 						context.SourceActorID = &actor.ID
-						g.PushLog(game.NewLogContext(">>> $source$ was protected.", context.WithSource(actor.ID)))
+						g.PushLog(game.NewLogContext("| $source$ was protected.", context.WithSource(actor.ID)))
 						continue
 					} else if checkWarded && resolved.Warded {
 						mod_tx.Context.FilterOutTarget(actor)
 
 						context.SourceActorID = &actor.ID
-						g.PushLog(game.NewLogContext(">>> $source$ was warded.", context.WithSource(actor.ID)))
+						g.PushLog(game.NewLogContext("| $source$ was warded.", context.WithSource(actor.ID)))
 						continue
 					}
 
 					hasApplicableTarget = true
-					g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %s.", modifier.Name), context.WithSource(actor.ID)))
+					g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ gained %s.", modifier.Name), context.WithSource(actor.ID)))
 				}
 
 				if hasCandidate && !hasApplicableTarget {

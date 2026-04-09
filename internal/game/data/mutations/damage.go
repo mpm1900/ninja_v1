@@ -41,19 +41,19 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 			summon_hp := a.Summon.Stats[game.StatHP]
 			a.Summon.Damage += damage
 			a.Summon.Alive = summon_hp > a.Summon.Damage
-			g.PushLog(game.NewLogContext(">>> $source$'s substitute took the attack.", log_ctx))
+			g.PushLog(game.NewLogContext("| $source$'s substitute took the attack.", log_ctx))
 		} else {
 			a.Damage += clampDamage(damage)
 			ratio := min(int(float64(damage)*100/float64(hp)), 100)
 			if ratio > 0 {
-				g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ lost %d%% HP.", ratio), log_ctx))
+				g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ lost %d%% HP.", ratio), log_ctx))
 			} else {
-				g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %d%% HP.", ratio*-1), log_ctx))
+				g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ gained %d%% HP.", ratio*-1), log_ctx))
 			}
 
 			if target.Immortal {
 				if hp <= a.Damage {
-					g.PushLog(game.NewLogContext(">>> $source$'s survived a fatal attack.", log_ctx))
+					g.PushLog(game.NewLogContext("| $source$'s survived a fatal attack.", log_ctx))
 					a.Damage = hp - 1
 					g.On(game.OnImmortalSave, &log_ctx)
 				}
@@ -152,7 +152,7 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 				missed := false
 				for ti, target := range resolved {
 					if target.Protected {
-						g.PushLog(game.NewLogContext(">>> $source$ was protected.", context.WithSource(target.ID)))
+						g.PushLog(game.NewLogContext("| $source$ was protected.", context.WithSource(target.ID)))
 						continue
 					}
 
@@ -177,6 +177,18 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 						action.Nature,
 						config.Random,
 					)
+
+					var natures []game.Nature
+					if action.Nature != nil {
+						natures = game.NATURES[*action.Nature]
+					}
+					nature_mod := game.ResolveNatures(natures, source.NatureDamage, target.NatureResistance, target.Natures)
+					if nature_mod >= 1.5 {
+						g.PushLog(game.NewLog("| Super effective!"))
+					}
+					if nature_mod < 0.75 {
+						g.PushLog(game.NewLog("| Not very effective!"))
+					}
 
 					for _, damage := range damages {
 						if !config.Repeat {
@@ -311,7 +323,7 @@ func ApplyHealRawWith(g *game.Game, targetID uuid.UUID, amount int, updater func
 	log_ctx.ParentActorID = &targetID
 	log_ctx.SourceActorID = &targetID
 	ratio := int(float64(amount) * 100 / float64(hp))
-	g.PushLog(game.NewLogContext(fmt.Sprintf(">>> $source$ gained %d%% HP.", ratio), log_ctx))
+	g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ gained %d%% HP.", ratio), log_ctx))
 
 	return amount
 }
