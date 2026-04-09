@@ -322,8 +322,15 @@ function RouteComponent() {
 
                   return (
                     <div className="flex-1 space-y-4 overflow-auto">
-                      <div className="text-sm font-medium">
-                        Editing {def.name}
+                      <div className='flex justify-between items-center'>
+                        <div className="text-sm font-medium">
+                          Editing {def.name}
+                        </div>
+                        <Button size='sm' variant='destructive' onClick={() => {
+                          form.removeFieldValue('actors', selected_index)
+                        }}>
+                          Delete
+                        </Button>
                       </div>
 
                       <div className="flex gap-4">

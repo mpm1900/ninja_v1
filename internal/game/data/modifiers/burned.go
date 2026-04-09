@@ -48,6 +48,7 @@ var Burned game.Modifier = game.Modifier{
 				}
 
 				actor.Statused = true
+				actor.Burned = true
 				actor.Stats[game.StatAttack] = game.Round(float64(actor.Stats[game.StatAttack]) * 0.5)
 				return actor
 			},

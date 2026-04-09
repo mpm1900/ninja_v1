@@ -7,11 +7,11 @@ import (
 	"github.com/google/uuid"
 )
 
-var lifeOrbID = uuid.MustParse("7dd1029f-aac8-5802-9fae-3873e507b57d")
+var gedoShardID = uuid.MustParse("7dd1029f-aac8-5802-9fae-3873e507b57d")
 
-var LifeOrbTrigger game.Trigger = game.Trigger{
+var GedoShardTrigger game.Trigger = game.Trigger{
 	ID:         uuid.MustParse("8ddae3f7-dffd-5a57-b3fc-eb3b50e01f96"),
-	ModifierID: lifeOrbID,
+	ModifierID: gedoShardID,
 	On:         game.OnTurnEnd,
 	Check: func(p, g game.Game, context game.Context, tx game.Transaction[game.Modifier]) bool {
 		return true
@@ -30,15 +30,15 @@ var LifeOrbTrigger game.Trigger = game.Trigger{
 	},
 }
 
-var LifeOrb game.Modifier = game.Modifier{
-	ID:       lifeOrbID,
-	GroupID:  &lifeOrbID,
-	Name:     "Life Orb",
+var GedoShard game.Modifier = game.Modifier{
+	ID:       gedoShardID,
+	GroupID:  &gedoShardID,
+	Name:     "Gedo Shard",
 	Show:     true,
 	Duration: game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
-			&lifeOrbID,
+			&gedoShardID,
 			game.MutPriorityDefault,
 			game.ComposeAF(game.SourceFilter, game.ActiveFilter),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {
@@ -53,6 +53,6 @@ var LifeOrb game.Modifier = game.Modifier{
 		),
 	},
 	Triggers: []game.Trigger{
-		LifeOrbTrigger,
+		GedoShardTrigger,
 	},
 }

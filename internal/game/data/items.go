@@ -14,7 +14,7 @@ var ITEMS map[uuid.UUID]game.Modifier = map[uuid.UUID]game.Modifier{
 	modifiers.CurseMarkOfSpeed.ID:    modifiers.CurseMarkOfSpeed,
 	modifiers.CurseMarkOfStrength.ID: modifiers.CurseMarkOfStrength,
 	modifiers.FirstAid.ID:            modifiers.FirstAid,
-	modifiers.LifeOrb.ID:             modifiers.LifeOrb,
+	modifiers.GedoShard.ID:           modifiers.GedoShard,
 	modifiers.Onigiri.ID:             modifiers.Onigiri,
 	modifiers.ShinobiVest.ID:         modifiers.ShinobiVest,
 }

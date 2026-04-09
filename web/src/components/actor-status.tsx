@@ -2,6 +2,7 @@ import type { Actor } from '#/lib/game/actor'
 import { cn } from '#/lib/utils'
 
 function ActorStatus({ actor }: { actor: Actor }) {
+  console.log(actor)
   return (
     <div
       className={cn(
