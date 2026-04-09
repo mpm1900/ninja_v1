@@ -254,7 +254,6 @@ func (g Game) GetModifierByTxID(txID uuid.UUID) (Modifier, bool) {
 	return Modifier{}, false
 }
 func (g Game) GetModifierByID(ID uuid.UUID) (Modifier, bool) {
-
 	modifiers := make([]Transaction[Modifier], 0, len(g.Modifiers))
 	modifiers = append(modifiers, g.Modifiers...)
 	modifiers = append(modifiers, GetActorModifiers(g)...)
@@ -291,7 +290,8 @@ func (g Game) GetActiveAction() (Action, bool) {
 
 	return Action{}, false
 }
-func (g Game) GetState(context Context) GameState {
+func (g Game) GetState(context Context) (GameState, []uuid.UUID) {
+	applied := make([]uuid.UUID, 0)
 	mutations, transactions := GetAllGameStateMutations(g)
 	state := g.state
 	for _, mut := range mutations {
@@ -299,10 +299,13 @@ func (g Game) GetState(context Context) GameState {
 		tx := MakeTransaction(mut.Mutation, mutContext)
 		s, ok := ResolveTransaction(g, state, tx, state)
 		if ok {
+			if mut.TransactionID != nil {
+				applied = append(applied, *mut.TransactionID)
+			}
 			state = s
 		}
 	}
-	return state
+	return state, applied
 }
 func (g Game) WithActor(actor Actor) Game {
 	next := g
@@ -641,12 +644,13 @@ func (g *Game) NextTurn() {
 }
 
 type GameJSON struct {
-	Status            GameStatus           `json:"status"`
-	Turn              Turn                 `json:"turn"`
-	ActiveTransaction *Transaction[Action] `json:"active_transaction"`
-	Players           []Player             `json:"players"`
-	Actors            []ResolvedActor      `json:"actors"`
-	State             GameState            `json:"state"`
+	Status             GameStatus           `json:"status"`
+	Turn               Turn                 `json:"turn"`
+	ActiveTransaction  *Transaction[Action] `json:"active_transaction"`
+	Players            []Player             `json:"players"`
+	Actors             []ResolvedActor      `json:"actors"`
+	State              GameState            `json:"state"`
+	AppliedGameStateTx []uuid.UUID          `json:"applied_game_state_tx"`
 
 	Modifiers    []Transaction[Modifier]     `json:"modifiers"`
 	Transactions []Transaction[GameMutation] `json:"-"`
@@ -687,20 +691,22 @@ func (g Game) ToJSON(playerID *uuid.UUID) GameJSON {
 		status = GameStatusWaiting
 	}
 
+	state, applied := g.GetState(NewContext())
 	return GameJSON{
-		Status:            status,
-		Turn:              g.Turn,
-		ActiveTransaction: g.ActiveTransaction,
-		Players:           g.Players,
-		Actors:            resolved,
-		State:             g.GetState(NewContext()),
-		Modifiers:         g.Modifiers,
-		Transactions:      g.Transactions,
-		Actions:           g.Actions,
-		Prompt:            prompt,
-		Triggers:          g.Triggers,
-		Log:               getLastN(g.Log, 30),
-		QueuedActions:     g.QueuedActions,
+		Status:             status,
+		Turn:               g.Turn,
+		ActiveTransaction:  g.ActiveTransaction,
+		Players:            g.Players,
+		Actors:             resolved,
+		State:              state,
+		AppliedGameStateTx: applied,
+		Modifiers:          g.Modifiers,
+		Transactions:       g.Transactions,
+		Actions:            g.Actions,
+		Prompt:             prompt,
+		Triggers:           g.Triggers,
+		Log:                getLastN(g.Log, 30),
+		QueuedActions:      g.QueuedActions,
 	}
 }
 

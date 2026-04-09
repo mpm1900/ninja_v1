@@ -15,6 +15,9 @@ func AddModifiers(checkProtect bool, modifiers ...game.Modifier) game.GameMutati
 				mod_tx.Context.ModifierID = &mod_tx.ID
 
 				// logs
+				if context.SourceActorID == nil && len(modifier.GameStateMutations) > 0 {
+					g.PushLog(game.NewLog(fmt.Sprintf(">>> The battlefield gained %s.", mod_tx.Mutation.Name)))
+				}
 				for _, actor := range g.GetActionableActors() {
 					if game.CheckModifierForActor(mod_tx, g, actor) {
 						resolved := actor.Resolve(g)

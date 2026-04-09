@@ -44,18 +44,46 @@ function RouteComponent() {
         <AppHeader />
         <div className="flex flex-col flex-1 relative overflow-auto">
           <div>
-            <div className="fixed top-12 px-4 flex right-0 z-10">
-              {enemies.map((player) => (
-                <PlayerPositions key={player.ID} flip player_ID={player.ID} />
-              ))}
+            <div className="fixed top-12 px-4 flex flex-col items-end right-0 z-10">
+              <div>
+                {enemies.map((player) => (
+                  <PlayerPositions key={player.ID} flip player_ID={player.ID} />
+                ))}
+              </div>
+              <Accordion
+                defaultValue={['log']}
+                type="multiple"
+                className="bg-black/70 px-3 border border-zinc-900 min-w-60"
+              >
+                <AccordionItem value="log">
+                  <AccordionTrigger>Log</AccordionTrigger>
+                  <AccordionContent>
+                    <ScrollArea className="h-40">
+                      <GameLogList />
+                    </ScrollArea>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
             <div className="fixed top-12 px-4 left-0 z-10">
               {enemies.map((player) => (
                 <PlayerThumbnails key={player.ID} player_ID={player.ID} />
               ))}
-              <div>
-                <pre>{JSON.stringify(game.state, null, 2)}</pre>
-              </div>
+              {game.state && (
+                <div>
+                  <div>Weather: {game.state.weather}</div>
+                  <div>Terrain: {game.state.terrain}</div>
+                  <div>
+                    Modifiers:{' '}
+                    {game.modifiers
+                      .filter((tx) =>
+                        game.applied_game_state_tx.includes(tx.ID)
+                      )
+                      .map((tx) => tx.mutation.name)
+                      .join(',') || 'none'}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <div className="flex-1 grid place-items-center overflow-hidden relative">
@@ -80,20 +108,6 @@ function RouteComponent() {
             ))}
           </div>
           <div className="fixed bottom-0 px-4 flex flex-col items-end right-0 z-10">
-            <Accordion
-              defaultValue={['log']}
-              type="multiple"
-              className="bg-black/70 px-3 border border-zinc-900 min-w-60"
-            >
-              <AccordionItem value="log">
-                <AccordionTrigger>Log</AccordionTrigger>
-                <AccordionContent>
-                  <ScrollArea className="h-40">
-                    <GameLogList />
-                  </ScrollArea>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
             {players.map((player) => (
               <PlayerThumbnails key={player.ID} player_ID={player.ID} />
             ))}

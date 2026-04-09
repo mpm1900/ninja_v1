@@ -19,6 +19,7 @@ type Game = {
     terrain: string
     weather: string
   }
+  applied_game_state_tx: string[]
 
   actions: ActionTransaction[]
   prompt: ActionTransaction | null
