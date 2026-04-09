@@ -80,6 +80,7 @@ type Actor = ActorDef &
     base_stats: ActorStats<number>
     staged_stats: ActorStats<number>
     pre_stats: ActorStats<number>
+    aux_stats: ActorStats<number>
     applied_modifiers: Record<string, number>
     actions: Array<Action>
     resolved_nature_resistance: NatureStats<number>
@@ -113,5 +114,7 @@ export type {
   ActorAttackStat,
   ActorDefenseStat,
   ActorBaseStat,
+  ActorStats,
+  NatureStats,
 }
 export { checkActorStat, getTotalBaseStats, actorFocuses }

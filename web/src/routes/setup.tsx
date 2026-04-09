@@ -7,12 +7,9 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { ClientOnly, createFileRoute, redirect } from '@tanstack/react-router'
 import { gameStore } from '#/lib/stores/game'
 import { clientsStore } from '#/lib/stores/clients'
-import { ActorCard } from '#/components/actor-card'
 import { ActorControl } from '#/components/actor-control'
 import { ActionQueue } from '#/components/action-queue'
 import { PromptController } from '#/components/prompt-controller'
-import { ActorThumbnail } from '#/components/actor-thumbnail'
-import { cn } from '#/lib/utils'
 import { AppHeader } from '#/components/app-header'
 import { actionsQuery } from '#/lib/queries/actions'
 import { PlayerPositions } from '#/components/player-positions'
@@ -49,8 +46,8 @@ function App() {
           <div className="min-w-0 space-y-2 flex-1 overflow-auto">
             <ActionQueue />
 
-            <div className='flex justify-between'>
-              <div className='flex flex-col'>
+            <div className="flex justify-between">
+              <div className="flex flex-col">
                 <div className="px-4 left-0 z-10">
                   {players.map((player) => (
                     <PlayerThumbnails key={player.ID} player_ID={player.ID} />
@@ -58,11 +55,15 @@ function App() {
                 </div>
                 <div className="px-4 flex right-0 z-10">
                   {players.map((player) => (
-                    <PlayerPositions key={player.ID} flip player_ID={player.ID} />
+                    <PlayerPositions
+                      key={player.ID}
+                      flip
+                      player_ID={player.ID}
+                    />
                   ))}
                 </div>
               </div>
-              <div className='flex flex-col items-end'>
+              <div className="flex flex-col items-end">
                 <div className="px-4 left-0 z-10">
                   {enemies.map((player) => (
                     <PlayerThumbnails key={player.ID} player_ID={player.ID} />
@@ -70,7 +71,11 @@ function App() {
                 </div>
                 <div className="px-4 flex right-0 z-10">
                   {enemies.map((player) => (
-                    <PlayerPositions key={player.ID} flip player_ID={player.ID} />
+                    <PlayerPositions
+                      key={player.ID}
+                      flip
+                      player_ID={player.ID}
+                    />
                   ))}
                 </div>
               </div>

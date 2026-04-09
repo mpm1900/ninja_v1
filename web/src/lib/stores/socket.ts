@@ -4,7 +4,7 @@ import { gameStore } from './game'
 import type { Game } from '../game/game'
 import type { Context } from '../game/context'
 import { setContextPlayer } from './battle-context'
-import type { ActorFocus } from '../game/actor'
+import type { ActorFocus, ActorStats } from '../game/actor'
 
 type SocketStatus =
   | 'idle'
@@ -41,6 +41,7 @@ type SocketRequest = {
   actor_config?: {
     ability_ID?: string
     action_IDs?: Array<string>
+    aux_stats?: ActorStats<number>
     focus?: ActorFocus
     item_ID?: string
   }

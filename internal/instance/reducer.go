@@ -1,6 +1,7 @@
 package instance
 
 import (
+	"maps"
 	"ninja_v1/internal/game"
 	data "ninja_v1/internal/game/data"
 	"slices"
@@ -161,10 +162,15 @@ func Reducer(instance *Instance, request Request) int {
 			if hydrated.Focus != nil {
 				a.Focus = *hydrated.Focus
 			}
-
-			a.Ability = hydrated.Ability
-			a.Item = hydrated.Item
-			a.AuxStats = hydrated.AuxStats
+			if hydrated.Ability != nil {
+				a.Ability = hydrated.Ability
+			}
+			if hydrated.Item != nil {
+				a.Item = hydrated.Item
+			}
+			if hydrated.AuxStats != nil {
+				a.AuxStats = maps.Clone(hydrated.AuxStats)
+			}
 
 			return a
 		})

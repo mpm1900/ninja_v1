@@ -490,7 +490,7 @@ func MapResourceStat(stat, level int, focus float64, ev int) int {
 }
 
 func (actor *Actor) MapBase(stat ActorStat) {
-	actor.Stats[stat] = MapBaseStat(actor.Stats[stat], actor.Level, actor.GetFocusModifier(stat), 0)
+	actor.Stats[stat] = MapBaseStat(actor.Stats[stat], actor.Level, actor.GetFocusModifier(stat), actor.AuxStats[stat])
 }
 
 func (actor *Actor) MapResource(stat ActorStat) {
