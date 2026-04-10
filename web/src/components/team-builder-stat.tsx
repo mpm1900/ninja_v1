@@ -14,6 +14,44 @@ import { Slider } from './ui/slider'
 
 const CAP = 64
 const PER_STAT_MAX = 31
+const MAX_COLOR_STAT = 255
+const MAX_BAR_WIDTH_PERCENT = 130.2
+
+const STAT_COLOR_STOPS = [
+  { stat: 0, color: [255, 0, 0] },
+  { stat: 55, color: [190, 85, 0] },
+  { stat: 61, color: [180, 98, 0] },
+  { stat: 95, color: [139, 153, 0] },
+  { stat: 100, color: [134, 160, 0] },
+  { stat: 110, color: [92, 216, 0] },
+  { stat: 134, color: [67, 249, 0] },
+  { stat: 255, color: [0, 255, 255] },
+] as const
+
+function getStatBarColor(baseStat: number) {
+  const stat = Math.max(0, Math.min(MAX_COLOR_STAT, baseStat))
+
+  if (stat <= STAT_COLOR_STOPS[0].stat) {
+    const [r, g, b] = STAT_COLOR_STOPS[0].color
+    return `rgb(${r}, ${g}, ${b})`
+  }
+
+  for (let i = 1; i < STAT_COLOR_STOPS.length; i++) {
+    const left = STAT_COLOR_STOPS[i - 1]
+    const right = STAT_COLOR_STOPS[i]
+
+    if (stat <= right.stat) {
+      const t = (stat - left.stat) / (right.stat - left.stat)
+      const r = Math.round(left.color[0] + (right.color[0] - left.color[0]) * t)
+      const g = Math.round(left.color[1] + (right.color[1] - left.color[1]) * t)
+      const b = Math.round(left.color[2] + (right.color[2] - left.color[2]) * t)
+      return `rgb(${r}, ${g}, ${b})`
+    }
+  }
+
+  const [r, g, b] = STAT_COLOR_STOPS[STAT_COLOR_STOPS.length - 1].color
+  return `rgb(${r}, ${g}, ${b})`
+}
 
 const STAT_NAMES: ActorStats<string> = {
   hp: 'HP',
@@ -28,12 +66,17 @@ const STAT_NAMES: ActorStats<string> = {
 }
 
 function TeamBuilderStatGuage({ baseStat }: { baseStat: number }) {
+  const widthPercent =
+    (Math.max(0, baseStat) * MAX_BAR_WIDTH_PERCENT) / MAX_COLOR_STAT
+  const barColor = getStatBarColor(baseStat)
+
   return (
-    <div className="relative bg-gray-600 rounded-md h-6 w-full min-w-40">
+    <div className="relative bg-gray-600 rounded-md h-6 w-full min-w-40 overflow-hidden">
       <div
-        className="absolute top-0 left-0 rounded-md h-6 bg-white"
+        className="absolute top-0 left-0 rounded-md h-6"
         style={{
-          width: `${(baseStat * 100) / 200}%`,
+          width: `${widthPercent}%`,
+          backgroundColor: barColor,
         }}
       />
     </div>

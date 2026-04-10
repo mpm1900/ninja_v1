@@ -42,10 +42,6 @@ var GedoShard game.Modifier = game.Modifier{
 			game.MutPriorityDefault,
 			game.ComposeAF(game.SourceFilter, game.ActiveFilter),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {
-				if actor.Statused {
-					return actor
-				}
-
 				actor.DamageMultipliers[game.Attack] += 0.3
 				actor.DamageMultipliers[game.ChakraAttack] += 0.3
 				return actor

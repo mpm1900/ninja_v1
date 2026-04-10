@@ -24,7 +24,7 @@ type Modifier struct {
 	Show     bool       `json:"show"`
 
 	ActorMutations     []ActorMutation     `json:"-"`
-	GameStateMutations []GameStateMutation `json:"-"` // TODO
+	GameStateMutations []GameStateMutation `json:"-"`
 	Triggers           []Trigger           `json:"-"`
 }
 

@@ -12,7 +12,7 @@ var BodyProtectionSealTrigger game.Trigger = game.Trigger{
 	ID:         uuid.MustParse("0a179ac1-8811-5319-9c4b-bb23c1f57ed8"),
 	ModifierID: bpsID,
 	On:         game.OnModifierAdd,
-	Check:      game.Match__SourceActor_SourceActor,
+	Check:      game.Match__SourceActor_SourceActor, // TODO move below switches to a filter so we dont get black logs
 	ActionMutation: game.ActionMutation{
 		Priority: game.ActionPriorityDefault,
 		Filter:   game.TrueGameFilter,
