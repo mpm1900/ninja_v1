@@ -72,6 +72,7 @@ function PlayerPositions({
                     targeted={targeted ? 'targeted' : undefined}
                     onClick={() => onSelectedChange?.(pos.actor_ID ?? '')}
                     className={flip ? 'flex-col-reverse' : ''}
+                    summonClass={!flip ? 'top-auto! bottom-0!' : ''}
                   />
                 ) : (
                   <Item className="p-6 w-86">

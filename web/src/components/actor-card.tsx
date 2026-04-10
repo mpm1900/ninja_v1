@@ -25,7 +25,7 @@ const actorVariants = cva(
       player: {
         player: 'border-transparent', //'bg-gray-900 border-gray-700',
         enemy: 'border-transparent',
-        summon: 'bg-stone-600! border-stone-400! shadow-xs',
+        summon: 'border-transparent',//'bg-stone-600! border-stone-400! shadow-xs',
       },
       selected: {
         selected:
@@ -71,6 +71,7 @@ function ActorCard({
   targeted,
   className,
   summon,
+  summonClass,
   ...rest
 }: React.ComponentProps<typeof Item> & {
   actor: Actor | undefined
@@ -80,6 +81,7 @@ function ActorCard({
   targeted?: 'targeted'
   source?: 'source'
   summon?: boolean
+  summonClass?: string
 }) {
   const modifiers = (game.modifiers ?? [])
     .map((m) => m.mutation)
@@ -94,13 +96,13 @@ function ActorCard({
 
   return (
     <div
-      className={cn(
-        summon ? 'pointer-events-none' : 'relative',
+      className={cn('relative',
+        summon && 'pointer-events-none',
         'flex flex-col',
         className
       )}
     >
-      {actor?.summon && (
+      {actor?.summon?.proxy && (
         <ActorCard
           summon
           actor={parseSummon(actor.summon, actor)}
@@ -109,7 +111,7 @@ function ActorCard({
           selected={selected}
           targeted={targeted}
           source={source}
-          className="absolute bottom-2 left-2 z-20"
+          className={cn("absolute top-0 left-0 z-20", summonClass)}
         />
       )}
       {actor && <ActorModifiers actor={actor} modifiers={modifiers} />}

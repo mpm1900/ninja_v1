@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"slices"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -603,7 +604,7 @@ func (g *Game) RunAction(transaction Transaction[Action]) {
 func (g *Game) RunTrigger(transaction Transaction[Trigger]) {
 	modifier, ok := g.GetModifierByID(transaction.Mutation.ModifierID)
 	if ok {
-		text := fmt.Sprintf("[%s]: %s", transaction.Mutation.On, modifier.Name)
+		text := fmt.Sprintf("%s: %s", strings.ToUpper(string(transaction.Mutation.On)), modifier.Name)
 		g.PushLog(NewLog(text))
 	}
 	transactions := ResolveTrigger(*g, transaction)

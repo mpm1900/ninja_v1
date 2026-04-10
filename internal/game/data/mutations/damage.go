@@ -44,11 +44,11 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 	hp := target.Stats[game.StatHP]
 
 	g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
-		if a.Summon != nil && a.Summon.Alive {
+		if a.Summon != nil && a.Summon.Proxy && a.Summon.Alive {
 			summonHP := a.Summon.Stats[game.StatHP]
 			a.Summon.Damage += damage
 			a.Summon.Alive = summonHP > a.Summon.Damage
-			g.PushLog(game.NewLogContext("| $source$'s substitute took the attack.", logCtx))
+			g.PushLog(game.NewLogContext("| $source$'s summon took the attack.", logCtx))
 		} else {
 			a.Damage += clampDamage(damage)
 			ratio := min(int(float64(damage)*100/float64(hp)), 100)

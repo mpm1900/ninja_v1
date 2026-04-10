@@ -2,24 +2,50 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
 
-var Substitution = MakeSubstitution()
+var Gamabunta game.ActorDef = game.ActorDef{
+	ActorID:   uuid.New(),
+	SpriteURL: "/sprites/sub_64.png",
+	Name:      "Gamabunta",
+	Stats: map[game.ActorStat]int{
+		game.StatHP:            106,
+		game.StatStamina:       100,
+		game.StatAttack:        90,
+		game.StatDefense:       130,
+		game.StatChakraAttack:  90,
+		game.StatChakraDefense: 154,
+		game.StatSpeed:         110,
+		game.StatEvasion:       100,
+		game.StatAccuracy:      100,
+	},
+	NatureDamage:     game.NewNatureSetValues(),
+	NatureResistance: game.NewNatureSetValues(),
+	Natures: game.MapNatures([]game.NatureSet{
+		game.NsWater,
+	}),
+}
 
-func MakeSubstitution() game.Action {
-	nature := game.NsYin
+var GamabuntaActions []game.Action = []game.Action{
+	Surf,
+}
+
+var SummonGamabunta = MakeSummonGamabunta()
+
+func MakeSummonGamabunta() game.Action {
+	nature := game.NsYang
 	config := game.ActionConfig{
-		Name:        "Substitution",
+		Name:        "Summon Gamabunta",
 		Nature:      &nature,
 		Jutsu:       game.Ninjutsu,
-		Description: "Summons a substitute to take damage. Pay 1/4th of Max HP.",
+		Description: "",
+		Cooldown:    game.Ptr(10),
 	}
 
 	return game.Action{
-		ID:              uuid.MustParse("e2a1768a-fb9a-5891-a703-a20cf8bcbd6e"),
+		ID:              uuid.MustParse("17967cc9-5b82-43d4-9cd6-3a4a2c70ca39"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.NoneFilter,
@@ -29,35 +55,20 @@ func MakeSubstitution() game.Action {
 			Filter:   game.ComposeGF(game.SourceIsAlive, game.SourceHasHpRatio(0.25)),
 			Delta: func(p, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
 				transactions := []game.GameTransaction{}
-				s, ok := g.GetSource(context)
-				if !ok {
-					return transactions
-				}
-				source := s.Resolve(g)
-				damage := mutations.RatioDamage(0.25)
-				damage_context := game.MakeContextForActor(s)
 
 				mut := game.GameMutation{
 					Delta: func(mp, mg game.Game, mc game.Context) game.Game {
 						mg.UpdateActor(*mc.SourceActorID, func(a game.Actor) game.Actor {
-							hp := game.Round(float64(source.Stats[game.StatHP]) * 0.25)
 							summon := game.MakeActor(
-								game.ActorDef{
-									ActorID:   uuid.New(),
-									SpriteURL: "/sprites/sub_64.png",
-									Name:      source.Name,
-									Stats: map[game.ActorStat]int{
-										game.StatHP: hp,
-									},
-								},
+								Gamabunta,
 								a.PlayerID,
 								a.Experience,
 								nil,
 								nil,
-								[]game.Action{},
+								GamabuntaActions,
 								map[game.ActorStat]int{},
 							)
-							a.SetSummonFromActor(&summon, true)
+							a.SetSummonFromActor(&summon, false)
 							return a
 						})
 						return mg
@@ -66,7 +77,6 @@ func MakeSubstitution() game.Action {
 
 				transactions = append(
 					transactions,
-					game.MakeTransaction(damage, damage_context),
 					game.MakeTransaction(mut, context),
 				)
 

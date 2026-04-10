@@ -370,8 +370,8 @@ func MakeActor(
 			StatAccuracy:      0,
 		},
 		AuxStats: maps.Clone(auxStats),
-		Actions: actions,
-		Summon:  nil,
+		Actions:  actions,
+		Summon:   nil,
 	}
 }
 
@@ -675,12 +675,23 @@ func resolveActor(actor Actor, g Game, bypassModifiers bool) ResolvedActor {
 	return resolved
 }
 
+func (a Actor) getActor() Actor {
+	actor := a
+	if actor.Summon != nil && !actor.Summon.Proxy {
+		form := actor.Summon.Actor
+		actor.ActorDef = form.ActorDef
+		actor.Actions = form.Actions
+	}
+
+	return actor
+}
 func (a Actor) ResolveModifierless(g Game) ResolvedActor {
-	return resolveActor(a, g, true)
+	return resolveActor(a.getActor(), g, true)
 }
 func (a Actor) Resolve(g Game) ResolvedActor {
-	resolved := resolveActor(a, g, false)
-	pre := a.ResolveModifierless(g)
+	actor := a.getActor()
+	resolved := resolveActor(actor, g, false)
+	pre := resolveActor(actor, g, true)
 	resolved.PreStats = maps.Clone(pre.Stats)
 
 	return resolved
