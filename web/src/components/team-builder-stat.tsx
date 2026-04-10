@@ -29,7 +29,7 @@ const STAT_NAMES: ActorStats<string> = {
 
 function TeamBuilderStatGuage({ baseStat }: { baseStat: number }) {
   return (
-    <div className="relative bg-gray-600 rounded-md h-6 w-60">
+    <div className="relative bg-gray-600 rounded-md h-6 w-full min-w-40">
       <div
         className="absolute top-0 left-0 rounded-md h-6 bg-white"
         style={{
@@ -101,7 +101,7 @@ function TeamBuilderStat({
       <td>
         <TeamBuilderStatGuage baseStat={base.stats[stat]} />
       </td>
-      <td className="px-2">
+      <td className="px-2 w-12">
         <Input
           className="w-16"
           value={localAux}

@@ -16,7 +16,7 @@ func MakeTailwind() game.Action {
 		Name:        "Tailwind",
 		Nature:      &nature,
 		Jutsu:       game.Ninjutsu,
-		Description: "Doubles the speed of the user's party for 4 turns. This effect cannot stack.",
+		Description: "Doubles the speed of the user's party for 4 turns. This effect does not stack.",
 	}
 	return game.Action{
 		ID:              uuid.MustParse("f0e7a99d-93ff-502a-b07c-6479f9a1fc30"),

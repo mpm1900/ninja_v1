@@ -503,7 +503,6 @@ function RouteComponent() {
                               data={actions.data.filter((a) =>
                                 def.action_IDs.includes(a.ID)
                               )}
-                              enabled
                               rowSelection={Object.fromEntries(
                                 actors[selected_index]?.config.action_IDs?.map(
                                   (id) => [id, true]

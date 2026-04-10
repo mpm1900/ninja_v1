@@ -131,7 +131,6 @@ function App() {
                         (a) => a.actor_ID === row.original.actor_ID
                       )!
                     }
-                    enabled={game.status == 'idle'}
                   />
                 )
               }

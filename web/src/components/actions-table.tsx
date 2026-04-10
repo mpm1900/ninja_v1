@@ -30,10 +30,16 @@ const columns = [
     id: 'select',
     header: ({ table }) =>
       `${table.getSelectedRowModel().rows.length}/${(table.options.meta as any).total}`,
-    cell: ({ row }) => (
+    cell: ({ row, table }) => (
       <Checkbox
         checked={row.getIsSelected()}
-        disabled={row.original.locked || !row.getCanSelect()}
+        disabled={
+          !row.getIsSelected() &&
+          (row.original.locked ||
+            !row.getCanSelect() ||
+            (table.options.meta as any).total ==
+              table.getSelectedRowModel().rows.length)
+        }
       />
     ),
   }),
@@ -49,7 +55,7 @@ const columns = [
     ),
   }),
   helper.accessor('config.nature', {
-    header: 'nature',
+    header: 'Nature',
     cell: ({ row }) =>
       row.original.config.nature ? (
         <NatureBadge nature={row.original.config.nature} />
@@ -58,7 +64,7 @@ const columns = [
       ),
   }),
   helper.accessor('config.stat', {
-    header: 'stat',
+    header: 'Stat',
     cell: ({ row }) =>
       row.original.config.stat ? (
         <StatBadge
@@ -70,31 +76,32 @@ const columns = [
       ),
   }),
   helper.accessor('config.power', {
-    header: 'power',
+    header: 'Power',
     cell: ({ row }) => row.original.config.power ?? '-',
   }),
   helper.accessor('config.accuracy', {
-    header: 'accuracy',
+    header: 'Accuracy',
     cell: ({ row }) =>
       row.original.config.accuracy ? `${row.original.config.accuracy}%` : '-',
   }),
   helper.accessor('config.cooldown', {
-    header: 'cooldown',
+    header: 'C/D',
     cell: ({ row }) => row.original.config.cooldown ?? '-',
+  }),
+  helper.accessor('config.description', {
+    header: 'Description',
   }),
 ]
 
 function ActionsTable({
   total,
   data,
-  enabled,
   rowSelection,
   onRowSelectionChange,
   subRow,
 }: {
   total: number
   data: Action[]
-  enabled: boolean
   rowSelection: RowSelectionState
   onRowSelectionChange: (rowSelection: RowSelectionState) => void
   subRow?: (props: { row: Row<Action> }) => ReactNode
@@ -106,7 +113,7 @@ function ActionsTable({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    enableRowSelection: enabled && total > Object.keys(rowSelection).length,
+    enableRowSelection: total > Object.keys(rowSelection).length,
     onRowSelectionChange: (updater) => {
       onRowSelectionChange(functionalUpdate(updater, rowSelection))
     },
@@ -142,9 +149,7 @@ function ActionsTable({
       <TableBody>
         {table.getRowModel().rows.map((row) => (
           <Fragment key={row.id}>
-            <TableRow
-              onClick={enabled ? () => row.toggleSelected() : undefined}
-            >
+            <TableRow onClick={() => row.toggleSelected()}>
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -16,7 +16,7 @@ func MakeHaze() game.Action {
 		Name:        "Haze",
 		Nature:      &nature,
 		Jutsu:       game.Ninjutsu,
-		Description: "Nullified all stat ups/downs.",
+		Description: "Nullifies all stat ups/downs.",
 	}
 	return game.Action{
 		ID:              uuid.MustParse("63db7718-b73b-5f31-8b1f-c2dfa5bd5c65"),
