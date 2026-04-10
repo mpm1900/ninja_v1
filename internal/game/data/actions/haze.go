@@ -46,7 +46,7 @@ func MakeHaze() game.Action {
 				su := modifiers.Haze
 				su.Duration = 5
 				modifiers := []game.Modifier{su}
-				mutation := mutations.AddModifiers(false, false, modifiers...)
+				mutation := mutations.AddModifiers(false, modifiers...)
 				context.ParentActorID = nil
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)

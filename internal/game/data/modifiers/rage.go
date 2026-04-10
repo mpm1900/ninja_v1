@@ -30,7 +30,7 @@ var RageTrigger game.Trigger = game.Trigger{
 				SourceActorID:  &target.ID,
 				ParentActorID:  &target.ID,
 			}
-			mutation := mutations.AddModifiers(false, false, AttackUpSource)
+			mutation := mutations.AddModifiers(false, AttackUpSource)
 			transaction := game.MakeTransaction(mutation, mut_ctx)
 			transactions = append(transactions, transaction)
 

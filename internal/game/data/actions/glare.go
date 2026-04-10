@@ -36,7 +36,7 @@ func MakeGlare() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				mutation := mutations.AddModifiers(true, false, modifiers.Stunned)
+				mutation := mutations.AddModifiers(false, modifiers.Stunned)
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)
 

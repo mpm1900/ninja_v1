@@ -21,7 +21,7 @@ var SpeedBoostTrigger game.Trigger = game.Trigger{
 		Delta: func(p, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
 			transactions := []game.GameTransaction{}
 
-			mutation := mutations.AddModifiers(false, false, SpeedUpSource)
+			mutation := mutations.AddModifiers(false, SpeedUpSource)
 			transactions = append(transactions, game.MakeTransaction(mutation, context))
 			return transactions
 		},

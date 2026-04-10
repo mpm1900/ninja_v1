@@ -21,6 +21,7 @@ var Protected = game.Modifier{
 			game.ComposeAF(game.ActiveFilter, game.SourceFilter),
 			func(g game.Game, a game.Actor, c game.Context) game.Actor {
 				a.Protected = true
+				a.Safeguarded = true
 				return a
 			},
 		),

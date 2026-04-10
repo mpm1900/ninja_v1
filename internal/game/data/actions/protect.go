@@ -35,7 +35,7 @@ func MakeProtect() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				mutation := mutations.AddModifiers(false, false, modifiers.Protected)
+				mutation := mutations.AddModifiers(false, modifiers.Protected)
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)
 

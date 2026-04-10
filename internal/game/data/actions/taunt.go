@@ -36,7 +36,7 @@ func MakeTaunt() game.Action {
 				if len(targets) == 1 {
 					context.ParentActorID = &targets[0].ID
 				}
-				mutation := mutations.AddModifiers(true, false, modifiers.Taunted)
+				mutation := mutations.AddModifiers(false, modifiers.Taunted)
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)
 

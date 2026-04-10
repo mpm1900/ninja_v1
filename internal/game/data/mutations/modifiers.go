@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func AddModifiers(checkProtected bool, checkWarded bool, modifiers ...game.Modifier) game.GameMutation {
+func AddModifiers(checkWarded bool, modifiers ...game.Modifier) game.GameMutation {
 	return game.GameMutation{
 		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			for _, modifier := range modifiers {
@@ -29,15 +29,19 @@ func AddModifiers(checkProtected bool, checkWarded bool, modifiers ...game.Modif
 					resolved := actor.Resolve(g)
 
 					/**
-					 * Filtering out via protected or warded check
+					 * Filtering out via safeguarded, and warded check
 					 */
-					if checkProtected && resolved.Protected {
+					if context.SourcePlayerID != nil {
+						fmt.Println(modifier.Name, resolved.Safeguarded, *context.SourcePlayerID, resolved.PlayerID)
+					}
+					if resolved.Safeguarded && context.SourcePlayerID != nil && resolved.PlayerID != *context.SourcePlayerID {
 						mod_tx.Context.FilterOutTarget(actor)
 
 						context.SourceActorID = &actor.ID
-						g.PushLog(game.NewLogContext("| $source$ was protected.", context.WithSource(actor.ID)))
+						g.PushLog(game.NewLogContext("| $source$ was safeguarded.", context.WithSource(actor.ID)))
 						continue
-					} else if checkWarded && resolved.Warded {
+					}
+					if checkWarded && resolved.Warded {
 						mod_tx.Context.FilterOutTarget(actor)
 
 						context.SourceActorID = &actor.ID

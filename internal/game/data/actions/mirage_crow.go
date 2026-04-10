@@ -42,12 +42,9 @@ func MakeMirageCrow() game.Action {
 
 				targets := g.GetTargets(context)
 				for _, target := range targets {
-					mut_ctx := game.Context{
-						SourcePlayerID: &target.PlayerID,
-						SourceActorID:  &target.ID,
-						ParentActorID:  &target.ID,
-					}
-					mutation := mutations.AddModifiers(true, false, modifiers.ChakraAttackDown2Source)
+					mut_ctx := context
+					mut_ctx.TargetActorIDs = []uuid.UUID{target.ID}
+					mutation := mutations.AddModifiers(false, modifiers.ChakraAttackDown2Target)
 					transaction := game.MakeTransaction(mutation, mut_ctx)
 					transactions = append(transactions, transaction)
 				}

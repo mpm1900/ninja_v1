@@ -168,8 +168,10 @@ type ActorState struct {
 	PositionID *uuid.UUID `json:"position_ID"`
 	// [Protected]
 	// - protected units cannot be damaged by actions
-	// - protected units cannot be targeted by enemy actions
 	Protected bool `json:"protected"`
+	// [Safeguarded]
+	// - safeguarded units cannot gain enemy modifiers
+	Safeguarded bool `json:"safeguarded"`
 	// [Warded]
 	// - warded units are immune to the secondary effects of attacking actions
 	Warded bool `json:"warded"`
@@ -350,6 +352,8 @@ func MakeActor(
 			ActionLocked:       false,
 			SwitchLocked:       false,
 			Protected:          false,
+			Safeguarded:        false,
+			Warded:             false,
 			StabMultiplier:     1.5,
 			Reflect:            0.0,
 			Immortal:           false,
@@ -359,7 +363,6 @@ func MakeActor(
 			Statused:           false,
 			Sleeping:           false,
 			SleepCounter:       0,
-			Warded:             false,
 		},
 		DamageMultipliers: map[AttackStat]float64{
 			Attack:       1.0,

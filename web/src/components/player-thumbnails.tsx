@@ -3,6 +3,7 @@ import { useStore } from '@tanstack/react-store'
 import { ActorThumbnail } from './actor-thumbnail'
 import { gameStore } from '#/lib/stores/game'
 import { clientsStore } from '#/lib/stores/clients'
+import { ActorTooltip } from './actor-tooltip'
 
 function PlayerThumbnails({ player_ID }: { player_ID: string }) {
   const client = useStore(clientsStore, (s) => s.me)
@@ -13,17 +14,18 @@ function PlayerThumbnails({ player_ID }: { player_ID: string }) {
       {actors
         .filter((a) => a.player_ID === player_ID)
         .map((a, i) => (
-          <ActorThumbnail
-            key={a.ID}
-            actor={a}
-            index={i}
-            showHealthBar={is_player}
-            showRing
-            hidden={!is_player && !a.seen && !a.position_ID}
-            className={cn({
-              'opacity-40': !a.position_ID,
-            })}
-          />
+          <ActorTooltip key={a.ID} actor={a} disabled={!is_player}>
+            <ActorThumbnail
+              actor={a}
+              index={i}
+              showHealthBar={is_player}
+              showRing
+              hidden={!is_player && !a.seen && !a.position_ID}
+              className={cn({
+                'opacity-40': !a.position_ID,
+              })}
+            />
+          </ActorTooltip>
         ))}
     </div>
   )

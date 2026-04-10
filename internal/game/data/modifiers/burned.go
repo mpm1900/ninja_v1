@@ -41,7 +41,7 @@ var Burned game.Modifier = game.Modifier{
 		game.MakeActorMutation(
 			&burnedID,
 			game.MutPriorityPostStagedStats,
-			game.ComposeAF(game.SourceFilter, game.ActiveFilter),
+			game.ComposeAF(game.TargetFilter, game.ActiveFilter),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {
 				if actor.Statused {
 					return actor

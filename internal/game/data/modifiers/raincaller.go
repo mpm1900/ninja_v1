@@ -24,7 +24,7 @@ var RaincallerTrigger game.Trigger = game.Trigger{
 
 			mod := HeavyRain
 			mod.Duration = 4
-			mutation := mutations.AddModifiers(false, false, mod)
+			mutation := mutations.AddModifiers(false, mod)
 			transaction := game.MakeTransaction(mutation, game.NewContext())
 			transactions = append(transactions, transaction)
 
