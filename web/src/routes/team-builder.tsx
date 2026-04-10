@@ -43,6 +43,8 @@ import { useForm, useStore } from '@tanstack/react-form'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
+import { getTotalBaseStats } from '#/lib/game/actor'
+import { cn } from '#/lib/utils'
 
 export const Route = createFileRoute('/team-builder')({
   component: RouteComponent,
@@ -381,12 +383,13 @@ function RouteComponent() {
                             <table className="flex-1">
                               <tbody>
                                 <tr>
-                                  <td colSpan={3}>Stats</td>
+                                  <td colSpan={1}>Stats</td>
+                                  <td colSpan={1} className='text-end w-8 p-2 whitespace-nowrap font-black'>{getTotalBaseStats(def)}</td>
                                   <td
-                                    colSpan={2}
-                                    className={
+                                    colSpan={3}
+                                    className={cn('text-end',
                                       total > 64 ? 'text-destructive' : ''
-                                    }
+                                    )}
                                   >
                                     {total}
                                     /64

@@ -483,7 +483,7 @@ func resolve(actor Actor, pre Actor) ResolvedActor {
 }
 
 func MapBaseStat(stat, level int, focus float64, ev int) int {
-	base := float64((stat * 2) + 15)
+	base := float64((stat * 2) + 31)
 	ratio := float64((base+(float64(ev)))*float64(level)) / 100
 	return Round((ratio + 5) * focus)
 }
