@@ -15,6 +15,11 @@ const gameStore = new Store<Game>({
   log: [],
   active_transaction: null,
   queued_actions: {},
+  applied_game_state_tx: [],
+  state: {
+    terrain: 'none',
+    weather: 'none'
+  }
 })
 
 export { gameStore }

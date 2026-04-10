@@ -21,18 +21,20 @@ type DamageTerms struct {
 }
 
 type DamageConfig struct {
-	Critical  float64
-	Random    float64
-	Repeat    bool
-	RepeatMax int
+	Critical     float64
+	Random       float64
+	IgnoreStages bool
+	Repeat       bool
+	RepeatMax    int
 }
 
 func NewDamageConfig(critical float64, random float64) DamageConfig {
 	return DamageConfig{
-		Critical:  critical,
-		Random:    random,
-		Repeat:    false,
-		RepeatMax: 0,
+		Critical:     critical,
+		Random:       random,
+		IgnoreStages: false,
+		Repeat:       false,
+		RepeatMax:    0,
 	}
 }
 
@@ -68,6 +70,7 @@ func GetStabModifier(source ResolvedActor, nature *NatureSet) float64 {
 func GetDamage(
 	source ResolvedActor,
 	targets []ResolvedActor,
+	ignoreStages bool,
 	targetsCount int,
 	attack AttackStat,
 	defense DefenseStat,
@@ -95,6 +98,9 @@ func GetDamage(
 		 * This piece is important. Critical hits ignore target stat changes.
 		 */
 		if critical > 1.0 {
+			ignoreStages = true
+		}
+		if ignoreStages {
 			d_base = float64(target.PreStats[ActorStat(defense)])
 		}
 		d_mod := 1.0

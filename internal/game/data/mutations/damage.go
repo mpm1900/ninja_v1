@@ -31,7 +31,7 @@ func getDefenseStat(a game.AttackStat) game.DefenseStat {
 }
 
 // returns if target is still alive after
-func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, updater func(game.Actor) game.Actor) bool {
+func ApplyDamageWith(g *game.Game, source_ID *uuid.UUID, target game.ResolvedActor, damage int, updater func(game.Actor) game.Actor) bool {
 	alive := target.Alive
 	if !target.Alive {
 		return alive
@@ -51,6 +51,9 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 			g.PushLog(game.NewLogContext("| $source$'s summon took the attack.", logCtx))
 		} else {
 			a.Damage += clampDamage(damage)
+			if source_ID != nil {
+				a.LastRecievedDamage[*source_ID] = clampDamage(damage)
+			}
 			ratio := min(int(float64(damage)*100/float64(hp)), 100)
 			if ratio > 0 {
 				g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ lost %d%% HP.", ratio), logCtx))
@@ -78,8 +81,8 @@ func ApplyDamageWith(g *game.Game, target game.ResolvedActor, damage int, update
 }
 
 // returns if target is still alive after
-func ApplyDamage(g *game.Game, target game.ResolvedActor, damage int) bool {
-	return ApplyDamageWith(g, target, damage, nil)
+func ApplyDamage(g *game.Game, source_ID *uuid.UUID, target game.ResolvedActor, damage int) bool {
+	return ApplyDamageWith(g, source_ID, target, damage, nil)
 }
 
 func PureDamageWith(damage int, trigger bool, updater func(game.Actor) game.Actor) game.GameMutation {
@@ -89,7 +92,7 @@ func PureDamageWith(damage int, trigger bool, updater func(game.Actor) game.Acto
 			targets := g.GetTargets(context)
 			for _, t := range targets {
 				target := t.Resolve(g)
-				ApplyDamageWith(&g, target, damage, updater)
+				ApplyDamageWith(&g, context.SourceActorID, target, damage, updater)
 				if trigger && damage > 0 {
 					g.On(game.OnDamageRecieve, &context)
 				}
@@ -110,7 +113,7 @@ func RatioDamageWith(ratio float64, updater func(game.Actor) game.Actor) game.Ga
 			for _, t := range targets {
 				target := t.Resolve(g)
 				damage := game.Round(float64(target.Stats[game.StatHP]) * ratio)
-				ApplyDamageWith(&g, target, damage, updater)
+				ApplyDamageWith(&g, context.SourceActorID, target, damage, updater)
 			}
 			return g
 		},
@@ -195,6 +198,7 @@ func (e *damageHandler) resolveTargetHit(g *game.Game, targetIndex int, target g
 	damages := game.GetDamage(
 		e.source,
 		[]game.ResolvedActor{target},
+		e.config.IgnoreStages,
 		len(e.resolved),
 		*e.action.Stat,
 		e.defense,
@@ -221,7 +225,7 @@ func (e *damageHandler) resolveTargetHit(g *game.Game, targetIndex int, target g
 	return false
 }
 func (e *damageHandler) applySingleHit(g *game.Game, target game.ResolvedActor, damage int) {
-	alive := ApplyDamage(g, target, damage)
+	alive := ApplyDamage(g, &e.source.ID, target, damage)
 
 	if damage > 0 {
 		g.On(game.OnDamageRecieve, &e.context)

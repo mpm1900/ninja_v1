@@ -91,6 +91,7 @@ type ActorState = {
   damage: number
   position_ID: string
   last_used_action_ID: string | null
+  // last_recieved_damage: Record<string, number>
   action_locked: boolean
   switch_locked: boolean
   seen: boolean

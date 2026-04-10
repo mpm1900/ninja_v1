@@ -151,11 +151,10 @@ const (
  * - the commonly modified fields
  */
 type ActorState struct {
-	State            ActorStateType `json:"state"`
-	ActiveTurns      int            `json:"-"`
-	InactiveTurns    int            `json:"-"`
-	LastUsedActionID *uuid.UUID     `json:"last_used_action_ID"`
-	Seen             bool           `json:"seen"`
+	State         ActorStateType `json:"state"`
+	ActiveTurns   int            `json:"-"`
+	InactiveTurns int            `json:"-"`
+	Seen          bool           `json:"seen"`
 	// [Alive] whether or not the actor is alive, could
 	// - could be computed, but this is here to not have to call .Resolve() on filters
 	Alive bool `json:"alive"`
@@ -197,6 +196,11 @@ type ActorState struct {
 	Paralyzed    bool `json:"paralyzed"`
 	Sleeping     bool `json:"sleeping"`
 	SleepCounter int  `json:"-"`
+	/**
+	 * Metadata fields used for tracking and filters
+	 */
+	LastUsedActionID   *uuid.UUID        `json:"last_used_action_ID"`
+	LastRecievedDamage map[uuid.UUID]int `json:"-"`
 }
 
 type Summon struct {
@@ -332,24 +336,25 @@ func MakeActor(
 		Ability:    ability,
 		Immunities: []uuid.UUID{},
 		ActorState: ActorState{
-			ActiveTurns:      0,
-			Alive:            true,
-			Damage:           0,
-			InactiveTurns:    0,
-			PositionID:       nil,
-			LastUsedActionID: nil,
-			ActionLocked:     false,
-			SwitchLocked:     false,
-			Protected:        false,
-			Reflect:          0.0,
-			Immortal:         false,
-			Seen:             false,
-			StaminaDamage:    0,
-			Stunned:          false,
-			Statused:         false,
-			Sleeping:         false,
-			SleepCounter:     0,
-			Warded:           false,
+			ActiveTurns:        0,
+			Alive:              true,
+			Damage:             0,
+			InactiveTurns:      0,
+			PositionID:         nil,
+			LastUsedActionID:   nil,
+			LastRecievedDamage: map[uuid.UUID]int{},
+			ActionLocked:       false,
+			SwitchLocked:       false,
+			Protected:          false,
+			Reflect:            0.0,
+			Immortal:           false,
+			Seen:               false,
+			StaminaDamage:      0,
+			Stunned:            false,
+			Statused:           false,
+			Sleeping:           false,
+			SleepCounter:       0,
+			Warded:             false,
 		},
 		DamageMultipliers: map[AttackStat]float64{
 			Attack:       1.0,
