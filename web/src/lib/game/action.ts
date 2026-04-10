@@ -15,6 +15,7 @@ type Action = {
     power?: number
     recoil?: number
     description: string
+    target_count?: number
   }
   locked: boolean
   cooldown: number | null

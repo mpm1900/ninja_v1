@@ -64,7 +64,7 @@ func GetStabModifier(source ResolvedActor, nature *NatureSet) float64 {
 		return 1.00
 	}
 
-	return 1.5
+	return source.StabMultiplier
 }
 
 func GetDamage(

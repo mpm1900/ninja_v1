@@ -146,12 +146,15 @@ const (
 	ActorStateIncorporeal ActorStateType = "incorporeal"
 )
 
+type ActorStance string
+
 /**
  * [ActorState]
  * - the commonly modified fields
  */
 type ActorState struct {
 	State         ActorStateType `json:"state"`
+	Stance        ActorStance    `json:"stance"`
 	ActiveTurns   int            `json:"-"`
 	InactiveTurns int            `json:"-"`
 	Seen          bool           `json:"seen"`
@@ -171,8 +174,9 @@ type ActorState struct {
 	// - warded units are immune to the secondary effects of attacking actions
 	Warded bool `json:"warded"`
 	// [Reflect] how much damage is reflected (PureDamage not affected)
-	Reflect  float64 `json:"-"`
-	Immortal bool    `json:"immortal"`
+	Reflect        float64 `json:"-"`
+	StabMultiplier float64 `json:"-"`
+	Immortal       bool    `json:"immortal"`
 	// [ActionLocked]
 	// - action locked units must use their last used action
 	// - if there there is no last used action, any action can be chosen
@@ -346,6 +350,7 @@ func MakeActor(
 			ActionLocked:       false,
 			SwitchLocked:       false,
 			Protected:          false,
+			StabMultiplier:     1.5,
 			Reflect:            0.0,
 			Immortal:           false,
 			Seen:               false,

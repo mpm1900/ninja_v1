@@ -140,7 +140,7 @@ type damageHandler struct {
 	sideEffectTxs      []game.GameTransaction
 }
 
-func newDamageExecution(g game.Game, action game.ActionConfig, config game.DamageConfig, context game.Context, source game.ResolvedActor) *damageHandler {
+func newDamageHandler(g game.Game, action game.ActionConfig, config game.DamageConfig, context game.Context, source game.ResolvedActor) *damageHandler {
 	resolved := resolveTargets(g, context)
 	return &damageHandler{
 		action:             action,
@@ -315,7 +315,7 @@ func NewDamage(action game.ActionConfig, config game.DamageConfig) game.GameMuta
 			}
 
 			source := s.Resolve(g)
-			exec := newDamageExecution(g, action, config, context, source)
+			exec := newDamageHandler(g, action, config, context, source)
 			exec.run(&g)
 
 			return g

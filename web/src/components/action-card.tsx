@@ -1,6 +1,6 @@
 import type { Action } from '#/lib/game/action'
 import { cn } from '#/lib/utils'
-import type { ComponentProps } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 import { NatureBadge } from './nature-badge'
 
 type ActionCardProps = ComponentProps<'button'> & {
@@ -63,9 +63,11 @@ function ActionCard({
                 <div className="text-[10px] uppercase tracking-wide text-destructive">
                   on cooldown
                 </div>
-              ) : disabled ? <div className="text-[10px] uppercase tracking-wide text-destructive">
-                disabled
-              </div> : (
+              ) : disabled ? (
+                <div className="text-[10px] uppercase tracking-wide text-destructive">
+                  disabled
+                </div>
+              ) : (
                 <div className="text-[10px] uppercase tracking-wide text-white/50">
                   {action.config.jutsu || '-'}
                 </div>
@@ -82,9 +84,9 @@ function ActionCard({
         <BrushEdge />
       </div>
 
-      <div className="flex [&>*]:flex-1 text-[11px] border-t border-b bg-white shadow-md z-2">
+      <div className="flex *:flex-1 text-[11px] border-t border-b bg-white shadow-md z-2">
         <StatChip label="Power" value={action.config.power ?? '-'} />
-        <StatChip label="Acc" value={accuracyLabel} />
+        <StatChip label={'Acc'} value={accuracyLabel} />
       </div>
       <div
         className={`flex-1 px-3 py-2 text-xs text-black font-bold rounded-b-md bg-[url('/paper.jpg')] relative`}
@@ -129,15 +131,25 @@ function BrushEdge() {
   )
 }
 
-function StatChip({ label, value }: { label: string; value: string | number }) {
+function StatChip({
+  label,
+  value,
+}: {
+  label?: ReactNode
+  value?: string | number
+}) {
   return (
-    <div className="py-1 flex items-center justify-center gap-1">
-      <div className="text-[9px] uppercase tracking-wide text-neutral-800">
-        {label}
-      </div>
-      <div className="text-xs font-semibold leading-tight text-zinc-900">
-        {value}
-      </div>
+    <div className="py-1 flex items-end justify-center gap-1">
+      {label && (
+        <div className="text-[9px] uppercase tracking-wide text-neutral-800">
+          {label}
+        </div>
+      )}
+      {value && (
+        <div className="text-xs font-semibold leading-tight text-zinc-900">
+          {value}
+        </div>
+      )}
     </div>
   )
 }

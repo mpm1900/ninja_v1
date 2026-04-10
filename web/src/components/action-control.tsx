@@ -1,9 +1,7 @@
 import { NULL_CONTEXT, type Context } from '#/lib/game/context'
 import { Button } from './ui/button'
 import { useStore } from '@tanstack/react-store'
-import {
-  sendContextMessage,
-} from '#/lib/stores/socket'
+import { sendContextMessage } from '#/lib/stores/socket'
 import { gameStore } from '#/lib/stores/game'
 import { clientsStore } from '#/lib/stores/clients'
 import { TargetButton } from './target-button'
@@ -11,6 +9,7 @@ import type { Action, ActionTransaction } from '#/lib/game/action'
 import { setActionID } from '#/lib/stores/battle-context'
 import { useValidateContext } from '#/hooks/use-validate-context'
 import { useGetTargets } from '#/hooks/use-get-targets'
+import { ChevronRight } from 'lucide-react'
 
 function ActionControl({
   action,
@@ -30,7 +29,9 @@ function ActionControl({
 
   const client = useStore(clientsStore, (c) => c.me!)
   const { context: t_context } = useGetTargets(context)
-  const actors = game.actors.filter((a) => t_context?.target_actor_IDs?.includes(a.ID))
+  const actors = game.actors.filter((a) =>
+    t_context?.target_actor_IDs?.includes(a.ID)
+  )
   const has_queued_action = game.queued_actions[context.source_actor_ID ?? '']
 
   if (!!staged) {
@@ -62,7 +63,7 @@ function ActionControl({
   }
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-2 min-w-xs">
       {action && (
         <div className="p-2 flex gap-2 justify-center">
           {actors.map((a) => (
@@ -82,10 +83,17 @@ function ActionControl({
               no targets available
             </span>
           )}
+          {actors.length == 0 && valid === true && (
+            <span className="text-muted-foreground/50 text-sm">
+              this action does not target
+            </span>
+          )}
         </div>
       )}
-      {enabled && action && valid && (
+
+      <div className="flex w-full justify-end">
         <Button
+          disabled={!(enabled && action && valid)}
           onClick={() => {
             sendContextMessage({
               type: 'push-action',
@@ -97,8 +105,9 @@ function ActionControl({
           }}
         >
           Select
+          <ChevronRight />
         </Button>
-      )}
+      </div>
     </div>
   )
 }
