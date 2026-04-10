@@ -92,7 +92,7 @@ function RouteComponent() {
               <RunningContext context={game.active_transaction?.context} />
             )}
           </div>
-          <div className="fixed bottom-0 px-4 flex left-0 z-10">
+          <div className="fixed bottom-4 left-8 flex z-10">
             {players.map((player) => (
               <PlayerPositions
                 key={player.ID}

@@ -28,7 +28,7 @@ function PlayerPositions({
   if (!player) return null
 
   return (
-    <div className="flex gap-8 py-4 px-4">
+    <div className="flex gap-8">
       {player.positions.map((pos) => {
         const targeted =
           target_IDs?.includes(pos.actor_ID ?? '') || pos_IDs?.includes(pos.ID)

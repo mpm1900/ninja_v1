@@ -31,7 +31,7 @@ function BattleCards({ actor }: { actor: Actor }) {
   )
   const action_locked = actor.action_locked && actor.last_used_action_ID != null
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-0 flex justify-center">
+    <div className="pointer-events-none fixed inset-x-0 bottom-6 z-0 flex justify-center">
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={actor.ID}
