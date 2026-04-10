@@ -85,7 +85,6 @@ function TeamBuilderStatGuage({ baseStat }: { baseStat: number }) {
 
 function TeamBuilderStat({
   total,
-  focus = 'none',
   base,
   stat,
   config,
@@ -98,6 +97,7 @@ function TeamBuilderStat({
   config: ActorConfig
   onConfigChange: (config: ActorConfig) => void
 }) {
+  const focus = config.focus ?? 'none'
   const detail = ACTOR_FOCUS_DETAILS[focus]
   const up = detail.up === stat
   const down = detail.down === stat

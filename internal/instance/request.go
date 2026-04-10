@@ -54,7 +54,7 @@ type Request struct {
 type HydratedActorConfig struct {
 	Ability  *game.Modifier
 	Actions  []game.Action
-	Focus    *game.ActorFocus
+	Focus    game.ActorFocus
 	Item     *game.Modifier
 	AuxStats map[game.ActorStat]int `json:"aux_stats"`
 }
@@ -90,11 +90,16 @@ func HydrateActorConfig(config ActorConfig, abilities []game.Modifier) HydratedA
 		}
 	}
 
+	focus := game.FocusNone
+	if config.Focus != nil {
+		focus = *config.Focus
+	}
+
 	return HydratedActorConfig{
 		Ability:  ability,
 		Actions:  actions,
 		AuxStats: config.AuxStats,
-		Focus:    config.Focus,
+		Focus:    focus,
 		Item:     item,
 	}
 }

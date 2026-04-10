@@ -8,11 +8,13 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
+  ComboboxTrigger,
+  ComboboxValue,
 } from './ui/combobox'
-import { CircleQuestionMark } from 'lucide-react'
-import { InputGroupAddon } from './ui/input-group'
+import { ChevronsUpDown, Plus } from 'lucide-react'
 import { natureIndexes, type NatureSet } from '#/lib/game/nature'
 import { NatureBadge } from './nature-badge'
+import { Button } from './ui/button'
 import { cn } from '#/lib/utils'
 
 function ActorCombobox({
@@ -47,41 +49,76 @@ function ActorCombobox({
       value={actor}
       onValueChange={handleValueChange}
     >
-      <ComboboxInput
-        className={cn(
-          'h-14 gap-2',
-          is_active && 'border-neutral-400 bg-input!',
-          className
-        )}
-        before={
-          actor ? (
-            <InputGroupAddon className="relative size-12 cursor-pointer">
-              <img
-                src={actor.sprite_url}
-                className="h-full w-full object-cover absolute inset-0 z-10 rounded-lg ml-1"
-                onClick={onClick}
-              />
-            </InputGroupAddon>
-          ) : (
-            <InputGroupAddon>
-              <CircleQuestionMark />
-            </InputGroupAddon>
-          )
+      <ComboboxTrigger
+        render={
+          <Button
+            variant="outline"
+            className={cn(
+              'relative justify-between font-normal h-16 px-2',
+              {
+                'bg-input!': is_active,
+              },
+              className
+            )}
+          >
+            <div className="flex gap-4">
+              {actor ? (
+                <img
+                  src={actor.sprite_url}
+                  className={cn(
+                    'size-12 p-1 bg-zinc-600 border border-zinc-900 rounded cursor-pointer',
+                    is_active && 'bg-zinc-300'
+                  )}
+                  onPointerDown={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onClick?.()
+                  }}
+                />
+              ) : (
+                <Plus className="text-muted-foreground/60 size-8" />
+              )}
+              <div className="text-left space-y-1">
+                <div
+                  className={cn(
+                    'font-semibold text-md',
+                    !is_active && 'text-muted-foreground!'
+                  )}
+                >
+                  <ComboboxValue placeholder="Select a shinobi..." />
+                </div>
+                {actor ? (
+                  <div className={cn('flex', !is_active && 'opacity-50')}>
+                    {(Object.keys(actor.natures) as Array<NatureSet>)
+                      .sort((a, b) => natureIndexes[a] - natureIndexes[b])
+                      .map((nature) => (
+                        <NatureBadge
+                          key={nature}
+                          nature={nature}
+                          className="text-xs block"
+                        />
+                      ))}
+                  </div>
+                ) : (
+                  <div className="text-xs text-muted-foreground/50 -mt-1">
+                    to add to your team
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="text-muted-foreground pr-3">
+              <ChevronsUpDown />
+            </div>
+          </Button>
         }
-        placeholder="Select a Shinobi"
-      >
-        {actor && (
-          <div>
-            {(Object.keys(actor.natures) as Array<NatureSet>)
-              .sort((a, b) => natureIndexes[a] - natureIndexes[b])
-              .map((nature) => (
-                <NatureBadge key={nature} nature={nature} />
-              ))}
-          </div>
-        )}
-      </ComboboxInput>
+      />
 
-      <ComboboxContent>
+      <ComboboxContent className="min-w-(--anchor-width) w-(--anchor-width) max-w-(--anchor-width)">
+        <ComboboxInput showTrigger={false} placeholder="Search" />
         <ComboboxEmpty>No Shinobi found.</ComboboxEmpty>
         <ComboboxList>
           {(actor) => (

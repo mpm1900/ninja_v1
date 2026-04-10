@@ -4,23 +4,10 @@ import { ActorCombobox } from '#/components/actor-combobox'
 import { AppHeader } from '#/components/app-header'
 import { FocusSelect } from '#/components/focus-select'
 import { ItemSelect } from '#/components/item-select'
-import { TeamBuilderStat } from '#/components/team-builder-stat'
 import { Button } from '#/components/ui/button'
-import { Field, FieldContent } from '#/components/ui/field'
+import { Field, FieldContent, FieldLabel } from '#/components/ui/field'
 import { Input } from '#/components/ui/input'
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-} from '#/components/ui/sidebar'
+import { SidebarInset, SidebarProvider } from '#/components/ui/sidebar'
 import { NULL_CONTEXT } from '#/lib/game/context'
 import { actionsQuery } from '#/lib/queries/actions'
 import { actorsQuery } from '#/lib/queries/actors'
@@ -33,7 +20,6 @@ import {
 } from '#/lib/stores/config'
 import {
   SAVED_TEAMS_KEY,
-  cloneTeamConfig,
   parseSavedTeamsJSON,
   serializeSavedTeams,
   upsertSavedTeam,
@@ -43,8 +29,31 @@ import { useForm, useStore } from '@tanstack/react-form'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
-import { getTotalBaseStats } from '#/lib/game/actor'
-import { cn } from '#/lib/utils'
+import { type ActorDef } from '#/lib/game/actor'
+import { TeamBuilderStats } from '#/components/team-builder-stats'
+import { Save, Swords } from 'lucide-react'
+import { TeamBuilderSidebar } from '#/components/team-builder-sidebar'
+
+function makeConfigFromDef(def: ActorDef): TeamActor {
+  return {
+    actor_ID: def.actor_ID,
+    config: {
+      ability_ID: def.abilities[0]?.ID ?? null,
+      item_ID: null,
+      action_IDs: [],
+      focus: 'none',
+      aux_stats: {
+        hp: 0,
+        stamina: 0,
+        speed: 0,
+        attack: 0,
+        defense: 0,
+        chakra_attack: 0,
+        chakra_defense: 0,
+      },
+    },
+  }
+}
 
 export const Route = createFileRoute('/team-builder')({
   component: RouteComponent,
@@ -105,15 +114,11 @@ function RouteComponent() {
   }
 
   const loadSavedTeam = (team: TeamConfig) => {
-    const loadedTeam = cloneTeamConfig(team)
-    form.setFieldValue('name', loadedTeam.name)
-    form.setFieldValue('actors', loadedTeam.actors)
+    form.setFieldValue('name', team.name)
+    form.setFieldValue('actors', team.actors)
     form.setFieldValue(
       'selected_index',
-      Math.min(
-        loadedTeam.selected_index,
-        Math.max(loadedTeam.actors.length - 1, 0)
-      )
+      Math.min(team.selected_index, Math.max(team.actors.length - 1, 0))
     )
   }
 
@@ -123,86 +128,32 @@ function RouteComponent() {
 
       <section className="flex flex-1 min-h-0 p-4 md:p-6">
         <SidebarProvider className="h-full min-h-0 w-full overflow-hidden rounded-xl border bg-background shadow-sm">
-          <Sidebar collapsible="none" className="border-r">
-            <SidebarHeader>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton size="lg" asChild>
-                    <a href="#">
-                      <div className="flex flex-col gap-0.5 leading-none">
-                        <span className="font-medium">Team Builder</span>
-                        <span className="text-xs text-muted-foreground">
-                          v1.0.0
-                        </span>
-                      </div>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarHeader>
-
-            <SidebarContent>
-              <SidebarGroup>
-                <SidebarGroupLabel>Teams</SidebarGroupLabel>
-                <SidebarGroupContent>
-                  <SidebarMenu className="gap-1">
-                    {savedTeams.length === 0 ? (
-                      <SidebarMenuItem>
-                        <SidebarMenuButton disabled>
-                          <span className="text-muted-foreground">
-                            No saved teams
-                          </span>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ) : (
-                      savedTeams.map((team) => (
-                        <SidebarMenuItem key={team.name}>
-                          <SidebarMenuButton
-                            onClick={() => loadSavedTeam(team)}
-                          >
-                            <span>{team.name}</span>
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      ))
-                    )}
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </SidebarGroup>
-            </SidebarContent>
-          </Sidebar>
+          <TeamBuilderSidebar
+            onLoadTeam={loadSavedTeam}
+            savedTeams={savedTeams}
+          />
 
           <SidebarInset className="min-h-0">
             <div className="flex h-full min-h-0 flex-row-reverse items-stretch p-4 gap-8">
               <div>
-                <div className="mb-4 flex items-center justify-between gap-6">
-                  <form.Field name="name">
-                    {(field) => (
-                      <Field>
-                        <FieldContent>
-                          <Input
-                            placeholder="Team Name"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                          />
-                        </FieldContent>
-                      </Field>
-                    )}
-                  </form.Field>
+                <div className="mb-4 flex items-center justify-end gap-6">
                   <form.Subscribe>
                     {({ isValid, isSubmitting, isValidating, values }) => {
                       return (
                         <div className="flex gap-2">
                           <Button
+                            size="icon"
                             disabled={!values.name.trim()}
                             onClick={() => saveTeam(values as TeamConfig)}
                           >
-                            Save Team
+                            <Save />
                           </Button>
                           <Button
+                            size="icon"
                             disabled={!isValid || isSubmitting || isValidating}
                             onClick={form.handleSubmit}
                           >
-                            Load Team
+                            <Swords />
                           </Button>
                         </div>
                       )
@@ -220,7 +171,7 @@ function RouteComponent() {
                       })}
                     >
                       {({ selected, active }) => (
-                        <div className="space-y-2">
+                        <div className="flex flex-col gap-2 min-w-sm">
                           <div className="">Team: {selected.length}/6</div>
                           {field.state.value.map((_, i) => (
                             <form.Field key={i} name={`actors[${i}]`}>
@@ -230,25 +181,9 @@ function RouteComponent() {
                                   selected={selected}
                                   value={actorID.state.value?.actor_ID}
                                   onValueChange={(actor) => {
-                                    actorID.handleChange({
-                                      actor_ID: actor.actor_ID,
-                                      config: {
-                                        ability_ID:
-                                          actor.abilities[0]?.ID ?? null,
-                                        item_ID: null,
-                                        action_IDs: [],
-                                        focus: 'none',
-                                        aux_stats: {
-                                          hp: 0,
-                                          stamina: 0,
-                                          speed: 0,
-                                          attack: 0,
-                                          defense: 0,
-                                          chakra_attack: 0,
-                                          chakra_defense: 0,
-                                        },
-                                      },
-                                    })
+                                    actorID.handleChange(
+                                      makeConfigFromDef(actor)
+                                    )
                                     form.setFieldValue('selected_index', i)
                                   }}
                                   onClick={() =>
@@ -264,24 +199,10 @@ function RouteComponent() {
                               selected={selected}
                               value={undefined}
                               onValueChange={(actor) => {
-                                form.pushFieldValue('actors', {
-                                  actor_ID: actor.actor_ID,
-                                  config: {
-                                    ability_ID: null,
-                                    item_ID: null,
-                                    action_IDs: [],
-                                    focus: 'none',
-                                    aux_stats: {
-                                      hp: 0,
-                                      stamina: 0,
-                                      speed: 0,
-                                      attack: 0,
-                                      defense: 0,
-                                      chakra_attack: 0,
-                                      chakra_defense: 0,
-                                    },
-                                  },
-                                })
+                                form.pushFieldValue(
+                                  'actors',
+                                  makeConfigFromDef(actor)
+                                )
                                 form.setFieldValue(
                                   'selected_index',
                                   selected.length
@@ -324,14 +245,30 @@ function RouteComponent() {
 
                   return (
                     <div className="flex-1 space-y-4 overflow-auto">
-                      <div className='flex justify-between items-center'>
-                        <div className="text-sm font-medium">
-                          Editing {def.name}
-                        </div>
-                        <Button size='sm' variant='destructive' onClick={() => {
-                          form.removeFieldValue('actors', selected_index)
-                        }}>
-                          Delete
+                      <div className="flex justify-between items-end gap-6">
+                        <form.Field name="name">
+                          {(field) => (
+                            <Field>
+                              <FieldLabel>Team Name</FieldLabel>
+                              <FieldContent>
+                                <Input
+                                  placeholder="Team Name"
+                                  value={field.state.value}
+                                  onChange={(e) =>
+                                    field.handleChange(e.target.value)
+                                  }
+                                />
+                              </FieldContent>
+                            </Field>
+                          )}
+                        </form.Field>
+                        <Button
+                          variant="destructive"
+                          onClick={() => {
+                            form.removeFieldValue('actors', selected_index)
+                          }}
+                        >
+                          Remove {def.name}
                         </Button>
                       </div>
 
@@ -380,116 +317,17 @@ function RouteComponent() {
                           }
                         >
                           {(total) => (
-                            <table className="flex-1">
-                              <tbody>
-                                <tr>
-                                  <td colSpan={1}>Stats</td>
-                                  <td colSpan={1} className='text-end w-8 p-2 whitespace-nowrap font-black'>{getTotalBaseStats(def)}</td>
-                                  <td
-                                    colSpan={3}
-                                    className={cn('text-end',
-                                      total > 64 ? 'text-destructive' : ''
-                                    )}
-                                  >
-                                    {total}
-                                    /64
-                                  </td>
-                                </tr>
-
-                                <TeamBuilderStat
-                                  total={total}
-                                  focus={actor.config.focus}
-                                  base={def}
-                                  stat="hp"
-                                  config={actor.config}
-                                  onConfigChange={(config) => {
-                                    form.setFieldValue(
-                                      `actors[${selected_index}].config`,
-                                      config
-                                    )
-                                  }}
-                                />
-                                <TeamBuilderStat
-                                  total={total}
-                                  focus={actor.config.focus}
-                                  base={def}
-                                  stat="stamina"
-                                  config={actor.config}
-                                  onConfigChange={(config) => {
-                                    form.setFieldValue(
-                                      `actors[${selected_index}].config`,
-                                      config
-                                    )
-                                  }}
-                                />
-
-                                <TeamBuilderStat
-                                  total={total}
-                                  focus={actor.config.focus}
-                                  base={def}
-                                  stat="attack"
-                                  config={actor.config}
-                                  onConfigChange={(config) => {
-                                    form.setFieldValue(
-                                      `actors[${selected_index}].config`,
-                                      config
-                                    )
-                                  }}
-                                />
-                                <TeamBuilderStat
-                                  total={total}
-                                  focus={actor.config.focus}
-                                  base={def}
-                                  stat="defense"
-                                  config={actor.config}
-                                  onConfigChange={(config) => {
-                                    form.setFieldValue(
-                                      `actors[${selected_index}].config`,
-                                      config
-                                    )
-                                  }}
-                                />
-                                <TeamBuilderStat
-                                  total={total}
-                                  focus={actor.config.focus}
-                                  base={def}
-                                  stat="chakra_attack"
-                                  config={actor.config}
-                                  onConfigChange={(config) => {
-                                    form.setFieldValue(
-                                      `actors[${selected_index}].config`,
-                                      config
-                                    )
-                                  }}
-                                />
-                                <TeamBuilderStat
-                                  total={total}
-                                  focus={actor.config.focus}
-                                  base={def}
-                                  stat="chakra_defense"
-                                  config={actor.config}
-                                  onConfigChange={(config) => {
-                                    form.setFieldValue(
-                                      `actors[${selected_index}].config`,
-                                      config
-                                    )
-                                  }}
-                                />
-                                <TeamBuilderStat
-                                  total={total}
-                                  focus={actor.config.focus}
-                                  base={def}
-                                  stat="speed"
-                                  config={actor.config}
-                                  onConfigChange={(config) => {
-                                    form.setFieldValue(
-                                      `actors[${selected_index}].config`,
-                                      config
-                                    )
-                                  }}
-                                />
-                              </tbody>
-                            </table>
+                            <TeamBuilderStats
+                              total={total}
+                              config={actor.config}
+                              def={def}
+                              onConfigChange={(config) => {
+                                form.setFieldValue(
+                                  `actors[${selected_index}].config`,
+                                  config
+                                )
+                              }}
+                            />
                           )}
                         </form.Subscribe>
                       </div>

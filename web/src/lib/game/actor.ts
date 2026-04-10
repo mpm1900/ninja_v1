@@ -65,10 +65,10 @@ const ACTOR_FOCUS_DETAILS: Record<ActorFocus, ActorFocusDetail> = {
   mindful: { up: 'chakra_defense', down: 'defense' },
   reserved: { up: 'chakra_defense', down: 'chakra_attack' },
   stoic: { up: 'chakra_defense', down: 'attack' },
-  agile: { up: 'defense', down: 'attack' },
-  hasty: { up: 'defense', down: 'defense' },
-  impulsive: { up: 'defense', down: 'chakra_attack' },
-  alert: { up: 'defense', down: 'chakra_defense' },
+  agile: { up: 'speed', down: 'attack' },
+  hasty: { up: 'speed', down: 'defense' },
+  impulsive: { up: 'speed', down: 'chakra_attack' },
+  alert: { up: 'speed', down: 'chakra_defense' },
 }
 
 type ActorDef = {

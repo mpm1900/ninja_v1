@@ -55,6 +55,7 @@ func MakeSubstitution() game.Action {
 								nil,
 								nil,
 								[]game.Action{},
+								game.FocusNone,
 								map[game.ActorStat]int{},
 							)
 							a.SetSummonFromActor(&summon, true)

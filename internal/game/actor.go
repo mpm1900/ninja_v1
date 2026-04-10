@@ -316,6 +316,7 @@ func MakeActor(
 	ability *Modifier,
 	item *Modifier,
 	actions []Action,
+	focus ActorFocus,
 	auxStats map[ActorStat]int,
 ) Actor {
 	clonedDef := def.Clone()
@@ -326,7 +327,7 @@ func MakeActor(
 		PlayerID:   playerID,
 		Level:      GetLevel(experience),
 		Experience: experience,
-		Focus:      FocusNone,
+		Focus:      focus,
 		Item:       item,
 		Ability:    ability,
 		Immunities: []uuid.UUID{},

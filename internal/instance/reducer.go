@@ -99,17 +99,18 @@ func Reducer(instance *Instance, request Request) int {
 			return none
 		}
 
-		for _, actor := range request.TeamConfig.Actors {
-			def, ok := data.ACTORS[actor.ActorID]
+		if len(request.TeamConfig.Actors) > player.TeamCapacity {
+			return none
+		}
+
+		teamActors := make([]game.Actor, len(request.TeamConfig.Actors))
+		for i, actorConfig := range request.TeamConfig.Actors {
+			def, ok := data.ACTORS[actorConfig.ActorID]
 			if !ok {
 				return none
 			}
 
-			hydrated := HydrateActorConfig(actor.Config, def.Abilities)
-			actors := instance.Game.GetActorsByPlayer(player.ID)
-			if len(actors) >= player.TeamCapacity {
-				return none
-			}
+			hydrated := HydrateActorConfig(actorConfig.Config, def.Abilities)
 
 			actor := game.MakeActor(
 				def,
@@ -118,10 +119,12 @@ func Reducer(instance *Instance, request Request) int {
 				hydrated.Ability,
 				hydrated.Item,
 				hydrated.Actions,
+				hydrated.Focus,
 				hydrated.AuxStats,
 			)
-			instance.Game.AddActor(actor)
+			teamActors[i] = actor
 		}
+		instance.Game.SetPlayerActors(request.ClientID, teamActors)
 		return state
 	case AddActor:
 		if request.Context.SourceActorID == nil {
@@ -164,6 +167,7 @@ func Reducer(instance *Instance, request Request) int {
 			ability,
 			hydrated.Item,
 			hydrated.Actions,
+			hydrated.Focus,
 			hydrated.AuxStats,
 		)
 		instance.Game.AddActor(actor)
@@ -193,9 +197,7 @@ func Reducer(instance *Instance, request Request) int {
 			if config.ActionIDs != nil {
 				a.SetActions(config.ActionIDs, data.ACTIONS)
 			}
-			if hydrated.Focus != nil {
-				a.Focus = *hydrated.Focus
-			}
+			a.Focus = hydrated.Focus
 			if hydrated.Ability != nil {
 				a.Ability = hydrated.Ability
 			}

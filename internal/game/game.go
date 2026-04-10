@@ -481,6 +481,17 @@ func (g *Game) RemoveActor(actorID uuid.UUID) {
 		return a.ID == actorID
 	})
 }
+func (g *Game) SetPlayerActors(playerID uuid.UUID, actors []Actor) {
+	result := make([]Actor, 0)
+	for _, a := range g.Actors {
+		if a.PlayerID != playerID {
+			actors = append(actors, a)
+		}
+	}
+
+	result = append(result, actors...)
+	g.Actors = result
+}
 
 func (g *Game) UpdateActor(actorID uuid.UUID, updater func(Actor) Actor) {
 	index := slices.IndexFunc(g.Actors, func(a Actor) bool {

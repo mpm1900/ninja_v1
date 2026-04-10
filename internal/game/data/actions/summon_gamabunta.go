@@ -66,6 +66,7 @@ func MakeSummonGamabunta() game.Action {
 								nil,
 								nil,
 								GamabuntaActions,
+								game.FocusNone,
 								map[game.ActorStat]int{},
 							)
 							a.SetSummonFromActor(&summon, false)
