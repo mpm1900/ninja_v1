@@ -31,9 +31,6 @@ func AddModifiers(checkWarded bool, modifiers ...game.Modifier) game.GameMutatio
 					/**
 					 * Filtering out via safeguarded, and warded check
 					 */
-					if context.SourcePlayerID != nil {
-						fmt.Println(modifier.Name, resolved.Safeguarded, *context.SourcePlayerID, resolved.PlayerID)
-					}
 					if resolved.Safeguarded && context.SourcePlayerID != nil && resolved.PlayerID != *context.SourcePlayerID {
 						mod_tx.Context.FilterOutTarget(actor)
 

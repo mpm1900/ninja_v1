@@ -163,6 +163,10 @@ func (i *Instance) RunGameActions() {
 			case game.TurnEnd:
 				if i.Game.Turn.Count > 0 {
 					i.Game.On(game.OnTurnEnd, nil)
+				} else {
+					for index := range i.Game.Actors {
+						i.Game.Actors[index].IncrementTurns()
+					}
 				}
 
 				for i.Game.Next() {
