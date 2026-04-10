@@ -1,0 +1,41 @@
+package actors
+
+import (
+	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/actions"
+
+	"github.com/google/uuid"
+)
+
+var Ginkaku = game.ActorDef{
+	ActorID:      uuid.MustParse("490b0f40-b921-44eb-9cc4-d6f375fd20c9"),
+	SpriteURL:    "/sprites/ginkaku_64.png",
+	Name:         "Ginkaku",
+	Affiliations: []string{game.AffKumo},
+
+	Stats: map[game.ActorStat]int{
+		game.StatHP:            100,
+		game.StatStamina:       130,
+		game.StatAttack:        134,
+		game.StatDefense:       110,
+		game.StatChakraAttack:  95,
+		game.StatChakraDefense: 100,
+		game.StatSpeed:         61,
+		game.StatEvasion:       100,
+		game.StatAccuracy:      100,
+	},
+	NatureDamage:     game.NewNatureSetValues(),
+	NatureResistance: game.NewNatureSetValues(),
+	Natures: game.MapNatures([]game.NatureSet{
+		game.NsEarth,
+		game.NsWind,
+		game.NsPure,
+	}),
+	Abilities:   []game.Modifier{},
+	ActionCount: 6,
+	ActionIDs: []uuid.UUID{
+		actions.Surf.ID,
+		actions.DragonDance.ID,
+		actions.LeafJab.ID,
+	},
+}
