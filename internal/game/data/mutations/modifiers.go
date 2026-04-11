@@ -54,8 +54,8 @@ func AddModifiers(checkWarded bool, modifiers ...game.Modifier) game.GameMutatio
 					continue
 				}
 
-				g.On(game.OnModifierAdd, &mod_tx.Context)
 				g.Modifiers = append(g.Modifiers, mod_tx)
+				g.On(game.OnModifierAdd, &mod_tx.Context)
 			}
 
 			return g

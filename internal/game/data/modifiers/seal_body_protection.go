@@ -12,7 +12,9 @@ var SealOfBodyProtectionTrigger game.Trigger = game.Trigger{
 	ID:         uuid.MustParse("0a179ac1-8811-5319-9c4b-bb23c1f57ed8"),
 	ModifierID: sobpID,
 	On:         game.OnModifierAdd,
-	Check:      game.Match__SourceActor_SourceActor, // TODO move below switches to a filter so we dont get black logs
+	Check: game.ComposeTF(game.Match__TargetActor_SourceActor, game.Modifier__IsOneOf(
+		AttackDownID, DefenseDownID, ChakraAttackDownID, ChakraDefenseDownID, SpeedDownID, AccuracyDownID, EvasionDownID,
+	)),
 	ActionMutation: game.ActionMutation{
 		Priority: game.ActionPriorityDefault,
 		Filter:   game.TrueGameFilter,
@@ -32,8 +34,14 @@ var SealOfBodyProtectionTrigger game.Trigger = game.Trigger{
 				switch *modifier.Mutation.GroupID {
 				case AttackDownID, DefenseDownID, ChakraAttackDownID, ChakraDefenseDownID, SpeedDownID, AccuracyDownID, EvasionDownID:
 					mut := mutations.RemoveModifierTxByID(*context.ModifierID)
-					transactions = append(transactions, game.MakeTransaction(mutations.ConsumeItem, context))
-					transactions = append(transactions, game.MakeTransaction(mut, context))
+
+					consume_ctx := context
+					targets := g.GetTargets(context)
+					for _, target := range targets {
+						consume_ctx.SourceActorID = &target.ID
+						transactions = append(transactions, game.MakeTransaction(mutations.ConsumeItem, consume_ctx))
+						transactions = append(transactions, game.MakeTransaction(mut, context))
+					}
 
 				default:
 					break

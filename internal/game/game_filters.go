@@ -1,5 +1,11 @@
 package game
 
+import (
+	"slices"
+
+	"github.com/google/uuid"
+)
+
 /**
  * Context Filters
  */
@@ -165,5 +171,19 @@ func Match__SourceActor_SourceActor(parent Game, game Game, context Context, mod
 func Source__IsAtOrBelowHealth(ratio float64) TriggerFilter {
 	return func(parent Game, game Game, context Context, modifier_tx Transaction[Modifier]) bool {
 		return SourceIsAtOrBelowHealth(ratio)(parent, game, modifier_tx.Context)
+	}
+}
+func Modifier__IsOneOf(modifierIDs ...uuid.UUID) TriggerFilter {
+	return func(parent Game, game Game, context Context, modifier_tx Transaction[Modifier]) bool {
+		if context.ModifierID == nil {
+			return false
+		}
+
+		modifier, ok := game.GetModifierTxByID(*context.ModifierID)
+		if !ok || modifier.Mutation.GroupID == nil {
+			return false
+		}
+
+		return slices.Contains(modifierIDs, *modifier.Mutation.GroupID)
 	}
 }
