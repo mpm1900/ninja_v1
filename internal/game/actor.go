@@ -488,7 +488,7 @@ func (a Actor) GetModifiers() []Modifier {
 	return modifiers
 }
 
-func resolve(actor Actor, pre Actor) ResolvedActor {
+func toResolved(actor Actor, pre Actor) ResolvedActor {
 	return ResolvedActor{
 		Actor:            actor,
 		BaseStats:        maps.Clone(pre.Stats),
@@ -556,13 +556,9 @@ func MapStagedStats(actor Actor) Actor {
 }
 
 func newActorContext(actor Actor) Context {
-	return Context{
-		SourcePlayerID:    &actor.PlayerID,
-		SourceActorID:     &actor.ID,
-		ParentActorID:     &actor.ID,
-		TargetActorIDs:    []uuid.UUID{},
-		TargetPositionIDs: []uuid.UUID{},
-	}
+	context := MakeContextForActor(actor)
+	context.TargetActorIDs = []uuid.UUID{}
+	return context
 }
 
 func GetActorModifiers(game Game) []Transaction[Modifier] {
@@ -626,66 +622,11 @@ func getContext(actor Actor, transactions []Transaction[Modifier], mutation Acto
 	return ResolveModifierTransactionContext(context, transactions, mutation.TransactionID)
 }
 
-func applyModifierMutation(gi Game, actor Actor, transactions []Transaction[Modifier], mutation ActorMutation) (Actor, bool) {
-	if mutation.ModifierGroupID != nil && actor.HasImmunity(*mutation.ModifierGroupID) {
-		return actor, false
-	}
-	context := getContext(actor, transactions, mutation)
-	g := gi.WithActor(actor)
-
-	tx := MakeTransaction(mutation.Mutation, context)
-	next, ok := ResolveTransaction(g, actor, tx, actor)
-	if !ok {
-		return actor, false
-	}
-
-	return next, true
-}
-
 func resolveActor(actor Actor, g Game, bypassModifiers bool) ResolvedActor {
-	applied := make(map[uuid.UUID]int)
-	mutations, transactions := GetAllActorMutations(g, bypassModifiers)
-	mapped := actor.Clone()
+	handler := newActorResolveHandler(actor, g, bypassModifiers)
 
-	for _, mutation := range mutations {
-		next, apply := applyModifierMutation(g, mapped, transactions, mutation)
-		if !apply {
-			continue
-		}
-
-		mapped = next
-		if mutation.ModifierGroupID != nil {
-			if count, ok := applied[*mutation.ModifierGroupID]; ok {
-				applied[*mutation.ModifierGroupID] = count + 1
-			} else {
-				applied[*mutation.ModifierGroupID] = 1
-			}
-		}
-	}
-
-	resolved := resolve(mapped, actor)
-	maps.Copy(resolved.AppliedModifiers, applied)
-	resolved.ResolvedNatureResistance = make(map[Nature]float64)
-	resolved.ResolvedNatureDamage = make(map[Nature]float64)
-
-	for nature := range resolved.NatureResistance {
-		incomingMultiplier := ResolveNatures(
-			[]Nature{nature},
-			NewNatureSetValues(),
-			resolved.NatureResistance,
-			resolved.Natures,
-		)
-
-		if incomingMultiplier == 0 {
-			resolved.ResolvedNatureResistance[nature] = 0
-			continue
-		}
-
-		resolved.ResolvedNatureResistance[nature] = 1.0 / incomingMultiplier
-		ns := NatureSet(nature)
-		resolved.ResolvedNatureDamage[nature] = GetStabModifier(resolved, &ns)
-	}
-
+	resolved := handler.resolveMutations()
+	handler.resolveNatures(&resolved)
 	return resolved
 }
 

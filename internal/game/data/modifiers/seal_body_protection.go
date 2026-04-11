@@ -12,9 +12,18 @@ var SealOfBodyProtectionTrigger game.Trigger = game.Trigger{
 	ID:         uuid.MustParse("0a179ac1-8811-5319-9c4b-bb23c1f57ed8"),
 	ModifierID: sobpID,
 	On:         game.OnModifierAdd,
-	Check: game.ComposeTF(game.Match__TargetActor_SourceActor, game.Modifier__IsOneOf(
-		AttackDownID, DefenseDownID, ChakraAttackDownID, ChakraDefenseDownID, SpeedDownID, AccuracyDownID, EvasionDownID,
-	)),
+	Check: game.ComposeTF(
+		game.Match__TargetActor_SourceActor,
+		game.Modifier__IsOneOf(
+			AttackDownID,
+			DefenseDownID,
+			ChakraAttackDownID,
+			ChakraDefenseDownID,
+			SpeedDownID,
+			AccuracyDownID,
+			EvasionDownID,
+		),
+	),
 	ActionMutation: game.ActionMutation{
 		Priority: game.ActionPriorityDefault,
 		Filter:   game.TrueGameFilter,
@@ -25,27 +34,12 @@ var SealOfBodyProtectionTrigger game.Trigger = game.Trigger{
 				return transactions
 			}
 
-			modifier, ok := g.GetModifierTxByID(*context.ModifierID)
-			if !ok {
-				return transactions
-			}
-
-			if modifier.Mutation.GroupID != nil {
-				switch *modifier.Mutation.GroupID {
-				case AttackDownID, DefenseDownID, ChakraAttackDownID, ChakraDefenseDownID, SpeedDownID, AccuracyDownID, EvasionDownID:
-					mut := mutations.RemoveModifierTxByID(*context.ModifierID)
-
-					consume_ctx := context
-					targets := g.GetTargets(context)
-					for _, target := range targets {
-						consume_ctx.SourceActorID = &target.ID
-						transactions = append(transactions, game.MakeTransaction(mutations.ConsumeItem, consume_ctx))
-						transactions = append(transactions, game.MakeTransaction(mut, context))
-					}
-
-				default:
-					break
-				}
+			removeDebuff := mutations.RemoveModifierTxByID(*context.ModifierID)
+			targets := g.GetTargets(context)
+			for _, target := range targets {
+				consumeCtx := game.MakeContextForActor(target)
+				transactions = append(transactions, game.MakeTransaction(mutations.ConsumeItem, consumeCtx))
+				transactions = append(transactions, game.MakeTransaction(removeDebuff, context))
 			}
 
 			return transactions

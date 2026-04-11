@@ -32,7 +32,7 @@ var SpeedBoost game.Modifier = game.Modifier{
 	ID:          speedBoostID,
 	GroupID:     &speedBoostID,
 	Name:        "Speed Boost",
-	Description: "End of turn: gain Speed Up.",
+	Description: "On turn end: gain Speed Up.",
 	Show:        true,
 	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
