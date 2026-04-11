@@ -27,6 +27,7 @@ var IntimidateTrigger game.Trigger = game.Trigger{
 
 			for _, target := range targets {
 				mut_ctx := context
+				mut_ctx.ModifierID = &intimidateID
 				mut_ctx.TargetActorIDs = []uuid.UUID{target.ID}
 				mutation := mutations.AddModifiers(false, AttackDownTarget)
 				transaction := game.MakeTransaction(mutation, mut_ctx)

@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -32,7 +33,9 @@ var Sasuke = game.ActorDef{
 		game.NsLightning,
 		game.NsYin,
 	}),
-	Abilities:   []game.Modifier{},
+	Abilities: []game.Modifier{
+		modifiers.AddImmunities(*modifiers.Intimidate.GroupID),
+	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		actions.Chidori.ID,

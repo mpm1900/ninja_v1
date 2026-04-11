@@ -37,8 +37,24 @@ func (m *Modifier) DecrementTimers() {
 }
 
 func ResolveTrigger(game Game, transaction Transaction[Trigger]) []Transaction[GameMutation] {
+	transactions := []Transaction[GameMutation]{}
 	if transaction.Mutation.Delta == nil {
-		return []Transaction[GameMutation]{}
+		return transactions
+	}
+
+	targets := game.GetTargets(transaction.Context)
+	for _, target := range targets {
+		resolved := target.Resolve(game)
+		if resolved.HasImmunity(transaction.Mutation.ModifierID) {
+			log_ctx := MakeContextForActor(target)
+			log_mut := AddLogs(NewLogContext("$source$ was immune.", log_ctx))
+			log_tx := MakeTransaction(log_mut, log_ctx)
+			transactions = append(transactions, log_tx)
+		}
+	}
+
+	if len(transactions) > 0 {
+		return transactions
 	}
 
 	return transaction.Mutation.Delta(game, game, transaction.Context)

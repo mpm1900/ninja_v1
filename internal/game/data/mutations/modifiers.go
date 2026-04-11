@@ -29,8 +29,18 @@ func AddModifiers(checkWarded bool, modifiers ...game.Modifier) game.GameMutatio
 					resolved := actor.Resolve(g)
 
 					/**
-					 * Filtering out via safeguarded, and warded check
+					 * Filtering out via immune, safeguarded, and warded check
 					 */
+					if context.ModifierID != nil {
+						parent_mod, ok := g.GetModifierByID(*context.ModifierID)
+						if ok && resolved.HasImmunity(*context.ModifierID) {
+							mod_tx.Context.FilterOutTarget(actor)
+
+							context.SourceActorID = &actor.ID
+							g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", parent_mod.Name), context.WithSource(actor.ID)))
+							continue
+						}
+					}
 					if resolved.Safeguarded && context.SourcePlayerID != nil && resolved.PlayerID != *context.SourcePlayerID {
 						mod_tx.Context.FilterOutTarget(actor)
 
