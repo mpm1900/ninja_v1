@@ -77,8 +77,8 @@ function ActorCard({
   actor: Actor | undefined
   client_ID?: string
   selected?: boolean
-  targeted?: 'targeted'
-  source?: 'source'
+  targeted?: boolean
+  source?: boolean
   summon?: boolean
   summonClass?: string
 }) {
@@ -122,7 +122,13 @@ function ActorCard({
         className={actorVariants({
           className: cn(is_player && 'cursor-pointer', 'gap-2'),
           player: summon ? 'summon' : is_player ? 'player' : 'enemy',
-          selected: selected ? 'selected' : source ? source : targeted,
+          selected: selected
+            ? 'selected'
+            : source
+              ? 'source'
+              : targeted
+                ? 'targeted'
+                : undefined,
         })}
         {...rest}
       >

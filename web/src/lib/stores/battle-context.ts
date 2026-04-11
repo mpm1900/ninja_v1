@@ -4,11 +4,13 @@ import type { Game } from '../game/game'
 
 type BattleContextState = Context & {
   previous_action_IDs: Record<string, string>
+  hover_target_IDs: Array<string>
 }
 
 const battleContext = new Store<BattleContextState>({
   ...NULL_CONTEXT,
   previous_action_IDs: {},
+  hover_target_IDs: []
 })
 
 function setContextPlayer(player_ID: string) {
@@ -20,6 +22,25 @@ function setContextPlayer(player_ID: string) {
     target_actor_IDs: [],
     target_position_IDs: [],
     previous_action_IDs: {},
+  }))
+}
+
+function clearHoverTargets() {
+  battleContext.setState((s) => ({
+    ...s,
+    hover_target_IDs: [],
+  }))
+}
+function addHoverTarget(ID: string) {
+  battleContext.setState((s) => ({
+    ...s,
+    hover_target_IDs: s.hover_target_IDs.concat(ID),
+  }))
+}
+function removeHoverTarget(ID: string) {
+  battleContext.setState((s) => ({
+    ...s,
+    hover_target_IDs: s.hover_target_IDs.filter(t => t != ID),
   }))
 }
 
@@ -134,4 +155,7 @@ export {
   setActionID,
   setContextSource,
   setContextAction,
+  clearHoverTargets,
+  addHoverTarget,
+  removeHoverTarget,
 }

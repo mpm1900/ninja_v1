@@ -1,6 +1,7 @@
 import type { Action } from '#/lib/game/action'
 import type { Actor } from '#/lib/game/actor'
 import type { Context } from '#/lib/game/context'
+import { addHoverTarget, removeHoverTarget } from '#/lib/stores/battle-context'
 import { Button } from './ui/button'
 
 function TargetButton({
@@ -29,6 +30,12 @@ function TargetButton({
     <Button
       disabled={loading || (contextValid && !includes) || !enabled}
       variant={includes ? 'default' : 'ghost'}
+      onMouseEnter={() => {
+        addHoverTarget(actor.ID)
+      }}
+      onMouseLeave={() => {
+        removeHoverTarget(actor.ID)
+      }}
       onClick={() => {
         if (targetType === 'target-actor-id') {
           onContextChange({

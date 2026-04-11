@@ -5,6 +5,7 @@ import { clientsStore } from '#/lib/stores/clients'
 import { Item } from './ui/item'
 import { cn } from '#/lib/utils'
 import { motion, AnimatePresence } from 'motion/react'
+import { battleContext } from '#/lib/stores/battle-context'
 
 function PlayerPositions({
   flip,
@@ -19,11 +20,19 @@ function PlayerPositions({
 }) {
   const game = useStore(gameStore, (g) => g)
   const client = useStore(clientsStore, (c) => c.me)
+  const bc = useStore(battleContext, (c) => c)
   const player = game.players.find((p) => p.ID === player_ID)
   const coef = flip ? -1 : 1
   const context = game.active_transaction?.context
-  const target_IDs = context?.target_actor_IDs
-  const pos_IDs = context?.target_position_IDs
+  const target_IDs = [
+    ...(bc.hover_target_IDs ?? []),
+    ...(bc.target_actor_IDs ?? []),
+    ...(context?.target_actor_IDs ?? []),
+  ]
+  const pos_IDs = [
+    ...(bc.target_position_IDs ?? []),
+    ...(context?.target_position_IDs ?? []),
+  ]
 
   if (!player) return null
 
@@ -31,7 +40,9 @@ function PlayerPositions({
     <div className="flex gap-8">
       {player.positions.map((pos) => {
         const targeted =
-          target_IDs?.includes(pos.actor_ID ?? '') || pos_IDs?.includes(pos.ID)
+          target_IDs?.includes(pos.actor_ID!) || pos_IDs?.includes(pos.ID)
+        const is_source = context?.source_actor_ID === pos.actor_ID
+        const is_selected = selected === pos.actor_ID
         return (
           <div
             key={pos.ID}
@@ -44,11 +55,7 @@ function PlayerPositions({
                 animate={{
                   y: 0,
                   opacity: 1,
-                  scale:
-                    selected === pos.actor_ID ||
-                    context?.source_actor_ID === pos.actor_ID
-                      ? 1.1
-                      : 1,
+                  scale: is_selected || is_source ? 1.1 : 1,
                 }}
                 exit={{ y: 24 * coef, opacity: 0 }}
                 transition={{
@@ -62,14 +69,10 @@ function PlayerPositions({
                   <ActorCard
                     actor={game.actors.find((a) => a.ID === pos.actor_ID)}
                     client_ID={client?.ID}
-                    selected={selected === pos.actor_ID}
-                    source={
-                      context?.source_actor_ID === pos.actor_ID
-                        ? 'source'
-                        : undefined
-                    }
-                    targeted={targeted ? 'targeted' : undefined}
-                    onClick={() => onSelectedChange?.(pos.actor_ID ?? '')}
+                    selected={is_selected}
+                    source={is_source}
+                    targeted={targeted}
+                    onClick={() => onSelectedChange?.(pos.actor_ID!)}
                     className={flip ? 'flex-col-reverse' : ''}
                     summonClass={!flip ? 'top-auto! bottom-0!' : ''}
                   />
