@@ -30,11 +30,12 @@ var ConsumeChakraTrigger game.Trigger = game.Trigger{
 }
 
 var ConsumeChakra game.Modifier = game.Modifier{
-	ID:       consumeChakraID,
-	GroupID:  &consumeChakraID,
-	Name:     "Consume Chakra",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+	ID:          consumeChakraID,
+	GroupID:     &consumeChakraID,
+	Name:        "Consume Chakra",
+	Description: "On kill: gain Chakra Attack Up.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.NewNoopSource(&consumeChakraID),
 	},

@@ -170,11 +170,12 @@ var ToadSong = MakeStatMultTeam(game.StatSpeed, "Toad Song", &ToadSongID, -1, ga
 // HAZE
 var hazeID = uuid.MustParse("1f9dc965-2621-5e04-aa5e-6484bcf9a723")
 var Haze game.Modifier = game.Modifier{
-	ID:       hazeID,
-	GroupID:  &hazeID,
-	Name:     "Haze",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+	ID:          hazeID,
+	GroupID:     &hazeID,
+	Name:        "Haze",
+	Description: "Reset all stat stages.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&hazeID,

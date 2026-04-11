@@ -31,11 +31,12 @@ var FirstAidTrigger game.Trigger = game.Trigger{
 }
 
 var FirstAid game.Modifier = game.Modifier{
-	ID:       firstAidID,
-	GroupID:  &firstAidID,
-	Name:     "First Aid Kit",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+	ID:          firstAidID,
+	GroupID:     &firstAidID,
+	Name:        "First Aid Kit",
+	Description: "End of turn: heal 1/16 HP.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.NewNoopSource(&firstAidID),
 	},

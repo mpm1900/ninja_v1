@@ -40,11 +40,12 @@ var RageTrigger game.Trigger = game.Trigger{
 }
 
 var Rage game.Modifier = game.Modifier{
-	ID:       rageID,
-	GroupID:  &rageID,
-	Name:     "Rage",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+	ID:          rageID,
+	GroupID:     &rageID,
+	Name:        "Rage",
+	Description: "On damage: gain Attack Up.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.NewNoopSource(&rageID),
 	},

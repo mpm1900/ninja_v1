@@ -34,11 +34,12 @@ var RaincallerTrigger game.Trigger = game.Trigger{
 }
 
 var Raincaller game.Modifier = game.Modifier{
-	ID:       raincallerID,
-	GroupID:  &raincallerID,
-	Name:     "Raincaller",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+	ID:          raincallerID,
+	GroupID:     &raincallerID,
+	Name:        "Raincaller",
+	Description: "On enter: start rain.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.NewNoopSource(&raincallerID),
 	},

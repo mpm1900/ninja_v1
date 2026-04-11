@@ -7,10 +7,10 @@ import (
 	"github.com/google/uuid"
 )
 
-var brittleSashID = uuid.MustParse("90fb1491-6da8-5828-9fad-45b9c06fff98")
-var BrittleSashTrigger game.Trigger = game.Trigger{
+var sealOfImmortalityID = uuid.MustParse("90fb1491-6da8-5828-9fad-45b9c06fff98")
+var SealOfImmortalityTrigger game.Trigger = game.Trigger{
 	ID:         uuid.MustParse("e716185d-2825-5399-92dc-2137b8bc2c0b"),
-	ModifierID: brittleSashID,
+	ModifierID: sealOfImmortalityID,
 	On:         game.OnImmortalSave,
 	Check:      game.ComposeTF(game.Match__SourceActor_SourceActor),
 	ActionMutation: game.ActionMutation{
@@ -32,15 +32,16 @@ var BrittleSashTrigger game.Trigger = game.Trigger{
 	},
 }
 
-var BrittleSash game.Modifier = game.Modifier{
-	ID:       brittleSashID,
-	GroupID:  &brittleSashID,
-	Name:     "Brittle Sash",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+var SealOfImmortality game.Modifier = game.Modifier{
+	ID:          sealOfImmortalityID,
+	GroupID:     &sealOfImmortalityID,
+	Name:        "Seal of Immortality",
+	Description: "Full HP only: survive lethal damage once.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
-			&brittleSashID,
+			&sealOfImmortalityID,
 			game.MutPriorityDefault,
 			game.ComposeAF(game.SourceFilter, game.ActiveFilter, game.FullHealthFilter),
 			func(g game.Game, a game.Actor, ctx game.Context) game.Actor {
@@ -49,6 +50,6 @@ var BrittleSash game.Modifier = game.Modifier{
 			}),
 	},
 	Triggers: []game.Trigger{
-		BrittleSashTrigger,
+		SealOfImmortalityTrigger,
 	},
 }

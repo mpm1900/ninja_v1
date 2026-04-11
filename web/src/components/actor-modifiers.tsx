@@ -2,7 +2,7 @@ import { MODIFIER_CLASSES, MODIFIER_ICONS } from '#/data/icons'
 import type { Actor } from '#/lib/game/actor'
 import type { Modifier } from '#/lib/game/modifier'
 import { cn } from '#/lib/utils'
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
+import { ModifierTooltip } from './modifier-tooltip'
 
 function ActorModifier({
   count,
@@ -14,24 +14,21 @@ function ActorModifier({
   if (!modifier || !modifier.show) return null
   const Icon = modifier?.icon ? MODIFIER_ICONS[modifier.icon] : undefined
   return (
-    <span className='text-shadow-[1px_1px_0px_#000000]'>
-      {Icon ? (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Icon
-              className={cn(
-                'size-6 my-1',
-                modifier?.icon && MODIFIER_CLASSES[modifier.icon]
-              )}
-            />
-          </TooltipTrigger>
-          <TooltipContent>{modifier?.name}</TooltipContent>
-        </Tooltip>
-      ) : (
-        modifier?.name
-      )}
-      {count > 1 ? ` (${count})` : null}
-    </span>
+    <ModifierTooltip modifier={modifier}>
+      <span className="text-shadow-[1px_1px_0px_#000000] cursor-default">
+        {Icon ? (
+          <Icon
+            className={cn(
+              'size-6 my-1',
+              modifier?.icon && MODIFIER_CLASSES[modifier.icon]
+            )}
+          />
+        ) : (
+          modifier?.name
+        )}
+        {count > 1 ? ` (${count})` : null}
+      </span>
+    </ModifierTooltip>
   )
 }
 

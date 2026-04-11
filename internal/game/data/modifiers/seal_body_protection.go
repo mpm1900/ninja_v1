@@ -7,10 +7,10 @@ import (
 	"github.com/google/uuid"
 )
 
-var bpsID = uuid.MustParse("096e2442-b231-53da-9892-91b0dea908b9")
-var BodyProtectionSealTrigger game.Trigger = game.Trigger{
+var sobpID = uuid.MustParse("096e2442-b231-53da-9892-91b0dea908b9")
+var SealOfBodyProtectionTrigger game.Trigger = game.Trigger{
 	ID:         uuid.MustParse("0a179ac1-8811-5319-9c4b-bb23c1f57ed8"),
-	ModifierID: bpsID,
+	ModifierID: sobpID,
 	On:         game.OnModifierAdd,
 	Check:      game.Match__SourceActor_SourceActor, // TODO move below switches to a filter so we dont get black logs
 	ActionMutation: game.ActionMutation{
@@ -45,16 +45,17 @@ var BodyProtectionSealTrigger game.Trigger = game.Trigger{
 	},
 }
 
-var BodyProtectionSeal game.Modifier = game.Modifier{
-	ID:       bpsID,
-	GroupID:  &bpsID,
-	Name:     "Body Protection Seal",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+var SealOfBodyProtection game.Modifier = game.Modifier{
+	ID:          sobpID,
+	GroupID:     &sobpID,
+	Name:        "Seal of Body Protection",
+	Description: "On stat drop: remove it and break this seal.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
-		game.NewNoopSource(&bpsID),
+		game.NewNoopSource(&sobpID),
 	},
 	Triggers: []game.Trigger{
-		BodyProtectionSealTrigger,
+		SealOfBodyProtectionTrigger,
 	},
 }

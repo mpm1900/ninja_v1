@@ -15,13 +15,14 @@ type ModifierMetadata struct {
 }
 
 type Modifier struct {
-	ID       uuid.UUID  `json:"ID"`
-	GroupID  *uuid.UUID `json:"group_ID"`
-	Name     string     `json:"name"`
-	Delay    int        `json:"-"`
-	Duration int        `json:"duration"`
-	Icon     string     `json:"icon"`
-	Show     bool       `json:"show"`
+	ID          uuid.UUID  `json:"ID"`
+	GroupID     *uuid.UUID `json:"group_ID"`
+	Name        string     `json:"name"`
+	Description string     `json:"description"`
+	Delay       int        `json:"-"`
+	Duration    int        `json:"duration"`
+	Icon        string     `json:"icon"`
+	Show        bool       `json:"show"`
 
 	ActorMutations     []ActorMutation     `json:"-"`
 	GameStateMutations []GameStateMutation `json:"-"`

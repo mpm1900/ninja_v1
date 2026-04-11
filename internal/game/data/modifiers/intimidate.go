@@ -39,11 +39,12 @@ var IntimidateTrigger game.Trigger = game.Trigger{
 }
 
 var Intimidate game.Modifier = game.Modifier{
-	ID:       intimidateID,
-	GroupID:  &intimidateID,
-	Name:     "Intimidate",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+	ID:          intimidateID,
+	GroupID:     &intimidateID,
+	Name:        "Intimidate",
+	Description: "On enter: all enemies gain Attack Down.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.NewNoopSource(&intimidateID),
 	},

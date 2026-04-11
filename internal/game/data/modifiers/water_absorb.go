@@ -9,11 +9,12 @@ import (
 var waterAbsorbID = uuid.MustParse("ebc37353-4eff-5b89-b7f5-361849f2028b")
 
 var WaterAbsorb game.Modifier = game.Modifier{
-	ID:       waterAbsorbID,
-	Name:     "Water Absorb",
-	Show:     true,
-	GroupID:  &waterAbsorbID,
-	Duration: game.ModifierDurationInf,
+	ID:          waterAbsorbID,
+	Name:        "Water Absorb",
+	Description: "Water damage heals this shinobi.",
+	Show:        true,
+	GroupID:     &waterAbsorbID,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		{
 			ModifierGroupID: &waterAbsorbID,

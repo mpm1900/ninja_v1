@@ -36,11 +36,12 @@ var OnigiriIDTrigger game.Trigger = game.Trigger{
 }
 
 var Onigiri game.Modifier = game.Modifier{
-	ID:       onigiriID,
-	GroupID:  &onigiriID,
-	Name:     "Onigiri",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+	ID:          onigiriID,
+	GroupID:     &onigiriID,
+	Name:        "Onigiri",
+	Description: "HP <=50%: heal 1/4 HP.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.NewNoopSource(&onigiriID),
 	},

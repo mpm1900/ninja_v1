@@ -9,11 +9,12 @@ import (
 var vesselOfPainID = uuid.MustParse("606b4892-56fa-58c4-af72-63f7ea3ef669")
 
 var VesselOfPain game.Modifier = game.Modifier{
-	ID:       vesselOfPainID,
-	GroupID:  &vesselOfPainID,
-	Name:     "Vessel of Pain",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+	ID:          vesselOfPainID,
+	GroupID:     &vesselOfPainID,
+	Name:        "Vessel of Pain",
+	Description: "Other shinobi: Chakra Attack x0.75.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&vesselOfPainID,

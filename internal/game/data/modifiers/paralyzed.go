@@ -9,12 +9,13 @@ import (
 var paralysisID = uuid.MustParse("b269dcbc-a6a0-5ea3-9ed5-6e8b5fee8024")
 
 var Paralysis game.Modifier = game.Modifier{
-	ID:       paralysisID,
-	GroupID:  &paralysisID,
-	Name:     "Paralyzed",
-	Icon:     "paralyzed",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+	ID:          paralysisID,
+	GroupID:     &paralysisID,
+	Name:        "Paralyzed",
+	Description: "Paralyzed: Speed x0.25.",
+	Icon:        "paralyzed",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&paralysisID,

@@ -29,11 +29,12 @@ var SpeedBoostTrigger game.Trigger = game.Trigger{
 }
 
 var SpeedBoost game.Modifier = game.Modifier{
-	ID:       speedBoostID,
-	GroupID:  &speedBoostID,
-	Name:     "Speed Boost",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+	ID:          speedBoostID,
+	GroupID:     &speedBoostID,
+	Name:        "Speed Boost",
+	Description: "End of turn: gain Speed Up.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.NewNoopSource(&speedBoostID),
 	},

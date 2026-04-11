@@ -31,11 +31,12 @@ var GedoShardTrigger game.Trigger = game.Trigger{
 }
 
 var GedoShard game.Modifier = game.Modifier{
-	ID:       gedoShardID,
-	GroupID:  &gedoShardID,
-	Name:     "Gedo Shard",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+	ID:          gedoShardID,
+	GroupID:     &gedoShardID,
+	Name:        "Gedo Shard",
+	Description: "Deal 30% more damage. End of turn: take damage (1/10).",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&gedoShardID,

@@ -9,11 +9,12 @@ import (
 var shinobiVestID = uuid.MustParse("a05df03d-bfc7-5a0a-a01b-831fa1deff3b")
 
 var ShinobiVest game.Modifier = game.Modifier{
-	ID:       shinobiVestID,
-	GroupID:  &shinobiVestID,
-	Name:     "Shinobi Vest",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+	ID:          shinobiVestID,
+	GroupID:     &shinobiVestID,
+	Name:        "Shinobi Vest",
+	Description: "Chakra Defense x1.5; attacking actions only.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&shinobiVestID,

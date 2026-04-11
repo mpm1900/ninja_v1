@@ -22,7 +22,7 @@ var BurnedTrigger game.Trigger = game.Trigger{
 		Delta: func(p game.Game, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
 			context.TargetPositionIDs = []uuid.UUID{}
 			context.TargetActorIDs = []uuid.UUID{*context.SourceActorID}
-			mut := mutations.RatioDamage(0.125)
+			mut := mutations.RatioDamage(0.0625)
 			return []game.Transaction[game.GameMutation]{
 				game.MakeTransaction(mut, context),
 			}
@@ -31,12 +31,13 @@ var BurnedTrigger game.Trigger = game.Trigger{
 }
 
 var Burned game.Modifier = game.Modifier{
-	ID:       burnedID,
-	GroupID:  &burnedID,
-	Name:     "Burned",
-	Icon:     "burned",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+	ID:          burnedID,
+	GroupID:     &burnedID,
+	Name:        "Burned",
+	Description: "Burned: Attack x0.5. End of turn: take damage (1/16).",
+	Icon:        "burned",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&burnedID,
