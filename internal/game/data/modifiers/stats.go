@@ -51,7 +51,7 @@ func NewStatMult(
 	)
 
 	return game.Modifier{
-		ID:       uuid.MustParse("87017c41-e542-55c3-947f-281d4c2f2dcf"),
+		ID:       uuid.New(),
 		GroupID:  groupID,
 		Duration: game.ModifierDurationInf,
 		ActorMutations: []game.ActorMutation{

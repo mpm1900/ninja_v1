@@ -12,7 +12,7 @@ func Coerced(actionID uuid.UUID) game.Modifier {
 	return game.Modifier{
 		ID:          uuid.New(),
 		Name:        "Coerced",
-		Description: "Coerced shinobi cannot must used their last used action.",
+		Description: "Coerced shinobi must used their last used action.",
 		Icon:        "coerced",
 		Show:        true,
 		GroupID:     &coercedID,

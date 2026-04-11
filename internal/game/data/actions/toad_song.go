@@ -40,7 +40,6 @@ func MakeToadSong() game.Action {
 						log_tx := game.MakeTransaction(game.AddLogs(log), context)
 						return append(transactions, log_tx)
 					}
-
 				}
 
 				su := modifiers.ToadSong

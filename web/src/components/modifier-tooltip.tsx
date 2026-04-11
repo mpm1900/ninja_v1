@@ -34,7 +34,14 @@ function ModifierTooltip({
           contentClassName
         )}
       >
-        <div className="text-sm font-medium w-full">{modifier.name}</div>
+        <div className="flex justify-between">
+          <div className="text-sm font-medium w-full">{modifier.name}</div>
+          {(modifier.duration ?? 0) > 0 && (
+            <div className="text-muted-foreground text-[10px] text-nowrap">
+              {modifier.duration} Turns
+            </div>
+          )}
+        </div>
         <div className="text-muted-foreground text-xs w-full break-words">
           {modifier.description}
         </div>
