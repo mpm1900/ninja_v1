@@ -191,7 +191,7 @@ func (i *Instance) RunGameActions() {
 				break resolveStep
 
 			default:
-				// Recover unknown/setup phases by moving toward Main.
+				// Recover unknown/debug phases by moving toward Main.
 				i.Game.NextPhase()
 				i.BroadcastGame()
 			}

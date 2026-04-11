@@ -15,7 +15,7 @@ import { actionsQuery } from '#/lib/queries/actions'
 import { PlayerPositions } from '#/components/player-positions'
 import { PlayerThumbnails } from '#/components/player-thumbnails'
 
-export const Route = createFileRoute('/setup')({
+export const Route = createFileRoute('/debug')({
   beforeLoad: ({ context }) => {
     if (!context.auth.user) {
       throw redirect({ to: '/login' })

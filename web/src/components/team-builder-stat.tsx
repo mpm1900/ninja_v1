@@ -15,7 +15,7 @@ import { Slider } from './ui/slider'
 const CAP = 64
 const PER_STAT_MAX = 31
 const MAX_COLOR_STAT = 255
-const MAX_BAR_WIDTH_PERCENT = 130.2
+const MAX_BAR_WIDTH_PERCENT = 140
 
 const STAT_COLOR_STOPS = [
   { stat: 0, color: [255, 0, 0] },

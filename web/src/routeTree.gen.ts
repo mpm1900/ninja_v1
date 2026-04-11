@@ -10,8 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TeamBuilderRouteImport } from './routes/team-builder'
-import { Route as SetupRouteImport } from './routes/setup'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as DebugRouteImport } from './routes/debug'
 import { Route as BattleRouteImport } from './routes/battle'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -20,14 +20,14 @@ const TeamBuilderRoute = TeamBuilderRouteImport.update({
   path: '/team-builder',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SetupRoute = SetupRouteImport.update({
-  id: '/setup',
-  path: '/setup',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DebugRoute = DebugRouteImport.update({
+  id: '/debug',
+  path: '/debug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BattleRoute = BattleRouteImport.update({
@@ -44,38 +44,38 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/battle': typeof BattleRoute
+  '/debug': typeof DebugRoute
   '/login': typeof LoginRoute
-  '/setup': typeof SetupRoute
   '/team-builder': typeof TeamBuilderRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/battle': typeof BattleRoute
+  '/debug': typeof DebugRoute
   '/login': typeof LoginRoute
-  '/setup': typeof SetupRoute
   '/team-builder': typeof TeamBuilderRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/battle': typeof BattleRoute
+  '/debug': typeof DebugRoute
   '/login': typeof LoginRoute
-  '/setup': typeof SetupRoute
   '/team-builder': typeof TeamBuilderRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/battle' | '/login' | '/setup' | '/team-builder'
+  fullPaths: '/' | '/battle' | '/debug' | '/login' | '/team-builder'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/battle' | '/login' | '/setup' | '/team-builder'
-  id: '__root__' | '/' | '/battle' | '/login' | '/setup' | '/team-builder'
+  to: '/' | '/battle' | '/debug' | '/login' | '/team-builder'
+  id: '__root__' | '/' | '/battle' | '/debug' | '/login' | '/team-builder'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BattleRoute: typeof BattleRoute
+  DebugRoute: typeof DebugRoute
   LoginRoute: typeof LoginRoute
-  SetupRoute: typeof SetupRoute
   TeamBuilderRoute: typeof TeamBuilderRoute
 }
 
@@ -88,18 +88,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TeamBuilderRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/setup': {
-      id: '/setup'
-      path: '/setup'
-      fullPath: '/setup'
-      preLoaderRoute: typeof SetupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/debug': {
+      id: '/debug'
+      path: '/debug'
+      fullPath: '/debug'
+      preLoaderRoute: typeof DebugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/battle': {
@@ -122,8 +122,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BattleRoute: BattleRoute,
+  DebugRoute: DebugRoute,
   LoginRoute: LoginRoute,
-  SetupRoute: SetupRoute,
   TeamBuilderRoute: TeamBuilderRoute,
 }
 export const routeTree = rootRouteImport

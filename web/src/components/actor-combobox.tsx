@@ -66,7 +66,7 @@ function ActorCombobox({
                 <img
                   src={actor.sprite_url}
                   className={cn(
-                    'size-12 p-1 bg-zinc-600 border border-zinc-900 rounded cursor-pointer',
+                    'size-15 p-0.5 -m-1.5 bg-zinc-600 border border-zinc-900 rounded cursor-pointer',
                     is_active && 'bg-zinc-300'
                   )}
                   onPointerDown={(e) => {

@@ -33,7 +33,7 @@ function getActiveTable(pathname: string) {
     case '/team-builder':
       return 'team-builder'
     default:
-      return 'setup'
+      return 'debug'
   }
 }
 
@@ -78,8 +78,8 @@ function AppHeader() {
             <TabsTrigger value="team-builder" asChild>
               <Link to="/team-builder">Team Builder</Link>
             </TabsTrigger>
-            <TabsTrigger value="setup" asChild>
-              <Link to="/setup">Setup</Link>
+            <TabsTrigger value="debug" asChild>
+              <Link to="/debug">Debug</Link>
             </TabsTrigger>
             <TabsTrigger value="battle" asChild>
               <Link to="/battle">Battle</Link>

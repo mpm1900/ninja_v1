@@ -20,7 +20,7 @@ const authSchema = z.object({
 export const Route = createFileRoute('/login')({
   beforeLoad: ({ context }) => {
     if (context.auth.user) {
-      throw redirect({ to: '/setup' })
+      throw redirect({ to: '/team-builder' })
     }
   },
   component: RouteComponent,
@@ -43,11 +43,11 @@ function RouteComponent() {
       try {
         if (value.form === 'signup') {
           await signup.mutateAsync(value)
-          await navigate({ to: '/setup' })
+          await navigate({ to: '/team-builder' })
         }
         if (value.form === 'login') {
           await login.mutateAsync(value)
-          await navigate({ to: '/setup' })
+          await navigate({ to: '/team-builder' })
         }
       } catch (e) {
         console.error(e)

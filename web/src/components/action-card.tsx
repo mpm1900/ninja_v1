@@ -47,7 +47,7 @@ function ActionCard({
       <div className="relative">
         <div
           className={cn(
-            'flex items-start justify-between gap-2 p-2 bg-zinc-900 text-white rounded-t-sm',
+            'flex items-start justify-between gap-2 p-2 bg-zinc-900 text-white rounded-t-md',
             disabled && 'opacity-50'
           )}
         >
