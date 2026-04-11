@@ -2,6 +2,7 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/modifiers"
 	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
@@ -31,7 +32,7 @@ func MakePowerBoost() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				mutation := mutations.BoostActionPower(1.5)
+				mutation := mutations.AddModifiers(false, modifiers.PowerBoosted)
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)
 

@@ -121,7 +121,7 @@ func GetDamage(
 			Nature:   nature_mod,
 			Offset:   0,
 			Other:    source.DamageMultipliers[attack] * target.DamageReduction[attack],
-			Power:    power,
+			Power:    Round(float64(power) * source.PowerMultiplier),
 			Random:   random,
 			STAB:     stab_mod,
 			Targets:  targets_mod,

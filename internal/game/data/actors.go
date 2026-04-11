@@ -36,4 +36,5 @@ var ACTORS map[uuid.UUID]game.ActorDef = map[uuid.UUID]game.ActorDef{
 	actors.KillerBee.ActorID:  actors.KillerBee,
 	actors.Kinkaku.ActorID:    actors.Kinkaku,
 	actors.Ginkaku.ActorID:    actors.Ginkaku,
+	actors.Gaara.ActorID:      actors.Gaara,
 }

@@ -102,6 +102,7 @@ const (
 	AffKumo     = "kumo"
 	AffKuri     = "kuri"
 	AffOto      = "oto"
+	AffSun      = "sun"
 	AffTaki     = "taki"
 	AffYuga     = "yuga"
 
@@ -176,9 +177,10 @@ type ActorState struct {
 	// - warded units are immune to the secondary effects of attacking actions
 	Warded bool `json:"warded"`
 	// [Reflect] how much damage is reflected (PureDamage not affected)
-	Reflect        float64 `json:"-"`
-	StabMultiplier float64 `json:"-"`
-	Immortal       bool    `json:"immortal"`
+	Reflect         float64 `json:"-"`
+	PowerMultiplier float64 `json:"-"`
+	StabMultiplier  float64 `json:"-"`
+	Immortal        bool    `json:"immortal"`
 	// [ActionLocked]
 	// - action locked units must use their last used action
 	// - if there there is no last used action, any action can be chosen
@@ -354,6 +356,7 @@ func MakeActor(
 			Protected:          false,
 			Safeguarded:        false,
 			Warded:             false,
+			PowerMultiplier:    1.0,
 			StabMultiplier:     1.5,
 			Reflect:            0.0,
 			Immortal:           false,

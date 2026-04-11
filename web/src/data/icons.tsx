@@ -4,7 +4,6 @@ import type { IconType } from 'react-icons/lib'
 const Anger: IconType = (props) => (
   <img src="/icons/anger.svg" alt="Ame" {...(props as any)} />
 )
-
 const Ame: IconType = (props) => (
   <img src="/icons/ame.svg" alt="Ame" {...(props as any)} />
 )
@@ -35,6 +34,9 @@ const Oto: IconType = (props) => (
 const Senju: IconType = (props) => (
   <img src="/icons/senju.svg" alt="Senju" {...(props as any)} />
 )
+const Sun: IconType = (props) => (
+  <img src="/icons/sun.svg" alt="Sun" {...(props as any)} />
+)
 const Taki: IconType = (props) => (
   <img src="/icons/taki.svg" alt="Taki" {...(props as any)} />
 )
@@ -59,6 +61,7 @@ const SHINOBI_ICONS: Record<string, IconType> = {
   nara: Nara,
   oto: Oto,
   senju: Senju,
+  sun: Sun,
   taki: Taki,
   uchiha: Uchiha,
   uzumaki: Uzumaki,
