@@ -37,7 +37,7 @@ var Itachi = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		actions.FollowMe.ID,
+		actions.Disable.ID,
 		actions.Glare.ID,
 		actions.MirageCrow.ID,
 		actions.Fireball.ID,

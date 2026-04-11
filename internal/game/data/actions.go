@@ -46,4 +46,5 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.ToadSong.ID:    actions.ToadSong,
 	actions.PowerBoost.ID:  actions.PowerBoost,
 	actions.Amaterasu.ID:   actions.Amaterasu,
+	actions.Disable.ID:     actions.Disable,
 }
