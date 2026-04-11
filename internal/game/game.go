@@ -668,9 +668,8 @@ type GameJSON struct {
 	Transactions []Transaction[GameMutation] `json:"-"`
 	Actions      []Transaction[Action]       `json:"actions"`
 	Prompt       *Transaction[Action]        `json:"prompt"`
-	Triggers     []Transaction[Trigger]      `json:"triggers"`
-
-	Log []GameLog `json:"log"`
+	Triggers     []Transaction[Trigger]      `json:"-"`
+	Log          []GameLog                   `json:"log"`
 
 	QueuedActions map[uuid.UUID]Transaction[uuid.UUID] `json:"queued_actions"`
 }

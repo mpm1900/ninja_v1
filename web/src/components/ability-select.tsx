@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from './ui/select'
 import type { Modifier } from '#/lib/game/modifier'
+import { ModifierTooltip } from './modifier-tooltip'
 
 function AbilitySelect({
   value,
@@ -29,9 +30,13 @@ function AbilitySelect({
           <SelectContent>
             <SelectGroup>
               {options.map((ability) => (
-                <SelectItem key={ability.ID} value={ability.ID}>
-                  {ability.name}
-                </SelectItem>
+                <ModifierTooltip
+                  key={ability.ID}
+                  modifier={ability}
+                  contentProps={{ side: 'right' }}
+                >
+                  <SelectItem value={ability.ID}>{ability.name}</SelectItem>
+                </ModifierTooltip>
               ))}
             </SelectGroup>
           </SelectContent>

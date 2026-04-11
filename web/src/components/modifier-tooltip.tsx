@@ -1,23 +1,45 @@
 import type React from 'react'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card'
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 import type { Modifier } from '#/lib/game/modifier'
+import { cn } from '#/lib/utils'
 
 function ModifierTooltip({
   modifier,
-  ...props
-}: React.ComponentProps<typeof HoverCardTrigger> & {
+  contentProps = {},
+  children,
+  ...triggerProps
+}: Omit<React.ComponentProps<typeof TooltipTrigger>, 'asChild'> & {
   modifier: Modifier
+  contentProps?: React.ComponentProps<typeof TooltipContent>
 }) {
+  const {
+    className: contentClassName,
+    arrowClassName: contentArrowClassName,
+    ...restContentProps
+  } = contentProps
+
   return (
-    <HoverCard openDelay={100} closeDelay={0}>
-      <HoverCardTrigger {...props} />
-      <HoverCardContent sideOffset={8} collisionPadding={8}>
-        <div>{modifier.name}</div>
-        <div className="text-muted-foreground text-xs">
+    <Tooltip delayDuration={100}>
+      <TooltipTrigger asChild {...triggerProps}>
+        {children}
+      </TooltipTrigger>
+      <TooltipContent
+        sideOffset={8}
+        collisionPadding={8}
+        showArrow
+        {...restContentProps}
+        arrowClassName={cn('bg-popover fill-popover', contentArrowClassName)}
+        className={cn(
+          'z-50 w-64 rounded-md border bg-popover p-2 text-popover-foreground shadow-md text-wrap',
+          contentClassName
+        )}
+      >
+        <div className="text-sm font-medium w-full">{modifier.name}</div>
+        <div className="text-muted-foreground text-xs w-full break-words">
           {modifier.description}
         </div>
-      </HoverCardContent>
-    </HoverCard>
+      </TooltipContent>
+    </Tooltip>
   )
 }
 

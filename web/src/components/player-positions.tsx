@@ -46,7 +46,7 @@ function PlayerPositions({
                   opacity: 1,
                   scale:
                     selected === pos.actor_ID ||
-                      context?.source_actor_ID === pos.actor_ID
+                    context?.source_actor_ID === pos.actor_ID
                       ? 1.1
                       : 1,
                 }}
@@ -62,7 +62,6 @@ function PlayerPositions({
                   <ActorCard
                     actor={game.actors.find((a) => a.ID === pos.actor_ID)}
                     client_ID={client?.ID}
-                    game={game}
                     selected={selected === pos.actor_ID}
                     source={
                       context?.source_actor_ID === pos.actor_ID

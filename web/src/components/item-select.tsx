@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select'
+import { ModifierTooltip } from './modifier-tooltip'
 
 function ItemSelect({
   value,
@@ -28,10 +29,14 @@ function ItemSelect({
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {query.data?.map((ability) => (
-                <SelectItem key={ability.ID} value={ability.ID}>
-                  {ability.name}
-                </SelectItem>
+              {query.data?.map((item) => (
+                <ModifierTooltip
+                  key={item.ID}
+                  modifier={item}
+                  contentProps={{ side: 'right' }}
+                >
+                  <SelectItem value={item.ID}>{item.name}</SelectItem>
+                </ModifierTooltip>
               ))}
             </SelectGroup>
           </SelectContent>

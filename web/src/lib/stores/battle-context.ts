@@ -32,7 +32,9 @@ function getNextActionableActor(
   if (!playerID) return null
 
   const actedActorIDs = new Set(
-    game.actions.map((tx) => tx.context.source_actor_ID).filter(Boolean) as string[]
+    game.actions
+      .map((tx) => tx.context.source_actor_ID)
+      .filter(Boolean) as string[]
   )
   actedActorIDs.add(actor_ID)
 
@@ -82,7 +84,9 @@ function setActionID(actor_ID: string, action_ID: string, game: Game) {
 }
 
 function setContextSource(source_ID: string, game: Game) {
-  const existing = game.actions.find((t) => t.context.source_actor_ID === source_ID)
+  const existing = game.actions.find(
+    (t) => t.context.source_actor_ID === source_ID
+  )
 
   if (existing) {
     return battleContext.setState((s) => ({

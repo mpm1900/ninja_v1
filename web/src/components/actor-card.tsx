@@ -1,5 +1,4 @@
 import type { Actor } from '#/lib/game/actor'
-import type { Game } from '#/lib/game/game'
 import { natureIndexes, type NatureSet } from '#/lib/game/nature'
 import { cn } from '#/lib/utils'
 import { cva } from 'class-variance-authority'
@@ -14,6 +13,8 @@ import { ActorThumbnail } from './actor-thumbnail'
 import { StageBadge } from './stage-badge'
 import { ActorModifiers } from './actor-modifiers'
 import { ActorStatus } from './actor-status'
+import { useStore } from '@tanstack/react-store'
+import { gameStore } from '#/lib/stores/game'
 
 const actorVariants = cva(
   cn(
@@ -25,7 +26,7 @@ const actorVariants = cva(
       player: {
         player: 'border-transparent', //'bg-gray-900 border-gray-700',
         enemy: 'border-transparent',
-        summon: 'border-transparent',//'bg-stone-600! border-stone-400! shadow-xs',
+        summon: 'border-transparent', //'bg-stone-600! border-stone-400! shadow-xs',
       },
       selected: {
         selected:
@@ -65,7 +66,6 @@ function parseSummon(summon: Actor['summon'], parent: Actor): Actor['summon'] {
 function ActorCard({
   actor,
   client_ID,
-  game,
   selected,
   source,
   targeted,
@@ -76,27 +76,31 @@ function ActorCard({
 }: React.ComponentProps<typeof Item> & {
   actor: Actor | undefined
   client_ID?: string
-  game: Game
   selected?: boolean
   targeted?: 'targeted'
   source?: 'source'
   summon?: boolean
   summonClass?: string
 }) {
-  const modifiers = (game.modifiers ?? [])
-    .map((m) => m.mutation)
-    .concat(game.actors.filter((a) => a.ability).map((a) => a.ability!))
-    .concat(game.actors.filter((a) => a.item).map((a) => a.item!))
-
-  const is_player = actor?.player_ID === client_ID
-  const action_tx = game.actions.find(
-    (t) => t.context.source_actor_ID === actor?.ID
+  const status = useStore(gameStore, (s) => s.status)
+  const actions = useStore(gameStore, (s) => s.actions)
+  const modifiers = useStore(gameStore, (g) =>
+    (g.modifiers ?? [])
+      .map((m) => m.mutation)
+      .concat(g.actors.filter((a) => a.ability).map((a) => a.ability!))
+      .concat(g.actors.filter((a) => a.item).map((a) => a.item!))
   )
-  const has_queued_action = game.queued_actions[actor?.ID ?? '']
+  const has_queued_action = useStore(
+    gameStore,
+    (s) => s.queued_actions[actor?.ID ?? '']
+  )
+  const action_tx = actions.find((t) => t.context.source_actor_ID === actor?.ID)
+  const is_player = actor?.player_ID === client_ID
 
   return (
     <div
-      className={cn('relative',
+      className={cn(
+        'relative',
         summon && 'pointer-events-none',
         'flex flex-col',
         className
@@ -107,11 +111,10 @@ function ActorCard({
           summon
           actor={parseSummon(actor.summon, actor)}
           client_ID={client_ID}
-          game={game}
           selected={selected}
           targeted={targeted}
           source={source}
-          className={cn("absolute top-0 left-0 z-20", summonClass)}
+          className={cn('absolute top-0 left-0 z-20', summonClass)}
         />
       )}
       {actor && <ActorModifiers actor={actor} modifiers={modifiers} />}
@@ -132,12 +135,7 @@ function ActorCard({
         <ItemContent className="relative gap-0">
           {actor && (
             <div className="flex justify-between items-end gap-4">
-              <ItemTitle
-                className={cn('px-2 pb-2 -mb-2 rounded-t', {
-                  //'bg-white': actor.player_ID === client_ID,
-                  // 'bg-black/80': !selected, //actor.player_ID !== client_ID,
-                })}
-              >
+              <ItemTitle className={cn('px-2 pb-2 -mb-2 rounded-t')}>
                 <span
                   className={cn(
                     'font-semibold text-lg text-shadow-[1px_1px_0px_#000000]',
@@ -154,7 +152,7 @@ function ActorCard({
                   {actor.name}
                 </span>
               </ItemTitle>
-              {!action_tx || !is_player || game.status === 'running' ? (
+              {!action_tx || !is_player || status === 'running' ? (
                 <ItemActions className="gap-px pb-1">
                   {(Object.keys(actor.natures) as Array<NatureSet>)
                     .sort((a, b) => natureIndexes[a] - natureIndexes[b])
