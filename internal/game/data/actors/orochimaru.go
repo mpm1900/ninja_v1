@@ -38,5 +38,6 @@ var Orochimaru = game.ActorDef{
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,
+		actions.MindTransfer.ID,
 	},
 }

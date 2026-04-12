@@ -15,11 +15,11 @@ var Hidan = game.ActorDef{
 
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            200,
-		game.StatStamina:       30,
+		game.StatStamina:       100,
 		game.StatAttack:        70,
-		game.StatDefense:       70,
+		game.StatDefense:       55,
 		game.StatChakraAttack:  30,
-		game.StatChakraDefense: 70,
+		game.StatChakraDefense: 55,
 		game.StatSpeed:         70,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
@@ -35,7 +35,7 @@ var Hidan = game.ActorDef{
 		actions.FollowMe.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
-		actions.Fireball.ID,
+		actions.BloodPrice.ID,
 		actions.LeafJab.ID,
 		actions.Curse.ID,
 	},

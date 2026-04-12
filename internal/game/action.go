@@ -15,6 +15,8 @@ const (
 	ActionPriorityP1      = 1
 	ActionPriorityDefault = 0
 	ActionPrioritySlow    = -1
+	ActionPrioritySlow2   = -2
+	ActionPrioritySlow3   = -3
 )
 
 type ActionJutsu string

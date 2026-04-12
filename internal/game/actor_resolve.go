@@ -89,3 +89,13 @@ func (ah *actorResolveHandler) resolveNatures(resolved *ResolvedActor) {
 		resolved.ResolvedNatureDamage[nature] = GetStabModifier(*resolved, &ns)
 	}
 }
+
+func (ah *actorResolveHandler) resolveActions(resolved *ResolvedActor) {
+	for i, _ := range resolved.Actions {
+		if resolved.Actions[i].Config.Cooldown == nil {
+			resolved.Actions[i].Config.Cooldown = Ptr(resolved.CooldownOffset)
+		} else {
+			*resolved.Actions[i].Config.Cooldown += resolved.CooldownOffset
+		}
+	}
+}

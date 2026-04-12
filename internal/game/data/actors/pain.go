@@ -41,7 +41,7 @@ var Pain = game.ActorDef{
 		actions.Sekiryoku.ID,
 		actions.Protect.ID,
 		actions.Tailwind.ID,
-		actions.LeafJab.ID,
+		actions.MindTransfer.ID,
 		actions.Surf.ID,
 	},
 }

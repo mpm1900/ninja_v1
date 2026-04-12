@@ -180,6 +180,7 @@ type ActorState struct {
 	Reflect         float64 `json:"-"`
 	PowerMultiplier float64 `json:"-"`
 	StabMultiplier  float64 `json:"-"`
+	CooldownOffset  int     `json:"-"`
 	Immortal        bool    `json:"immortal"`
 	// [ActionLocked]
 	// - action locked units must use their last used action
@@ -220,12 +221,16 @@ type Summon struct {
 type Actor struct {
 	ActorDef
 	ActorState
-	ID                uuid.UUID              `json:"ID"`
-	PlayerID          uuid.UUID              `json:"player_ID"`
-	Level             int                    `json:"level"`
-	Experience        int                    `json:"experience"`
-	Focus             ActorFocus             `json:"focus"`
-	Ability           *Modifier              `json:"ability"`
+	ID         uuid.UUID  `json:"ID"`
+	PlayerID   uuid.UUID  `json:"player_ID"`
+	Level      int        `json:"level"`
+	Experience int        `json:"experience"`
+	Focus      ActorFocus `json:"focus"`
+	Ability    *Modifier  `json:"ability"`
+	// [AuxAbility]
+	// - take priority over Ability
+	// - set to nil on switch-out
+	AuxAbility        *Modifier              `json:"-"`
 	Item              *Modifier              `json:"item"`
 	Stages            map[ActorStat]int      `json:"staged_stats"`
 	AuxStats          map[ActorStat]int      `json:"aux_stats"`
@@ -279,6 +284,12 @@ func (a Actor) GetActionByID(g Game, actionID uuid.UUID) (Action, bool) {
 }
 func (a Actor) IsActive() bool {
 	return a.PositionID != nil
+}
+func (a Actor) GetAbility() *Modifier {
+	if a.AuxAbility != nil {
+		return a.AuxAbility
+	}
+	return a.Ability
 }
 func (ra ResolvedActor) GetActionByID(actionID uuid.UUID) (Action, bool) {
 	for _, action := range ra.Actions {
@@ -359,6 +370,7 @@ func MakeActor(
 			PowerMultiplier:    1.0,
 			StabMultiplier:     1.5,
 			Reflect:            0.0,
+			CooldownOffset:     0,
 			Immortal:           false,
 			Seen:               false,
 			StaminaDamage:      0,
@@ -401,6 +413,7 @@ func (a *Actor) SetPosition(positionID *uuid.UUID) {
 		a.ActiveTurns = 0
 		a.Seen = true
 	} else {
+		a.AuxAbility = nil
 		a.LastUsedActionID = nil
 		a.InactiveTurns = 0
 		a.SetSummon(nil)
@@ -481,8 +494,9 @@ func (a Actor) GetFocusModifier(stat ActorStat) float64 {
 }
 func (a Actor) GetModifiers() []Modifier {
 	modifiers := make([]Modifier, 0)
-	if a.Ability != nil {
-		modifiers = append(modifiers, *a.Ability)
+	ability := a.GetAbility()
+	if ability != nil {
+		modifiers = append(modifiers, *ability)
 	}
 	if a.Item != nil {
 		modifiers = append(modifiers, *a.Item)
@@ -629,6 +643,7 @@ func resolveActor(actor Actor, g Game, bypassModifiers bool) ResolvedActor {
 	handler := newActorResolveHandler(actor, g, bypassModifiers)
 
 	resolved := handler.resolveMutations()
+	handler.resolveActions(&resolved)
 	handler.resolveNatures(&resolved)
 	return resolved
 }
@@ -651,6 +666,7 @@ func (a Actor) Resolve(g Game) ResolvedActor {
 	resolved := resolveActor(actor, g, false)
 	pre := resolveActor(actor, g, true)
 	resolved.PreStats = maps.Clone(pre.Stats)
+	resolved.Ability = actor.GetAbility()
 
 	return resolved
 }
