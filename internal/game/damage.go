@@ -21,20 +21,20 @@ type DamageTerms struct {
 }
 
 type DamageConfig struct {
-	Critical     float64
-	Random       float64
-	IgnoreStages bool
-	Repeat       bool
-	RepeatMax    int
+	Critical        float64
+	Random          float64
+	IgnoreModifiers bool
+	Repeat          bool
+	RepeatMax       int
 }
 
 func NewDamageConfig(critical float64, random float64) DamageConfig {
 	return DamageConfig{
-		Critical:     critical,
-		Random:       random,
-		IgnoreStages: false,
-		Repeat:       false,
-		RepeatMax:    0,
+		Critical:        critical,
+		Random:          random,
+		IgnoreModifiers: false,
+		Repeat:          false,
+		RepeatMax:       0,
 	}
 }
 
@@ -67,10 +67,21 @@ func GetStabModifier(source ResolvedActor, nature *NatureSet) float64 {
 	return source.StabMultiplier
 }
 
+func HasDebuff(r ResolvedActor, stat AttackStat) bool {
+	return r.DamageMultipliers[stat] < 1 ||
+		r.Stages[ActorStat(stat)] < 0 ||
+		r.Stages[StatAccuracy] < 0
+}
+func HasBuff(r ResolvedActor, attack AttackStat, defense DefenseStat) bool {
+	return r.DamageReduction[attack] > 1 ||
+		r.Stages[ActorStat(defense)] > 0 ||
+		r.Stages[StatEvasion] > 0
+}
+
 func GetDamage(
 	source ResolvedActor,
 	targets []ResolvedActor,
-	ignoreStages bool,
+	ignoreModifiers bool,
 	targetsCount int,
 	attack AttackStat,
 	defense DefenseStat,
@@ -98,10 +109,15 @@ func GetDamage(
 		 * This piece is important. Critical hits ignore target stat changes.
 		 */
 		if critical > 1.0 {
-			ignoreStages = true
+			ignoreModifiers = true
 		}
-		if ignoreStages {
-			d_base = float64(target.PreStats[ActorStat(defense)])
+		if ignoreModifiers {
+			if HasBuff(target, attack, defense) {
+				d_base = float64(target.PreStats[ActorStat(defense)])
+			}
+			if HasDebuff(source, attack) {
+				a_base = float64(source.PreStats[ActorStat(attack)])
+			}
 		}
 		d_mod := 1.0
 		defense_value := Round(d_base * d_mod)

@@ -160,7 +160,7 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 	return action.Delta(*game, *game, context)
 }
 
-func GetAccuracy(game Game, source ResolvedActor, target ResolvedActor) float64 {
+func GetAccuracy(game Game, source ResolvedActor, target ResolvedActor, ignoreModifiers bool) float64 {
 	ratio := float64(source.Stats[StatAccuracy]) / float64(target.Stats[StatEvasion])
 	fmt.Printf("ACC = %d / %d = %f \n", source.Stats[StatAccuracy], target.Stats[StatEvasion], ratio)
 	return ratio
@@ -200,8 +200,8 @@ func MakeCriticalCheck(action ActionConfig) ChanceResult {
 	}
 }
 
-func MakeAccuracyCheck(g *Game, action ActionConfig, source ResolvedActor, target ResolvedActor) ChanceResult {
-	base_accuracy := GetAccuracy(*g, source, target)
+func MakeAccuracyCheck(g *Game, action ActionConfig, source ResolvedActor, target ResolvedActor, ignoreModifiers bool) ChanceResult {
+	base_accuracy := GetAccuracy(*g, source, target, ignoreModifiers)
 	if action.Accuracy == nil {
 		return ChanceResult{
 			Success: true,

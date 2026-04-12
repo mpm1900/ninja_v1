@@ -186,7 +186,7 @@ func (e *damageHandler) resolveTargetHit(g *game.Game, targetIndex int, target g
 		return false
 	}
 
-	result := game.MakeAccuracyCheck(g, e.action, e.source, target)
+	result := game.MakeAccuracyCheck(g, e.action, e.source, target, e.config.IgnoreModifiers)
 	if !result.Success {
 		if !e.config.Repeat || e.repeats == 0 {
 			g.PushLog(game.NewLog(fmt.Sprintf("%s missed!", e.action.Name)))
@@ -198,7 +198,7 @@ func (e *damageHandler) resolveTargetHit(g *game.Game, targetIndex int, target g
 	damages := game.GetDamage(
 		e.source,
 		[]game.ResolvedActor{target},
-		e.config.IgnoreStages,
+		e.config.IgnoreModifiers,
 		len(e.resolved),
 		*e.action.Stat,
 		e.defense,
@@ -408,7 +408,7 @@ func NewHeal(action game.ActionConfig, ratio float64) game.GameMutation {
 
 			source := s.Resolve(g)
 			for _, target := range resolveTargets(g, context) {
-				result := game.MakeAccuracyCheck(&g, action, source, target)
+				result := game.MakeAccuracyCheck(&g, action, source, target, false)
 				if !result.Success {
 					g.PushLog(game.NewLog(fmt.Sprintf("%s missed!", action.Name)))
 					g.PushLog(game.NewLog(fmt.Sprintf("roll = %d, acc = %d", result.Roll, result.Chance)))
