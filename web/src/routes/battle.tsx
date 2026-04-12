@@ -1,18 +1,13 @@
 import { AppHeader } from '#/components/app-header'
 import { BattleActions } from '#/components/battle-actions'
 import { BattleContextController } from '#/components/battle-context-controller'
-import { GameLogList } from '#/components/game-log'
+import { BattleWeather } from '#/components/battle-weather'
+import { GameLog } from '#/components/game-log'
 import { PlayerPositions } from '#/components/player-positions'
 import { PlayerThumbnails } from '#/components/player-thumbnails'
 import { PromptController } from '#/components/prompt-controller'
 import { RunningContext } from '#/components/running-context'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '#/components/ui/accordion'
-import { ScrollArea } from '#/components/ui/scroll-area'
+import { useActiveActor } from '#/hooks/use-active-actor'
 import { battleContext, setContextSource } from '#/lib/stores/battle-context'
 import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
@@ -32,7 +27,7 @@ function RouteComponent() {
   const game = useStore(gameStore, (g) => g)
   const client = useStore(clientsStore, (c) => c.me)
   const context = useStore(battleContext, (c) => c)
-  const actor = game.actors.find((a) => a.ID === context.source_actor_ID)
+  const actor = useActiveActor()
   const players = game.players.filter((p) => p.ID === client?.ID)
   const enemies = game.players.filter((p) => p.ID !== client?.ID)
 
@@ -50,40 +45,13 @@ function RouteComponent() {
                   <PlayerPositions key={player.ID} flip player_ID={player.ID} />
                 ))}
               </div>
-              <Accordion
-                defaultValue={['log']}
-                type="multiple"
-                className="bg-black/70 px-3 border border-zinc-900 min-w-80 mt-4"
-              >
-                <AccordionItem value="log">
-                  <AccordionTrigger>Log</AccordionTrigger>
-                  <AccordionContent>
-                    <ScrollArea className="h-40">
-                      <GameLogList />
-                    </ScrollArea>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+              <GameLog />
             </div>
             <div className="fixed top-12 px-4 left-0 z-10">
               {enemies.map((player) => (
                 <PlayerThumbnails key={player.ID} player_ID={player.ID} />
               ))}
-              {game.state && (
-                <div>
-                  <div>Weather: {game.state.weather}</div>
-                  <div>Terrain: {game.state.terrain}</div>
-                  <div>
-                    Modifiers:{' '}
-                    {game.modifiers
-                      .filter((tx) =>
-                        game.applied_game_state_tx.includes(tx.ID)
-                      )
-                      .map((tx) => tx.mutation.name)
-                      .join(',') || 'none'}
-                  </div>
-                </div>
-              )}
+              <BattleWeather />
             </div>
           </div>
           <div className="flex-1 grid place-items-center overflow-hidden relative">

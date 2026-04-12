@@ -218,6 +218,10 @@ func Reducer(instance *Instance, request Request) int {
 			return none
 		}
 
+		if request.Context.ParentActorID == nil {
+			request.Context.ParentActorID = request.Context.SourceActorID
+		}
+
 		actor, ok := instance.Game.GetSource(request.Context)
 		if !ok {
 			return none

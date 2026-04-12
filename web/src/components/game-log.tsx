@@ -1,17 +1,19 @@
 import { useEffect, useRef } from 'react'
 import type { Game } from '#/lib/game/game'
-import { type GameLog } from '#/lib/game/log'
+import { type GameLog as GameLogType } from '#/lib/game/log'
 import { gameStore } from '#/lib/stores/game'
 import { useStore } from '@tanstack/react-store'
 import { clientsStore } from '#/lib/stores/clients'
 import { cn } from '#/lib/utils'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion'
+import { ScrollArea } from './ui/scroll-area'
 
 function GameLogItem({
   item,
   game,
   clientID,
 }: {
-  item: GameLog
+  item: GameLogType
   game: Game
   clientID: string
 }) {
@@ -78,4 +80,23 @@ function GameLogList() {
   )
 }
 
-export { GameLogItem, GameLogList }
+function GameLog() {
+  return (
+    <Accordion
+      defaultValue={['log']}
+      type="multiple"
+      className="bg-black/70 px-3 border border-zinc-900 min-w-80 mt-4"
+    >
+      <AccordionItem value="log">
+        <AccordionTrigger>Log</AccordionTrigger>
+        <AccordionContent>
+          <ScrollArea className="h-40">
+            <GameLogList />
+          </ScrollArea>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  )
+}
+
+export { GameLogItem, GameLogList, GameLog }

@@ -535,7 +535,7 @@ func (g *Game) SortActions() {
 
 func (g *Game) PushAction(transaction Transaction[Action]) bool {
 	for _, t := range g.Actions {
-		if *t.Context.ParentActorID == *transaction.Context.ParentActorID {
+		if t.Context.ParentActorID != nil && *t.Context.ParentActorID == *transaction.Context.ParentActorID {
 			return false
 		}
 	}
