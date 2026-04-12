@@ -1,46 +1,66 @@
-import type { Context } from "#/lib/game/context"
-import { clientsStore } from "#/lib/stores/clients"
-import { sendContextMessage, subscribeSocketMessages } from "#/lib/stores/socket"
-import { Store, useStore } from "@tanstack/react-store"
-import { useEffect } from "react"
+import { contextToString, type Context } from '#/lib/game/context'
+import { clientsStore } from '#/lib/stores/clients'
+import { sendContextMessage, subscribeSocketMessages } from '#/lib/stores/socket'
+import { useStore } from '@tanstack/react-store'
+import { useEffect, useRef, useState } from 'react'
 
-const validateContextStore = new Store<{ valid: boolean, loading: boolean }>({
-  valid: false,
-  loading: false,
-})
+type ValidateContextState = {
+  valid: boolean
+  loading: boolean
+}
+
+type PendingRequest = {
+  seq: number
+  contextKey: string
+}
 
 function useValidateContext(context: Context, prompt_ID?: string) {
   const client = useStore(clientsStore, (c) => c.me)
-  const store = useStore(validateContextStore, s => s)
+  const [state, setState] = useState<ValidateContextState>({
+    valid: false,
+    loading: false,
+  })
+
+  const pendingRef = useRef<PendingRequest | null>(null)
+  const seqRef = useRef(0)
 
   useEffect(() => {
-    validateContextStore.setState(() => ({ valid: false, loading: false }))
     return subscribeSocketMessages((_, message) => {
-      if (message?.type !== 'validate-context') return
-      validateContextStore.setState(() => ({
+      if (message?.type !== 'validate-context' || !message.context) return
+
+      const pending = pendingRef.current
+      if (!pending) return
+
+      const responseContextKey = contextToString(message.context)
+      if (responseContextKey !== pending.contextKey) return
+
+      setState({
         valid: message.valid ?? false,
         loading: false,
-      }))
+      })
+
+      pendingRef.current = null
     })
   }, [])
 
   useEffect(() => {
-    if (!client || validateContextStore.get().loading) return
+    if (!client) return
 
-    validateContextStore.setState(s => ({
-      ...s,
-      loading: true
-    }))
+    const seq = ++seqRef.current
+    const contextKey = contextToString(context)
+
+    pendingRef.current = { seq, contextKey }
+    setState((s) => ({ ...s, loading: true }))
+
     sendContextMessage({
       type: 'validate-context',
-      context: context,
+      context,
       client_ID: client.ID,
-      prompt_ID: prompt_ID
+      prompt_ID,
     })
-  }, [context])
+  }, [client?.ID, context, prompt_ID])
 
-
-  return store
+  return state
 }
 
 export { useValidateContext }
