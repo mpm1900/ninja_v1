@@ -15,9 +15,6 @@ import { setActionID } from '#/lib/stores/battle-context'
 
 function SwitchButton({ actor }: { actor: Actor }) {
   const active = useActiveActor()
-  const client = useStore(clientsStore, (c) => c.me!)
-  const game = useStore(gameStore, (g) => g)
-  const idle = game.status === 'idle'
   const switch_action = active?.actions.find((a) => a.config.name === 'Switch')
   const context = {
     ...NULL_CONTEXT,
@@ -27,6 +24,15 @@ function SwitchButton({ actor }: { actor: Actor }) {
     source_player_ID: active?.player_ID ?? null,
     target_actor_IDs: [],
   }
+  const client = useStore(clientsStore, (c) => c.me!)
+  const game = useStore(gameStore, (g) => g)
+  const idle = game.status === 'idle'
+  const queued_action = game.actions.find(
+    (a) =>
+      a.context.parent_actor_ID === active?.ID ||
+      (a.context.target_actor_IDs?.includes(actor.ID) &&
+        a.mutation.ID === switch_action?.ID)
+  )
 
   const { context: t_context } = useGetTargets(context)
   if (!idle || !t_context?.target_actor_IDs?.includes(actor.ID)) {
@@ -35,6 +41,7 @@ function SwitchButton({ actor }: { actor: Actor }) {
 
   return (
     <Button
+      disabled={!!queued_action}
       onClick={() => {
         sendContextMessage({
           type: 'push-action',

@@ -168,7 +168,9 @@ function ActorCard({
                 </ItemActions>
               ) : (
                 <Badge
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
                     if (has_queued_action) return
 
                     sendContextMessage({
