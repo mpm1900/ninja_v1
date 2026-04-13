@@ -22,6 +22,53 @@ type NatureSet =
   | 'particle'
   | 'jashin'
 
+const natureWeaknesses: Record<NatureSet, Array<Nature> | undefined> = {
+  tai: undefined,
+  pure: undefined,
+  fire: ['water'],
+  wind: ['fire'],
+  lightning: ['wind'],
+  earth: ['lightning'],
+  water: ['earth'],
+  yang: undefined,
+  yin: undefined,
+
+  scorch: undefined,
+  lava: undefined,
+  boil: undefined,
+  magnet: undefined,
+  ice: undefined,
+  explosion: undefined,
+  storm: undefined,
+  wood: ['earth', 'lightning'],
+  yinyang: undefined,
+  particle: undefined,
+  jashin: undefined,
+}
+const natureResistances: Record<NatureSet, Array<Nature> | undefined> = {
+  tai: undefined,
+  pure: undefined,
+  fire: ['wind'],
+  wind: ['lightning'],
+  lightning: ['earth'],
+  earth: ['water'],
+  water: ['fire'],
+  yang: undefined,
+  yin: undefined,
+
+  scorch: undefined,
+  lava: undefined,
+  boil: undefined,
+  magnet: undefined,
+  ice: undefined,
+  explosion: undefined,
+  storm: undefined,
+  wood: ['fire', 'water'],
+  yinyang: undefined,
+  particle: undefined,
+  jashin: undefined,
+}
+
 const natureNames: Partial<Record<NatureSet, string>> = {
   tai: '体',
   pure: '纯',
@@ -65,4 +112,4 @@ const natureIndexes: Record<NatureSet, number> = {
 }
 
 export type { Nature, NatureSet }
-export { natureNames, natureIndexes }
+export { natureNames, natureIndexes, natureWeaknesses, natureResistances }

@@ -33,7 +33,12 @@ import { type ActorDef } from '#/lib/game/actor'
 import { TeamBuilderStats } from '#/components/team-builder-stats'
 import { Frown, Save, Smile, Swords } from 'lucide-react'
 import { TeamBuilderSidebar } from '#/components/team-builder-sidebar'
-import { natureIndexes, type NatureSet } from '#/lib/game/nature'
+import {
+  natureIndexes,
+  natureResistances,
+  natureWeaknesses,
+  type NatureSet,
+} from '#/lib/game/nature'
 import { NatureBadge } from '#/components/nature-badge'
 
 function makeConfigFromDef(def: ActorDef): TeamActor {
@@ -341,11 +346,28 @@ function RouteComponent() {
                                     nature={nature}
                                     className="text-xs"
                                   />
-                                  <span> is weak to </span>
-                                  <NatureBadge
-                                    nature={nature}
-                                    className="text-xs"
-                                  />
+                                  <span className="text-xs text-muted-foreground">
+                                    {' '}
+                                    is weak to{' '}
+                                  </span>
+                                  {natureWeaknesses[nature]?.map((n) => (
+                                    <NatureBadge
+                                      key={n}
+                                      nature={n}
+                                      className="text-xs"
+                                    />
+                                  ))}
+                                  <span className="text-xs text-muted-foreground">
+                                    {' '}
+                                    but resists{' '}
+                                  </span>
+                                  {natureResistances[nature]?.map((n) => (
+                                    <NatureBadge
+                                      key={n}
+                                      nature={n}
+                                      className="text-xs"
+                                    />
+                                  ))}
                                 </div>
                               ))}
                           </div>
