@@ -168,10 +168,25 @@ func Match__SourceActor_SourceActor(parent Game, game Game, context Context, mod
 
 	return *context.SourceActorID == *modifier_tx.Context.SourceActorID
 }
+func NotMatch__SourceActor_SourceActor(parent Game, game Game, context Context, modifier_tx Transaction[Modifier]) bool {
+	if context.SourceActorID == nil || modifier_tx.Context.SourceActorID == nil {
+		return false
+	}
+
+	return *context.SourceActorID != *modifier_tx.Context.SourceActorID
+}
 func Source__IsAtOrBelowHealth(ratio float64) TriggerFilter {
 	return func(parent Game, game Game, context Context, modifier_tx Transaction[Modifier]) bool {
 		return SourceIsAtOrBelowHealth(ratio)(parent, game, modifier_tx.Context)
 	}
+}
+func Source__IsActive(parent Game, game Game, context Context, modifier_tx Transaction[Modifier]) bool {
+	source, ok := game.GetSource(modifier_tx.Context)
+	if !ok {
+		return false
+	}
+
+	return source.IsActive()
 }
 func Modifier__IsOneOf(modifierIDs ...uuid.UUID) TriggerFilter {
 	return func(parent Game, game Game, context Context, modifier_tx Transaction[Modifier]) bool {
