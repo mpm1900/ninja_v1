@@ -12,6 +12,7 @@ var Shino = game.ActorDef{
 	SpriteURL:    "/sprites/shino_64.png",
 	Name:         "Shino Aburame",
 	Affiliations: []string{game.AffKonoha},
+	Clan:         game.ClanAburame,
 
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            80,

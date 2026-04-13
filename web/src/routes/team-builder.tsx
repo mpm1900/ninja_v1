@@ -31,8 +31,10 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { type ActorDef } from '#/lib/game/actor'
 import { TeamBuilderStats } from '#/components/team-builder-stats'
-import { Save, Swords } from 'lucide-react'
+import { Frown, Save, Smile, Swords } from 'lucide-react'
 import { TeamBuilderSidebar } from '#/components/team-builder-sidebar'
+import { natureIndexes, type NatureSet } from '#/lib/game/nature'
+import { NatureBadge } from '#/components/nature-badge'
 
 function makeConfigFromDef(def: ActorDef): TeamActor {
   return {
@@ -274,10 +276,29 @@ function RouteComponent() {
 
                       <div className="flex gap-4">
                         <div className="flex flex-col gap-2 min-w-1/4">
-                          <img
-                            src={def.sprite_url}
-                            className="object-cover size-16"
-                          />
+                          <div className="flex">
+                            <img
+                              src={def.sprite_url}
+                              className="object-cover size-16"
+                            />
+                            <div>
+                              <div>{def.name}</div>
+                              <div className="flex">
+                                {(Object.keys(def.natures) as Array<NatureSet>)
+                                  .sort(
+                                    (a, b) =>
+                                      natureIndexes[a] - natureIndexes[b]
+                                  )
+                                  .map((nature) => (
+                                    <NatureBadge
+                                      key={nature}
+                                      nature={nature}
+                                      className="text-xs block"
+                                    />
+                                  ))}
+                              </div>
+                            </div>
+                          </div>
                           <FocusSelect
                             value={actor.config?.focus ?? 'none'}
                             onValueChange={(focus) => {
@@ -306,6 +327,28 @@ function RouteComponent() {
                               )
                             }}
                           />
+                          <div>
+                            <p className="text-xs text-muted-foreground">
+                              Reminder:
+                            </p>
+                            {(Object.keys(def.natures) as Array<NatureSet>)
+                              .sort(
+                                (a, b) => natureIndexes[a] - natureIndexes[b]
+                              )
+                              .map((nature) => (
+                                <div key={nature}>
+                                  <NatureBadge
+                                    nature={nature}
+                                    className="text-xs"
+                                  />
+                                  <span> is weak to </span>
+                                  <NatureBadge
+                                    nature={nature}
+                                    className="text-xs"
+                                  />
+                                </div>
+                              ))}
+                          </div>
                         </div>
 
                         <form.Subscribe

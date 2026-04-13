@@ -1,6 +1,9 @@
 import { GiFlamer, GiLightningTrio, GiShieldcomb, GiStarSwirl } from 'react-icons/gi'
 import type { IconType } from 'react-icons/lib'
 
+const Aburame: IconType = (props) => (
+  <img src="/icons/aburame.svg" alt="aburame" {...(props as any)} />
+)
 const Anger: IconType = (props) => (
   <img src="/icons/anger.svg" alt="Ame" {...(props as any)} />
 )
@@ -51,6 +54,7 @@ const Yuga: IconType = (props) => (
 )
 
 const SHINOBI_ICONS: Record<string, IconType> = {
+  aburame: Aburame,
   ame: Ame,
   akatsuki: Akatsuki,
   hatake: Hatake,

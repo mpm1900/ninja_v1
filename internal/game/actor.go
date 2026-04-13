@@ -106,6 +106,7 @@ const (
 	AffTaki     = "taki"
 	AffYuga     = "yuga"
 
+	ClanAburame = "aburame"
 	ClanHatake  = "hatake"
 	ClanSenju   = "senju"
 	ClanUchiha  = "uchiha"
