@@ -201,6 +201,20 @@ func (g Game) GetTriggers(on TriggerOn, context *Context) []Transaction[Trigger]
 	modifiers = append(modifiers, transactions...)
 	modifiers = append(modifiers, GetActorModifiers(g)...)
 
+	/**
+	 * This is so that leaving actos are temporarily considered active
+	 * for trigger resolution
+	 */
+	if on == OnActorLeave && context != nil && context.SourceActorID != nil {
+		source, ok := g.GetActorByID(*context.SourceActorID)
+		if ok {
+			source_ctx := newActorContext(source)
+			for _, mod := range source.GetModifiers() {
+				modifiers = append(modifiers, MakeTransaction(mod, source_ctx))
+			}
+		}
+	}
+
 	for _, tx := range modifiers {
 		if context == nil {
 			ctx = tx.Context

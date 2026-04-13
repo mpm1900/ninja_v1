@@ -65,6 +65,42 @@ var NeutralizingChakra game.Modifier = game.Modifier{
 		{
 			ID:         uuid.New(),
 			ModifierID: neutralizingChakraID,
+			On:         game.OnActorLeave,
+			Check:      game.Match__SourceActor_SourceActor,
+			ActionMutation: game.ActionMutation{
+				Priority: game.ActionPriorityP1,
+				Filter:   game.TrueGameFilter,
+				Delta: func(p, g game.Game, context game.Context) []game.GameTransaction {
+					transactions := []game.GameTransaction{}
+					targets := g.GetActorsFilters(context, game.ComposeAF(
+						game.ActiveFilter,
+						game.AliveFilter,
+						game.OtherFilter,
+					))
+					for _, target := range targets {
+						mut_ctx := context
+						mut_ctx.ModifierID = &neutralizingChakraID
+						mut_ctx.TargetActorIDs = []uuid.UUID{target.ID}
+						mutation := game.GameMutation{
+							Delta: func(p, g game.Game, context game.Context) game.Game {
+								g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
+									a.AuxAbility = nil
+									return a
+								})
+								return g
+							},
+						}
+						transaction := game.MakeTransaction(mutation, mut_ctx)
+						transactions = append(transactions, transaction)
+					}
+
+					return transactions
+				},
+			},
+		},
+		{
+			ID:         uuid.New(),
+			ModifierID: neutralizingChakraID,
 			On:         game.OnActorEnter,
 			Check:      game.NotMatch__SourceActor_SourceActor,
 			ActionMutation: game.ActionMutation{
