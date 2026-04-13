@@ -112,7 +112,7 @@ type Actor = ActorDef &
     focus: ActorFocus
     base_stats: ActorStats<number>
     staged_stats: ActorStats<number>
-    pre_stats: ActorStats<number>
+    unmodified_stats: ActorStats<number>
     aux_stats: ActorStats<number>
     applied_modifiers: Record<string, number>
     actions: Array<Action>
@@ -125,7 +125,7 @@ type Actor = ActorDef &
 
 function checkActorStat(actor: Actor, key: ActorBaseStat) {
   const stat = actor.stats[key]
-  const pre = actor.pre_stats[key]
+  const pre = actor.unmodified_stats[key]
   return stat === pre ? 0 : stat > pre ? 1 : -1
 }
 

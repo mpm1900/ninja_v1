@@ -32,7 +32,7 @@ func NewDamageConfig(critical float64, random float64) DamageConfig {
 	return DamageConfig{
 		Critical:        critical,
 		Random:          random,
-		IgnoreModifiers: false,
+		IgnoreModifiers: critical > 1,
 		Repeat:          false,
 		RepeatMax:       0,
 	}
@@ -113,10 +113,10 @@ func GetDamage(
 		}
 		if ignoreModifiers {
 			if HasBuff(target, attack, defense) {
-				d_base = float64(target.PreStats[ActorStat(defense)])
+				d_base = float64(target.UnmodifiedStats[ActorStat(defense)])
 			}
 			if HasDebuff(source, attack) {
-				a_base = float64(source.PreStats[ActorStat(attack)])
+				a_base = float64(source.UnmodifiedStats[ActorStat(attack)])
 			}
 		}
 		d_mod := 1.0

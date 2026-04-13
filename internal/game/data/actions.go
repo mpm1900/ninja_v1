@@ -50,4 +50,5 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.Coersion.ID:     actions.Coersion,
 	actions.BloodPrice.ID:   actions.BloodPrice,
 	actions.MindTransfer.ID: actions.MindTransfer,
+	actions.CopyJutsu.ID:    actions.CopyJutsu,
 }

@@ -1,0 +1,40 @@
+package actors
+
+import (
+	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/actions"
+
+	"github.com/google/uuid"
+)
+
+var Shino = game.ActorDef{
+	ActorID:      uuid.MustParse("4bc617c5-2df1-4ae4-8e6e-dd086d017104"),
+	SpriteURL:    "/sprites/shino_64.png",
+	Name:         "Shino Aburame",
+	Affiliations: []string{game.AffKonoha},
+
+	Stats: map[game.ActorStat]int{
+		game.StatHP:            80,
+		game.StatStamina:       80,
+		game.StatAttack:        80,
+		game.StatDefense:       80,
+		game.StatChakraAttack:  100,
+		game.StatChakraDefense: 80,
+		game.StatSpeed:         100,
+		game.StatEvasion:       100,
+		game.StatAccuracy:      100,
+	},
+	NatureDamage:     game.NewNatureSetValues(),
+	NatureResistance: game.NewNatureSetValues(),
+	Natures: game.MapNatures([]game.NatureSet{
+		game.NsEarth,
+		game.NsYang,
+	}),
+	Abilities:   []game.Modifier{},
+	ActionCount: 6,
+	ActionIDs: []uuid.UUID{
+		actions.DragonDance.ID,
+		actions.Fireball.ID,
+		actions.LeafJab.ID,
+	},
+}

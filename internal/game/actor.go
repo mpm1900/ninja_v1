@@ -244,7 +244,7 @@ type Actor struct {
 type ResolvedActor struct {
 	Actor
 	BaseStats                map[ActorStat]int  `json:"base_stats"`
-	PreStats                 map[ActorStat]int  `json:"pre_stats"`
+	UnmodifiedStats          map[ActorStat]int  `json:"unmodified_stats"`
 	AppliedModifiers         map[uuid.UUID]int  `json:"applied_modifiers"`
 	ResolvedNatureResistance map[Nature]float64 `json:"resolved_nature_resistance"`
 	ResolvedNatureDamage     map[Nature]float64 `json:"resolved_nature_damage"`
@@ -664,8 +664,8 @@ func (a Actor) ResolveModifierless(g Game) ResolvedActor {
 func (a Actor) Resolve(g Game) ResolvedActor {
 	actor := a.getActor()
 	resolved := resolveActor(actor, g, false)
-	pre := resolveActor(actor, g, true)
-	resolved.PreStats = maps.Clone(pre.Stats)
+	unmodified := resolveActor(actor, g, true)
+	resolved.UnmodifiedStats = maps.Clone(unmodified.Stats)
 	resolved.Ability = actor.GetAbility()
 
 	return resolved

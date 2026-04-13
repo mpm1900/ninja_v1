@@ -28,6 +28,8 @@ var ACTORS map[uuid.UUID]game.ActorDef = map[uuid.UUID]game.ActorDef{
 	actors.Guy.ActorID:        actors.Guy,
 	actors.RockLee.ActorID:    actors.RockLee,
 	actors.Kakashi.ActorID:    actors.Kakashi,
+	actors.Asuma.ActorID:      actors.Asuma,
+	actors.Hiruzen.ActorID:    actors.Hiruzen,
 	actors.Shikamaru.ActorID:  actors.Shikamaru,
 	actors.Kabuto.ActorID:     actors.Kabuto,
 	actors.Choji.ActorID:      actors.Choji,
@@ -37,4 +39,7 @@ var ACTORS map[uuid.UUID]game.ActorDef = map[uuid.UUID]game.ActorDef{
 	actors.Kinkaku.ActorID:    actors.Kinkaku,
 	actors.Ginkaku.ActorID:    actors.Ginkaku,
 	actors.Gaara.ActorID:      actors.Gaara,
+	actors.Haku.ActorID:       actors.Haku,
+	actors.Zabuza.ActorID:     actors.Zabuza,
+	actors.Shino.ActorID:      actors.Shino,
 }
