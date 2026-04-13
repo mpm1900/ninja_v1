@@ -43,5 +43,6 @@ var Itachi = game.ActorDef{
 		actions.Fireball.ID,
 		actions.Amaterasu.ID,
 		actions.Coersion.ID,
+		actions.TempleOfNirvana.ID,
 	},
 }

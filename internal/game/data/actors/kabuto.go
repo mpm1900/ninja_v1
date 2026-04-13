@@ -36,5 +36,6 @@ var Kabuto = game.ActorDef{
 		actions.Haze.ID,
 		actions.Tailwind.ID,
 		actions.FollowMe.ID,
+		actions.TempleOfNirvana.ID,
 	},
 }

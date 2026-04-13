@@ -110,17 +110,19 @@ const natureIndexes: Record<NatureSet, number> = {
 }
 
 function getWeakness(...natures: Array<NatureSet>): Array<Nature> {
-  return natures.flatMap((nature) => {
+  const list = natures.flatMap((nature) => {
     const base = natureSetMap[nature]
     return base.map((n) => natureWeakness[n]).filter((n) => n !== undefined)
   })
+  return Array.from(new Set(list))
 }
 
 function getResistance(...natures: Array<NatureSet>): Array<Nature> {
-  return natures.flatMap((nature) => {
+  const list = natures.flatMap((nature) => {
     const base = natureSetMap[nature]
     return base.map((n) => natureResistance[n]).filter((n) => n !== undefined)
   })
+  return Array.from(new Set(list))
 }
 
 export type { Nature, NatureSet }

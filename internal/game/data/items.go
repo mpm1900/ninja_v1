@@ -17,4 +17,5 @@ var ITEMS map[uuid.UUID]game.Modifier = map[uuid.UUID]game.Modifier{
 	modifiers.GedoShard.ID:            modifiers.GedoShard,
 	modifiers.Onigiri.ID:              modifiers.Onigiri,
 	modifiers.ShinobiVest.ID:          modifiers.ShinobiVest,
+	modifiers.UchihaFan.ID:            modifiers.UchihaFan,	
 }

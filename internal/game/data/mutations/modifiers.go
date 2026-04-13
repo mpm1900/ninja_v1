@@ -7,6 +7,25 @@ import (
 	"github.com/google/uuid"
 )
 
+func AddStatus(checkWarded bool, modifiers ...game.Modifier) game.GameMutation {
+	mut := AddModifiers(checkWarded, modifiers...)
+	baseDelta := mut.Delta
+	mut.Delta = func(p, g game.Game, context game.Context) game.Game {
+		source, ok := g.GetSource(context)
+		if !ok {
+			return g
+		}
+
+		resolved := source.Resolve(g)
+		if resolved.Statused {
+			return g
+		}
+
+		return baseDelta(p, g, context)
+	}
+	return mut
+}
+
 func AddModifiers(checkWarded bool, modifiers ...game.Modifier) game.GameMutation {
 	return game.GameMutation{
 		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {

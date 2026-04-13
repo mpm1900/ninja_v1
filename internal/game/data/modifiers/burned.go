@@ -42,12 +42,6 @@ var Burned game.Modifier = game.Modifier{
 			game.MutPriorityPostStagedStats,
 			game.ComposeAF(game.TargetFilter, game.ActiveFilter),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {
-				if actor.Statused {
-					return actor
-				}
-
-				actor.Statused = true
-				actor.Burned = true
 				actor.Stats[game.StatAttack] = game.Round(float64(actor.Stats[game.StatAttack]) * 0.5)
 				return actor
 			},

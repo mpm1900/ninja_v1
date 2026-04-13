@@ -59,9 +59,12 @@ func MakeAmaterasu() game.Action {
 						ParentActorID:  nil, // do not remove on switch
 						TargetActorIDs: []uuid.UUID{target.ID},
 					}
-					mutation := mutations.AddModifiers(true, modifiers.Burned)
-					transaction := game.MakeTransaction(mutation, mut_ctx)
-					transactions = append(transactions, transaction)
+
+					mod := mutations.AddStatus(true, modifiers.Burned)
+					mod_tx := game.MakeTransaction(mod, mut_ctx)
+					mut := mutations.Burn
+					mut_tx := game.MakeTransaction(mut, mut_ctx)
+					transactions = append(transactions, mod_tx, mut_tx)
 				}
 
 				return transactions
