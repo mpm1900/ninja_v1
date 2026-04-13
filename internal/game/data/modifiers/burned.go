@@ -14,14 +14,12 @@ var BurnedTrigger game.Trigger = game.Trigger{
 	ModifierID: burnedID,
 	On:         game.OnTurnEnd,
 	Check: func(p, g game.Game, context game.Context, tx game.Transaction[game.Modifier]) bool {
-		return true
+		return game.TargetIsActive(p, g, context)
 	},
 	ActionMutation: game.ActionMutation{
 		Priority: game.ActionPriorityDefault,
 		Filter:   game.TrueGameFilter,
 		Delta: func(p game.Game, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
-			context.TargetPositionIDs = []uuid.UUID{}
-			context.TargetActorIDs = []uuid.UUID{*context.SourceActorID}
 			mut := mutations.RatioDamage(0.0625)
 			return []game.Transaction[game.GameMutation]{
 				game.MakeTransaction(mut, context),

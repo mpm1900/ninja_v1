@@ -110,6 +110,15 @@ func SourceIsAtOrBelowHealth(ratio float64) func(Game, Game, Context) bool {
 		return ratio >= (hp-damage)/hp
 	}
 }
+func TargetIsActive(parent Game, game Game, context Context) bool {
+	targets := game.GetTargets(context)
+	for _, target := range targets {
+		if target.PositionID != nil {
+			return true
+		}
+	}
+	return false
+}
 func TargetsIsOneAlive(parent Game, game Game, context Context) bool {
 	targets := game.GetTargets(context)
 	for _, target := range targets {

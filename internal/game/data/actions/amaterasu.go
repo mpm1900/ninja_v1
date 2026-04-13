@@ -53,8 +53,12 @@ func MakeAmaterasu() game.Action {
 
 				targets := g.GetTargets(context)
 				for _, target := range targets {
-					mut_ctx := context
-					mut_ctx.TargetActorIDs = []uuid.UUID{target.ID}
+					mut_ctx := game.Context{
+						SourcePlayerID: &target.PlayerID,
+						SourceActorID:  &target.ID,
+						ParentActorID:  nil, // do not remove on switch
+						TargetActorIDs: []uuid.UUID{target.ID},
+					}
 					mutation := mutations.AddModifiers(true, modifiers.Burned)
 					transaction := game.MakeTransaction(mutation, mut_ctx)
 					transactions = append(transactions, transaction)

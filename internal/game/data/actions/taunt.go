@@ -22,7 +22,7 @@ func MakeTaunt() game.Action {
 		ID:              uuid.MustParse("c62f29ad-2f3e-5e5e-b045-bb0ed58837bc"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
-		TargetPredicate: game.ComposeAF(game.ActiveFilter, game.TargetableFilter),
+		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
 		ContextValidate: game.TargetLengthFilter(1),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
@@ -33,12 +33,12 @@ func MakeTaunt() game.Action {
 				transactions := []game.GameTransaction{}
 
 				targets := g.GetTargets(context)
-				if len(targets) == 1 {
-					context.ParentActorID = &targets[0].ID
+				for _, target := range targets {
+					context.ParentActorID = &target.ID
+					mutation := mutations.AddModifiers(false, modifiers.Taunted)
+					transaction := game.MakeTransaction(mutation, context)
+					transactions = append(transactions, transaction)
 				}
-				mutation := mutations.AddModifiers(false, modifiers.Taunted)
-				transaction := game.MakeTransaction(mutation, context)
-				transactions = append(transactions, transaction)
 
 				return transactions
 			},
