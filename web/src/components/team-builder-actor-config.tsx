@@ -10,6 +10,36 @@ import { NatureBadge } from './nature-badge'
 import { TeamBuilderActorAttributes } from './team-builder-actor-attributes'
 import { TeamBuilderStats } from './team-builder-stats'
 
+function NatureWR({ nature }: { nature: NatureSet }) {
+  const weaknesses = natureWeaknesses[nature] ?? []
+  const resistances = natureResistances[nature] ?? []
+  if (weaknesses.length == 0 && resistances.length == 0) {
+    return null
+  }
+  return (
+    <div>
+      <NatureBadge nature={nature} className="text-xs" />
+      {weaknesses.length > 0 && (
+        <>
+          <span className="text-xs text-muted-foreground"> is weak to </span>
+          {weaknesses?.map((n) => (
+            <NatureBadge key={n} nature={n} className="text-xs" />
+          ))}
+        </>
+      )}
+
+      {resistances.length > 0 && (
+        <>
+          <span className="text-xs text-muted-foreground"> but resists </span>
+          {resistances?.map((n) => (
+            <NatureBadge key={n} nature={n} className="text-xs" />
+          ))}
+        </>
+      )}
+    </div>
+  )
+}
+
 function TeamBuilderActorConfig({
   def,
   form,
@@ -81,23 +111,7 @@ function TeamBuilderActorConfig({
               {(Object.keys(def.natures) as Array<NatureSet>)
                 .sort((a, b) => natureIndexes[a] - natureIndexes[b])
                 .map((nature) => (
-                  <div key={nature}>
-                    <NatureBadge nature={nature} className="text-xs" />
-                    <span className="text-xs text-muted-foreground">
-                      {' '}
-                      is weak to{' '}
-                    </span>
-                    {natureWeaknesses[nature]?.map((n) => (
-                      <NatureBadge key={n} nature={n} className="text-xs" />
-                    ))}
-                    <span className="text-xs text-muted-foreground">
-                      {' '}
-                      but resists{' '}
-                    </span>
-                    {natureResistances[nature]?.map((n) => (
-                      <NatureBadge key={n} nature={n} className="text-xs" />
-                    ))}
-                  </div>
+                  <NatureWR key={nature} nature={nature} />
                 ))}
             </div>
           </div>

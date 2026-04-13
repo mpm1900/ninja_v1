@@ -5,7 +5,7 @@ import {
   subscribeSocketMessages,
 } from '#/lib/stores/socket'
 import { useStore } from '@tanstack/react-store'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type GetTargetsState = {
   context: Context | null
@@ -33,8 +33,13 @@ function useGetTargets(context: Context, prompt_ID?: string) {
 
   const latestScopeRef = useRef<string>('')
   const latestRequestRef = useRef(0)
+  const latestContextRef = useRef(context)
 
-  const requestScope = useMemo(() => contextScopeKey(context), [context])
+  const requestScope = contextScopeKey(context)
+
+  useEffect(() => {
+    latestContextRef.current = context
+  }, [context])
 
   useEffect(() => {
     return subscribeSocketMessages((_, message) => {
@@ -65,7 +70,7 @@ function useGetTargets(context: Context, prompt_ID?: string) {
 
     const sent = sendContextMessage({
       type: 'get-targets',
-      context,
+      context: latestContextRef.current,
       client_ID: client.ID,
       prompt_ID,
     })
@@ -76,7 +81,7 @@ function useGetTargets(context: Context, prompt_ID?: string) {
         loading: false,
       }))
     }
-  }, [client?.ID, context, prompt_ID, requestScope])
+  }, [client?.ID, prompt_ID, requestScope])
 
   return state
 }

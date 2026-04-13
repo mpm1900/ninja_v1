@@ -27,6 +27,7 @@ const (
 	NsScorch    NatureSet = "scorch"
 	NsLava      NatureSet = "lava"
 	NsBoil      NatureSet = "boil"
+	NsGale      NatureSet = "gale"
 	NsMagnet    NatureSet = "magnet"
 	NsIce       NatureSet = "ice"
 	NsExplosion NatureSet = "explosion"
@@ -51,9 +52,9 @@ var NATURES = map[NatureSet][]Nature{
 
 	NsScorch: {NatureFire, NatureWind},
 	// ??? {NatureFire, NatureLightning}
-	NsLava: {NatureFire, NatureEarth},
-	NsBoil: {NatureFire, NatureWater},
-	// ??? {NatureWind, NatureLightning}
+	NsLava:      {NatureFire, NatureEarth},
+	NsBoil:      {NatureFire, NatureWater},
+	NsGale:      {NatureWind, NatureLightning},
 	NsMagnet:    {NatureWind, NatureEarth},
 	NsIce:       {NatureWind, NatureWater},
 	NsExplosion: {NatureLightning, NatureEarth},
@@ -70,8 +71,6 @@ var ElementalCycle = map[Nature]Nature{
 	NatureLightning: NatureEarth,
 	NatureEarth:     NatureWater,
 	NatureWater:     NatureFire,
-	NatureYin:       NatureYang,
-	NatureYang:      NatureYin,
 }
 
 func NewNatureSetValues() map[Nature]float64 {
@@ -87,9 +86,6 @@ func NewNatureSetValues() map[Nature]float64 {
 }
 
 func GetEffectiveness(moveNature Nature, targetNature Nature) float64 {
-	if moveNature == targetNature && (moveNature == NatureYin || moveNature == NatureYang) {
-		return 0.5
-	}
 	if ElementalCycle[moveNature] == targetNature {
 		return 2.0
 	}
@@ -129,7 +125,6 @@ func ResolveNatures(
 
 		total_effectiveness += effectiveness
 	}
-
 
 	avg_effectiveness := total_effectiveness / float64(len(input))
 	if len(input) == 0 {
