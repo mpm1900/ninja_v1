@@ -23,26 +23,29 @@ function PlayerPositions({
   const bc = useStore(battleContext, (c) => c)
   const player = game.players.find((p) => p.ID === player_ID)
   const coef = flip ? -1 : 1
-  const context = game.active_transaction?.context
-  const target_IDs = [
+  const is_running = game.status === 'running'
+  const running_context = is_running ? game.active_transaction?.context : null
+  const targetedActorIDs = new Set<string>([
     ...(bc.hover_target_IDs ?? []),
     ...(bc.target_actor_IDs ?? []),
-    ...(context?.target_actor_IDs ?? []),
-  ]
-  const pos_IDs = [
+    ...(running_context?.target_actor_IDs ?? []),
+  ])
+  const targetedPositionIDs = new Set<string>([
     ...(bc.target_position_IDs ?? []),
-    ...(context?.target_position_IDs ?? []),
-  ]
+    ...(running_context?.target_position_IDs ?? []),
+  ])
 
   if (!player) return null
 
   return (
     <div className="flex gap-8">
       {player.positions.map((pos) => {
+        const actor_ID = pos.actor_ID
         const targeted =
-          target_IDs?.includes(pos.actor_ID!) || pos_IDs?.includes(pos.ID)
-        const is_source = context?.source_actor_ID === pos.actor_ID
-        const is_selected = selected === pos.actor_ID
+          (!!actor_ID && targetedActorIDs.has(actor_ID)) ||
+          targetedPositionIDs.has(pos.ID)
+        const is_source = running_context?.source_actor_ID === actor_ID
+        const is_selected = selected === actor_ID
         return (
           <div
             key={pos.ID}

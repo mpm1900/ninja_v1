@@ -30,7 +30,7 @@ const actorVariants = cva(
       },
       selected: {
         selected:
-          'bg-gray-600! border-gray-400! shadow-[0px_5px_10px_rgba(0,0,0,0.7)]',
+          'bg-stone-500! border-stone-300! shadow-[0px_5px_10px_rgba(0,0,0,0.7)]',
         // source: 'scale-105 bg-blue-900! border-blue-300/40',
         targeted:
           'bg-red-900! border-red-300/40! shadow-[0px_5px_10px_rgba(0,0,0,0.7)]',

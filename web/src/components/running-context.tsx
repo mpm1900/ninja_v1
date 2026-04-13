@@ -9,7 +9,7 @@ function RunningContext({ context }: { context: Context }) {
   const client_ID = useStore(clientsStore, (s) => s.me?.ID)
   const source = game.actors.find((a) => a.ID === context.source_actor_ID)
   const source_action = source?.actions.find((a) => a.ID === context.action_ID)
-  const targets = getTargets(game, context)
+  const targets = getTargets(source_action?.target_type, game, context)
   const has_targets =
     targets.length > 0 && targets[0].ID !== context.source_actor_ID
   return (

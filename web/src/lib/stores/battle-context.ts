@@ -22,6 +22,7 @@ function setContextPlayer(player_ID: string) {
     target_actor_IDs: [],
     target_position_IDs: [],
     previous_action_IDs: {},
+    hover_target_IDs: [],
   }))
 }
 
@@ -32,15 +33,19 @@ function clearHoverTargets() {
   }))
 }
 function addHoverTarget(ID: string) {
+  if (!ID) return
+
   battleContext.setState((s) => ({
     ...s,
-    hover_target_IDs: s.hover_target_IDs.concat(ID),
+    hover_target_IDs: s.hover_target_IDs.includes(ID)
+      ? s.hover_target_IDs
+      : s.hover_target_IDs.concat(ID),
   }))
 }
 function removeHoverTarget(ID: string) {
   battleContext.setState((s) => ({
     ...s,
-    hover_target_IDs: s.hover_target_IDs.filter(t => t != ID),
+    hover_target_IDs: s.hover_target_IDs.filter((t) => t !== ID),
   }))
 }
 
@@ -85,6 +90,7 @@ function setActionID(actor_ID: string, action_ID: string, game: Game) {
         target_actor_IDs: [],
         target_position_IDs: [],
         previous_action_IDs,
+        hover_target_IDs: [],
       }
     }
 
@@ -100,6 +106,7 @@ function setActionID(actor_ID: string, action_ID: string, game: Game) {
       target_actor_IDs: [],
       target_position_IDs: [],
       previous_action_IDs,
+      hover_target_IDs: [],
     }
   })
 }
@@ -113,6 +120,7 @@ function setContextSource(source_ID: string, game: Game) {
     return battleContext.setState((s) => ({
       ...s,
       ...existing.context,
+      hover_target_IDs: [],
     }))
   }
 
@@ -129,6 +137,7 @@ function setContextSource(source_ID: string, game: Game) {
     source_actor_ID: source_ID,
     target_actor_IDs: [],
     target_position_IDs: [],
+    hover_target_IDs: [],
   }))
 }
 
@@ -138,6 +147,7 @@ function setContextAction(action_ID: string) {
     action_ID,
     target_actor_IDs: [],
     target_position_IDs: [],
+    hover_target_IDs: [],
   }))
 }
 
@@ -145,6 +155,7 @@ function setContext(context: Context) {
   battleContext.setState((s) => ({
     ...s,
     ...context,
+    hover_target_IDs: [],
   }))
 }
 
