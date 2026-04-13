@@ -34,7 +34,7 @@ var GedoShard game.Modifier = game.Modifier{
 	ID:          gedoShardID,
 	GroupID:     &gedoShardID,
 	Name:        "Gedo Shard",
-	Description: "Deal 30% more damage. On turn end: take damage (1/10).",
+	Description: "Deal 30% more damage. On turn end: lose 1/10th HP.",
 	Show:        true,
 	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{

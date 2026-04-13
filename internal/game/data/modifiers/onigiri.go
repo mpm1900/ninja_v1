@@ -39,7 +39,7 @@ var Onigiri game.Modifier = game.Modifier{
 	ID:          onigiriID,
 	GroupID:     &onigiriID,
 	Name:        "Onigiri",
-	Description: "HP <=50%: heal 1/4 HP.",
+	Description: "HP <=50%: heal 1/4th HP.",
 	Show:        true,
 	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{

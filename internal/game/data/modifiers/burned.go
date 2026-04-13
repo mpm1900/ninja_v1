@@ -32,7 +32,7 @@ var Burned game.Modifier = game.Modifier{
 	ID:          burnedID,
 	GroupID:     &burnedID,
 	Name:        "Burned",
-	Description: "Burned: Attack x0.5. On turn end: take damage (1/16).",
+	Description: "Burned: Attack x0.5. On turn end: lose 1/16th HP.",
 	Icon:        "burned",
 	Show:        true,
 	Duration:    game.ModifierDurationInf,

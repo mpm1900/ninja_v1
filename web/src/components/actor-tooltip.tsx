@@ -83,60 +83,67 @@ function ActorTooltip({
                 ))}
             </div>
           </div>
-          <table className="[&_td]:px-2">
-            <tbody>
-              <tr>
-                <td>HP</td>
-                <td>
-                  <ActorStat actor={actor} showBase={false} stat={'hp'} />
-                </td>
-              </tr>
-              <tr>
-                <td>Stamina</td>
-                <td>
-                  <ActorStat actor={actor} showBase={false} stat={'stamina'} />
-                </td>
-              </tr>
-              <tr>
-                <td>Attack</td>
-                <td>
-                  <ActorStat actor={actor} showBase={false} stat={'attack'} />
-                </td>
-              </tr>
-              <tr>
-                <td>Defense</td>
-                <td>
-                  <ActorStat actor={actor} showBase={false} stat={'defense'} />
-                </td>
-              </tr>
-              <tr>
-                <td>C.Attack</td>
-                <td>
-                  <ActorStat
-                    actor={actor}
-                    showBase={false}
-                    stat={'chakra_attack'}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>C.Defense</td>
-                <td>
-                  <ActorStat
-                    actor={actor}
-                    showBase={false}
-                    stat={'chakra_defense'}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>Speed</td>
-                <td>
-                  <ActorStat actor={actor} showBase={false} stat={'speed'} />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div className='flex'>
+            <table className="[&_td]:px-2 [&_td]:whitespace-nowrap">
+              <tbody>
+                <tr>
+                  <td>HP</td>
+                  <td>
+                    <ActorStat actor={actor} showBase={false} stat={'hp'} />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Stamina</td>
+                  <td>
+                    <ActorStat actor={actor} showBase={false} stat={'stamina'} />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Attack</td>
+                  <td>
+                    <ActorStat actor={actor} showBase={false} stat={'attack'} />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Defense</td>
+                  <td>
+                    <ActorStat actor={actor} showBase={false} stat={'defense'} />
+                  </td>
+                </tr>
+                <tr>
+                  <td>C.Attack</td>
+                  <td>
+                    <ActorStat
+                      actor={actor}
+                      showBase={false}
+                      stat={'chakra_attack'}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>C.Defense</td>
+                  <td>
+                    <ActorStat
+                      actor={actor}
+                      showBase={false}
+                      stat={'chakra_defense'}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Speed</td>
+                  <td>
+                    <ActorStat actor={actor} showBase={false} stat={'speed'} />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div>
+              {actor.actions.map(a => (
+                <div>{a.config.name}</div>
+              ))}
+            </div>
+          </div>
           <SwitchButton actor={actor} />
         </HoverCardContent>
       )}

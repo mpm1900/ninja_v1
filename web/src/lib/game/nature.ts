@@ -22,51 +22,49 @@ type NatureSet =
   | 'particle'
   | 'jashin'
 
-const natureWeaknesses: Record<NatureSet, Array<Nature> | undefined> = {
+const natureWeakness: Record<Nature, Nature | undefined> = {
   tai: undefined,
   pure: undefined,
-  fire: ['water'],
-  wind: ['fire'],
-  lightning: ['wind'],
-  earth: ['lightning'],
-  water: ['earth'],
+  fire: 'water',
+  wind: 'fire',
+  lightning: 'wind',
+  earth: 'lightning',
+  water: 'earth',
   yang: undefined,
   yin: undefined,
-
-  scorch: undefined,
-  lava: undefined,
-  boil: undefined,
-  magnet: undefined,
-  ice: undefined,
-  explosion: undefined,
-  storm: undefined,
-  wood: ['earth', 'lightning'],
-  yinyang: undefined,
-  particle: undefined,
-  jashin: undefined,
 }
-const natureResistances: Record<NatureSet, Array<Nature> | undefined> = {
+const natureResistance: Record<Nature, Nature | undefined> = {
   tai: undefined,
   pure: undefined,
-  fire: ['wind'],
-  wind: ['lightning'],
-  lightning: ['earth'],
-  earth: ['water'],
-  water: ['fire'],
+  fire: 'wind',
+  wind: 'lightning',
+  lightning: 'earth',
+  earth: 'water',
+  water: 'fire',
   yang: undefined,
   yin: undefined,
-
-  scorch: undefined,
-  lava: undefined,
-  boil: undefined,
-  magnet: undefined,
-  ice: undefined,
-  explosion: undefined,
-  storm: undefined,
-  wood: ['fire', 'water'],
-  yinyang: undefined,
-  particle: undefined,
-  jashin: undefined,
+}
+const natureSetMap: Record<NatureSet, Array<Nature>> = {
+  tai: ['tai'],
+  pure: ['pure'],
+  fire: ['fire'],
+  wind: ['wind'],
+  lightning: ['lightning'],
+  earth: ['earth'],
+  water: ['water'],
+  yang: ['yang'],
+  yin: ['yin'],
+  scorch: ['fire', 'wind'],
+  lava: ['fire', 'earth'],
+  boil: ['fire', 'water'],
+  magnet: ['wind', 'earth'],
+  ice: ['wind', 'water'],
+  explosion: ['earth', 'lightning'],
+  storm: ['lightning', 'water'],
+  wood: ['earth', 'water'],
+  yinyang: ['yin', 'yang'],
+  particle: ['fire', 'earth', 'lightning'],
+  jashin: [],
 }
 
 const natureNames: Partial<Record<NatureSet, string>> = {
@@ -111,5 +109,27 @@ const natureIndexes: Record<NatureSet, number> = {
   jashin: 20,
 }
 
+function getWeakness(...natures: Array<NatureSet>): Array<Nature> {
+  return natures.flatMap((nature) => {
+    const base = natureSetMap[nature]
+    return base.map((n) => natureWeakness[n]).filter((n) => n !== undefined)
+  })
+}
+
+function getResistance(...natures: Array<NatureSet>): Array<Nature> {
+  return natures.flatMap((nature) => {
+    const base = natureSetMap[nature]
+    return base.map((n) => natureResistance[n]).filter((n) => n !== undefined)
+  })
+}
+
 export type { Nature, NatureSet }
-export { natureNames, natureIndexes, natureWeaknesses, natureResistances }
+export {
+  natureNames,
+  natureIndexes,
+  natureSetMap,
+  natureWeakness,
+  natureResistance,
+  getWeakness,
+  getResistance,
+}
