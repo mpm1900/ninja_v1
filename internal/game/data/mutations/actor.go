@@ -45,3 +45,23 @@ var Burn = game.GameMutation{
 		return g
 	},
 }
+
+var Paralyze = game.GameMutation{
+	Delta: func(p, g game.Game, context game.Context) game.Game {
+		targets := g.GetTargets(context)
+		for _, target := range targets {
+			g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
+				if a.Statused {
+					return a
+				}
+
+				a.Paralyzed = true
+				a.Statused = true
+
+				return a
+			})
+		}
+
+		return g
+	},
+}
