@@ -29,7 +29,7 @@ function TargetButton({
   return (
     <Button
       disabled={loading || (contextValid && !includes) || !enabled}
-      variant={includes ? 'default' : 'ghost'}
+      variant={includes ? 'default' : 'outline'}
       onMouseEnter={() => {
         addHoverTarget(actor.ID)
       }}

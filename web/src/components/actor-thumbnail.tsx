@@ -33,6 +33,7 @@ function ActorThumbnail({
   className,
   showRing,
   showHealthBar,
+  imgClass,
   ...props
 }: ComponentProps<'div'> & {
   actor: Actor
@@ -41,6 +42,7 @@ function ActorThumbnail({
   size?: number
   showRing?: boolean
   showHealthBar?: boolean
+  imgClass?: string
 }) {
   const active = !!actor.position_ID
   const alive = actor.alive
@@ -63,7 +65,10 @@ function ActorThumbnail({
         {!hidden && (
           <img
             src={actor.sprite_url}
-            className="h-full w-full object-cover absolute inset-0 z-10"
+            className={cn(
+              'h-full w-full object-cover absolute inset-0 z-10 rounded-bl-2xl',
+              imgClass
+            )}
             width={size}
             height={size}
           />

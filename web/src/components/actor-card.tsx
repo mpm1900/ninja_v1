@@ -4,7 +4,6 @@ import { cn } from '#/lib/utils'
 import { cva } from 'class-variance-authority'
 import { HealthBar } from './health-bar'
 import { NatureBadge } from './nature-badge'
-import { Item, ItemActions, ItemContent, ItemTitle } from './ui/item'
 import { Badge } from './ui/badge'
 import { X } from 'lucide-react'
 import { sendContextMessage } from '#/lib/stores/socket'
@@ -16,31 +15,18 @@ import { ActorStatus } from './actor-status'
 import { useStore } from '@tanstack/react-store'
 import { gameStore } from '#/lib/stores/game'
 
-const actorVariants = cva(
-  cn(
-    'group/item flex flex-wrap items-center rounded-md border text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50',
-    'p-2 w-92'
-  ),
-  {
-    variants: {
-      player: {
-        player: 'border-transparent', //'bg-gray-900 border-gray-700',
-        enemy: 'border-transparent',
-        summon: 'border-transparent', //'bg-stone-600! border-stone-400! shadow-xs',
-      },
-      selected: {
-        selected:
-          'bg-stone-500! border-stone-300! shadow-[0px_5px_10px_rgba(0,0,0,0.7)]',
-        // source: 'scale-105 bg-blue-900! border-blue-300/40',
-        targeted:
-          'bg-red-900! border-red-300/40! shadow-[0px_5px_10px_rgba(0,0,0,0.7)]',
-        source:
-          'bg-yellow-900! border-yellow-300/40 shadow-[0px_5px_10px_rgba(0,0,0,0.7)]',
-      },
+const frameVariants = cva('', {
+  variants: {
+    variant: {
+      default: 'bg-zinc-900',
+      selected: 'bg-zinc-200',
+      targeted: 'bg-red-900',
     },
-    defaultVariants: {},
-  }
-)
+  },
+  defaultVariants: {
+    variant: 'default',
+  },
+})
 
 function parseSummon(summon: Actor['summon'], parent: Actor): Actor['summon'] {
   if (!summon) return summon
@@ -73,7 +59,7 @@ function ActorCard({
   summon,
   summonClass,
   ...rest
-}: React.ComponentProps<typeof Item> & {
+}: React.ComponentProps<'div'> & {
   actor: Actor | undefined
   client_ID?: string
   selected?: boolean
@@ -119,53 +105,63 @@ function ActorCard({
       )}
       {actor && <ActorModifiers actor={actor} modifiers={modifiers} />}
       <div
-        className={actorVariants({
-          className: cn(is_player && 'cursor-pointer', 'gap-2'),
-          player: summon ? 'summon' : is_player ? 'player' : 'enemy',
-          selected: selected
-            ? 'selected'
-            : source
-              ? 'source'
-              : targeted
-                ? 'targeted'
-                : undefined,
-        })}
+        className={cn(
+          is_player && 'cursor-pointer',
+          'group/item flex flex-wrap items-center rounded-md text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50 p-2 w-92'
+        )}
         {...rest}
       >
         {actor && (
-          <div className="relative">
-            <ActorThumbnail actor={actor} size={50} />
+          <div
+            className={cn(
+              'relative p-2 -mb-2 pr-3 -mr-1 rounded-xl rounded-tr-none rounded-l-3xl',
+              frameVariants({
+                variant: targeted
+                  ? 'targeted'
+                  : selected || source
+                    ? 'selected'
+                    : 'default',
+              })
+            )}
+          >
+            <ActorThumbnail actor={actor} size={50} imgClass="rounded-bl-xl" />
             <ActorStatus actor={actor} />
           </div>
         )}
-        <ItemContent className="relative gap-0">
+        <div className="flex flex-1 flex-col relative gap-0">
           {actor && (
             <div className="flex justify-between items-end gap-4">
-              <ItemTitle className={cn('px-2 pb-2 -mb-2 rounded-t')}>
+              <div
+                className={cn(
+                  'px-2 pb-2 pt-1.5 -mb-2 rounded-md rounded-tl-none shadow-[4px_1px_3px_rgba(0,0,0,0.2)]',
+                  frameVariants({
+                    variant: targeted
+                      ? 'targeted'
+                      : selected || source
+                        ? 'selected'
+                        : 'default',
+                  })
+                )}
+              >
                 <span
                   className={cn(
-                    'font-semibold text-lg text-shadow-[1px_1px_0px_#000000]',
-                    {
-                      'text-foreground':
-                        actor.player_ID === client_ID ||
-                        selected ||
-                        targeted ||
-                        source,
-                      'text-red-300': actor.player_ID !== client_ID,
-                    }
+                    'font-semibold text-lg',
+                    selected || source
+                      ? 'text-zinc-900!'
+                      : 'text-shadow-[1px_1px_0px_#000000]'
                   )}
                 >
                   {actor.name}
                 </span>
-              </ItemTitle>
+              </div>
               {!action_tx || !is_player || status === 'running' ? (
-                <ItemActions className="gap-px pb-1">
+                <div className="flex gap-px pb-1">
                   {(Object.keys(actor.natures) as Array<NatureSet>)
                     .sort((a, b) => natureIndexes[a] - natureIndexes[b])
                     .map((nature) => (
                       <NatureBadge key={nature} nature={nature} />
                     ))}
-                </ItemActions>
+                </div>
               ) : (
                 <Badge
                   onClick={(e) => {
@@ -204,7 +200,7 @@ function ActorCard({
                 ))}
             </div>
           )}
-        </ItemContent>
+        </div>
       </div>
     </div>
   )
