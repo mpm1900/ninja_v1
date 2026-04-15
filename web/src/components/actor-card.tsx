@@ -18,9 +18,9 @@ import { gameStore } from '#/lib/stores/game'
 const frameVariants = cva('', {
   variants: {
     variant: {
-      default: 'bg-zinc-900',
-      selected: 'bg-zinc-200',
-      targeted: 'bg-red-900',
+      default: 'bg-zinc-900 text-zinc-200',
+      selected: 'bg-zinc-200 text-zinc-900 text-shadow-none!',
+      targeted: 'bg-red-900 text-zinc-200',
     },
   },
   defaultVariants: {
@@ -114,7 +114,7 @@ function ActorCard({
         {actor && (
           <div
             className={cn(
-              'relative p-2 -mb-2 pr-3 -mr-1 rounded-xl rounded-tr-none rounded-l-3xl',
+              'relative p-2 -mb-2 pr-3 -mr-1 rounded-lg rounded-tr-none rounded-l-2xl',
               frameVariants({
                 variant: targeted
                   ? 'targeted'
@@ -133,7 +133,7 @@ function ActorCard({
             <div className="flex justify-between items-end gap-4">
               <div
                 className={cn(
-                  'px-2 pb-2 pt-1.5 -mb-2 rounded-md rounded-tl-none shadow-[4px_1px_3px_rgba(0,0,0,0.2)]',
+                  'pl-2 pr-4 pb-2 pt-1.5 -mb-2 rounded-md rounded-tl-none shadow-[4px_1px_3px_rgba(0,0,0,0.2)]',
                   frameVariants({
                     variant: targeted
                       ? 'targeted'
@@ -143,14 +143,7 @@ function ActorCard({
                   })
                 )}
               >
-                <span
-                  className={cn(
-                    'font-semibold text-lg',
-                    selected || source
-                      ? 'text-zinc-900!'
-                      : 'text-shadow-[1px_1px_0px_#000000]'
-                  )}
-                >
+                <span className={cn('font-semibold text-lg')}>
                   {actor.name}
                 </span>
               </div>
