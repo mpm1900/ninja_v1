@@ -8,17 +8,17 @@ import (
 	"github.com/google/uuid"
 )
 
-var Coersion = MakeCoersion()
+var Coercion = MakeCoercion()
 
-func MakeCoersion() game.Action {
+func MakeCoercion() game.Action {
 	cooldown := 1
 	nature := game.NsYin
 	config := game.ActionConfig{
-		Name:        "Coersion",
+		Name:        "Coercion",
 		Nature:      &nature,
 		Cooldown:    &cooldown,
 		Jutsu:       game.Genjutsu,
-		Description: "Force's the target to use only their last used action.",
+		Description: "Forces the target to use only their last used action.",
 	}
 	return game.Action{
 		ID:              uuid.MustParse("06840403-52cc-4e8a-95eb-318cf012e634"),

@@ -38,7 +38,7 @@ func MakeBloodPrice() game.Action {
 				targets := g.GetTargets(context)
 
 				for _, target := range targets {
-					damage, ok := source.LastRecievedDamage[target.ID]
+					damage, ok := source.LastReceivedDamage[target.ID]
 					if !ok {
 						log := game.NewLog("Blood Price failed.")
 						transactions = append(transactions, game.MakeTransaction(game.AddLogs(log), game.NewContext()))

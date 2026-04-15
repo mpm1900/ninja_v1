@@ -14,7 +14,7 @@ func MakeCopyJutsu() game.Action {
 		Name:        "Copy Jutsu",
 		Nature:      &nature,
 		Jutsu:       game.Ninjutsu,
-		Description: "Switches abilities with the target temporarility.",
+		Description: "Switches abilities with the target temporarily.",
 	}
 	return game.Action{
 		ID:              uuid.MustParse("7d55195c-b6be-4f4a-960f-951421740943"),
