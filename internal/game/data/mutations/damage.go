@@ -52,7 +52,7 @@ func ApplyDamageWith(g *game.Game, source_ID *uuid.UUID, target game.ResolvedAct
 		} else {
 			a.Damage += clampDamage(damage)
 			if source_ID != nil {
-				a.LastRecievedDamage[*source_ID] = clampDamage(damage)
+				a.LastReceivedDamage[*source_ID] = clampDamage(damage)
 			}
 			ratio := min(int(float64(damage)*100/float64(hp)), 100)
 			if ratio > 0 {
@@ -94,7 +94,7 @@ func PureDamageWith(damage int, trigger bool, updater func(game.Actor) game.Acto
 				target := t.Resolve(g)
 				ApplyDamageWith(&g, context.SourceActorID, target, damage, updater)
 				if trigger && damage > 0 {
-					g.On(game.OnDamageRecieve, &context)
+					g.On(game.OnDamageReceive, &context)
 				}
 			}
 			return g
@@ -228,7 +228,7 @@ func (e *damageHandler) applySingleHit(g *game.Game, target game.ResolvedActor, 
 	alive := ApplyDamage(g, &e.source.ID, target, damage)
 
 	if damage > 0 {
-		g.On(game.OnDamageRecieve, &e.context)
+		g.On(game.OnDamageReceive, &e.context)
 	}
 
 	if e.config.Critical > 1.0 {

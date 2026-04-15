@@ -31,7 +31,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.LuckyStrikes.ID:   actions.LuckyStrikes,
 	actions.GreatTreeSpear.ID: actions.GreatTreeSpear,
 	actions.C1Bird.ID:         actions.C1Bird,
-	actions.SearingMigrane.ID: actions.SearingMigrane,
+	actions.SearingMigraine.ID: actions.SearingMigraine,
 
 	actions.Rasengan.ID:         actions.Rasengan,
 	actions.RasenganRecharge.ID: actions.RasenganRecharge,
@@ -47,7 +47,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.PowerBoost.ID:      actions.PowerBoost,
 	actions.Amaterasu.ID:       actions.Amaterasu,
 	actions.Disable.ID:         actions.Disable,
-	actions.Coersion.ID:        actions.Coersion,
+	actions.Coercion.ID:        actions.Coercion,
 	actions.BloodPrice.ID:      actions.BloodPrice,
 	actions.MindTransfer.ID:    actions.MindTransfer,
 	actions.CopyJutsu.ID:       actions.CopyJutsu,

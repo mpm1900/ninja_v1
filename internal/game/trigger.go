@@ -10,7 +10,7 @@ const (
 	OnActorEnter    TriggerOn = "on-actor-enter"
 	OnActorLeave    TriggerOn = "on-actor-leave"
 	OnImmortalSave  TriggerOn = "on-immortal-save"
-	OnDamageRecieve TriggerOn = "on-damage-recieve"
+	OnDamageReceive TriggerOn = "on-damage-receive"
 	OnDeath         TriggerOn = "on-death"
 	OnKill          TriggerOn = "on-kill"
 	OnModifierAdd   TriggerOn = "on-modifier-add"
@@ -18,7 +18,7 @@ const (
 )
 
 var TRIGGERS []TriggerOn = []TriggerOn{
-	OnDamageRecieve,
+	OnDamageReceive,
 	OnTurnEnd,
 }
 

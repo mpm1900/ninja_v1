@@ -8,9 +8,9 @@ import (
 	"github.com/google/uuid"
 )
 
-var SearingMigrane = MakeSearingMigrane()
+var SearingMigraine = MakeSearingMigraine()
 
-func MakeSearingMigrane() game.Action {
+func MakeSearingMigraine() game.Action {
 	ID := uuid.MustParse("dc6edab6-535f-508f-b791-e197283eae86")
 	accuracy := 100
 	power := 70
@@ -21,7 +21,7 @@ func MakeSearingMigrane() game.Action {
 	cooldown := 1
 
 	config := game.ActionConfig{
-		Name:        "Searing Migrane",
+		Name:        "Searing Migraine",
 		Description: "Grants the user Fire nature until end of turn.",
 		Nature:      &nature,
 		Accuracy:    &accuracy,

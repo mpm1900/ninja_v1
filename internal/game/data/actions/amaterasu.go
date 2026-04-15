@@ -16,7 +16,7 @@ func MakeAmaterasu() game.Action {
 
 	config := game.ActionConfig{
 		Name:        "Amaterasu",
-		Description: "Burns taraget.",
+		Description: "Burns target.",
 		Nature:      &nature,
 		Stat:        game.Ptr(game.ChakraAttack),
 		TargetCount: game.Ptr(1),

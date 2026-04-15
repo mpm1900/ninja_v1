@@ -18,7 +18,7 @@ func MakeDisable() game.Action {
 		Nature:      &nature,
 		Cooldown:    &cooldown,
 		Jutsu:       game.Genjutsu,
-		Description: "Disable's the target's last used action.",
+		Description: "Disables the target's last used action.",
 	}
 	return game.Action{
 		ID:              uuid.MustParse("5cf69985-6785-56a6-b879-e02cb6207960"),

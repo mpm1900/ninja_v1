@@ -34,7 +34,7 @@ var Kakuzu = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
-		actions.SearingMigrane.ID,
+		actions.SearingMigraine.ID,
 		actions.LeafJab.ID,
 	},
 }

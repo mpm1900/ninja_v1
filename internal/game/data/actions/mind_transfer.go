@@ -14,7 +14,7 @@ func MakeMindTransfer() game.Action {
 		Name:        "Mind Transfer",
 		Nature:      &nature,
 		Jutsu:       game.Ninjutsu,
-		Description: "Switches abilities with the target temporarility.",
+		Description: "Switches abilities with the target temporarily.",
 	}
 	return game.Action{
 		ID:              uuid.MustParse("f7a33bde-db98-45e1-8d4d-028afe124aeb"),

@@ -163,7 +163,7 @@ type ActorState struct {
 	// [Alive] whether or not the actor is alive, could
 	// - could be computed, but this is here to not have to call .Resolve() on filters
 	Alive bool `json:"alive"`
-	// [Damage] how much damage this actor has recieved
+	// [Damage] how much damage this actor has received
 	Damage        int `json:"damage"`
 	StaminaDamage int `json:"stamina_damage"`
 	// [PositionID] current position, nil if not active
@@ -185,10 +185,10 @@ type ActorState struct {
 	Immortal        bool    `json:"immortal"`
 	// [ActionLocked]
 	// - action locked units must use their last used action
-	// - if there there is no last used action, any action can be chosen
+	// - if there is no last used action, any action can be chosen
 	ActionLocked bool `json:"action_locked"`
 	// [SwitchLocked]
-	// - swiched locked units cannot use Switch, to switch out, but other means are fine
+	// - switched locked units cannot use Switch to switch out, but other means are fine
 	SwitchLocked bool `json:"switch_locked"`
 	// [Stunned] whether or not an actor _can act_
 	// - stunned units cannot push actions
@@ -198,8 +198,8 @@ type ActorState struct {
 	 * Statuses
 	 * Made the choice for the core to not reference status modifiers by name,
 	 *  rather, have both reference keys in ActorState below. For example,
-	 *  ResolveAction will no check if the source has a modifier "Paralysis,"
-	 *  It instead check the flag set by Paralysis here.
+	 *  ResolveAction will not check if the source has a modifier "Paralysis,"
+	 *  It instead checks the flag set by Paralysis here.
 	 */
 	Statused     bool `json:"statused"`
 	Burned       bool `json:"burned"`
@@ -210,7 +210,7 @@ type ActorState struct {
 	 * Metadata fields used for tracking and filters
 	 */
 	LastUsedActionID   *uuid.UUID        `json:"last_used_action_ID"`
-	LastRecievedDamage map[uuid.UUID]int `json:"-"`
+	LastReceivedDamage map[uuid.UUID]int `json:"-"`
 }
 
 type Summon struct {
@@ -362,7 +362,7 @@ func MakeActor(
 			InactiveTurns:      0,
 			PositionID:         nil,
 			LastUsedActionID:   nil,
-			LastRecievedDamage: map[uuid.UUID]int{},
+			LastReceivedDamage: map[uuid.UUID]int{},
 			ActionLocked:       false,
 			SwitchLocked:       false,
 			Protected:          false,
