@@ -60,16 +60,10 @@ func MakeSearingMigraine() game.Action {
 				add_tx := game.MakeTransaction(add_mut, context)
 				transactions = append(transactions, add_tx)
 
-				damage_context := context
-				other_team_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherTeamFilter))
-				for _, t := range other_team_actors {
-					damage_context.TargetPositionIDs = append(damage_context.TargetPositionIDs, *t.PositionID)
-				}
-
 				damages := mutations.NewDamage(conf, game.NewDamageConfig(1, 1))
 				transactions = append(
 					transactions,
-					mutations.MakeDamageTransactions(damage_context, damages)...,
+					mutations.MakeDamageTransactions(context, damages)...,
 				)
 
 				return transactions

@@ -208,8 +208,6 @@ func (e *damageHandler) resolveTargetHit(g *game.Game, targetIndex int, target g
 		e.config.Random,
 	)
 
-	e.logNatureEffectiveness(g, target)
-
 	for _, damage := range damages {
 		if e.config.Repeat {
 			e.queueRepeatHit(target, damage)
@@ -221,6 +219,8 @@ func (e *damageHandler) resolveTargetHit(g *game.Game, targetIndex int, target g
 		e.total += applied
 		e.totals[targetIndex] += applied
 	}
+
+	e.logNatureEffectiveness(g, target)
 
 	return false
 }

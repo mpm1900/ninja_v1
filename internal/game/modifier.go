@@ -79,7 +79,7 @@ func GetAllActorMutations(g Game, bypassModifiers bool) ([]ActorMutation, []Tran
 	mutations := make([]ActorMutation, 0)
 	for _, transaction := range transactions {
 		for _, mut := range transaction.Mutation.ActorMutations {
-			mut.TransactionID = &transaction.ID
+			mut.TransactionID = Ptr(transaction.ID)
 			mutations = append(mutations, mut)
 		}
 	}
@@ -95,7 +95,7 @@ func GetAllGameStateMutations(g Game) ([]GameStateMutation, []Transaction[Modifi
 	mutations := make([]GameStateMutation, 0)
 	for _, transaction := range transactions {
 		for _, mut := range transaction.Mutation.GameStateMutations {
-			mut.TransactionID = &transaction.ID
+			mut.TransactionID = Ptr(transaction.ID)
 			mutations = append(mutations, mut)
 		}
 	}

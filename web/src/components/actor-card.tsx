@@ -1,7 +1,7 @@
 import type { Actor } from '#/lib/game/actor'
 import { natureIndexes, type NatureSet } from '#/lib/game/nature'
 import { cn } from '#/lib/utils'
-import { cva } from 'class-variance-authority'
+import { cva, type VariantProps } from 'class-variance-authority'
 import { HealthBar } from './health-bar'
 import { NatureBadge } from './nature-badge'
 import { Badge } from './ui/badge'
@@ -49,6 +49,24 @@ function parseSummon(summon: Actor['summon'], parent: Actor): Actor['summon'] {
   return summon
 }
 
+type ActorCardProps = {
+  actor: Actor | undefined
+  client_ID?: string
+  selected?: boolean
+  targeted?: boolean
+  source?: boolean
+  summon?: boolean
+  summonClass?: string
+}
+
+function getVariant(
+  props: Partial<ActorCardProps>
+): VariantProps<typeof frameVariants>['variant'] {
+  if (props.targeted) return 'targeted'
+  if (props.selected) return 'selected'
+  return 'default'
+}
+
 function ActorCard({
   actor,
   client_ID,
@@ -59,15 +77,7 @@ function ActorCard({
   summon,
   summonClass,
   ...rest
-}: React.ComponentProps<'div'> & {
-  actor: Actor | undefined
-  client_ID?: string
-  selected?: boolean
-  targeted?: boolean
-  source?: boolean
-  summon?: boolean
-  summonClass?: string
-}) {
+}: React.ComponentProps<'div'> & ActorCardProps) {
   const status = useStore(gameStore, (s) => s.status)
   const actions = useStore(gameStore, (s) => s.actions)
   const modifiers = useStore(gameStore, (g) =>
@@ -86,9 +96,8 @@ function ActorCard({
   return (
     <div
       className={cn(
-        'relative',
+        'relative flex flex-col',
         summon && 'pointer-events-none',
-        'flex flex-col',
         className
       )}
     >
@@ -111,23 +120,7 @@ function ActorCard({
         )}
         {...rest}
       >
-        {actor && (
-          <div
-            className={cn(
-              'relative p-2 -mb-2 pr-3 -mr-1 rounded-lg rounded-tr-none rounded-l-2xl',
-              frameVariants({
-                variant: targeted
-                  ? 'targeted'
-                  : selected || source
-                    ? 'selected'
-                    : 'default',
-              })
-            )}
-          >
-            <ActorThumbnail actor={actor} size={50} imgClass="rounded-bl-xl" />
-            <ActorStatus actor={actor} />
-          </div>
-        )}
+        <ActorAvatar actor={actor} selected={selected} targeted={targeted} />
         <div className="flex flex-1 flex-col relative gap-0">
           {actor && (
             <div className="flex justify-between items-end gap-4">
@@ -135,11 +128,7 @@ function ActorCard({
                 className={cn(
                   'pl-2 pr-4 pb-2 pt-1.5 -mb-2 rounded-md rounded-tl-none shadow-[4px_1px_3px_rgba(0,0,0,0.2)]',
                   frameVariants({
-                    variant: targeted
-                      ? 'targeted'
-                      : selected || source
-                        ? 'selected'
-                        : 'default',
+                    variant: getVariant({ selected, targeted }),
                   })
                 )}
               >
@@ -148,13 +137,7 @@ function ActorCard({
                 </span>
               </div>
               {!action_tx || !is_player || status === 'running' ? (
-                <div className="flex gap-px pb-1">
-                  {(Object.keys(actor.natures) as Array<NatureSet>)
-                    .sort((a, b) => natureIndexes[a] - natureIndexes[b])
-                    .map((nature) => (
-                      <NatureBadge key={nature} nature={nature} />
-                    ))}
-                </div>
+                <ActorNatures actor={actor} />
               ) : (
                 <Badge
                   onClick={(e) => {
@@ -180,21 +163,62 @@ function ActorCard({
           <div className="space-y-2">
             {actor && <HealthBar actor={actor} selected={selected} />}
           </div>
-          {actor && (
-            <div className="absolute -bottom-1.5 flex gap-1 px-2">
-              {Object.entries(actor.staged_stats)
-                .filter(([key]) => key !== 'evasion' && key !== 'accuracy')
-                .map(([key, stage]) => (
-                  <StageBadge
-                    key={key}
-                    stage={stage as any}
-                    stat={key as any}
-                  />
-                ))}
-            </div>
-          )}
+          <ActorStages actor={actor} />
         </div>
       </div>
+    </div>
+  )
+}
+
+function ActorStages({ actor }: { actor: Actor | undefined }) {
+  if (!actor) return null
+
+  return (
+    <div className="absolute -bottom-1.5 flex gap-1 px-2">
+      {Object.entries(actor.staged_stats)
+        .filter(([key]) => key !== 'evasion' && key !== 'accuracy')
+        .map(([key, stage]) => (
+          <StageBadge key={key} stage={stage as any} stat={key as any} />
+        ))}
+    </div>
+  )
+}
+
+function ActorNatures({ actor }: { actor: Actor | undefined }) {
+  if (!actor) return null
+  return (
+    <div className="flex gap-px pb-1">
+      {(Object.keys(actor.natures) as Array<NatureSet>)
+        .sort((a, b) => natureIndexes[a] - natureIndexes[b])
+        .map((nature) => (
+          <NatureBadge key={nature} nature={nature} />
+        ))}
+    </div>
+  )
+}
+
+function ActorAvatar({
+  actor,
+  selected,
+  targeted,
+}: {
+  actor: Actor | undefined
+  selected?: boolean
+  targeted?: boolean
+}) {
+  if (!actor) return null
+
+  return (
+    <div
+      className={cn(
+        'relative p-2 -mb-2 pr-3 -mr-1 rounded-lg rounded-tr-none rounded-l-2xl',
+        frameVariants({
+          variant: getVariant({ selected, targeted }),
+        })
+      )}
+    >
+      <ActorThumbnail actor={actor} size={50} imgClass="rounded-bl-xl" />
+      <ActorStatus actor={actor} />
     </div>
   )
 }

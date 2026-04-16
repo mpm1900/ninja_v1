@@ -8,7 +8,7 @@ import (
 
 var priorityFailureID = uuid.MustParse("7fdf20ca-b003-5082-8980-a0c6990169d0")
 var PriorityFailure = game.Modifier{
-	ID:          uuid.MustParse("20070a28-dc4d-5aa8-a45c-27d952d221a6"),
+	ID:          priorityFailureID,
 	Name:        "Priority Failure",
 	Description: "Enemy non-attacking priority actions fail.",
 	Show:        true,
@@ -21,8 +21,10 @@ var PriorityFailure = game.Modifier{
 			game.ComposeAF(game.ActiveFilter, game.OtherTeamFilter),
 			func(g game.Game, a game.Actor, c game.Context) game.Actor {
 				for i, action := range a.Actions {
-					if action.Config.Power != nil && action.Priority > 0 {
-						a.Actions[i].Filter = game.FalseGameFilter
+					if action.ID != game.Switch.ID {
+						if action.Config.Power == nil && action.Priority > game.ActionPriorityDefault {
+							a.Actions[i].Disabled = true
+						}
 					}
 				}
 

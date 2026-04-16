@@ -52,16 +52,11 @@ func MakeSurf() game.Action {
 				transactions := []game.GameTransaction{}
 
 				conf := game.GetActiveActionConfig(g, config)
-				damage_context := context
-				other_team_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherTeamFilter))
-				for _, t := range other_team_actors {
-					damage_context.TargetPositionIDs = append(damage_context.TargetPositionIDs, *t.PositionID)
-				}
 
 				damages := mutations.NewDamage(conf, game.NewDamageConfig(1, 1))
 				transactions = append(
 					transactions,
-					mutations.MakeDamageTransactions(damage_context, damages)...,
+					mutations.MakeDamageTransactions(context, damages)...,
 				)
 
 				return transactions
