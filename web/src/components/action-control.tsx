@@ -32,6 +32,8 @@ function ActionControl({
   const actors = game.actors.filter((a) =>
     t_context?.target_actor_IDs?.includes(a.ID)
   )
+  const enemy_actors = actors.filter(a => a.player_ID !== client.ID)
+  const player_actors = actors.filter(a => a.player_ID === client.ID)
   const has_queued_action = game.queued_actions[context.source_actor_ID ?? '']
 
   if (!!staged) {
@@ -65,19 +67,35 @@ function ActionControl({
   return (
     <div className="flex flex-col items-center gap-2 min-w-xs">
       {action && (
-        <div className="p-2 flex gap-2 justify-center">
-          {actors.map((a) => (
-            <TargetButton
-              key={a.ID}
-              actor={a}
-              enabled={enabled}
-              loading={false}
-              contextValid={!!valid}
-              targetType={action.target_type}
-              context={context}
-              onContextChange={onContextChange}
-            />
-          ))}
+        <div className='flex flex-col gap-2'>
+          <div className="gap-2 grid grid-cols-2">
+            {enemy_actors.map((a) => (
+              <TargetButton
+                key={a.ID}
+                actor={a}
+                enabled={enabled}
+                loading={false}
+                contextValid={!!valid}
+                targetType={action.target_type}
+                context={context}
+                onContextChange={onContextChange}
+              />
+            ))}
+          </div>
+          <div className="gap-2 grid grid-cols-2">
+            {player_actors.map((a) => (
+              <TargetButton
+                key={a.ID}
+                actor={a}
+                enabled={enabled}
+                loading={false}
+                contextValid={!!valid}
+                targetType={action.target_type}
+                context={context}
+                onContextChange={onContextChange}
+              />
+            ))}
+          </div>
           {actors.length == 0 && valid === false && (
             <span className="text-muted-foreground text-sm">
               no targets available
@@ -88,6 +106,7 @@ function ActionControl({
               this action does not target
             </span>
           )}
+
         </div>
       )}
 

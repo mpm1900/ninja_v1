@@ -22,7 +22,7 @@ var PriorityFailure = game.Modifier{
 			func(g game.Game, a game.Actor, c game.Context) game.Actor {
 				for i, action := range a.Actions {
 					if action.ID != game.Switch.ID {
-						if action.Config.Power == nil && action.Priority > game.ActionPriorityDefault {
+						if action.Config.Power != nil && action.Priority > game.ActionPriorityDefault {
 							a.Actions[i].Disabled = true
 						}
 					}

@@ -54,6 +54,7 @@ function PlayerPositions({
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={pos.actor_ID ?? `empty:${pos.ID}`}
+                className="transform-gpu"
                 initial={{ y: 24 * coef, opacity: 0 }}
                 animate={{
                   y: 0,

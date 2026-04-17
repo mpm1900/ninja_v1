@@ -1,3 +1,4 @@
+import { clamp } from '#/utils/clamp'
 import type { Action } from './action'
 import type { Modifier } from './modifier'
 import type { Nature, NatureSet } from './nature'
@@ -139,6 +140,29 @@ function getTotalBaseStats(actor: ActorDef) {
   )
 }
 
+function getVitals(actor: Actor) {
+  const maxHp = Math.max(1, actor.stats.hp)
+  const maxStamina = Math.max(1, actor.stats.stamina)
+  const currentHp = Math.max(0, actor.stats.hp - actor.damage)
+  const currentStamina = Math.max(0, actor.stats.stamina - actor.stamina_damage)
+
+  const hpRatio = clamp(currentHp / maxHp)
+  const staminaRatio = clamp(currentStamina / maxStamina)
+
+  return {
+    hp: {
+      max: maxHp,
+      current: currentHp,
+      ratio: hpRatio,
+    },
+    stamina: {
+      max: maxStamina,
+      current: currentStamina,
+      ratio: staminaRatio
+    }
+  }
+}
+
 export type {
   ActorDef,
   Actor,
@@ -150,4 +174,4 @@ export type {
   ActorNatureStat,
   NatureStats,
 }
-export { checkActorStat, getTotalBaseStats, actorFocuses, ACTOR_FOCUS_DETAILS }
+export { checkActorStat, getTotalBaseStats, actorFocuses, ACTOR_FOCUS_DETAILS, getVitals, }

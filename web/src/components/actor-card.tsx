@@ -140,6 +140,7 @@ function ActorCard({
                 <ActorNatures actor={actor} />
               ) : (
                 <Badge
+                  className="mb-0.5"
                   onClick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
@@ -161,7 +162,13 @@ function ActorCard({
             </div>
           )}
           <div className="space-y-2">
-            {actor && <HealthBar actor={actor} selected={selected} />}
+            {actor && (
+              <HealthBar
+                actor={actor}
+                selected={selected}
+                percentage={!is_player}
+              />
+            )}
           </div>
           <ActorStages actor={actor} />
         </div>
