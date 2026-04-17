@@ -38,7 +38,7 @@ var Shisui = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		actions.FollowMe.ID,
+		actions.Distraction.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,

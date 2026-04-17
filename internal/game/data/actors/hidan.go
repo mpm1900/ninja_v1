@@ -32,7 +32,7 @@ var Hidan = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		actions.FollowMe.ID,
+		actions.Distraction.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.BloodPrice.ID,

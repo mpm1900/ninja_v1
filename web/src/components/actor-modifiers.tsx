@@ -40,7 +40,7 @@ function ActorModifiers({
   modifiers: Modifier[]
 }) {
   return (
-    <div className="relative flex flex-row-reverse justify-end flex-wrap px-2 gap-2 z-30">
+    <div className="relative flex flex-row-reverse justify-end items-end flex-wrap px-2 gap-2 z-30">
       {Object.entries(actor.applied_modifiers ?? {}).map(([ID, count]) => (
         <ActorModifier
           key={ID}

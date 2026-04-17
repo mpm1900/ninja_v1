@@ -8,36 +8,38 @@ import (
 	"github.com/google/uuid"
 )
 
-var Shikamaru = game.ActorDef{
-	ActorID:      uuid.MustParse("4d0ad337-2685-5ac1-be21-d62a2e23f678"),
-	SpriteURL:    "/sprites/shikamaru_64.png",
-	Name:         "Shikamaru Nara",
-	Affiliations: []string{game.AffKonoha},
+var Zetsu = game.ActorDef{
+	ActorID:      uuid.MustParse("dfdd143c-faba-4ab2-b607-cbe69baf68e7"),
+	SpriteURL:    "/sprites/zetsu_64.png",
+	Name:         "Zetsu",
+	Affiliations: []string{game.AffAkatsuki},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            70,
+		game.StatHP:            114,
 		game.StatStamina:       100,
-		game.StatAttack:        55,
-		game.StatDefense:       65,
-		game.StatChakraAttack:  95,
-		game.StatChakraDefense: 105,
-		game.StatSpeed:         85,
+		game.StatAttack:        85,
+		game.StatDefense:       70,
+		game.StatChakraAttack:  85,
+		game.StatChakraDefense: 85,
+		game.StatSpeed:         30,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},
 	NatureDamage:     game.NewNatureSetValues(),
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsEarth,
 		game.NsYin,
+		game.NsYang,
+		game.NsWood,
 	}),
 	Abilities: []game.Modifier{
-		modifiers.FastThinking,
+		modifiers.Regneration,
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		actions.Haze.ID,
-		actions.Tailwind.ID,
+		actions.Protect.ID,
+		actions.TempleOfNirvana.ID,
 		actions.Distraction.ID,
+		actions.Graft.ID,
 	},
 }

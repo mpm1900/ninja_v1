@@ -32,8 +32,8 @@ function ActionControl({
   const actors = game.actors.filter((a) =>
     t_context?.target_actor_IDs?.includes(a.ID)
   )
-  const enemy_actors = actors.filter(a => a.player_ID !== client.ID)
-  const player_actors = actors.filter(a => a.player_ID === client.ID)
+  const enemy_actors = actors.filter((a) => a.player_ID !== client.ID)
+  const player_actors = actors.filter((a) => a.player_ID === client.ID)
   const has_queued_action = game.queued_actions[context.source_actor_ID ?? '']
 
   if (!!staged) {
@@ -67,7 +67,7 @@ function ActionControl({
   return (
     <div className="flex flex-col items-center gap-2 min-w-xs">
       {action && (
-        <div className='flex flex-col gap-2'>
+        <div className="flex flex-col gap-2">
           <div className="gap-2 grid grid-cols-2">
             {enemy_actors.map((a) => (
               <TargetButton
@@ -97,16 +97,15 @@ function ActionControl({
             ))}
           </div>
           {actors.length == 0 && valid === false && (
-            <span className="text-muted-foreground text-sm">
+            <span className="text-muted-foreground text-sm mb-4">
               no targets available
             </span>
           )}
           {actors.length == 0 && valid === true && (
-            <span className="text-muted-foreground/50 text-sm">
+            <span className="text-muted-foreground/50 text-sm mb-4">
               this action does not target
             </span>
           )}
-
         </div>
       )}
 

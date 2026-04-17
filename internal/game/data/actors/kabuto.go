@@ -35,7 +35,7 @@ var Kabuto = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.Haze.ID,
 		actions.Tailwind.ID,
-		actions.FollowMe.ID,
+		actions.Distraction.ID,
 		actions.TempleOfNirvana.ID,
 	},
 }

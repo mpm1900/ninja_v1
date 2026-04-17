@@ -7,15 +7,15 @@ import (
 	"github.com/google/uuid"
 )
 
-var FollowMe = MakeFollowMe()
+var Distraction = MakeDistraction()
 
-func MakeFollowMe() game.Action {
+func MakeDistraction() game.Action {
 	nature := game.NsYin
 	config := game.ActionConfig{
-		Name:        "Follow Me",
+		Name:        "Distraction",
 		Nature:      &nature,
 		Jutsu:       game.Genjutsu,
-		Description: "Changes the target of enemy actions to this user if able.",
+		Description: "Changes the target of single-target enemy actions.",
 	}
 	return game.Action{
 		ID:              uuid.MustParse("3d0b6e04-f5f0-50db-9eb6-4aede4c11701"),

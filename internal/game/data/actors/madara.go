@@ -29,8 +29,7 @@ var Madara = game.ActorDef{
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsFire,
-		game.NsStorm,
-		game.NsYin,
+		game.NsYinYang,
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
