@@ -77,6 +77,15 @@ func ApplyDamageWith(g *game.Game, source_ID *uuid.UUID, target game.ResolvedAct
 		return updater(a)
 	})
 
+	if !alive {
+		deathContext := game.NewContext().WithSource(target.ID)
+		g.On(game.OnDeath, &deathContext)
+		if source_ID != nil {
+			killContext := game.NewContext().WithSource(*source_ID).WithTargetIDs([]uuid.UUID{target.ID})
+			g.On(game.OnKill, &killContext)
+		}
+	}
+
 	return alive
 }
 
@@ -225,7 +234,7 @@ func (e *damageHandler) resolveTargetHit(g *game.Game, targetIndex int, target g
 	return false
 }
 func (e *damageHandler) applySingleHit(g *game.Game, target game.ResolvedActor, damage int) {
-	alive := ApplyDamage(g, &e.source.ID, target, damage)
+	ApplyDamage(g, &e.source.ID, target, damage)
 
 	if damage > 0 {
 		g.On(game.OnDamageReceive, &e.context)
@@ -233,13 +242,6 @@ func (e *damageHandler) applySingleHit(g *game.Game, target game.ResolvedActor, 
 
 	if e.config.Critical > 1.0 {
 		g.PushLog(game.NewLog(fmt.Sprintf("Critical Hit! (x%f)", e.config.Critical)))
-	}
-
-	if !alive {
-		deathContext := game.NewContext().WithSource(target.ID)
-		killContext := game.NewContext().WithSource(e.source.ID).WithTargetIDs([]uuid.UUID{target.ID})
-		g.On(game.OnDeath, &deathContext)
-		g.On(game.OnKill, &killContext)
 	}
 }
 func (e *damageHandler) queueRepeatHit(target game.ResolvedActor, damage int) {

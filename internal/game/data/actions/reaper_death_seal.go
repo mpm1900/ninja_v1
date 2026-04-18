@@ -71,7 +71,41 @@ var SourceBonded game.Modifier = game.Modifier{
 	},
 	Triggers: []game.Trigger{
 		// 1. Death trigger
+		{
+			ID:         uuid.New(),
+			ModifierID: sourceBondedID,
+			On:         game.OnDeath,
+			Check:      game.Match__SourceActor_SourceActor,
+			ActionMutation: game.ActionMutation{
+				Priority: game.ActionPriorityDefault,
+				Filter:   game.TrueGameFilter,
+				Delta: func(p, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
+					transactions := []game.GameTransaction{}
+					if context.SourceActorID == nil {
+						return transactions
+					}
 
+					var bonded_partner_ID *uuid.UUID = nil
+					for _, tx := range g.Modifiers {
+						if tx.Mutation.ID == sourceBondedID && tx.Context.SourceActorID != nil && *tx.Context.SourceActorID == *context.SourceActorID {
+							if len(tx.Context.TargetActorIDs) > 0 {
+								bonded_partner_ID = &tx.Context.TargetActorIDs[0]
+							}
+							break
+						}
+					}
+
+					if bonded_partner_ID != nil {
+						partner_ctx := game.NewContext().WithSource(*context.SourceActorID).WithTargetIDs([]uuid.UUID{*bonded_partner_ID})
+						mut := mutations.RatioDamage(1.0)
+						tx := game.MakeTransaction(mut, partner_ctx)
+						transactions = append(transactions, tx)
+					}
+
+					return transactions
+				},
+			},
+		},
 		// 2. Break trigger
 		{
 			ID:         uuid.New(),
@@ -119,6 +153,41 @@ var TargetBonded game.Modifier = game.Modifier{
 	},
 	Triggers: []game.Trigger{
 		// 1. Death trigger
+		{
+			ID:         uuid.New(),
+			ModifierID: targetBondedID,
+			On:         game.OnDeath,
+			Check:      game.Match__SourceActor_SourceActor,
+			ActionMutation: game.ActionMutation{
+				Priority: game.ActionPriorityDefault,
+				Filter:   game.TrueGameFilter,
+				Delta: func(p, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
+					transactions := []game.GameTransaction{}
+					if context.SourceActorID == nil {
+						return transactions
+					}
+
+					var bonded_partner_ID *uuid.UUID = nil
+					for _, tx := range g.Modifiers {
+						if tx.Mutation.ID == targetBondedID && tx.Context.SourceActorID != nil && *tx.Context.SourceActorID == *context.SourceActorID {
+							if len(tx.Context.TargetActorIDs) > 0 {
+								bonded_partner_ID = &tx.Context.TargetActorIDs[0]
+							}
+							break
+						}
+					}
+
+					if bonded_partner_ID != nil {
+						partner_ctx := game.NewContext().WithSource(*context.SourceActorID).WithTargetIDs([]uuid.UUID{*bonded_partner_ID})
+						mut := mutations.RatioDamage(1.0)
+						tx := game.MakeTransaction(mut, partner_ctx)
+						transactions = append(transactions, tx)
+					}
+
+					return transactions
+				},
+			},
+		},
 		// 2. Break trigger
 		{
 			ID:         uuid.New(),
