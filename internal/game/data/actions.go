@@ -23,7 +23,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.Protect.ID:     actions.Protect,
 	actions.Tailwind.ID:    actions.Tailwind,
 	actions.Haze.ID:        actions.Haze,
-	actions.Glare.ID:       actions.Glare,
+	actions.Flash.ID:       actions.Flash,
 	actions.MirageCrow.ID:  actions.MirageCrow,
 	actions.Sekiryoku.ID:   actions.Sekiryoku,
 
