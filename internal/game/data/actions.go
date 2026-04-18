@@ -56,4 +56,5 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.InstilFear.ID:      actions.InstilFear,
 	actions.HumanBoulder.ID:    actions.HumanBoulder,
 	actions.BodyFlicker.ID:     actions.BodyFlicker,
+	actions.KamuiCounter.ID:    actions.KamuiCounter,
 }

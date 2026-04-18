@@ -49,5 +49,6 @@ var Kakashi = game.ActorDef{
 		actions.Fireball.ID,
 		actions.LeafJab.ID,
 		actions.CopyJutsu.ID,
+		actions.KamuiCounter.ID,
 	},
 }
