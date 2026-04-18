@@ -39,7 +39,7 @@ function PromptControl({
   return (
     <>
       {action && (
-        <div className="p-2 flex flex-wrap gap-2">
+        <div className="p-2 grid grid-cols-3 gap-2">
           {game.actors
             .filter((a) => t_context?.target_actor_IDs?.includes(a.ID))
             .map((a) => (

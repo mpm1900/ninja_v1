@@ -38,6 +38,7 @@ var Minato = game.ActorDef{
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		actions.Rasengan.ID,
+		actions.GiantRasengan.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.ToadSong.ID,

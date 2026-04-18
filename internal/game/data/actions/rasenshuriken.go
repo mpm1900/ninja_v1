@@ -2,32 +2,30 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/modifiers"
 	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
 
-var Fireball = MakeFireball()
+var Rasenshuriken = MakeRasenshuriken()
 
-func MakeFireball() game.Action {
-	ID := uuid.MustParse("aaf5174b-f386-54b1-84c4-0c062937c770")
-
+func MakeRasenshuriken() game.Action {
 	config := game.ActionConfig{
-		Name:        "Fireball",
-		Nature:      game.Ptr(game.NsFire),
-		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(80),
+		Name:        "Rasenshuriken",
+		Description: "User's Chakra Attack is lowered by 2 stages.",
+		Nature:      game.Ptr(game.NsWind),
+		Accuracy:    game.Ptr(90),
+		Power:       game.Ptr(130),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(1),
-		Cost:        game.Ptr(30),
-		Cooldown:    game.Ptr(1),
+		Cost:        game.Ptr(50),
 		Jutsu:       game.Ninjutsu,
 		CritChance:  game.Ptr(5),
 		CritMod:     1.5,
 	}
-
 	return game.Action{
-		ID:              ID,
+		ID:              uuid.MustParse("6b3df363-7052-47fc-af99-7e8eafdc9ee2"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
@@ -35,10 +33,7 @@ func MakeFireball() game.Action {
 		Cost:            mutations.UseStaminaSource(*config.Cost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
-			Filter: game.ComposeGF(
-				game.SourceIsAlive,
-				game.SourceIsActionOffCooldown,
-			),
+			Filter:   game.SourceIsAlive,
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
@@ -49,6 +44,10 @@ func MakeFireball() game.Action {
 					transactions,
 					mutations.MakeDamageTransactions(context, damages)...,
 				)
+
+				mutation := mutations.AddModifiers(false, modifiers.ChakraAttackDown2Source)
+				transaction := game.MakeTransaction(mutation, context)
+				transactions = append(transactions, transaction)
 
 				return transactions
 			},

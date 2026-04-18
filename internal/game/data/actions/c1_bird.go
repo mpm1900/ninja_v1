@@ -44,7 +44,7 @@ func MakeC1Bird() game.Action {
 
 				conf := game.GetActiveActionConfig(g, config)
 				crit_result := game.MakeCriticalCheck(conf)
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, 1))
+				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
 				transactions = append(
 					transactions,
 					mutations.MakeDamageTransactions(context, damages)...,

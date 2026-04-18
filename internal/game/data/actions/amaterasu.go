@@ -12,12 +12,11 @@ var Amaterasu = MakeAmaterasu()
 
 func MakeAmaterasu() game.Action {
 	ID := uuid.MustParse("d103e605-9381-52fd-9cb8-450b7315a9f9")
-	nature := game.NsYin
 
 	config := game.ActionConfig{
 		Name:        "Amaterasu",
 		Description: "Burns target.",
-		Nature:      &nature,
+		Nature:      game.Ptr(game.NsYin),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(1),
 		Accuracy:    game.Ptr(100),
@@ -45,7 +44,7 @@ func MakeAmaterasu() game.Action {
 
 				conf := game.GetActiveActionConfig(g, config)
 				crit_result := game.MakeCriticalCheck(conf)
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, 1))
+				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
 				transactions = append(
 					transactions,
 					mutations.MakeDamageTransactions(context, damages)...,

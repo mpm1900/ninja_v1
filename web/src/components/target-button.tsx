@@ -2,6 +2,7 @@ import type { Action } from '#/lib/game/action'
 import { getVitals, type Actor } from '#/lib/game/actor'
 import type { Context } from '#/lib/game/context'
 import { addHoverTarget, removeHoverTarget } from '#/lib/stores/battle-context'
+import { MiniHealthBar } from './actor-thumbnail'
 import { Button } from './ui/button'
 
 function TargetButton({
@@ -29,6 +30,7 @@ function TargetButton({
 
   return (
     <Button
+      className="relative flex-col h-auto p-2 px-3 min-w-30"
       disabled={loading || (contextValid && !includes) || !enabled}
       variant={
         includes
@@ -66,7 +68,13 @@ function TargetButton({
         }
       }}
     >
-      {actor.name} ({(vitals.hp.ratio * 100).toFixed()}%)
+      <div className="flex w-full justify-between gap-4 relative">
+        <div>{actor.name}</div>
+      </div>
+
+      <div className="relative w-full">
+        <MiniHealthBar actor={actor} className="left-0 right-0" />
+      </div>
     </Button>
   )
 }

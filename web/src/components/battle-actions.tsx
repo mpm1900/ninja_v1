@@ -39,7 +39,7 @@ function BattleActions({ actor }: { actor: Actor }) {
                 }}
               >
                 {!staged && (
-                  <div className="grid place-items-center mb-6 nanum-brush-script-regular text-5xl text-shadow-lg">
+                  <div className="grid place-items-center mb-6 nanum-brush-script-regular text-5xl text-shadow-[2px_2px_0px_#000000]">
                     <div>
                       {action ? action.config.name : 'Choose an Action'}
                     </div>

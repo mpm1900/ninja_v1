@@ -35,6 +35,7 @@ var Jiraiya = game.ActorDef{
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		actions.Rasengan.ID,
+		actions.GiantRasengan.ID,
 		actions.Haze.ID,
 		actions.ToadSong.ID,
 		actions.Fireball.ID,

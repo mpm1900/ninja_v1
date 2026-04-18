@@ -36,5 +36,6 @@ var Tobi = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.Protect.ID,
 		actions.KamuiCounter.ID,
+		actions.KamuiSlash.ID,
 	},
 }

@@ -37,7 +37,7 @@ func MakeLuckyStrikes() game.Action {
 
 				conf := game.GetActiveActionConfig(g, config)
 				crit_result := game.MakeCriticalCheck(conf)
-				damage_config := game.NewDamageConfig(crit_result.Ratio, 1)
+				damage_config := game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor())
 				damage_config.Repeat = true
 				damage_config.RepeatMax = -1
 				damages := mutations.NewDamage(conf, damage_config)

@@ -39,10 +39,12 @@ var Naruto = game.ActorDef{
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		actions.Rasengan.ID,
+		actions.GiantRasengan.ID,
 		actions.PowerBoost.ID,
 		actions.ToadSong.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,
 		actions.SummonGamabunta.ID,
+		actions.Rasenshuriken.ID,
 	},
 }

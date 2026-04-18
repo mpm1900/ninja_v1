@@ -7,16 +7,30 @@ function clamp(value: number) {
   return Math.max(0, Math.min(1, value))
 }
 
-function MiniHealthBar({ actor }: { actor: Actor }) {
+function MiniHealthBar({
+  className,
+  actor,
+  ...props
+}: React.ComponentProps<'div'> & { actor: Actor }) {
   const maxHp = Math.max(1, actor.stats.hp)
   const hpCurrent = Math.max(0, actor.stats.hp - actor.damage)
   const hpRatio = clamp(hpCurrent / maxHp)
 
   return (
     <>
-      <div className="absolute -bottom-px h-1.5 left-0 right-0 z-20 bg-black/80" />
       <div
-        className="absolute -bottom-px h-1.5 left-0 z-20 bg-red-400 border border-black"
+        {...props}
+        className={cn(
+          'absolute -bottom-px h-1.5 left-0 right-0 z-20 bg-black/80',
+          className
+        )}
+      />
+      <div
+        {...props}
+        className={cn(
+          'absolute -bottom-px h-1.5 left-0 z-20 bg-red-400 border border-black',
+          className
+        )}
         style={{
           width: `${hpRatio * 100}%`,
         }}
@@ -102,4 +116,4 @@ function ActorThumbnail({
   )
 }
 
-export { ActorThumbnail }
+export { ActorThumbnail, MiniHealthBar }

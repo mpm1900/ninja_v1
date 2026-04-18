@@ -7,19 +7,19 @@ import (
 	"github.com/google/uuid"
 )
 
-var Fireball = MakeFireball()
+var KamuiSlash = MakeKamuiSlash()
 
-func MakeFireball() game.Action {
-	ID := uuid.MustParse("aaf5174b-f386-54b1-84c4-0c062937c770")
+func MakeKamuiSlash() game.Action {
+	ID := uuid.MustParse("76fce93b-68d0-43d3-9ffb-c4560d652950")
 
 	config := game.ActionConfig{
-		Name:        "Fireball",
-		Nature:      game.Ptr(game.NsFire),
-		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(80),
+		Name:        "Kamui: Slash",
+		Description: "Never misses.",
+		Nature:      game.Ptr(game.NsYin),
+		Power:       game.Ptr(85),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(1),
-		Cost:        game.Ptr(30),
+		Cost:        game.Ptr(60),
 		Cooldown:    game.Ptr(1),
 		Jutsu:       game.Ninjutsu,
 		CritChance:  game.Ptr(5),

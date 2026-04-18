@@ -170,6 +170,19 @@ func Match__TargetActor_SourceActor(parent Game, game Game, context Context, mod
 	}
 	return false
 }
+func Match__SourceActor_TargetActor(parent Game, game Game, context Context, modifier_tx Transaction[Modifier]) bool {
+	targets := game.GetTargets(modifier_tx.Context)
+	if len(targets) == 0 || context.SourceActorID == nil {
+		return false
+	}
+
+	for _, t := range targets {
+		if t.ID == *context.SourceActorID {
+			return true
+		}
+	}
+	return false
+}
 func Match__SourceActor_SourceActor(parent Game, game Game, context Context, modifier_tx Transaction[Modifier]) bool {
 	if context.SourceActorID == nil || modifier_tx.Context.SourceActorID == nil {
 		return false

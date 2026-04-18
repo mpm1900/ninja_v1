@@ -111,6 +111,22 @@ func RemoveModifierTxByID(ID uuid.UUID) game.GameMutation {
 	}
 }
 
+func RemoveModifierWhere(where func(game.Transaction[game.Modifier]) bool) game.GameMutation {
+	return game.GameMutation{
+		Delta: func(p, g game.Game, context game.Context) game.Game {
+			modifiers := []game.Transaction[game.Modifier]{}
+			for _, tx := range g.Modifiers {
+				if !where(tx) {
+					modifiers = append(modifiers, tx)
+				}
+			}
+
+			g.Modifiers = modifiers
+			return g
+		},
+	}
+}
+
 var ConsumeItem game.GameMutation = game.GameMutation{
 	Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 		if context.SourceActorID == nil {

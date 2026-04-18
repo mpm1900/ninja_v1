@@ -1,0 +1,154 @@
+package actions
+
+import (
+	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/mutations"
+
+	"github.com/google/uuid"
+)
+
+var ReaperDeathSeal = MakeReaperDeathSeal()
+
+func MakeReaperDeathSeal() game.Action {
+	config := game.ActionConfig{
+		Name:        "Reaper Death Seal",
+		Nature:      game.Ptr(game.NsYin),
+		Jutsu:       game.Fuinjutsu,
+		TargetCount: game.Ptr(1),
+	}
+
+	return game.Action{
+		ID:              uuid.MustParse("0cf47657-82bf-4a82-b933-cd7a762e0327"),
+		Config:          config,
+		TargetType:      game.TargetPositionID,
+		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
+		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
+		ActionMutation: game.ActionMutation{
+			Priority: game.ActionPriorityDefault,
+			Filter: game.ComposeGF(
+				game.SourceIsAlive,
+			),
+			Delta: func(p, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
+				transactions := []game.GameTransaction{}
+
+				source, ok := g.GetSource(context)
+				if !ok {
+					return transactions
+				}
+
+				for _, target := range g.GetTargets(context) {
+					source_ctx := game.MakeContextForActor(source)
+					source_ctx.TargetActorIDs = []uuid.UUID{target.ID}
+					source_ctx.ModifierID = &SourceBonded.ID
+					source_mut := mutations.AddModifiers(false, SourceBonded)
+					source_tx := game.MakeTransaction(source_mut, source_ctx)
+					transactions = append(transactions, source_tx)
+
+					target_ctx := game.MakeContextForActor(target)
+					target_ctx.TargetActorIDs = []uuid.UUID{source.ID}
+					target_ctx.ModifierID = &targetBondedID
+					target_mut := mutations.AddModifiers(true, TargetBonded)
+					target_tx := game.MakeTransaction(target_mut, target_ctx)
+					transactions = append(transactions, target_tx)
+				}
+
+				return transactions
+			},
+		},
+	}
+}
+
+var sourceBondedID = uuid.New()
+var SourceBonded game.Modifier = game.Modifier{
+	ID:          sourceBondedID,
+	GroupID:     &sourceBondedID,
+	Name:        "Bonded",
+	Description: "When a bonded shinbi dies, so does the other.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
+	ActorMutations: []game.ActorMutation{
+		game.NewNoopSource(&sourceBondedID),
+	},
+	Triggers: []game.Trigger{
+		// 1. Death trigger
+
+		// 2. Break trigger
+		{
+			ID:         uuid.New(),
+			ModifierID: sourceBondedID,
+			On:         game.OnActorLeave,
+			Check:      game.Match__SourceActor_TargetActor,
+			ActionMutation: game.ActionMutation{
+				Priority: game.ActionPriorityDefault,
+				Filter:   game.TrueGameFilter,
+				Delta: func(p, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
+					transactions := []game.GameTransaction{}
+					if context.SourceActorID == nil {
+						return transactions
+					}
+
+					mut := mutations.RemoveModifierWhere(func(tx game.Transaction[game.Modifier]) bool {
+						for _, tid := range tx.Context.TargetActorIDs {
+							if tx.Mutation.ID == sourceBondedID && tid == *context.SourceActorID {
+								return true
+							}
+						}
+
+						return false
+					})
+					tx := game.MakeTransaction(mut, game.NewContext())
+					transactions = append(transactions, tx)
+
+					return transactions
+				},
+			},
+		},
+	},
+}
+
+var targetBondedID = uuid.New()
+var TargetBonded game.Modifier = game.Modifier{
+	ID:          targetBondedID,
+	GroupID:     &targetBondedID,
+	Name:        "Bonded",
+	Description: "When a bonded shinbi dies, so does the other.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
+	ActorMutations: []game.ActorMutation{
+		game.NewNoopSource(&targetBondedID),
+	},
+	Triggers: []game.Trigger{
+		// 1. Death trigger
+		// 2. Break trigger
+		{
+			ID:         uuid.New(),
+			ModifierID: targetBondedID,
+			On:         game.OnActorLeave,
+			Check:      game.Match__SourceActor_TargetActor,
+			ActionMutation: game.ActionMutation{
+				Priority: game.ActionPriorityDefault,
+				Filter:   game.TrueGameFilter,
+				Delta: func(p, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
+					transactions := []game.Transaction[game.GameMutation]{}
+					if context.SourceActorID == nil {
+						return transactions
+					}
+
+					mut := mutations.RemoveModifierWhere(func(tx game.Transaction[game.Modifier]) bool {
+						for _, tid := range tx.Context.TargetActorIDs {
+							if tx.Mutation.ID == targetBondedID && tid == *context.SourceActorID {
+								return true
+							}
+						}
+
+						return false
+					})
+					tx := game.MakeTransaction(mut, game.NewContext())
+					transactions = append(transactions, tx)
+
+					return transactions
+				},
+			},
+		},
+	},
+}

@@ -57,7 +57,7 @@ func MakeSearingMigraine() game.Action {
 				add_tx := game.MakeTransaction(add_mut, context)
 				transactions = append(transactions, add_tx)
 
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, 1))
+				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
 				transactions = append(
 					transactions,
 					mutations.MakeDamageTransactions(context, damages)...,
