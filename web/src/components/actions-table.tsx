@@ -38,7 +38,7 @@ const columns = [
           (row.original.locked ||
             !row.getCanSelect() ||
             (table.options.meta as any).total ==
-              table.getSelectedRowModel().rows.length)
+            table.getSelectedRowModel().rows.length)
         }
       />
     ),

@@ -13,7 +13,7 @@ var RasenganRecharge = MakeRasenganRecharge()
 func MakeRasengan() game.Action {
 	accuracy := 100
 	power := 150
-	stat := game.ChakraAttack
+	stat := game.StatChakraAttack
 	nature := game.NsPure
 	chakraCost := 100
 	config := game.ActionConfig{

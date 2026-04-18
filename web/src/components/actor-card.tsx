@@ -218,7 +218,7 @@ function ActorAvatar({
   return (
     <div
       className={cn(
-        'relative p-2 -mb-2 pr-3 -mr-1 rounded-lg rounded-tr-none rounded-l-2xl',
+        'relative p-2 -mb-2 -mr-1 rounded-lg rounded-tr-none rounded-l-2xl',
         frameVariants({
           variant: getVariant({ selected, targeted }),
         })

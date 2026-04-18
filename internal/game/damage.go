@@ -68,12 +68,20 @@ func GetStabModifier(source ResolvedActor, nature *NatureSet) float64 {
 }
 
 func HasDebuff(r ResolvedActor, stat AttackStat) bool {
-	return r.DamageMultipliers[stat] < 1 ||
+	damage_mult, ok := r.DamageMultipliers[stat]
+	if !ok {
+		return false
+	}
+	return damage_mult < 1 ||
 		r.Stages[ActorStat(stat)] < 0 ||
 		r.Stages[StatAccuracy] < 0
 }
 func HasBuff(r ResolvedActor, attack AttackStat, defense DefenseStat) bool {
-	return r.DamageReduction[attack] > 1 ||
+	damage_reduction, ok := r.DamageReduction[attack]
+	if !ok {
+		return false
+	}
+	return damage_reduction > 1 ||
 		r.Stages[ActorStat(defense)] > 0 ||
 		r.Stages[StatEvasion] > 0
 }
@@ -83,8 +91,8 @@ func GetDamage(
 	targets []ResolvedActor,
 	ignoreModifiers bool,
 	targetsCount int,
-	attack AttackStat,
-	defense DefenseStat,
+	attack ActorStat,
+	defense ActorStat,
 	power int,
 	critical float64,
 	nature *NatureSet,
@@ -95,7 +103,7 @@ func GetDamage(
 		return damages
 	}
 
-	a_base := float64(source.Stats[ActorStat(attack)])
+	a_base := float64(source.Stats[attack])
 	a_mod := 1.0
 	attack_value := Round(a_base * a_mod)
 	targets_mod := 1.0
@@ -104,7 +112,7 @@ func GetDamage(
 	}
 
 	for i, target := range targets {
-		d_base := float64(target.Stats[ActorStat(defense)])
+		d_base := float64(target.Stats[defense])
 		/**
 		 * This piece is important. Critical hits ignore target stat changes.
 		 */
@@ -112,10 +120,10 @@ func GetDamage(
 			ignoreModifiers = true
 		}
 		if ignoreModifiers {
-			if HasBuff(target, attack, defense) {
+			if HasBuff(target, AttackStat(attack), DefenseStat(defense)) {
 				d_base = float64(target.UnmodifiedStats[ActorStat(defense)])
 			}
-			if HasDebuff(source, attack) {
+			if HasDebuff(source, AttackStat(attack)) {
 				a_base = float64(source.UnmodifiedStats[ActorStat(attack)])
 			}
 		}
@@ -128,6 +136,14 @@ func GetDamage(
 		}
 		nature_mod := ResolveNatures(natures, source.NatureDamage, target.NatureResistance, target.Natures)
 		stab_mod := GetStabModifier(source, nature)
+		damage_mult, ok := source.DamageMultipliers[AttackStat(attack)]
+		if !ok {
+			damage_mult = 1
+		}
+		damage_reduction, ok := target.DamageReduction[AttackStat(attack)]
+		if !ok {
+			damage_reduction = 1
+		}
 
 		damages[i] = DamageEquation(DamageTerms{
 			Attack:   attack_value,
@@ -136,7 +152,7 @@ func GetDamage(
 			Level:    source.Level,
 			Nature:   nature_mod,
 			Offset:   0,
-			Other:    source.DamageMultipliers[attack] * target.DamageReduction[attack],
+			Other:    damage_mult * damage_reduction,
 			Power:    Round(float64(power) * source.PowerMultiplier),
 			Random:   random,
 			STAB:     stab_mod,

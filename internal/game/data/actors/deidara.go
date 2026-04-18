@@ -19,7 +19,7 @@ var Deidara = game.ActorDef{
 		game.StatAttack:        60,
 		game.StatDefense:       80,
 		game.StatChakraAttack:  130,
-		game.StatChakraDefense: 130,
+		game.StatChakraDefense: 110,
 		game.StatSpeed:         95,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,

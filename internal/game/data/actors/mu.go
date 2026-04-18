@@ -7,20 +7,22 @@ import (
 	"github.com/google/uuid"
 )
 
-var Choji = game.ActorDef{
-	ActorID:      uuid.MustParse("00f5a224-63ce-5cd7-87d9-5623dca59e92"),
-	SpriteURL:    "/sprites/choji_64.png",
-	Name:         "Choji Akimichi",
-	Affiliations: []string{game.AffKonoha},
+var Mu = game.ActorDef{
+	ActorID:   uuid.MustParse("1198d088-4f2a-46e1-b320-0d0361f3dc33"),
+	SpriteURL: "/sprites/mu_64.png",
+	Name:      "Mū",
+	Affiliations: []string{
+		game.AffIwa,
+	},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            150,
+		game.StatHP:            89,
 		game.StatStamina:       100,
-		game.StatAttack:        100,
-		game.StatDefense:       115,
-		game.StatChakraAttack:  65,
-		game.StatChakraDefense: 65,
-		game.StatSpeed:         35,
+		game.StatAttack:        115,
+		game.StatDefense:       70,
+		game.StatChakraAttack:  135,
+		game.StatChakraDefense: 90,
+		game.StatSpeed:         121,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},
@@ -28,14 +30,15 @@ var Choji = game.ActorDef{
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsEarth,
-		game.NsYang,
+		game.NsWater,
+		game.NsParticle,
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
+		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,
-		actions.BodyPress.ID,
 	},
 }

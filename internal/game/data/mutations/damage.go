@@ -23,11 +23,11 @@ func resolveTargets(g game.Game, context game.Context) []game.ResolvedActor {
 	return resolved
 }
 
-func getDefenseStat(a game.AttackStat) game.DefenseStat {
-	if a == game.ChakraAttack {
-		return game.ChakraDefense
+func getDefenseStat(a game.ActorStat) game.ActorStat {
+	if a == game.StatChakraAttack {
+		return game.StatChakraDefense
 	}
-	return game.Defense
+	return game.StatDefense
 }
 
 // returns if target is still alive after
@@ -130,7 +130,7 @@ type damageHandler struct {
 	context  game.Context
 	source   game.ResolvedActor
 	resolved []game.ResolvedActor
-	defense  game.DefenseStat
+	defense  game.ActorStat
 
 	total  int
 	totals []int

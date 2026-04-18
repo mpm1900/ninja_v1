@@ -20,7 +20,7 @@ var Itachi = game.ActorDef{
 		game.StatStamina:       80,
 		game.StatAttack:        80,
 		game.StatDefense:       60,
-		game.StatChakraAttack:  145,
+		game.StatChakraAttack:  140,
 		game.StatChakraDefense: 130,
 		game.StatSpeed:         130,
 		game.StatEvasion:       100,
@@ -43,6 +43,6 @@ var Itachi = game.ActorDef{
 		actions.Fireball.ID,
 		actions.Amaterasu.ID,
 		actions.Coercion.ID,
-		actions.TempleOfNirvana.ID,
+		actions.InstilFear.ID,
 	},
 }

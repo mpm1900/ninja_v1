@@ -15,7 +15,7 @@ func MakeSearingMigraine() game.Action {
 	accuracy := 100
 	power := 70
 	nature := game.NsFire
-	stat := game.ChakraAttack
+	stat := game.StatChakraAttack
 	targetCount := 0
 	chakraCost := 30
 	cooldown := 1

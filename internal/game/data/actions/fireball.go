@@ -17,7 +17,7 @@ func MakeFireball() game.Action {
 		Nature:      game.Ptr(game.NsFire),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(80),
-		Stat:        game.Ptr(game.ChakraAttack),
+		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(30),
 		Cooldown:    game.Ptr(1),

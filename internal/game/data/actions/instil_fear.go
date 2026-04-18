@@ -2,30 +2,25 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/modifiers"
 	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
 
-var Amaterasu = MakeAmaterasu()
+var InstilFear = MakeInstilFear()
 
-func MakeAmaterasu() game.Action {
-	ID := uuid.MustParse("d103e605-9381-52fd-9cb8-450b7315a9f9")
+func MakeInstilFear() game.Action {
+	ID := uuid.MustParse("0b2947a8-5caf-4588-b4d5-192443bd51e3")
 	nature := game.NsYin
 
 	config := game.ActionConfig{
-		Name:        "Amaterasu",
-		Description: "Burns target.",
+		Name:        "Instil Fear",
+		Description: "Paralyzes the target.",
 		Nature:      &nature,
-		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(1),
 		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(20),
 		Cost:        game.Ptr(30),
 		Jutsu:       game.Genjutsu,
-		CritChance:  game.Ptr(5),
-		CritMod:     1.5,
 	}
 
 	return game.Action{
@@ -43,28 +38,18 @@ func MakeAmaterasu() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				conf := game.GetActiveActionConfig(g, config)
-				crit_result := game.MakeCriticalCheck(conf)
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, 1))
-				transactions = append(
-					transactions,
-					mutations.MakeDamageTransactions(context, damages)...,
-				)
-
 				targets := g.GetTargets(context)
 				for _, target := range targets {
+
 					mut_ctx := game.Context{
 						SourcePlayerID: &target.PlayerID,
 						SourceActorID:  &target.ID,
 						ParentActorID:  nil, // do not remove on switch
 						TargetActorIDs: []uuid.UUID{target.ID},
 					}
-
-					mod := mutations.AddStatus(true, modifiers.Burned)
-					mod_tx := game.MakeTransaction(mod, mut_ctx)
-					mut := mutations.Burn
-					mut_tx := game.MakeTransaction(mut, mut_ctx)
-					transactions = append(transactions, mod_tx, mut_tx)
+					mutation := mutations.Paralyze
+					transaction := game.MakeTransaction(mutation, mut_ctx)
+					transactions = append(transactions, transaction)
 				}
 
 				return transactions

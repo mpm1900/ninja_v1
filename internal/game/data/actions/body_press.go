@@ -7,43 +7,34 @@ import (
 	"github.com/google/uuid"
 )
 
-var C1Bird = MakeC1Bird()
+var BodyPress = MakeBodyPress()
 
-func MakeC1Bird() game.Action {
-	ID := uuid.MustParse("9e8ecd72-8df3-5551-9672-0040d622beb1")
+func MakeBodyPress() game.Action {
 	accuracy := 100
-	power := 70
-	nature := game.NsExplosion
-	stat := game.StatChakraAttack
-	targetCount := 1
-	chakraCost := 30
-	cooldown := 1
-
+	power := 80
+	stat := game.StatDefense
+	nature := game.NsTai
+	chakraCost := 0
 	config := game.ActionConfig{
-		Name:        "C1: Bird",
-		Nature:      &nature,
+		Name:        "Body Press",
+		Description: "Damage is based of the user's Defense stat rather than Attack.",
 		Accuracy:    &accuracy,
 		Power:       &power,
 		Stat:        &stat,
-		TargetCount: &targetCount,
+		Nature:      &nature,
 		Cost:        &chakraCost,
-		Cooldown:    &cooldown,
-		Jutsu:       game.Ninjutsu,
+		Jutsu:       game.Taijutsu,
 	}
-
 	return game.Action{
-		ID:              ID,
+		ID:              uuid.MustParse("05b5376a-5c76-4f72-bc2c-c148ad068e40"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
-		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
+		ContextValidate: game.PositionsLengthFilter(1),
 		Cost:            mutations.UseStaminaSource(chakraCost),
 		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityP1,
-			Filter: game.ComposeGF(
-				game.SourceIsAlive,
-				game.SourceIsActionOffCooldown,
-			),
+			Priority: game.ActionPriorityDefault,
+			Filter:   game.SourceIsAlive,
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 

@@ -14,7 +14,7 @@ func MakeGreatTreeSpear() game.Action {
 	accuracy := 70
 	power := 120
 	nature := game.NsWood
-	stat := game.ChakraAttack
+	stat := game.StatChakraAttack
 	targetCount := 1
 	chakraCost := 90
 

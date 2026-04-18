@@ -12,7 +12,7 @@ var LuckyStrikes = MakeLuckyStrikes()
 func MakeLuckyStrikes() game.Action {
 	accuracy := 80
 	power := 10
-	stat := game.Attack
+	stat := game.StatAttack
 	nature := game.NsTai
 	chakraCost := 30
 	config := game.ActionConfig{

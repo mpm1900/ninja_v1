@@ -14,7 +14,7 @@ func MakeSurf() game.Action {
 	accuracy := 100
 	power := 90
 	nature := game.NsWater
-	stat := game.ChakraAttack
+	stat := game.StatChakraAttack
 	targetCount := 0
 	cost := 30
 

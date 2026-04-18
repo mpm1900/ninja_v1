@@ -41,7 +41,7 @@ type ActionConfig struct {
 	Nature      *NatureSet  `json:"nature,omitempty"`
 	Power       *int        `json:"power,omitempty"`
 	Recoil      *float64    `json:"recoil,omitempty"`
-	Stat        *AttackStat `json:"stat,omitempty"`
+	Stat        *ActorStat  `json:"stat,omitempty"`
 	TargetCount *int        `json:"target_count,omitempty"`
 	Jutsu       ActionJutsu `json:"jutsu"`
 	Description string      `json:"description"`
