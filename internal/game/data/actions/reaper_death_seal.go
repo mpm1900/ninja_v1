@@ -12,6 +12,7 @@ var ReaperDeathSeal = MakeReaperDeathSeal()
 func MakeReaperDeathSeal() game.Action {
 	config := game.ActionConfig{
 		Name:        "Reaper Death Seal",
+		Description: "Bonds user and target. When either bonded shinobi dies, both die.",
 		Nature:      game.Ptr(game.NsYin),
 		Jutsu:       game.Fuinjutsu,
 		TargetCount: game.Ptr(1),
