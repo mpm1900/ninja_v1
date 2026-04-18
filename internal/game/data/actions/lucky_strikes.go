@@ -10,27 +10,25 @@ import (
 var LuckyStrikes = MakeLuckyStrikes()
 
 func MakeLuckyStrikes() game.Action {
-	accuracy := 80
-	power := 10
-	stat := game.StatAttack
-	nature := game.NsTai
-	chakraCost := 30
 	config := game.ActionConfig{
-		Name:     "Lucky Strikes",
-		Accuracy: &accuracy,
-		Power:    &power,
-		Stat:     &stat,
-		Nature:   &nature,
-		Cost:     &chakraCost,
-		Jutsu:    game.Taijutsu,
+		Name:        "Lucky Strikes",
+		Accuracy:    game.Ptr(80),
+		Power:       game.Ptr(10),
+		Stat:        game.Ptr(game.StatAttack),
+		Nature:      game.Ptr(game.NsTai),
+		Cost:        game.Ptr(30),
+		TargetCount: game.Ptr(1),
+		Jutsu:       game.Taijutsu,
+		CritChance:  game.Ptr(5),
+		CritMod:     1.5,
 	}
 	return game.Action{
 		ID:              uuid.MustParse("4ac4894c-2ff3-5142-b087-a8924837cefc"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
-		ContextValidate: game.PositionsLengthFilter(1),
-		Cost:            mutations.UseStaminaSource(chakraCost),
+		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
+		Cost:            mutations.UseStaminaSource(*config.Cost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter:   game.SourceIsAlive,
@@ -38,7 +36,8 @@ func MakeLuckyStrikes() game.Action {
 				transactions := []game.GameTransaction{}
 
 				conf := game.GetActiveActionConfig(g, config)
-				damage_config := game.NewDamageConfig(1, 1)
+				crit_result := game.MakeCriticalCheck(conf)
+				damage_config := game.NewDamageConfig(crit_result.Ratio, 1)
 				damage_config.Repeat = true
 				damage_config.RepeatMax = -1
 				damages := mutations.NewDamage(conf, damage_config)

@@ -36,6 +36,6 @@ var Choji = game.ActorDef{
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,
-		actions.BodyPress.ID,
+		actions.HumanBoulder.ID,
 	},
 }

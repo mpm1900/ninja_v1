@@ -7,21 +7,22 @@ import (
 	"github.com/google/uuid"
 )
 
-var C1Bird = MakeC1Bird()
+var BodyFlicker = MakeBodyFlicker()
 
-func MakeC1Bird() game.Action {
-	ID := uuid.MustParse("9e8ecd72-8df3-5551-9672-0040d622beb1")
+func MakeBodyFlicker() game.Action {
+	ID := uuid.MustParse("f052f07c-bb06-4f44-8b26-ec2f17401446")
+	nature := game.NsTai
+	targetCount := 1
 
 	config := game.ActionConfig{
-		Name:        "C1: Bird",
-		Nature:      game.Ptr(game.NsExplosion),
-		Accuracy:    game.Ptr(100),
+		Name:        "Body Flicker",
+		Description: "User then switches out.",
+		Nature:      &nature,
+		TargetCount: &targetCount,
+		Jutsu:       game.Taijutsu,
 		Power:       game.Ptr(70),
-		Stat:        game.Ptr(game.StatChakraAttack),
-		TargetCount: game.Ptr(1),
-		Cost:        game.Ptr(30),
-		Cooldown:    game.Ptr(1),
-		Jutsu:       game.Ninjutsu,
+		Accuracy:    game.Ptr(100),
+		Stat:        game.Ptr(game.StatAttack),
 		CritChance:  game.Ptr(5),
 		CritMod:     1.5,
 	}
@@ -32,12 +33,10 @@ func MakeC1Bird() game.Action {
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
 		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseStaminaSource(*config.Cost),
 		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityP1,
+			Priority: game.ActionPriorityDefault,
 			Filter: game.ComposeGF(
 				game.SourceIsAlive,
-				game.SourceIsActionOffCooldown,
 			),
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
@@ -49,6 +48,12 @@ func MakeC1Bird() game.Action {
 					transactions,
 					mutations.MakeDamageTransactions(context, damages)...,
 				)
+
+				switch_mux := game.RemovePositions
+				switch_ctx := game.NewContext()
+				switch_ctx.TargetActorIDs = append(switch_ctx.TargetActorIDs, *context.SourceActorID)
+				switch_tx := game.MakeTransaction(switch_mux, switch_ctx)
+				transactions = append(transactions, switch_tx)
 
 				return transactions
 			},

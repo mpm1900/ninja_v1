@@ -11,22 +11,18 @@ var Surf = MakeSurf()
 
 func MakeSurf() game.Action {
 	ID := uuid.MustParse("74d5a7d7-cb62-58b4-9ace-e80bf7f0fd40")
-	accuracy := 100
-	power := 90
-	nature := game.NsWater
-	stat := game.StatChakraAttack
-	targetCount := 0
-	cost := 30
 
 	config := game.ActionConfig{
 		Name:        "Surf",
-		Nature:      &nature,
-		Accuracy:    &accuracy,
-		Power:       &power,
-		Stat:        &stat,
-		TargetCount: &targetCount,
-		Cost:        &cost,
+		Nature:      game.Ptr(game.NsWater),
+		Accuracy:    game.Ptr(100),
+		Power:       game.Ptr(90),
+		Stat:        game.Ptr(game.StatChakraAttack),
+		TargetCount: game.Ptr(1),
+		Cost:        game.Ptr(30),
 		Jutsu:       game.Ninjutsu,
+		CritChance:  game.Ptr(5),
+		CritMod:     1.5,
 	}
 
 	return game.Action{
@@ -35,7 +31,7 @@ func MakeSurf() game.Action {
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.NoneFilter,
 		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseStaminaSource(cost),
+		Cost:            mutations.UseStaminaSource(*config.Cost),
 		MapContext: func(g game.Game, context game.Context) game.Context {
 			other_team_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherTeamFilter))
 			for _, t := range other_team_actors {
@@ -52,8 +48,8 @@ func MakeSurf() game.Action {
 				transactions := []game.GameTransaction{}
 
 				conf := game.GetActiveActionConfig(g, config)
-
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(1, 1))
+				crit_result := game.MakeCriticalCheck(conf)
+				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, 1))
 				transactions = append(
 					transactions,
 					mutations.MakeDamageTransactions(context, damages)...,

@@ -11,28 +11,26 @@ var Rasengan = MakeRasengan()
 var RasenganRecharge = MakeRasenganRecharge()
 
 func MakeRasengan() game.Action {
-	accuracy := 100
-	power := 150
-	stat := game.StatChakraAttack
-	nature := game.NsPure
-	chakraCost := 100
 	config := game.ActionConfig{
 		Name:        "Rasengan",
 		Description: "Powerful chakra attack. Must recharge the next turn.",
-		Accuracy:    &accuracy,
-		Power:       &power,
-		Stat:        &stat,
-		Nature:      &nature,
-		Cost:        &chakraCost,
+		Nature:      game.Ptr(game.NsPure),
+		Accuracy:    game.Ptr(100),
+		Power:       game.Ptr(150),
+		Stat:        game.Ptr(game.StatChakraAttack),
+		TargetCount: game.Ptr(1),
+		Cost:        game.Ptr(100),
 		Jutsu:       game.Ninjutsu,
+		CritChance:  game.Ptr(5),
+		CritMod:     1.5,
 	}
 	return game.Action{
 		ID:              uuid.MustParse("e0874a45-2f62-5544-a4a2-f440644407db"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
-		ContextValidate: game.PositionsLengthFilter(1),
-		Cost:            mutations.UseStaminaSource(chakraCost),
+		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
+		Cost:            mutations.UseStaminaSource(*config.Cost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter:   game.SourceIsAlive,
@@ -40,7 +38,8 @@ func MakeRasengan() game.Action {
 				transactions := []game.GameTransaction{}
 
 				conf := game.GetActiveActionConfig(g, config)
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(1, 1))
+				crit_result := game.MakeCriticalCheck(conf)
+				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, 1))
 				transactions = append(
 					transactions,
 					mutations.MakeDamageTransactions(context, damages)...,

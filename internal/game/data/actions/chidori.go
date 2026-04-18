@@ -10,19 +10,16 @@ import (
 var Chidori = MakeChidori()
 
 func MakeChidori() game.Action {
-	accuracy := 100
-	power := 80
-	recoil := 0.2
-	nature := game.NsLightning
-	stat := game.StatChakraAttack
 	config := game.ActionConfig{
-		Name:     "Chidori",
-		Nature:   &nature,
-		Accuracy: &accuracy,
-		Power:    &power,
-		Stat:     &stat,
-		Recoil:   &recoil,
-		Jutsu:    game.Ninjutsu,
+		Name:       "Chidori",
+		Nature:     game.Ptr(game.NsLightning),
+		Accuracy:   game.Ptr(100),
+		Power:      game.Ptr(80),
+		Stat:       game.Ptr(game.StatChakraAttack),
+		Recoil:     game.Ptr(0.2),
+		Jutsu:      game.Ninjutsu,
+		CritChance: game.Ptr(5),
+		CritMod:    1.5,
 	}
 	return game.Action{
 		ID:              uuid.MustParse("c1502330-764c-56f8-9c9e-f41b933a90f0"),
@@ -37,7 +34,8 @@ func MakeChidori() game.Action {
 				transactions := []game.GameTransaction{}
 
 				conf := game.GetActiveActionConfig(g, config)
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(1, 1))
+				crit_result := game.MakeCriticalCheck(conf)
+				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, 1))
 				transactions = append(
 					transactions,
 					mutations.MakeDamageTransactions(context, damages)...,

@@ -75,9 +75,9 @@ function ActionCard({
             </div>
           </div>
 
-          {action.config.cost && (
+          {!!action.config.cost && action.config.cost > 0 && (
             <div className="text-white/90 font-black nanum-brush-script-regular text-4xl h-8 w-8 -mt-0.5">
-              {action.config.cost ?? 0}
+              {action.config.cost}
             </div>
           )}
         </div>

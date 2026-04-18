@@ -7,23 +7,19 @@ import (
 	"github.com/google/uuid"
 )
 
-var BodyPress = MakeBodyPress()
+var HumanBoulder = MakeHumanBoulder()
 
-func MakeBodyPress() game.Action {
-	accuracy := 100
-	power := 80
-	stat := game.StatDefense
-	nature := game.NsTai
-	chakraCost := 0
+func MakeHumanBoulder() game.Action {
 	config := game.ActionConfig{
-		Name:        "Body Press",
+		Name:        "Human Boulder",
 		Description: "Damage is based of the user's Defense stat rather than Attack.",
-		Accuracy:    &accuracy,
-		Power:       &power,
-		Stat:        &stat,
-		Nature:      &nature,
-		Cost:        &chakraCost,
+		Accuracy:    game.Ptr(100),
+		Power:       game.Ptr(80),
+		Stat:        game.Ptr(game.StatDefense),
+		Nature:      game.Ptr(game.NsTai),
 		Jutsu:       game.Taijutsu,
+		CritChance:  game.Ptr(5),
+		CritMod:     1.5,
 	}
 	return game.Action{
 		ID:              uuid.MustParse("05b5376a-5c76-4f72-bc2c-c148ad068e40"),
@@ -31,7 +27,6 @@ func MakeBodyPress() game.Action {
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
 		ContextValidate: game.PositionsLengthFilter(1),
-		Cost:            mutations.UseStaminaSource(chakraCost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter:   game.SourceIsAlive,
@@ -39,7 +34,8 @@ func MakeBodyPress() game.Action {
 				transactions := []game.GameTransaction{}
 
 				conf := game.GetActiveActionConfig(g, config)
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(1, 1))
+				crit_result := game.MakeCriticalCheck(conf)
+				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, 1))
 				transactions = append(
 					transactions,
 					mutations.MakeDamageTransactions(context, damages)...,

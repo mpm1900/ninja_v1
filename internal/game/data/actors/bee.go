@@ -17,7 +17,7 @@ var KillerBee = game.ActorDef{
 		game.StatHP:            74,
 		game.StatStamina:       80,
 		game.StatAttack:        130,
-		game.StatDefense:       90,
+		game.StatDefense:       100,
 		game.StatChakraAttack:  110,
 		game.StatChakraDefense: 70,
 		game.StatSpeed:         116,

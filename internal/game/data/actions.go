@@ -54,5 +54,6 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.TempleOfNirvana.ID: actions.TempleOfNirvana,
 	actions.Graft.ID:           actions.Graft,
 	actions.InstilFear.ID:      actions.InstilFear,
-	actions.BodyPress.ID:       actions.BodyPress,
+	actions.HumanBoulder.ID:    actions.HumanBoulder,
+	actions.BodyFlicker.ID:     actions.BodyFlicker,
 }
