@@ -73,7 +73,7 @@ function PlayerPositions({
                   <ActorCard
                     actor={game.actors.find((a) => a.ID === pos.actor_ID)}
                     client_ID={client?.ID}
-                    selected={is_selected}
+                    selected={is_selected || is_source}
                     source={is_source}
                     targeted={targeted}
                     onClick={() => onSelectedChange?.(pos.actor_ID!)}

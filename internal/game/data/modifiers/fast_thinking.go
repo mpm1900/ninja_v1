@@ -18,10 +18,10 @@ var FastThinking = game.Modifier{
 		game.MakeActorMutation(
 			&fastThinkingID,
 			game.MutPriorityDefault,
-			game.ComposeAF(game.SourceFilter, game.ActiveFilter, game.IsAtOrBelowHealthRatio(0.5)),
+			game.ComposeAF(game.SourceFilter, game.ActiveFilter),
 			func(g game.Game, a game.Actor, c game.Context) game.Actor {
 				for i, action := range a.Actions {
-					if action.Config.Power == nil && action.Priority == game.ActionPriorityDefault {
+					if action.Config.Power == nil {
 						a.Actions[i].Priority = a.Actions[i].Priority + 1
 					}
 				}

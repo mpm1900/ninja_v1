@@ -2,7 +2,6 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -10,6 +9,7 @@ import (
 var LeafJab = MakeLeafJab()
 
 func MakeLeafJab() game.Action {
+	ID := uuid.MustParse("b23ace96-eb09-5bf7-b884-7ef8e8fc544d")
 	config := game.ActionConfig{
 		Name:        "Leaf Jab",
 		Accuracy:    game.Ptr(100),
@@ -22,29 +22,8 @@ func MakeLeafJab() game.Action {
 		CritChance:  game.Ptr(5),
 		CritMod:     1.5,
 	}
-	return game.Action{
-		ID:              uuid.MustParse("b23ace96-eb09-5bf7-b884-7ef8e8fc544d"),
-		Config:          config,
-		TargetType:      game.TargetPositionID,
-		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
-		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseStaminaSource(*config.Cost),
-		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityP1,
-			Filter:   game.SourceIsAlive,
-			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
-				transactions := []game.GameTransaction{}
 
-				conf := game.GetActiveActionConfig(g, config)
-				crit_result := game.MakeCriticalCheck(conf)
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
-				transactions = append(
-					transactions,
-					mutations.MakeDamageTransactions(context, damages)...,
-				)
-
-				return transactions
-			},
-		},
-	}
+	action := makeBasicAttack(ID, config)
+	action.Priority = game.ActionPriorityP1
+	return action
 }
