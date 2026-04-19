@@ -11,6 +11,7 @@ import (
 var Rasenshuriken = MakeRasenshuriken()
 
 func MakeRasenshuriken() game.Action {
+	ID := uuid.MustParse("6b3df363-7052-47fc-af99-7e8eafdc9ee2")
 	config := game.ActionConfig{
 		Name:        "Rasenshuriken",
 		Description: "User's Chakra Attack is lowered by 2 stages.",
@@ -24,37 +25,17 @@ func MakeRasenshuriken() game.Action {
 		CritChance:  game.Ptr(5),
 		CritMod:     1.5,
 	}
-	return game.Action{
-		ID:              uuid.MustParse("6b3df363-7052-47fc-af99-7e8eafdc9ee2"),
-		Config:          config,
-		TargetType:      game.TargetPositionID,
-		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
-		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseStaminaSource(*config.Cost),
-		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityDefault,
-			Filter:   game.SourceIsAlive,
-			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
-				transactions := []game.GameTransaction{}
-				source, ok := g.GetSource(context)
-				if !ok {
-					return transactions
-				}
 
-				conf := game.GetActiveActionConfig(g, config)
-				crit_result := game.MakeCriticalCheck(conf)
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
-				transactions = append(
-					transactions,
-					mutations.MakeDamageTransactions(context, damages)...,
-				)
+	return makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
+		source, ok := g.GetSource(context)
+		if !ok {
+			return transactions
+		}
 
-				mutation := mutations.AddModifiers(false, modifiers.ChakraAttackDown2Source)
-				transaction := game.MakeTransaction(mutation, game.MakeContextForActor(source))
-				transactions = append(transactions, transaction)
+		mutation := mutations.AddModifiers(false, modifiers.ChakraAttackDown2Source)
+		transaction := game.MakeTransaction(mutation, game.MakeContextForActor(source))
+		transactions = append(transactions, transaction)
 
-				return transactions
-			},
-		},
-	}
+		return transactions
+	})
 }

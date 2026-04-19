@@ -2,7 +2,6 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -14,6 +13,7 @@ func MakeSurf() game.Action {
 
 	config := game.ActionConfig{
 		Name:        "Surf",
+		Description: "Hits all other active shinobi.",
 		Nature:      game.Ptr(game.NsWater),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(90),
@@ -25,38 +25,15 @@ func MakeSurf() game.Action {
 		CritMod:     1.5,
 	}
 
-	return game.Action{
-		ID:              ID,
-		Config:          config,
-		TargetType:      game.TargetPositionID,
-		TargetPredicate: game.NoneFilter,
-		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseStaminaSource(*config.Cost),
-		MapContext: func(g game.Game, context game.Context) game.Context {
-			other_team_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherTeamFilter))
-			for _, t := range other_team_actors {
-				context.TargetPositionIDs = append(context.TargetPositionIDs, *t.PositionID)
-			}
-			return context
-		},
-		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityDefault,
-			Filter: game.ComposeGF(
-				game.SourceIsAlive,
-			),
-			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
-				transactions := []game.GameTransaction{}
-
-				conf := game.GetActiveActionConfig(g, config)
-				crit_result := game.MakeCriticalCheck(conf)
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
-				transactions = append(
-					transactions,
-					mutations.MakeDamageTransactions(context, damages)...,
-				)
-
-				return transactions
-			},
-		},
+	action := makeBasicAttack(ID, config)
+	action.TargetPredicate = game.NoneFilter
+	action.MapContext = func(g game.Game, context game.Context) game.Context {
+		other_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherFilter))
+		for _, t := range other_actors {
+			context.TargetPositionIDs = append(context.TargetPositionIDs, *t.PositionID)
+		}
+		return context
 	}
+
+	return action
 }

@@ -14,6 +14,7 @@ func MakeC0UltimateArt() game.Action {
 
 	config := game.ActionConfig{
 		Name:        "C0: Ultimate Art",
+		Description: "Hits all other active shinobi.",
 		Nature:      game.Ptr(game.NsExplosion),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(250),
@@ -25,47 +26,26 @@ func MakeC0UltimateArt() game.Action {
 		CritMod:     1.5,
 	}
 
-	return game.Action{
-		ID:              ID,
-		Config:          config,
-		TargetType:      game.TargetPositionID,
-		TargetPredicate: game.NoneFilter,
-		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseStaminaSource(*config.Cost),
-		MapContext: func(g game.Game, context game.Context) game.Context {
-			other_team_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherFilter))
-			for _, t := range other_team_actors {
-				context.TargetPositionIDs = append(context.TargetPositionIDs, *t.PositionID)
-			}
-			return context
-		},
-		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityDefault,
-			Filter: game.ComposeGF(
-				game.SourceIsAlive,
-			),
-			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
-				transactions := []game.GameTransaction{}
+	action := makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
+		source, ok := g.GetSource(context)
+		if !ok {
+			return transactions
+		}
 
-				source, ok := g.GetSource(context)
-				if !ok {
-					return transactions
-				}
+		self_dmg := mutations.RatioDamage(1.0)
+		self_dmg_ctx := game.MakeContextForActor(source)
+		transactions = append(transactions, game.MakeTransaction(self_dmg, self_dmg_ctx))
 
-				self_dmg := mutations.RatioDamage(1.0)
-				self_dmg_ctx := game.MakeContextForActor(source)
-				transactions = append(transactions, game.MakeTransaction(self_dmg, self_dmg_ctx))
-
-				conf := game.GetActiveActionConfig(g, config)
-				crit_result := game.MakeCriticalCheck(conf)
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
-				transactions = append(
-					transactions,
-					mutations.MakeDamageTransactions(context, damages)...,
-				)
-
-				return transactions
-			},
-		},
+		return transactions
+	})
+	action.TargetPredicate = game.NoneFilter
+	action.MapContext = func(g game.Game, context game.Context) game.Context {
+		other_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherFilter))
+		for _, t := range other_actors {
+			context.TargetPositionIDs = append(context.TargetPositionIDs, *t.PositionID)
+		}
+		return context
 	}
+
+	return action
 }
