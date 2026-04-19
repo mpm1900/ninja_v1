@@ -11,6 +11,7 @@ var GiantRasengan = MakeGiantRasengan()
 var RasenganRecharge = MakeRasenganRecharge()
 
 func MakeGiantRasengan() game.Action {
+	ID := uuid.MustParse("e0874a45-2f62-5544-a4a2-f440644407db")
 	config := game.ActionConfig{
 		Name:        "Giant Rasengan",
 		Description: "Powerful chakra attack. Must recharge the next turn.",
@@ -24,34 +25,13 @@ func MakeGiantRasengan() game.Action {
 		CritChance:  game.Ptr(5),
 		CritMod:     1.5,
 	}
-	return game.Action{
-		ID:              uuid.MustParse("e0874a45-2f62-5544-a4a2-f440644407db"),
-		Config:          config,
-		TargetType:      game.TargetPositionID,
-		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
-		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseStaminaSource(*config.Cost),
-		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityDefault,
-			Filter:   game.SourceIsAlive,
-			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
-				transactions := []game.GameTransaction{}
+	action := makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
+		recharge := mutations.QueueAction(RasenganRecharge.ID, context)
+		transactions = append(transactions, game.MakeTransaction(recharge, context))
 
-				conf := game.GetActiveActionConfig(g, config)
-				crit_result := game.MakeCriticalCheck(conf)
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
-				transactions = append(
-					transactions,
-					mutations.MakeDamageTransactions(context, damages)...,
-				)
-
-				recharge := mutations.QueueAction(RasenganRecharge.ID, context)
-				transactions = append(transactions, game.MakeTransaction(recharge, context))
-
-				return transactions
-			},
-		},
-	}
+		return transactions
+	}, nil)
+	return action
 }
 
 func MakeRasenganRecharge() game.Action {

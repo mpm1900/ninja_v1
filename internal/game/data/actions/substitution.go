@@ -2,7 +2,6 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -34,7 +33,7 @@ func MakeShadowClone() game.Action {
 					return transactions
 				}
 				source := s.Resolve(g)
-				damage := mutations.RatioDamage(0.25)
+				damage := game.RatioDamage(0.25)
 				damage_context := game.MakeContextForActor(s)
 
 				mut := game.GameMutation{

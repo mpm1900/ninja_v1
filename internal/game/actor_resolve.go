@@ -93,11 +93,30 @@ func (ah *actorResolveHandler) resolveNatures(resolved *ResolvedActor) {
 }
 
 func (ah *actorResolveHandler) resolveActions(resolved *ResolvedActor) {
-	for i, _ := range resolved.Actions {
+	for i, a := range resolved.Actions {
+		// static cooldown offset
 		if resolved.Actions[i].Config.Cooldown == nil {
 			resolved.Actions[i].Config.Cooldown = Ptr(resolved.CooldownOffset)
 		} else {
 			*resolved.Actions[i].Config.Cooldown += resolved.CooldownOffset
 		}
+
+		// set dynamic disabled state
+		if !a.Disabled {
+			if a.Cooldown != nil {
+				resolved.Actions[i].Disabled = true
+			}
+			if resolved.ActionLocked && resolved.LastUsedActionID != nil {
+				if *resolved.LastUsedActionID != a.ID && !a.Meta.Switch {
+					resolved.Actions[i].Disabled = true
+				}
+			}
+			if resolved.SwitchLocked && a.Meta.Switch {
+				resolved.Actions[i].Disabled = true
+			}
+		}
+
+		// if everything is disabled, add struggle
+
 	}
 }

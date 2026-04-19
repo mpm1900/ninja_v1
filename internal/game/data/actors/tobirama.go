@@ -36,7 +36,7 @@ var Tobirama = game.ActorDef{
 	Abilities: []game.Modifier{
 		modifiers.ConsumeChakra,
 	},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.BodyReplacement.ID,
 		actions.Tailwind.ID,

@@ -35,7 +35,7 @@ func MakeRecover() game.Action {
 				transactions := []game.GameTransaction{}
 
 				conf := game.GetActiveActionConfig(g, config)
-				heal := mutations.NewHeal(conf, 0.5)
+				heal := game.NewHeal(conf, 0.5)
 				transactions = append(
 					transactions,
 					game.MakeTransaction(heal, context),

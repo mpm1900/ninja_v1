@@ -32,7 +32,7 @@ var Kinkaku = game.ActorDef{
 		game.NsPure,
 	}),
 	Abilities:   []game.Modifier{},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Surf.ID,
 		actions.DragonDance.ID,

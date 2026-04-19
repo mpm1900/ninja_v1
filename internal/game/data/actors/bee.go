@@ -32,7 +32,7 @@ var KillerBee = game.ActorDef{
 		game.NsYang,
 	}),
 	Abilities:   []game.Modifier{},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Surf.ID,
 		actions.DragonDance.ID,

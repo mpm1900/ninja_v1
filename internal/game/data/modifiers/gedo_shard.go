@@ -2,7 +2,6 @@ package modifiers
 
 import (
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -22,7 +21,7 @@ var GedoShardTrigger game.Trigger = game.Trigger{
 		Delta: func(p game.Game, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
 			context.TargetPositionIDs = []uuid.UUID{}
 			context.TargetActorIDs = []uuid.UUID{*context.SourceActorID}
-			mut := mutations.RatioDamage(0.1)
+			mut := game.RatioDamage(0.1)
 			return []game.Transaction[game.GameMutation]{
 				game.MakeTransaction(mut, context),
 			}

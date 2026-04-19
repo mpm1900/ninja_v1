@@ -98,7 +98,7 @@ var SourceBonded game.Modifier = game.Modifier{
 
 					if bonded_partner_ID != nil {
 						partner_ctx := game.NewContext().WithSource(*context.SourceActorID).WithTargetIDs([]uuid.UUID{*bonded_partner_ID})
-						mut := mutations.RatioDamage(1.0)
+						mut := game.RatioDamage(1.0)
 						tx := game.MakeTransaction(mut, partner_ctx)
 						transactions = append(transactions, tx)
 					}
@@ -180,7 +180,7 @@ var TargetBonded game.Modifier = game.Modifier{
 
 					if bonded_partner_ID != nil {
 						partner_ctx := game.NewContext().WithSource(*context.SourceActorID).WithTargetIDs([]uuid.UUID{*bonded_partner_ID})
-						mut := mutations.RatioDamage(1.0)
+						mut := game.RatioDamage(1.0)
 						tx := game.MakeTransaction(mut, partner_ctx)
 						transactions = append(transactions, tx)
 					}

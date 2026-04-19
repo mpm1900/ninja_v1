@@ -35,7 +35,7 @@ var Yamato = game.ActorDef{
 	Abilities:   []game.Modifier{
 		modifiers.NeutralizingChakra,
 	},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Chidori.ID,
 		actions.DragonDance.ID,

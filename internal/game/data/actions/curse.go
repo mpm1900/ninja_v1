@@ -2,7 +2,6 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -49,14 +48,14 @@ func MakeCurse() game.Action {
 					hp := source.Stats[game.StatHP]
 					amount := hp / 2
 
-					hp_loss := mutations.PureDamageWith(amount, false, func(a game.Actor) game.Actor {
+					hp_loss := game.PureDamageWith(amount, false, func(a game.Actor) game.Actor {
 						if !a.Alive {
 							a.Alive = true
 							a.Damage = hp - 1
 						}
 						return a
 					})
-					damage := mutations.PureDamage(amount, false)
+					damage := game.PureDamage(amount, false)
 
 					sourceTx := game.MakeTransaction(hp_loss, context.WithTargetIDs([]uuid.UUID{source.ID}))
 					targetTx := game.MakeTransaction(damage, context.WithTargetIDs([]uuid.UUID{target.ID}))

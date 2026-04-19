@@ -22,12 +22,6 @@ var Paralysis game.Modifier = game.Modifier{
 			game.MutPriorityPostStagedStats,
 			game.ComposeAF(game.SourceFilter, game.ActiveFilter),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {
-				if actor.Statused {
-					return actor
-				}
-
-				actor.Statused = true
-				actor.Paralyzed = true
 				actor.Stats[game.StatSpeed] = game.Round(float64(actor.Stats[game.StatSpeed]) * 0.25)
 				return actor
 			},

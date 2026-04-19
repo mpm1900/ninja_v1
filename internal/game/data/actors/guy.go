@@ -37,7 +37,7 @@ var Guy = game.ActorDef{
 	Abilities: []game.Modifier{
 		modifiers.Rage,
 	},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.LuckyStrikes.ID,
 		actions.Chidori.ID,

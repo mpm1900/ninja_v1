@@ -24,7 +24,7 @@ func MakeSandstorm() game.Modifier {
 			Priority: game.ActionPriorityDefault,
 			Filter:   game.TrueGameFilter,
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
-				mut := mutations.RatioDamage(0.0625)
+				mut := game.RatioDamage(0.0625)
 				mut_ctx := context
 				mut_ctx.TargetActorIDs = []uuid.UUID{}
 				for _, target := range g.GetActiveActors() {

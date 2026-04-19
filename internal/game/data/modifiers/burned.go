@@ -3,7 +3,6 @@ package modifiers
 import (
 	"maps"
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/mutations"
 	"slices"
 
 	"github.com/google/uuid"
@@ -23,7 +22,7 @@ var BurnedTrigger game.Trigger = game.Trigger{
 		Priority: game.ActionPriorityDefault,
 		Filter:   game.TrueGameFilter,
 		Delta: func(p game.Game, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
-			mut := mutations.RatioDamage(0.0625)
+			mut := game.RatioDamage(0.0625)
 			return []game.Transaction[game.GameMutation]{
 				game.MakeTransaction(mut, context),
 			}

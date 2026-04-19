@@ -29,7 +29,6 @@ function BattleCards({ actor }: { actor: Actor }) {
   const staged_action = actions.find(
     (tx) => tx.context.source_actor_ID === actor.ID
   )
-  const action_locked = actor.action_locked && actor.last_used_action_ID != null
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-8 z-0 flex justify-center">
       <AnimatePresence mode="wait" initial={false}>
@@ -81,12 +80,7 @@ function BattleCards({ actor }: { actor: Actor }) {
                   action={a}
                   disabled={
                     (!!staged_action && !selected) ||
-                    a.disabled ||
-                    a.cooldown != null ||
-                    (action_locked &&
-                      actor.last_used_action_ID !== a.ID &&
-                      a.config.name != 'Switch') ||
-                    (actor.switch_locked && a.config.name == 'Switch')
+                    a.disabled
                   }
                   selected={selected}
                   onClick={() => setContextAction(a.ID)}

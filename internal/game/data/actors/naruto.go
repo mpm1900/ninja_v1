@@ -36,7 +36,7 @@ var Naruto = game.ActorDef{
 	Abilities: []game.Modifier{
 		modifiers.IchirakuRamen,
 	},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Rasengan.ID,
 		actions.GiantRasengan.ID,

@@ -33,7 +33,7 @@ var Kisame = game.ActorDef{
 	Abilities: []game.Modifier{
 		modifiers.WaterAbsorb,
 	},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Surf.ID,
 		actions.Chidori.ID,

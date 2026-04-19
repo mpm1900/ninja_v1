@@ -35,7 +35,7 @@ var Minato = game.ActorDef{
 	Abilities: []game.Modifier{
 		modifiers.SpeedBoost,
 	},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Rasengan.ID,
 		actions.GiantRasengan.ID,

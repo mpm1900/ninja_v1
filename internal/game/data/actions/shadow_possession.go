@@ -51,10 +51,9 @@ func MakeShadowPossession() game.Action {
 							game.MakeTransaction(mut, ctx),
 						)
 					} else {
-						mut := mutations.Paralyze
 						transactions = append(
 							transactions,
-							game.MakeTransaction(mut, ctx),
+							applyParalysis(target)...,
 						)
 					}
 				}

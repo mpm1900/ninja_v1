@@ -85,10 +85,10 @@ var LeechSeedTrigger game.Trigger = game.Trigger{
 				hp_loss_ctx := context
 				hp_loss_ctx.TargetActorIDs = []uuid.UUID{resolved_parent.ID}
 				hp_loss_ctx.TargetPositionIDs = []uuid.UUID{}
-				hp_loss_mut := mutations.PureDamage(hp_loss, false)
+				hp_loss_mut := game.PureDamage(hp_loss, false)
 				hp_loss_tx := game.MakeTransaction(hp_loss_mut, hp_loss_ctx)
 
-				heal_mut := mutations.PureHeal(hp_loss)
+				heal_mut := game.PureHeal(hp_loss)
 				heal_ctx := context
 				heal_ctx.TargetActorIDs = []uuid.UUID{target.ID}
 				heal_ctx.TargetPositionIDs = []uuid.UUID{}

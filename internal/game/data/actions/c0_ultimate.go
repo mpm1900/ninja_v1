@@ -2,7 +2,6 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -32,12 +31,12 @@ func MakeC0UltimateArt() game.Action {
 			return transactions
 		}
 
-		self_dmg := mutations.RatioDamage(1.0)
+		self_dmg := game.RatioDamage(1.0)
 		self_dmg_ctx := game.MakeContextForActor(source)
 		transactions = append(transactions, game.MakeTransaction(self_dmg, self_dmg_ctx))
 
 		return transactions
-	})
+	}, nil)
 	action.TargetPredicate = game.NoneFilter
 	action.MapContext = func(g game.Game, context game.Context) game.Context {
 		other_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherFilter))

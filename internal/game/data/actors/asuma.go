@@ -31,7 +31,7 @@ var Asuma = game.ActorDef{
 		game.NsWind,
 	}),
 	Abilities:   []game.Modifier{},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Haze.ID,
 		actions.Fireball.ID,

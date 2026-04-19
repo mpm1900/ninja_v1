@@ -51,16 +51,16 @@ func MakeGraft() game.Action {
 					ctx := context
 					ctx.TargetPositionIDs = []uuid.UUID{*target.PositionID}
 					if isTeam {
-						damages := mutations.RatioHeal(0.5)
+						heals := game.RatioHeal(0.5)
 						transactions = append(
 							transactions,
-							mutations.MakeDamageTransactions(ctx, damages)...,
+							game.MakeDamageTransactions(ctx, heals)...,
 						)
 					} else {
-						damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
+						damages := game.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
 						transactions = append(
 							transactions,
-							mutations.MakeDamageTransactions(ctx, damages)...,
+							game.MakeDamageTransactions(ctx, damages)...,
 						)
 					}
 				}

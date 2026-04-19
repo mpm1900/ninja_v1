@@ -68,3 +68,24 @@ var Paralyze = game.GameMutation{
 		return g
 	},
 }
+
+var Poison = game.GameMutation{
+	Delta: func(p, g game.Game, context game.Context) game.Game {
+		targets := g.GetTargets(context)
+		for _, target := range targets {
+			g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
+				if a.Statused {
+					return a
+				}
+
+				a.Poisoned = true
+				a.Statused = true
+
+				return a
+			})
+			g.PushLog(game.NewLogContext("$source$ became poisoned.", game.MakeContextForActor(target)))
+		}
+
+		return g
+	},
+}

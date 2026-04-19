@@ -37,5 +37,5 @@ func MakeRasenshuriken() game.Action {
 		transactions = append(transactions, transaction)
 
 		return transactions
-	})
+	}, nil)
 }

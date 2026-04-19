@@ -36,7 +36,7 @@ var Pain = game.ActorDef{
 		modifiers.SpeedBoost,
 		modifiers.Raincaller,
 	},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Sekiryoku.ID,
 		actions.BodyReplacement.ID,

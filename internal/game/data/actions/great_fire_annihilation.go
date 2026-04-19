@@ -41,5 +41,5 @@ func MakeGreatFireAnnihilation() game.Action {
 		}
 
 		return transactions
-	})
+	}, nil)
 }

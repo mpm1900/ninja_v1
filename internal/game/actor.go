@@ -204,6 +204,7 @@ type ActorState struct {
 	Statused     bool `json:"statused"`
 	Burned       bool `json:"burned"`
 	Paralyzed    bool `json:"paralyzed"`
+	Poisoned     bool `json:"poisoned"`
 	Sleeping     bool `json:"sleeping"`
 	SleepCounter int  `json:"-"`
 	/**

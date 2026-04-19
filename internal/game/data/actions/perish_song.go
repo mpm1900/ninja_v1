@@ -35,7 +35,7 @@ var PerishDealthModifier game.Modifier = game.Modifier{
 						return transactions
 					}
 
-					mut := mutations.RatioDamage(1.0)
+					mut := game.RatioDamage(1.0)
 					tx := game.MakeTransaction(mut, game.MakeContextForActor(source))
 					transactions = append(transactions, tx)
 

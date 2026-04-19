@@ -23,7 +23,7 @@ var OnigiriIDTrigger game.Trigger = game.Trigger{
 			for _, target := range targets {
 				mut_ctx := game.MakeContextForActor(target)
 
-				heal := mutations.RatioHeal(0.25)
+				heal := game.RatioHeal(0.25)
 				heal_tx := game.MakeTransaction(heal, mut_ctx)
 				consume_tx := game.MakeTransaction(mutations.ConsumeItem, mut_ctx)
 				transactions = append(transactions, consume_tx)

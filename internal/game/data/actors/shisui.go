@@ -36,7 +36,7 @@ var Shisui = game.ActorDef{
 	Abilities: []game.Modifier{
 		modifiers.PriorityFailure,
 	},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Distraction.ID,
 		actions.Chidori.ID,

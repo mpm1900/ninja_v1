@@ -39,5 +39,5 @@ func MakeFireball() game.Action {
 		}
 
 		return transactions
-	})
+	}, nil)
 }

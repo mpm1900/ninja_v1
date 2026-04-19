@@ -2,7 +2,6 @@ package modifiers
 
 import (
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -23,7 +22,7 @@ var RegnerationTrigger game.Trigger = game.Trigger{
 				return transactions
 			}
 
-			mut := mutations.RatioHeal(0.25)
+			mut := game.RatioHeal(0.25)
 			mut_ctx := game.MakeContextForActor(source)
 			mut_tx := game.MakeTransaction(mut, mut_ctx)
 			transactions = append(transactions, mut_tx)

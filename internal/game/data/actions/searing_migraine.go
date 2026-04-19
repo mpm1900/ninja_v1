@@ -20,7 +20,7 @@ func MakeSearingMigraine() game.Action {
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(80),
 		Stat:        game.Ptr(game.StatChakraAttack),
-		TargetCount: game.Ptr(1),
+		TargetCount: game.Ptr(0),
 		Cost:        game.Ptr(30),
 		Cooldown:    game.Ptr(1),
 		Jutsu:       game.Ninjutsu,
@@ -28,43 +28,19 @@ func MakeSearingMigraine() game.Action {
 		CritMod:     1.5,
 	}
 
-	return game.Action{
-		ID:              ID,
-		Config:          config,
-		TargetPredicate: game.NoneFilter,
-		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseStaminaSource(*config.Cost),
-		MapContext: func(g game.Game, context game.Context) game.Context {
-			other_team_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherTeamFilter))
-			for _, t := range other_team_actors {
-				context.TargetPositionIDs = append(context.TargetPositionIDs, *t.PositionID)
-			}
-			return context
-		},
-		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityDefault,
-			Filter: game.ComposeGF(
-				game.SourceIsAlive,
-				game.SourceIsActionOffCooldown,
-			),
-			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
-				transactions := []game.GameTransaction{}
-
-				conf := game.GetActiveActionConfig(g, config)
-				crit_result := game.MakeCriticalCheck(conf)
-
-				add_mut := mutations.AddModifiers(false, modifiers.AddNature(game.NsFire, 0))
-				add_tx := game.MakeTransaction(add_mut, context)
-				transactions = append(transactions, add_tx)
-
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
-				transactions = append(
-					transactions,
-					mutations.MakeDamageTransactions(context, damages)...,
-				)
-
-				return transactions
-			},
-		},
+	action := makeBasicAttackWith(ID, config, nil, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
+		add_mut := mutations.AddModifiers(false, modifiers.AddNature(game.NsFire, 0))
+		add_tx := game.MakeTransaction(add_mut, context)
+		transactions = append(transactions, add_tx)
+		return transactions
+	})
+	action.TargetPredicate = game.NoneFilter
+	action.MapContext = func(g game.Game, context game.Context) game.Context {
+		other_team_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherTeamFilter))
+		for _, t := range other_team_actors {
+			context.TargetPositionIDs = append(context.TargetPositionIDs, *t.PositionID)
+		}
+		return context
 	}
+	return action
 }

@@ -1,6 +1,7 @@
 import { Store } from '@tanstack/store'
 import { NULL_CONTEXT, type Context } from '../game/context'
 import type { Game } from '../game/game'
+import type { Actor } from '../game/actor'
 
 type BattleContextState = Context & {
   previous_action_IDs: Record<string, string>
@@ -73,6 +74,23 @@ function getNextActionableActor(
   return actionableActors[0] ?? null
 }
 
+function nextAction(actor: Actor, previous_action_IDs: {
+  [x: string]: string;
+}) {
+
+  const preferredActionID = (previous_action_IDs[actor.ID] as string | null) ?? null
+  const preferredAction = actor.actions.find((a) => a.ID === preferredActionID)
+  const fallbackActionID = actor.actions.find(a => !a.disabled)?.ID ?? null
+  const fallbackAction = actor.actions.find(a => a.ID === fallbackActionID)
+  let nextActionID = preferredActionID ?? fallbackActionID
+  console.log(preferredAction, fallbackAction)
+  if (preferredAction?.disabled === true) {
+    nextActionID = fallbackActionID
+  }
+
+  return nextActionID
+}
+
 function setActionID(actor_ID: string, action_ID: string, game: Game) {
   battleContext.setState((s) => {
     const previous_action_IDs = {
@@ -94,10 +112,7 @@ function setActionID(actor_ID: string, action_ID: string, game: Game) {
       }
     }
 
-    const preferredActionID = previous_action_IDs[nextActor.ID]
-    const fallbackActionID = nextActor.actions[0]?.ID ?? null
-    const nextActionID = preferredActionID ?? fallbackActionID
-
+    let nextActionID = nextAction(nextActor, previous_action_IDs)
     return {
       ...s,
       action_ID: nextActionID,
@@ -127,12 +142,11 @@ function setContextSource(source_ID: string, game: Game) {
   const source = game.actors.find((a) => a.ID === source_ID)
   if (!source) return
 
-  const prev_ID = battleContext.get().previous_action_IDs[source_ID]
-  const prev = source.actions.find((a) => a.ID === prev_ID)
-
+  const prev_ID = nextAction(source, battleContext.state.previous_action_IDs)
+  console.log('prevID', prev_ID)
   battleContext.setState((s) => ({
     ...s,
-    action_ID: prev?.ID ?? source.actions[0]?.ID ?? null,
+    action_ID: prev_ID,
     parent_actor_ID: source_ID,
     source_actor_ID: source_ID,
     target_actor_IDs: [],

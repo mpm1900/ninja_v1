@@ -33,6 +33,6 @@ func MakeBodyFlicker() game.Action {
 		transactions = append(transactions, switch_tx)
 
 		return transactions
-	})
+	}, nil)
 	return action
 }

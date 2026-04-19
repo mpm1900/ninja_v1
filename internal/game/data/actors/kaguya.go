@@ -31,7 +31,7 @@ var Kaguya = game.ActorDef{
 		game.NsYinYang,
 	}),
 	Abilities:   []game.Modifier{},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Chidori.ID,
 		actions.DragonDance.ID,

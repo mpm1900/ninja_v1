@@ -33,7 +33,7 @@ var Kimimaro = game.ActorDef{
 		game.NsEarth,
 	}),
 	Abilities:   []game.Modifier{},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.LuckyStrikes.ID,
 		actions.Chidori.ID,

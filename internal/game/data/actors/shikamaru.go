@@ -35,7 +35,7 @@ var Shikamaru = game.ActorDef{
 		modifiers.FastThinking,
 		modifiers.ShadowCage,
 	},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Haze.ID,
 		actions.Tailwind.ID,

@@ -37,7 +37,7 @@ var Gaara = game.ActorDef{
 	Abilities: []game.Modifier{
 		modifiers.SandAura,
 	},
-	ActionCount: 6,
+	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.LuckyStrikes.ID,
 		actions.Chidori.ID,

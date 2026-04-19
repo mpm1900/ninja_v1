@@ -2,7 +2,6 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -44,7 +43,7 @@ func MakeBloodPrice() game.Action {
 						transactions = append(transactions, game.MakeTransaction(game.AddLogs(log), game.NewContext()))
 						continue
 					}
-					mut := mutations.PureDamage(game.Round(float64(damage)*1.5), true)
+					mut := game.PureDamage(game.Round(float64(damage)*1.5), true)
 					mut_ctx := game.NewContext().WithSource(source.ID).WithTargetIDs([]uuid.UUID{target.ID})
 					tx := game.MakeTransaction(mut, mut_ctx)
 					transactions = append(transactions, tx)
