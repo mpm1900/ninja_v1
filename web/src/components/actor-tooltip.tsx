@@ -72,7 +72,7 @@ function ActorTooltip({
     <HoverCard openDelay={100} closeDelay={100}>
       <HoverCardTrigger {...props} />
       {!disabled && (
-        <HoverCardContent sideOffset={8} collisionPadding={8}>
+        <HoverCardContent sideOffset={8} collisionPadding={8} className='w-auto'>
           <div className="flex justify-between">
             <div>{actor.name}</div>
             <div>
@@ -140,7 +140,7 @@ function ActorTooltip({
             </table>
             <div>
               {actor.actions.map(a => (
-                <div>{a.config.name}</div>
+                <div className='text-nowrap'>{a.config.name}</div>
               ))}
             </div>
           </div>

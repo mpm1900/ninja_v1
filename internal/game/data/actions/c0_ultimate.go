@@ -7,16 +7,16 @@ import (
 	"github.com/google/uuid"
 )
 
-var Surf = MakeSurf()
+var C0UltimateArt = MakeC0UltimateArt()
 
-func MakeSurf() game.Action {
-	ID := uuid.MustParse("74d5a7d7-cb62-58b4-9ace-e80bf7f0fd40")
+func MakeC0UltimateArt() game.Action {
+	ID := uuid.MustParse("181d48e6-11d4-45fe-a8a4-09a5fc37c800")
 
 	config := game.ActionConfig{
-		Name:        "Surf",
-		Nature:      game.Ptr(game.NsWater),
+		Name:        "C0: Ultimate Art",
+		Nature:      game.Ptr(game.NsExplosion),
 		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(90),
+		Power:       game.Ptr(250),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(0),
 		Cost:        game.Ptr(30),
@@ -33,7 +33,7 @@ func MakeSurf() game.Action {
 		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
 		Cost:            mutations.UseStaminaSource(*config.Cost),
 		MapContext: func(g game.Game, context game.Context) game.Context {
-			other_team_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherTeamFilter))
+			other_team_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherFilter))
 			for _, t := range other_team_actors {
 				context.TargetPositionIDs = append(context.TargetPositionIDs, *t.PositionID)
 			}
@@ -46,6 +46,15 @@ func MakeSurf() game.Action {
 			),
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
+
+				source, ok := g.GetSource(context)
+				if !ok {
+					return transactions
+				}
+
+				self_dmg := mutations.RatioDamage(1.0)
+				self_dmg_ctx := game.MakeContextForActor(source)
+				transactions = append(transactions, game.MakeTransaction(self_dmg, self_dmg_ctx))
 
 				conf := game.GetActiveActionConfig(g, config)
 				crit_result := game.MakeCriticalCheck(conf)

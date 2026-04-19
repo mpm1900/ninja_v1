@@ -17,7 +17,7 @@ func MakeKamuiSlash() game.Action {
 		Description: "Never misses.",
 		Nature:      game.Ptr(game.NsYin),
 		Power:       game.Ptr(85),
-		Stat:        game.Ptr(game.StatChakraAttack),
+		Stat:        game.Ptr(game.StatAttack),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(60),
 		Cooldown:    game.Ptr(1),
