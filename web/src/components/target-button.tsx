@@ -31,7 +31,7 @@ function TargetButton({
 
   return (
     <Button
-      className="relative flex-col h-auto p-2 px-3 min-w-30 w-auto overflow-hidden"
+      className="relative flex-col h-auto p-2 px-3 min-w-30 w-auto overflow-hidden shadow-[4px_4px_8px_rgba(0,0,0,0.5)]"
       disabled={loading || (contextValid && !includes) || !enabled}
       variant={
         includes

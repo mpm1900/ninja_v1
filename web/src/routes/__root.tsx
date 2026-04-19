@@ -11,6 +11,7 @@ import styles from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 import { TooltipProvider } from '#/components/ui/tooltip'
 import type { User } from '#/lib/queries/auth'
+import { VantaBackground } from '#/components/vanta-background'
 
 interface RouterContext {
   queryClient: QueryClient
@@ -65,9 +66,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       }
     ],
     scripts: [
-      // { src: '/scripts/three.js' },
-      //{ src: '/scripts/fog.js' },
-      //{ src: '/scripts/fog_bg.js' }
+      { src: '/scripts/three.js' },
+      { src: '/scripts/fog.js' },
     ]
   }),
   shellComponent: RootDocument,
@@ -82,7 +82,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
         <HeadContent />
       </head>
-      <body className="font-sans antialiased wrap-anywhere overflow-x-hidden" id="body">
+      <body className="font-sans antialiased wrap-anywhere overflow-x-hidden">
+        <ClientOnly>
+          <VantaBackground />
+        </ClientOnly>
         <TanStackQueryProvider>
           <TooltipProvider>{children}</TooltipProvider>
         </TanStackQueryProvider>
