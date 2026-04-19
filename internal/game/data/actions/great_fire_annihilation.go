@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/modifiers"
-	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -17,6 +15,7 @@ func MakeGreatFireAnnihilation() game.Action {
 
 	config := game.ActionConfig{
 		Name:        "Great Fire Annihilation",
+		Description: "30% chance to burn target.",
 		Nature:      game.Ptr(game.NsFire),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(100),
@@ -38,19 +37,9 @@ func MakeGreatFireAnnihilation() game.Action {
 				continue
 			}
 			fmt.Println("BURN! roll=", roll)
-			mut_ctx := game.Context{
-				SourcePlayerID: &target.PlayerID,
-				SourceActorID:  &target.ID,
-				ParentActorID:  nil, // do not remove on switch
-				TargetActorIDs: []uuid.UUID{target.ID},
-			}
-
-			mod := mutations.AddStatus(true, modifiers.Burned)
-			mod_tx := game.MakeTransaction(mod, mut_ctx)
-			mut := mutations.Burn
-			mut_tx := game.MakeTransaction(mut, mut_ctx)
-			transactions = append(transactions, mod_tx, mut_tx)
+			transactions = append(transactions, applyBurn(target)...)
 		}
+
 		return transactions
 	})
 }

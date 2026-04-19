@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"math/rand"
 	"ninja_v1/internal/game"
 
 	"github.com/google/uuid"
@@ -13,6 +14,7 @@ func MakeFireball() game.Action {
 
 	config := game.ActionConfig{
 		Name:        "Fireball",
+		Description: "10% chance to burn target.",
 		Nature:      game.Ptr(game.NsFire),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(70),
@@ -25,5 +27,17 @@ func MakeFireball() game.Action {
 		CritMod:     1.5,
 	}
 
-	return makeBasicAttack(ID, config)
+	return makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
+		targets := g.GetTargets(context)
+		for _, target := range targets {
+			// on 10% chance
+			roll := rand.Intn(100)
+			if roll > 10 {
+				continue
+			}
+			transactions = append(transactions, applyBurn(target)...)
+		}
+
+		return transactions
+	})
 }

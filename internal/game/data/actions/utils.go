@@ -2,6 +2,7 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/modifiers"
 	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
@@ -48,4 +49,23 @@ func makeBasicAttackWith(
 
 func makeBasicAttack(ID uuid.UUID, config game.ActionConfig) game.Action {
 	return makeBasicAttackWith(ID, config, nil)
+}
+
+func applyBurn(actor game.Actor) []game.GameTransaction {
+	transactions := []game.GameTransaction{}
+
+	mut_ctx := game.Context{
+		SourcePlayerID: &actor.PlayerID,
+		SourceActorID:  &actor.ID,
+		ParentActorID:  nil, // do not remove on switch
+		TargetActorIDs: []uuid.UUID{actor.ID},
+	}
+
+	mod := mutations.AddStatus(true, modifiers.Burned)
+	mod_tx := game.MakeTransaction(mod, mut_ctx)
+	mut := mutations.Burn
+	mut_tx := game.MakeTransaction(mut, mut_ctx)
+	transactions = append(transactions, mod_tx, mut_tx)
+
+	return transactions
 }

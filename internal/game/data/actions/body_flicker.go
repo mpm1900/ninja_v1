@@ -11,14 +11,12 @@ var BodyFlicker = MakeBodyFlicker()
 
 func MakeBodyFlicker() game.Action {
 	ID := uuid.MustParse("f052f07c-bb06-4f44-8b26-ec2f17401446")
-	nature := game.NsTai
-	targetCount := 1
 
 	config := game.ActionConfig{
 		Name:        "Body Flicker",
 		Description: "User then switches out.",
-		Nature:      &nature,
-		TargetCount: &targetCount,
+		Nature:      game.Ptr(game.NsWind),
+		TargetCount: game.Ptr(1),
 		Jutsu:       game.Taijutsu,
 		Power:       game.Ptr(70),
 		Accuracy:    game.Ptr(100),

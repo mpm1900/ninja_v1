@@ -12,9 +12,10 @@ func MakeChidori() game.Action {
 	ID := uuid.MustParse("c1502330-764c-56f8-9c9e-f41b933a90f0")
 	config := game.ActionConfig{
 		Name:        "Chidori",
+		Description: "Deals 30% recoil damage.",
 		Nature:      game.Ptr(game.NsLightning),
 		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(120),
+		Power:       game.Ptr(100),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		Cost:        game.Ptr(50),
 		TargetCount: game.Ptr(1),

@@ -1,8 +1,15 @@
 import { cva } from 'class-variance-authority'
 import type { ClassValue } from 'class-variance-authority/types'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
-import { natureNames, type NatureSet } from '#/lib/game/nature'
+import {
+  natureNames,
+  natureResistance,
+  natureSetMap,
+  natureWeakness,
+  type NatureSet,
+} from '#/lib/game/nature'
 import { cn } from '#/lib/utils'
+import { ChevronRight } from 'lucide-react'
 
 type t = Record<string, Partial<Record<NatureSet | 'none', ClassValue>>>
 
@@ -44,8 +51,30 @@ const variants = cva<t>(
 function NatureBadge({
   nature,
   className,
+  children,
   ...props
 }: React.ComponentProps<'span'> & { nature: NatureSet }) {
+  if (children) {
+    return (
+      <span
+        data-role="nature"
+        className="inline-block shadow-[1px_1px_0_rgba(0,0,0,1)] mx-px rounded"
+        {...props}
+      >
+        <span className={cn(variants({ variant: nature }), className)}>
+          {children}
+        </span>
+      </span>
+    )
+  }
+
+  const weaknesses = natureSetMap[nature]
+    .flatMap((n) => natureWeakness[n])
+    .filter((n) => n !== undefined)
+  const resistances = natureSetMap[nature]
+    .flatMap((n) => natureResistance[n])
+    .filter((n) => n !== undefined)
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -59,7 +88,25 @@ function NatureBadge({
           </span>
         </span>
       </TooltipTrigger>
-      <TooltipContent>{nature}</TooltipContent>
+      <TooltipContent className="flex items-center">
+        {!!weaknesses.length && (
+          <div className="flex items-center">
+            {weaknesses.map((n) => (
+              <NatureBadge key={n} nature={n} />
+            ))}
+            <ChevronRight className="size-3" />
+          </div>
+        )}
+        <NatureBadge nature={nature}>{nature}</NatureBadge>
+        {!!resistances.length && (
+          <div className="flex items-center">
+            <ChevronRight className="size-3" />
+            {resistances.map((n) => (
+              <NatureBadge key={n} nature={n} />
+            ))}
+          </div>
+        )}
+      </TooltipContent>
     </Tooltip>
   )
 }

@@ -89,7 +89,13 @@ const columns = [
     cell: ({ row }) => row.original.config.cooldown ?? '-',
   }),
   helper.accessor('config.description', {
+    id: 'description',
     header: 'Description',
+    cell: ({ row }) => (
+      <span className="block truncate">
+        {row.original.config.description}
+      </span>
+    ),
   }),
 ]
 
@@ -136,7 +142,11 @@ function ActionsTable({
         {table.getHeaderGroups().map((hg) => (
           <tr key={hg.id}>
             {hg.headers.map((header) => (
-              <TableHead key={header.id} colSpan={header.colSpan}>
+              <TableHead
+                key={header.id}
+                colSpan={header.colSpan}
+                className={header.column.id === 'description' ? 'w-full' : ''}
+              >
                 {flexRender(
                   header.column.columnDef.header,
                   header.getContext()
@@ -151,7 +161,10 @@ function ActionsTable({
           <Fragment key={row.id}>
             <TableRow onClick={() => row.toggleSelected()}>
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
+                <TableCell
+                  key={cell.id}
+                  className={cell.column.id === 'description' ? 'w-full max-w-0' : ''}
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
