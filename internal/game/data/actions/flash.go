@@ -16,7 +16,7 @@ func MakeBlindingFlash() game.Action {
 		Nature:      game.Ptr(game.NsYin),
 		Cooldown:    game.Ptr(1),
 		Jutsu:       game.Genjutsu,
-		Description: "Stuns the target this turn. Fails unless it is the user's first turn switched in.",
+		Description: "+3 priority. Stuns the target this turn. Fails unless it is the user's first turn switched in.",
 	}
 	return game.Action{
 		ID:              uuid.MustParse("4cf69985-6785-56a6-b879-e02cb6207960"),

@@ -52,6 +52,11 @@ var SandAuraTrigger game.Trigger = game.Trigger{
 		Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 			transactions := []game.GameTransaction{}
 
+			state, _ := g.GetState(context)
+			if state.Weather == game.GameWeatherSandstorm {
+				return transactions
+			}
+
 			mod := SandstormWeather
 			mod.Duration = 4
 			mutation := mutations.AddModifiers(false, mod)

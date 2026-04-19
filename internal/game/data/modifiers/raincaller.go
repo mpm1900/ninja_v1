@@ -22,6 +22,11 @@ var RaincallerTrigger game.Trigger = game.Trigger{
 		Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 			transactions := []game.GameTransaction{}
 
+			state, _ := g.GetState(context)
+			if state.Weather == game.GameWeatherRain {
+				return transactions
+			}
+
 			mod := RainWeather
 			mod.Duration = 4
 			mutation := mutations.AddModifiers(false, mod)

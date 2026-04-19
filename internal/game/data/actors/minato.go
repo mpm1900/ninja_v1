@@ -44,5 +44,6 @@ var Minato = game.ActorDef{
 		actions.ToadSong.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,
+		actions.FlyingRaijin.ID,
 	},
 }

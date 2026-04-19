@@ -16,7 +16,7 @@ func MakeBodyReplacement() game.Action {
 		Nature:      game.Ptr(game.NsYin),
 		Cooldown:    game.Ptr(1),
 		Jutsu:       game.Ninjutsu,
-		Description: "Protects the user from actions this turn. 1 turn cooldown.",
+		Description: "+4 priority. Protects the user from actions this turn. 1 turn cooldown.",
 	}
 	return game.Action{
 		ID:              uuid.MustParse("d3765608-4b30-5c4c-b5a9-f4132f0bbb7c"),
