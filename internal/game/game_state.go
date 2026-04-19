@@ -4,9 +4,10 @@ type GameWeather string
 type GameTerrain string
 
 const (
-	GameWeatherNone     GameWeather = "none"
-	GameWeatherRain     GameWeather = "rain"
-	GameWeatherSunlight GameWeather = "sunlight"
+	GameWeatherNone      GameWeather = "none"
+	GameWeatherRain      GameWeather = "rain"
+	GameWeatherSunlight  GameWeather = "sunlight"
+	GameWeatherSandstorm GameWeather = "sandstorm"
 )
 
 const (

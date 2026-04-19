@@ -15,11 +15,12 @@ func makeGutsMutation() game.ActorMutation {
 }
 
 var Guts game.Modifier = game.Modifier{
-	ID:       gutsID,
-	GroupID:  &gutsID,
-	Name:     "Guts",
-	Show:     true,
-	Duration: game.ModifierDurationInf,
+	ID:          gutsID,
+	GroupID:     &gutsID,
+	Name:        "Guts",
+	Description: "Status conditions increase Attack by 50%.",
+	Show:        true,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		makeGutsMutation(),
 	},

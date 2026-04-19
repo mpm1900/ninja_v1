@@ -8,14 +8,14 @@ import (
 
 func SetWeather(gid uuid.UUID, weather game.GameWeather, name string) game.Modifier {
 	return game.Modifier{
-		ID:       uuid.New(),
+		ID:       gid,
 		GroupID:  &gid,
 		Name:     name,
 		Show:     true,
 		Duration: game.ModifierDurationInf,
 		GameStateMutations: []game.GameStateMutation{
 			game.MakeGameStateMutation(
-				&heavyRainID,
+				&gid,
 				game.MutPriorityGameState0,
 				game.GS_TrueFilter,
 				func(g game.Game, gs game.GameState, context game.Context) game.GameState {

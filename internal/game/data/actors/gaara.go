@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -33,7 +34,9 @@ var Gaara = game.ActorDef{
 		game.NsEarth,
 		game.NsLightning,
 	}),
-	Abilities:   []game.Modifier{},
+	Abilities: []game.Modifier{
+		modifiers.SandAura,
+	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		actions.LuckyStrikes.ID,

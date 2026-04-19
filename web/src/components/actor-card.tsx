@@ -126,7 +126,7 @@ function ActorCard({
             <div className="flex justify-between items-end gap-4">
               <div
                 className={cn(
-                  'pl-2 pr-4 pb-2 pt-1.5 -mb-2 rounded-md rounded-tl-none shadow-[4px_1px_3px_rgba(0,0,0,0.2)]',
+                  'pl-2 pr-4 pb-2 pt-1.5 -mb-2 rounded-md rounded-tl-none shadow-[2px_1px_0px_rgba(0,0,0,1)]',
                   frameVariants({
                     variant: getVariant({ selected, targeted }),
                   })
@@ -218,7 +218,7 @@ function ActorAvatar({
   return (
     <div
       className={cn(
-        'relative p-2 -mb-2 -mr-1 rounded-lg rounded-tr-none rounded-l-2xl',
+        'relative p-2 -mb-2 -mr-1 rounded-lg rounded-tr-none rounded-l-2xl shadow-[2px_1px_0px_rgba(0,0,0,1)]',
         frameVariants({
           variant: getVariant({ selected, targeted }),
         })

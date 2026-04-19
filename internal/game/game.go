@@ -164,6 +164,12 @@ func (g Game) GetActorsByPlayer(playerID uuid.UUID) []Actor {
 		return a.PlayerID == playerID
 	})
 }
+func (g Game) GetActiveActors() []Actor {
+	return g.GetActors(func(a Actor) bool {
+		active := a.IsActive()
+		return active && a.Alive
+	})
+}
 func (g Game) GetActionableActors() []Actor {
 	return g.GetActors(func(a Actor) bool {
 		active := a.IsActive()
@@ -257,8 +263,7 @@ func (g Game) GetModifierTxByID(txID uuid.UUID) (Transaction[Modifier], bool) {
 	return Transaction[Modifier]{}, false
 }
 func (g Game) GetModifierByTxID(txID uuid.UUID) (Modifier, bool) {
-	modifiers := make([]Transaction[Modifier], 0, len(g.Modifiers))
-	modifiers = append(modifiers, g.Modifiers...)
+	modifiers := g.GetModifiers()
 	modifiers = append(modifiers, GetActorModifiers(g)...)
 
 	for _, m := range modifiers {
@@ -269,12 +274,11 @@ func (g Game) GetModifierByTxID(txID uuid.UUID) (Modifier, bool) {
 	return Modifier{}, false
 }
 func (g Game) GetModifierByID(ID uuid.UUID) (Modifier, bool) {
-	modifiers := make([]Transaction[Modifier], 0, len(g.Modifiers))
-	modifiers = append(modifiers, g.Modifiers...)
+	modifiers := g.GetModifiers()
 	modifiers = append(modifiers, GetActorModifiers(g)...)
 
 	for _, m := range modifiers {
-		if m.Mutation.ID == ID {
+		if m.Mutation.ID == ID || (m.Mutation.GroupID != nil && *m.Mutation.GroupID == ID) {
 			return m.Mutation, m.Mutation.Delay <= 0
 		}
 	}
@@ -321,6 +325,10 @@ func (g Game) GetState(context Context) (GameState, []uuid.UUID) {
 		}
 	}
 	return state, applied
+}
+func (g Game) HasWeather(weather GameWeather, context Context) bool {
+	state, _ := g.GetState(context)
+	return state.Weather == weather
 }
 func (g Game) WithActor(actor Actor) Game {
 	next := g
