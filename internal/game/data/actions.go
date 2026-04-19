@@ -61,4 +61,5 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.KamuiCounter.ID:    actions.KamuiCounter,
 	actions.KamuiSlash.ID:      actions.KamuiSlash,
 	actions.ReaperDeathSeal.ID: actions.ReaperDeathSeal,
+	actions.PerishSong.ID:      actions.PerishSong,
 }
