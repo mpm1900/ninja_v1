@@ -7,7 +7,11 @@ import (
 	"github.com/google/uuid"
 )
 
-func makeBasicAttack(ID uuid.UUID, config game.ActionConfig) game.Action {
+func makeBasicAttackWith(
+	ID uuid.UUID,
+	config game.ActionConfig,
+	with func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction,
+) game.Action {
 	return game.Action{
 		ID:              ID,
 		Config:          config,
@@ -32,8 +36,16 @@ func makeBasicAttack(ID uuid.UUID, config game.ActionConfig) game.Action {
 					mutations.MakeDamageTransactions(context, damages)...,
 				)
 
-				return transactions
+				if with == nil {
+					return transactions
+				}
+
+				return with(g, context, transactions)
 			},
 		},
 	}
+}
+
+func makeBasicAttack(ID uuid.UUID, config game.ActionConfig) game.Action {
+	return makeBasicAttackWith(ID, config, nil)
 }

@@ -11,12 +11,10 @@ import (
 var Flash = MakeBlindingFlash()
 
 func MakeBlindingFlash() game.Action {
-	cooldown := 1
-	nature := game.NsYin
 	config := game.ActionConfig{
 		Name:        "Flash",
-		Nature:      &nature,
-		Cooldown:    &cooldown,
+		Nature:      game.Ptr(game.NsYin),
+		Cooldown:    game.Ptr(1),
 		Jutsu:       game.Genjutsu,
 		Description: "Stuns the target this turn. Fails unless it is the user's first turn switched in.",
 	}

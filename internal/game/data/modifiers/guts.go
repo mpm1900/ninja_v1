@@ -1,0 +1,26 @@
+package modifiers
+
+import (
+	"ninja_v1/internal/game"
+
+	"github.com/google/uuid"
+)
+
+var gutsID = uuid.MustParse("efda299f-bedd-4c3a-8e67-146a994a231d")
+
+func makeGutsMutation() game.ActorMutation {
+	mut := game.NewNoopSource(&gutsID)
+	mut.Priority = game.MutPriorityImmunity
+	return mut
+}
+
+var Guts game.Modifier = game.Modifier{
+	ID:       gutsID,
+	GroupID:  &gutsID,
+	Name:     "Guts",
+	Show:     true,
+	Duration: game.ModifierDurationInf,
+	ActorMutations: []game.ActorMutation{
+		makeGutsMutation(),
+	},
+}

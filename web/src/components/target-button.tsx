@@ -1,7 +1,9 @@
+import { SHINOBI_ICONS } from '#/data/icons'
 import type { Action } from '#/lib/game/action'
-import { getVitals, type Actor } from '#/lib/game/actor'
+import { type Actor } from '#/lib/game/actor'
 import type { Context } from '#/lib/game/context'
 import { addHoverTarget, removeHoverTarget } from '#/lib/stores/battle-context'
+import { cn } from '#/lib/utils'
 import { MiniHealthBar } from './actor-thumbnail'
 import { Button } from './ui/button'
 
@@ -22,7 +24,6 @@ function TargetButton({
   onContextChange: (context: Context) => void
   targetType: Action['target_type']
 }) {
-  const vitals = getVitals(actor)
   const includes =
     targetType === 'target-actor-id'
       ? context.target_actor_IDs?.includes(actor.ID)
@@ -30,7 +31,7 @@ function TargetButton({
 
   return (
     <Button
-      className="relative flex-col h-auto p-2 px-3 min-w-30"
+      className="relative flex-col h-auto p-2 px-3 min-w-30 w-auto overflow-hidden"
       disabled={loading || (contextValid && !includes) || !enabled}
       variant={
         includes
@@ -61,19 +62,26 @@ function TargetButton({
             ...context,
             target_position_IDs: includes
               ? (context.target_position_IDs?.filter(
-                  (id) => id !== actor.position_ID
-                ) ?? null)
+                (id) => id !== actor.position_ID
+              ) ?? null)
               : [...(context.target_position_IDs ?? []), actor.position_ID],
           })
         }
       }}
     >
-      <div className="flex w-full justify-between gap-4 relative">
+      <div className={cn("flex items-end w-full justify-between gap-4 relative z-10", !includes && "text-shadow-[1px_1px_0px_#000000]")}>
         <div>{actor.name}</div>
+        <div className='text-xs'>Lv<span className='font-black'>{actor.level}</span></div>
       </div>
 
       <div className="relative w-full">
         <MiniHealthBar actor={actor} className="left-0 right-0" />
+      </div>
+      <div className='absolute z-0 opacity-30 -left-4 -top-3'>
+        {actor.affiliations?.filter((_, i) => i == 0).map((a) => {
+          const C = SHINOBI_ICONS[a]
+          return C ? <C key={a} className="w-12" /> : null
+        })}
       </div>
     </Button>
   )

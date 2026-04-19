@@ -39,7 +39,7 @@ function BattleCards({ actor }: { actor: Actor }) {
           animate={{ y: 0, opacity: idle && !has_queued_action ? 1 : 0 }}
           exit={{ y: 100, opacity: 0 }}
           transition={collection_transition}
-          className="flex items-end -space-x-9 px-4 transform-gpu"
+          className="flex items-end -space-x-11 px-4 transform-gpu"
         >
           {actor.actions.map((a, i) => {
             const selected = context.action_ID === a.ID

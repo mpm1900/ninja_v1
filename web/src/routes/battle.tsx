@@ -35,7 +35,7 @@ function RouteComponent() {
     <>
       <PromptController />
       <BattleContextController />
-      <main className="flex flex-col h-screen bg-zinc-800">
+      <main className="flex flex-col h-screen">
         <AppHeader />
         <div className="flex flex-col flex-1 relative overflow-auto">
           <div>

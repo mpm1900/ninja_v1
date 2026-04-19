@@ -240,13 +240,13 @@ type Actor struct {
 	Actions           []Action               `json:"actions"`
 	Immunities        []uuid.UUID            `json:"-"`
 	Summon            *Summon                `json:"summon,omitempty"`
+	AppliedModifiers  map[uuid.UUID]int      `json:"applied_modifiers"`
 }
 
 type ResolvedActor struct {
 	Actor
 	BaseStats                map[ActorStat]int  `json:"base_stats"`
 	UnmodifiedStats          map[ActorStat]int  `json:"unmodified_stats"`
-	AppliedModifiers         map[uuid.UUID]int  `json:"applied_modifiers"`
 	ResolvedNatureResistance map[Nature]float64 `json:"resolved_nature_resistance"`
 	ResolvedNatureDamage     map[Nature]float64 `json:"resolved_nature_damage"`
 }
@@ -399,9 +399,10 @@ func MakeActor(
 			StatEvasion:       0,
 			StatAccuracy:      0,
 		},
-		AuxStats: maps.Clone(auxStats),
-		Actions:  actions,
-		Summon:   nil,
+		AuxStats:         maps.Clone(auxStats),
+		AppliedModifiers: map[uuid.UUID]int{},
+		Actions:          actions,
+		Summon:           nil,
 	}
 }
 
@@ -508,9 +509,8 @@ func (a Actor) GetModifiers() []Modifier {
 
 func toResolved(actor Actor, pre Actor) ResolvedActor {
 	return ResolvedActor{
-		Actor:            actor,
-		BaseStats:        maps.Clone(pre.Stats),
-		AppliedModifiers: map[uuid.UUID]int{},
+		Actor:     actor,
+		BaseStats: maps.Clone(pre.Stats),
 	}
 }
 
@@ -631,6 +631,12 @@ func (a Actor) Clone() Actor {
 
 	b.Natures = maps.Clone(a.Natures)
 	b.Actions = slices.Clone(a.Actions)
+
+	if a.AppliedModifiers != nil {
+		b.AppliedModifiers = maps.Clone(a.AppliedModifiers)
+	} else {
+		b.AppliedModifiers = make(map[uuid.UUID]int)
+	}
 
 	return b
 }

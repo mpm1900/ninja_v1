@@ -110,24 +110,6 @@ func SourceIsAtOrBelowHealth(ratio float64) func(Game, Game, Context) bool {
 		return ratio >= (hp-damage)/hp
 	}
 }
-func TargetIsActive(parent Game, game Game, context Context) bool {
-	targets := game.GetTargets(context)
-	for _, target := range targets {
-		if target.PositionID != nil {
-			return true
-		}
-	}
-	return false
-}
-func TargetsIsOneAlive(parent Game, game Game, context Context) bool {
-	targets := game.GetTargets(context)
-	for _, target := range targets {
-		if target.Alive {
-			return true
-		}
-	}
-	return false
-}
 func SourceHasHpRatio(ratio float64) func(Game, Game, Context) bool {
 	return func(p, g Game, context Context) bool {
 		s, ok := g.GetSource(context)
@@ -137,6 +119,38 @@ func SourceHasHpRatio(ratio float64) func(Game, Game, Context) bool {
 		source := s.Resolve(g)
 		hp := source.Stats[StatHP]
 		return float64(hp-source.Damage)/float64(hp) > ratio
+	}
+}
+func TargetsAreActive(parent Game, game Game, context Context) bool {
+	targets := game.GetTargets(context)
+	for _, target := range targets {
+		if target.PositionID != nil {
+			return true
+		}
+	}
+	return false
+}
+func TargetsAreOneAlive(parent Game, game Game, context Context) bool {
+	targets := game.GetTargets(context)
+	for _, target := range targets {
+		if target.Alive {
+			return true
+		}
+	}
+	return false
+}
+func TargetsHaveAppliedModifier(modifierID uuid.UUID) func(Game, Game, Context) bool {
+	return func(parent Game, game Game, context Context) bool {
+		targets := game.GetTargets(context)
+		for _, target := range targets {
+			resolved := target.Resolve(game)
+			for mid, _ := range resolved.AppliedModifiers {
+				if mid == modifierID {
+					return true
+				}
+			}
+		}
+		return false
 	}
 }
 

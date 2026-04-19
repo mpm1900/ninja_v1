@@ -1,32 +1,28 @@
 package game
 
 import (
-	"maps"
-
 	"github.com/google/uuid"
 )
 
 type actorResolveHandler struct {
-	pre               Actor
-	actor             Actor
-	applied_modifiers map[uuid.UUID]int
-	bypass_modifiers  bool
-	game              Game
-	mutations         []ActorMutation
-	transactions      []Transaction[Modifier]
+	pre              Actor
+	actor            Actor
+	bypass_modifiers bool
+	game             Game
+	mutations        []ActorMutation
+	transactions     []Transaction[Modifier]
 }
 
 func newActorResolveHandler(actor Actor, g Game, bypass_modifiers bool) actorResolveHandler {
 	mutations, transactions := GetAllActorMutations(g, bypass_modifiers)
 	clone := actor.Clone()
 	return actorResolveHandler{
-		actor:             clone,
-		pre:               clone,
-		applied_modifiers: map[uuid.UUID]int{},
-		game:              g,
-		bypass_modifiers:  bypass_modifiers,
-		mutations:         mutations,
-		transactions:      transactions,
+		actor:            clone,
+		pre:              clone,
+		game:             g,
+		bypass_modifiers: bypass_modifiers,
+		mutations:        mutations,
+		transactions:     transactions,
 	}
 }
 
@@ -43,6 +39,21 @@ func (ah *actorResolveHandler) applyModifierMutation(mutation ActorMutation) (Ac
 		return ah.actor, false
 	}
 
+	if mutation.ModifierGroupID == nil {
+		return next, true
+	}
+
+	if next.AppliedModifiers == nil {
+		next.AppliedModifiers = make(map[uuid.UUID]int)
+	}
+
+	count, ok := next.AppliedModifiers[*mutation.ModifierGroupID]
+	if !ok {
+		next.AppliedModifiers[*mutation.ModifierGroupID] = 1
+		return next, true
+	}
+
+	next.AppliedModifiers[*mutation.ModifierGroupID] = count + 1
 	return next, true
 }
 
@@ -54,18 +65,9 @@ func (ah *actorResolveHandler) resolveMutations() ResolvedActor {
 		}
 
 		ah.actor = next
-		if mutation.ModifierGroupID != nil {
-			if count, ok := ah.applied_modifiers[*mutation.ModifierGroupID]; ok {
-				ah.applied_modifiers[*mutation.ModifierGroupID] = count + 1
-			} else {
-				ah.applied_modifiers[*mutation.ModifierGroupID] = 1
-			}
-		}
 	}
 
-	resolved := toResolved(ah.actor, ah.pre)
-	maps.Copy(resolved.AppliedModifiers, ah.applied_modifiers)
-	return resolved
+	return toResolved(ah.actor, ah.pre)
 }
 
 func (ah *actorResolveHandler) resolveNatures(resolved *ResolvedActor) {

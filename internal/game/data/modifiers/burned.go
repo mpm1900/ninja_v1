@@ -1,8 +1,10 @@
 package modifiers
 
 import (
+	"maps"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/mutations"
+	"slices"
 
 	"github.com/google/uuid"
 )
@@ -14,7 +16,8 @@ var BurnedTrigger game.Trigger = game.Trigger{
 	ModifierID: burnedID,
 	On:         game.OnTurnEnd,
 	Check: func(p, g game.Game, context game.Context, tx game.Transaction[game.Modifier]) bool {
-		return game.TargetIsActive(p, g, context)
+		active := game.TargetsAreActive(p, g, context)
+		return active
 	},
 	ActionMutation: game.ActionMutation{
 		Priority: game.ActionPriorityDefault,
@@ -42,6 +45,11 @@ var Burned game.Modifier = game.Modifier{
 			game.MutPriorityPostStagedStats,
 			game.ComposeAF(game.TargetFilter, game.ActiveFilter),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {
+				keys := maps.Keys(actor.AppliedModifiers)
+				if slices.Contains(slices.Collect(keys), Guts.ID) {
+					return actor
+				}
+
 				actor.Stats[game.StatAttack] = game.Round(float64(actor.Stats[game.StatAttack]) * 0.5)
 				return actor
 			},

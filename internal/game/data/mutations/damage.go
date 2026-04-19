@@ -96,7 +96,7 @@ func ApplyDamage(g *game.Game, source_ID *uuid.UUID, target game.ResolvedActor, 
 
 func PureDamageWith(damage int, trigger bool, updater func(game.Actor) game.Actor) game.GameMutation {
 	return game.GameMutation{
-		Filter: game.TargetsIsOneAlive,
+		Filter: game.TargetsAreOneAlive,
 		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			targets := g.GetTargets(context)
 			for _, t := range targets {
@@ -253,7 +253,7 @@ func (e *damageHandler) queueRepeatHit(target game.ResolvedActor, damage int) {
 
 	log := game.NewLogContext(fmt.Sprintf("$action$ hit %d times.", e.repeats+1), e.context)
 	logMux := game.AddLogs(log)
-	logMux.Filter = game.TargetsIsOneAlive
+	logMux.Filter = game.TargetsAreOneAlive
 	logTx := game.MakeTransaction(logMux, e.context)
 
 	e.repeatTransactions = append(e.repeatTransactions, logTx, repeatTx)

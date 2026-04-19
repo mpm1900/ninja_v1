@@ -2,6 +2,8 @@ package game
 
 import (
 	"slices"
+
+	"github.com/google/uuid"
 )
 
 /**
@@ -105,11 +107,23 @@ func IsAtOrBelowHealthRatio(ratio float64) func(Game, Actor, Context) bool {
 		return ratio >= (hp-damage)/hp
 	}
 }
+func HasAppliedModifier(modifierID uuid.UUID) func(Game, Actor, Context) bool {
+	return func(game Game, actor Actor, context Context) bool {
+		for mid, _ := range actor.AppliedModifiers {
+			if mid == modifierID {
+				return true
+			}
+		}
+
+		return false
+	}
+}
 
 /**
  * RESOLVED FILTERS
  * These filters required modifiers to be resolved to check things like
  * protected, chakra amount, and things that can change with modifers
+ * THESE CANNOT BE USED IN MODIFIERS
  */
 func RHasChakraFilter(amount int) func(Game, Actor, Context) bool {
 	return func(game Game, actor Actor, context Context) bool {

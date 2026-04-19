@@ -1,4 +1,5 @@
 import {
+  ClientOnly,
   HeadContent,
   Scripts,
   createRootRouteWithContext,
@@ -63,6 +64,11 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         href: 'https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&family=Yeon+Sung&display=swap'
       }
     ],
+    scripts: [
+      // { src: '/scripts/three.js' },
+      //{ src: '/scripts/fog.js' },
+      //{ src: '/scripts/fog_bg.js' }
+    ]
   }),
   shellComponent: RootDocument,
   errorComponent: RootErrorComponent,
@@ -73,9 +79,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         {/*<script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />*/}
+
         <HeadContent />
       </head>
-      <body className="font-sans antialiased wrap-anywhere overflow-x-hidden">
+      <body className="font-sans antialiased wrap-anywhere overflow-x-hidden" id="body">
         <TanStackQueryProvider>
           <TooltipProvider>{children}</TooltipProvider>
         </TanStackQueryProvider>

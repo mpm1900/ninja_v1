@@ -18,7 +18,7 @@ func MakeSearingMigraine() game.Action {
 		Description: "Grants the user Fire nature until end of turn.",
 		Nature:      game.Ptr(game.NsFire),
 		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(70),
+		Power:       game.Ptr(80),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(30),

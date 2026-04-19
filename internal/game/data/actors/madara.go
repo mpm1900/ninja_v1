@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -31,7 +32,9 @@ var Madara = game.ActorDef{
 		game.NsFire,
 		game.NsYinYang,
 	}),
-	Abilities:   []game.Modifier{},
+	Abilities: []game.Modifier{
+		modifiers.Guts,
+	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		actions.Flash.ID,
@@ -40,5 +43,6 @@ var Madara = game.ActorDef{
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,
+		actions.GreatFireAnnihilation.ID,
 	},
 }
