@@ -8,15 +8,13 @@ import (
 	"github.com/google/uuid"
 )
 
-var Protect = MakeProtect()
+var BodyReplacement = MakeBodyReplacement()
 
-func MakeProtect() game.Action {
-	cooldown := 1
-	nature := game.NsEarth
+func MakeBodyReplacement() game.Action {
 	config := game.ActionConfig{
 		Name:        "Body Replacement",
-		Nature:      &nature,
-		Cooldown:    &cooldown,
+		Nature:      game.Ptr(game.NsYin),
+		Cooldown:    game.Ptr(1),
 		Jutsu:       game.Ninjutsu,
 		Description: "Protects the user from actions this turn. 1 turn cooldown.",
 	}

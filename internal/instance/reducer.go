@@ -232,11 +232,11 @@ func Reducer(instance *Instance, request Request) int {
 			return none
 		}
 
-		if action.ID == game.Switch.ID && actor.SwitchLocked {
+		if action.Meta.Switch && actor.SwitchLocked {
 			return none
 		}
 
-		if action.ID != game.Switch.ID && actor.ActionLocked && actor.LastUsedActionID != nil {
+		if !action.Meta.Switch && actor.ActionLocked && actor.LastUsedActionID != nil {
 			if *request.Context.ActionID != *actor.LastUsedActionID {
 				return none
 			}

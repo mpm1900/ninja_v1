@@ -90,6 +90,9 @@ var Switch = Action{
 		Name:        "Switch",
 		Description: "Switches user out and target ally into battle.",
 	},
+	Meta: ActionMeta{
+		Switch: true,
+	},
 	Locked:          true,
 	TargetType:      TargetActorID,
 	TargetPredicate: ComposeAF(TeamFilter, InactiveFilter, AliveFilter, SwitchFilter),
@@ -119,6 +122,9 @@ func SwitchIn(count int) Action {
 		ID: SwitchInIds[count],
 		Config: ActionConfig{
 			Name: "Switch In",
+		},
+		Meta: ActionMeta{
+			Switch: true,
 		},
 		Locked:          true,
 		TargetType:      TargetActorID,

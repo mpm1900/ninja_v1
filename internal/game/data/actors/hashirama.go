@@ -33,17 +33,17 @@ var Hashirama = game.ActorDef{
 		game.NsYang,
 		game.NsWood,
 	}),
-	Abilities:   []game.Modifier{
+	Abilities: []game.Modifier{
 		modifiers.Regneration,
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		actions.Protect.ID,
+		actions.BodyReplacement.ID,
 		actions.Tailwind.ID,
 		//actions.LeechSeed.ID,
 		actions.Haze.ID,
 		//actions.GreatTreeSpear.ID,
 		//actions.LeafJab.ID,
-		actions.Substitution.ID,
+		actions.ShadowClone.ID,
 	},
 }

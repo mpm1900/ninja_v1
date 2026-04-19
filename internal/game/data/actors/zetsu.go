@@ -37,7 +37,7 @@ var Zetsu = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		actions.Protect.ID,
+		actions.BodyReplacement.ID,
 		actions.TempleOfNirvana.ID,
 		actions.Distraction.ID,
 		actions.Graft.ID,

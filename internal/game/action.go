@@ -58,6 +58,11 @@ const (
 
 type ActionMutation Mutation[Game, Game, []Transaction[GameMutation]]
 
+type ActionMeta struct {
+	Switch   bool `json:"switch"`
+	Struggle bool `json:"struggle"`
+}
+
 /** [This comment was not written by an LLM]
  * Action Function Members for Action "a"
  *
@@ -86,6 +91,7 @@ type Action struct {
 	MapContext      func(Game, Context) Context     `json:"-"`
 	Cost            GameMutation                    `json:"-"`
 	Cooldown        *int                            `json:"cooldown"`
+	Meta            ActionMeta                      `json:"meta"`
 }
 
 func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransaction {
@@ -110,7 +116,7 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 	/**
 	 * Source Can-Act Checks
 	 */
-	if ok && action.ID != Switch.ID {
+	if ok && !action.Meta.Switch {
 		resolved := source.Resolve(*game)
 		if !resolved.CanAct(game, context) {
 			return []GameTransaction{}

@@ -38,12 +38,12 @@ var Tobirama = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		actions.Protect.ID,
+		actions.BodyReplacement.ID,
 		actions.Tailwind.ID,
 		actions.LeechSeed.ID,
 		actions.Haze.ID,
 		actions.GreatTreeSpear.ID,
 		actions.LeafJab.ID,
-		actions.Substitution.ID,
+		actions.ShadowClone.ID,
 	},
 }

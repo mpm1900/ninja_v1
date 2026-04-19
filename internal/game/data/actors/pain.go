@@ -39,7 +39,7 @@ var Pain = game.ActorDef{
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
 		actions.Sekiryoku.ID,
-		actions.Protect.ID,
+		actions.BodyReplacement.ID,
 		actions.Tailwind.ID,
 		actions.MindTransfer.ID,
 		actions.Surf.ID,

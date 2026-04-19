@@ -7,15 +7,15 @@ import (
 	"github.com/google/uuid"
 )
 
-var Substitution = MakeSubstitution()
+var ShadowClone = MakeShadowClone()
 
-func MakeSubstitution() game.Action {
+func MakeShadowClone() game.Action {
 	nature := game.NsYin
 	config := game.ActionConfig{
-		Name:        "Substitution",
+		Name:        "Shadow Clone",
 		Nature:      &nature,
 		Jutsu:       game.Ninjutsu,
-		Description: "Summons a substitute to take damage. Pay 1/4th of Max HP.",
+		Description: "Summons a shadow clone to take damage. Pay 1/4th of Max HP.",
 	}
 
 	return game.Action{

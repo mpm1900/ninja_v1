@@ -34,7 +34,7 @@ var Tobi = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 6,
 	ActionIDs: []uuid.UUID{
-		actions.Protect.ID,
+		actions.BodyReplacement.ID,
 		actions.KamuiCounter.ID,
 		actions.KamuiSlash.ID,
 	},
