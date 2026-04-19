@@ -15,12 +15,12 @@ import { ActorStatus } from './actor-status'
 import { useStore } from '@tanstack/react-store'
 import { gameStore } from '#/lib/stores/game'
 
-const frameVariants = cva('', {
+const frameVariants = cva('border border-transparent', {
   variants: {
     variant: {
-      default: 'bg-zinc-900 text-zinc-200',
-      selected: 'bg-zinc-200 text-zinc-900 text-shadow-none!',
-      targeted: 'bg-red-900 text-zinc-200',
+      default: 'bg-zinc-900 text-zinc-200 border-zinc-600',
+      selected: 'bg-zinc-300 text-zinc-900 border-white text-shadow-none!',
+      targeted: 'bg-red-900 text-zinc-200 border-red-500',
     },
   },
   defaultVariants: {
@@ -126,10 +126,11 @@ function ActorCard({
             <div className="flex justify-between items-end gap-4">
               <div
                 className={cn(
-                  'pl-2 pr-4 pb-2 pt-1.5 -mb-2 rounded-md rounded-tl-none shadow-[2px_1px_0px_rgba(0,0,0,1)]',
+                  'pl-2 pr-4 pb-2 pt-1.5 -mb-2 rounded-sm rounded-tl-none shadow-[2px_1px_0px_rgba(0,0,0,1)]',
                   frameVariants({
                     variant: getVariant({ selected, targeted }),
-                  })
+                  }),
+                  'border-l-0',
                 )}
               >
                 <span className={cn('font-semibold text-lg text-nowrap')}>
@@ -218,10 +219,11 @@ function ActorAvatar({
   return (
     <div
       className={cn(
-        'relative p-2 -mb-2 -mr-1 rounded-lg rounded-tr-none rounded-l-2xl shadow-[2px_1px_0px_rgba(0,0,0,1)]',
+        'relative p-2 -mb-2 -mr-1 rounded-sm rounded-tr-none rounded-l-2xl shadow-[2px_1px_0px_rgba(0,0,0,1)]',
         frameVariants({
           variant: getVariant({ selected, targeted }),
-        })
+        }),
+        'border-r-0',
       )}
     >
       <ActorThumbnail actor={actor} size={50} imgClass="rounded-bl-xl" />
