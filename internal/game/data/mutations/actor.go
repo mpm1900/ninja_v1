@@ -20,6 +20,7 @@ var Sleep = game.GameMutation{
 
 				return a
 			})
+			g.PushLog(game.NewLogContext("$source$ went to sleep.", game.MakeContextForActor(target)))
 		}
 
 		return g
@@ -40,6 +41,7 @@ var Burn = game.GameMutation{
 
 				return a
 			})
+			g.PushLog(game.NewLogContext("$source$ became burned.", game.MakeContextForActor(target)))
 		}
 
 		return g
@@ -60,6 +62,7 @@ var Paralyze = game.GameMutation{
 
 				return a
 			})
+			g.PushLog(game.NewLogContext("$source$ became paralyzed.", game.MakeContextForActor(target)))
 		}
 
 		return g
