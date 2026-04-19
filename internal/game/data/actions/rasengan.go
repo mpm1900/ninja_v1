@@ -2,7 +2,6 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -10,6 +9,7 @@ import (
 var Rasengan = MakeRasengan()
 
 func MakeRasengan() game.Action {
+	ID := uuid.MustParse("054eb97a-cd6f-4428-8f54-96d9b6b33bfa")
 	config := game.ActionConfig{
 		Name:        "Rasengan",
 		Nature:      game.Ptr(game.NsPure),
@@ -22,29 +22,6 @@ func MakeRasengan() game.Action {
 		CritChance:  game.Ptr(5),
 		CritMod:     1.5,
 	}
-	return game.Action{
-		ID:              uuid.MustParse("054eb97a-cd6f-4428-8f54-96d9b6b33bfa"),
-		Config:          config,
-		TargetType:      game.TargetPositionID,
-		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
-		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseStaminaSource(*config.Cost),
-		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityDefault,
-			Filter:   game.SourceIsAlive,
-			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
-				transactions := []game.GameTransaction{}
 
-				conf := game.GetActiveActionConfig(g, config)
-				crit_result := game.MakeCriticalCheck(conf)
-				damages := mutations.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
-				transactions = append(
-					transactions,
-					mutations.MakeDamageTransactions(context, damages)...,
-				)
-
-				return transactions
-			},
-		},
-	}
+	return makeBasicAttack(ID, config)
 }

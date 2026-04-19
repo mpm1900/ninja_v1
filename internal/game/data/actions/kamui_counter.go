@@ -13,7 +13,7 @@ var KamuiCounter = MakeBlitz()
 func MakeBlitz() game.Action {
 	config := game.ActionConfig{
 		Name:        "Kamui: Counter",
-		Description: "Attacks with +1 priority. Fails unless the target has a pending attack.",
+		Description: "+1 priority. Fails unless the target has a pending attack.",
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(70),
 		Stat:        game.Ptr(game.StatAttack),

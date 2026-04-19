@@ -7,11 +7,11 @@ import (
 	"github.com/google/uuid"
 )
 
-var firstAidID = uuid.MustParse("4186b062-e930-51cd-b838-12c618b790c0")
+var ichirakuRamenID = uuid.MustParse("4186b062-e930-51cd-b838-12c618b790c0")
 
-var FirstAidTrigger game.Trigger = game.Trigger{
+var IchirakuRamenTrigger game.Trigger = game.Trigger{
 	ID:         uuid.MustParse("7d6c4561-b6e8-5107-8e8b-3d69b18cb93f"),
-	ModifierID: firstAidID,
+	ModifierID: ichirakuRamenID,
 	On:         game.OnTurnEnd,
 	Check: func(p, g game.Game, context game.Context, tx game.Transaction[game.Modifier]) bool {
 		return true
@@ -30,17 +30,17 @@ var FirstAidTrigger game.Trigger = game.Trigger{
 	},
 }
 
-var FirstAid game.Modifier = game.Modifier{
-	ID:          firstAidID,
-	GroupID:     &firstAidID,
-	Name:        "First Aid Kit",
+var IchirakuRamen game.Modifier = game.Modifier{
+	ID:          ichirakuRamenID,
+	GroupID:     &ichirakuRamenID,
+	Name:        "Ichiraku Ramen",
 	Description: "End of turn: heal 1/16 HP.",
 	Show:        true,
 	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
-		game.NewNoopSource(&firstAidID),
+		game.NewNoopSource(&ichirakuRamenID),
 	},
 	Triggers: []game.Trigger{
-		FirstAidTrigger,
+		IchirakuRamenTrigger,
 	},
 }
