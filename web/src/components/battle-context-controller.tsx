@@ -10,9 +10,9 @@ function hasAction(a_id: string, actions: ActionTransaction[]) {
 
 function BattleContextController() {
   const game = useStore(gameStore, (g) => g)
-  const context = useStore(battleContext, (c) => c)
+  const source_player_ID = useStore(battleContext, (c) => c.source_player_ID)
   const actors = game.actors.filter(
-    (a) => a.player_ID === context.source_player_ID
+    (a) => a.player_ID === source_player_ID
   )
   const active_actors = actors.filter((a) => !!a.position_ID)
   const actionable_actors = active_actors.filter(

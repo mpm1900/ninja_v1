@@ -23,7 +23,7 @@ function BattleCards({ actor }: { actor: Actor }) {
   const queued_actions = useStore(gameStore, (g) => g.queued_actions)
   const status = useStore(gameStore, (g) => g.status)
   const actions = useStore(gameStore, (g) => g.actions)
-  const context = useStore(battleContext, (c) => c)
+  const action_ID = useStore(battleContext, (c) => c.action_ID)
   const has_queued_action = queued_actions[actor.ID]
   const idle = status === 'idle'
   const staged_action = actions.find(
@@ -41,7 +41,7 @@ function BattleCards({ actor }: { actor: Actor }) {
           className="flex items-end -space-x-11 px-4 transform-gpu"
         >
           {actor.actions.map((a, i) => {
-            const selected = context.action_ID === a.ID
+            const selected = action_ID === a.ID
             const center = (actor.actions.length - 1) / 2
             const fanRotate = (i - center) * 1.25
 

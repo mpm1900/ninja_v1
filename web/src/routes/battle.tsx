@@ -26,7 +26,7 @@ export const Route = createFileRoute('/battle')({
 function RouteComponent() {
   const game = useStore(gameStore, (g) => g)
   const client = useStore(clientsStore, (c) => c.me)
-  const context = useStore(battleContext, (c) => c)
+  const source_actor_ID = useStore(battleContext, (c) => c.source_actor_ID)
   const actor = useActiveActor()
   const players = game.players.filter((p) => p.ID === client?.ID)
   const enemies = game.players.filter((p) => p.ID !== client?.ID)
@@ -67,7 +67,7 @@ function RouteComponent() {
                 flip={false}
                 player_ID={player.ID}
                 selected={
-                  game.status === 'idle' ? (context.source_actor_ID ?? '') : ''
+                  game.status === 'idle' ? (source_actor_ID ?? '') : ''
                 }
                 onSelectedChange={(actor_ID) =>
                   setContextSource(actor_ID, game)

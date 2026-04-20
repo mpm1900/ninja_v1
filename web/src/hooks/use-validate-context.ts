@@ -43,11 +43,12 @@ function useValidateContext(context: Context, prompt_ID?: string) {
     })
   }, [])
 
+  const contextKey = contextToString(context)
+
   useEffect(() => {
     if (!client) return
 
     const seq = ++seqRef.current
-    const contextKey = contextToString(context)
 
     pendingRef.current = { seq, contextKey }
     setState((s) => ({ ...s, loading: true }))
@@ -58,7 +59,7 @@ function useValidateContext(context: Context, prompt_ID?: string) {
       client_ID: client.ID,
       prompt_ID,
     })
-  }, [client?.ID, context, prompt_ID])
+  }, [client?.ID, contextKey, prompt_ID])
 
   return state
 }

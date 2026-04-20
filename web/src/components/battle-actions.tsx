@@ -6,10 +6,24 @@ import { battleContext, setContext } from '#/lib/stores/battle-context'
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react'
 import { BattleCards } from './battle-cards'
 
+import { useMemo } from 'react'
+import { contextToString } from '#/lib/game/context'
+
 function BattleActions({ actor }: { actor: Actor }) {
   const status = useStore(gameStore, (g) => g.status)
   const actions = useStore(gameStore, (g) => g.actions)
-  const context = useStore(battleContext, (c) => c)
+  const context_key = useStore(battleContext, (c) => contextToString(c))
+  const context = useMemo(() => {
+    const c = battleContext.state
+    return {
+      action_ID: c.action_ID,
+      source_player_ID: c.source_player_ID,
+      parent_actor_ID: c.parent_actor_ID,
+      source_actor_ID: c.source_actor_ID,
+      target_actor_IDs: c.target_actor_IDs,
+      target_position_IDs: c.target_position_IDs,
+    }
+  }, [context_key])
   const action = actor.actions.find((a) => a.ID === context.action_ID)
   const idle = status === 'idle'
   const staged = actions.find((tx) => tx.context.source_actor_ID === actor.ID)
