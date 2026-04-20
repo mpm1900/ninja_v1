@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"fmt"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/modifiers"
 	"ninja_v1/internal/game/data/mutations"
@@ -34,7 +35,7 @@ func makeBasicAttackWith(
 					transactions = before(g, context, transactions)
 				}
 
-				conf := game.GetActiveActionConfig(g, config)
+				conf, _ := game.GetActiveActionConfig(g, config)
 				crit_result := game.MakeCriticalCheck(conf)
 				damages := game.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
 				transactions = append(
@@ -56,8 +57,17 @@ func makeBasicAttack(ID uuid.UUID, config game.ActionConfig) game.Action {
 	return makeBasicAttackWith(ID, config, nil, nil)
 }
 
-func applyBurn(actor game.Actor) []game.GameTransaction {
+func applyBurn(config game.ActionConfig, actor game.Actor) []game.GameTransaction {
 	transactions := []game.GameTransaction{}
+
+	if mutations.CheckJutsuImmunity(config, actor) {
+		log_ctx := game.MakeContextForActor(actor)
+		log := game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", config.Jutsu), log_ctx)
+		tx := game.AddLogs(log)
+		transactions = append(transactions, game.MakeTransaction(tx, log_ctx))
+
+		return transactions
+	}
 
 	mut_ctx := game.Context{
 		SourcePlayerID: &actor.PlayerID,
@@ -76,8 +86,17 @@ func applyBurn(actor game.Actor) []game.GameTransaction {
 	return transactions
 }
 
-func applyParalysis(actor game.Actor) []game.GameTransaction {
+func applyParalysis(config game.ActionConfig, actor game.Actor) []game.GameTransaction {
 	transactions := []game.GameTransaction{}
+
+	if mutations.CheckJutsuImmunity(config, actor) {
+		log_ctx := game.MakeContextForActor(actor)
+		log := game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", config.Jutsu), log_ctx)
+		tx := game.AddLogs(log)
+		transactions = append(transactions, game.MakeTransaction(tx, log_ctx))
+
+		return transactions
+	}
 
 	mut_ctx := game.Context{
 		SourcePlayerID: &actor.PlayerID,

@@ -2,7 +2,6 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -26,36 +25,14 @@ func MakeAmaterasu() game.Action {
 		CritMod:     1.5,
 	}
 
-	return game.Action{
-		ID:              ID,
-		Config:          config,
-		TargetType:      game.TargetPositionID,
-		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
-		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseStaminaSource(*config.Cost),
-		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityDefault,
-			Filter: game.ComposeGF(
-				game.SourceIsAlive,
-			),
-			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
-				transactions := []game.GameTransaction{}
+	action := makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
+		targets := g.GetTargets(context)
+		for _, target := range targets {
+			transactions = append(transactions, applyBurn(config, target)...)
+		}
 
-				conf := game.GetActiveActionConfig(g, config)
-				crit_result := game.MakeCriticalCheck(conf)
-				damages := game.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
-				transactions = append(
-					transactions,
-					game.MakeDamageTransactions(context, damages)...,
-				)
+		return transactions
+	}, nil)
 
-				targets := g.GetTargets(context)
-				for _, target := range targets {
-					transactions = append(transactions, applyBurn(target)...)
-				}
-
-				return transactions
-			},
-		},
-	}
+	return action
 }

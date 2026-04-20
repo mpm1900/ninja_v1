@@ -7,12 +7,32 @@ import (
 	"github.com/google/uuid"
 )
 
+func CheckGameJutsuImmunity(g *game.Game, source game.Actor) bool {
+	config, ok := game.GetActiveActionConfig(*g, game.ActionConfig{})
+	if ok {
+		if CheckJutsuImmunity(config, source) {
+			log_ctx := game.MakeContextForActor(source)
+			g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", config.Jutsu), log_ctx))
+			return true
+		}
+	}
+
+	return false
+}
+func CheckJutsuImmunity(config game.ActionConfig, source game.Actor) bool {
+	return source.HasJutsuImmunity(config.Jutsu)
+}
+
 func AddStatus(checkWarded bool, modifiers ...game.Modifier) game.GameMutation {
 	mut := AddModifiers(checkWarded, modifiers...)
 	baseDelta := mut.Delta
 	mut.Delta = func(p, g game.Game, context game.Context) game.Game {
 		source, ok := g.GetSource(context)
 		if !ok {
+			return g
+		}
+
+		if CheckGameJutsuImmunity(&g, source) {
 			return g
 		}
 
@@ -50,16 +70,22 @@ func AddModifiers(checkWarded bool, modifiers ...game.Modifier) game.GameMutatio
 					/**
 					 * Filtering out via immune, safeguarded, and warded check
 					 */
+					if CheckGameJutsuImmunity(&g, resolved.Actor) {
+						log_ctx := game.MakeContextForActor(resolved.Actor)
+						g.PushLog(game.NewLogContext("| $source$ was immune.", log_ctx))
+						continue
+					}
 					if context.ModifierID != nil {
 						parent_mod, ok := g.GetModifierByID(*context.ModifierID)
 						if ok && resolved.HasImmunity(*context.ModifierID) {
 							mod_tx.Context.FilterOutTarget(actor)
 
-							context.SourceActorID = &actor.ID
-							g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", parent_mod.Name), context.WithSource(actor.ID)))
+							log_ctx := game.MakeContextForActor(resolved.Actor)
+							g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", parent_mod.Name), log_ctx))
 							continue
 						}
 					}
+
 					if resolved.Safeguarded && context.SourcePlayerID != nil && resolved.PlayerID != *context.SourcePlayerID {
 						mod_tx.Context.FilterOutTarget(actor)
 

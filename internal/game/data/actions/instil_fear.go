@@ -42,7 +42,7 @@ func MakeInstilFear() game.Action {
 				for _, target := range targets {
 					transactions = append(
 						transactions,
-						applyParalysis(target)...,
+						applyParalysis(config, target)...,
 					)
 				}
 

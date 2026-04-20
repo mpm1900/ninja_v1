@@ -37,7 +37,7 @@ func MakeGreatFireAnnihilation() game.Action {
 				continue
 			}
 			fmt.Println("BURN! roll=", roll)
-			transactions = append(transactions, applyBurn(target)...)
+			transactions = append(transactions, applyBurn(config, target)...)
 		}
 
 		return transactions

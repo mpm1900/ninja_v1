@@ -9,6 +9,11 @@ var Sleep = game.GameMutation{
 	Delta: func(p, g game.Game, context game.Context) game.Game {
 		targets := g.GetTargets(context)
 		for _, target := range targets {
+			resolved := target.Resolve(g)
+			if resolved.Statused {
+				continue
+			}
+
 			g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
 				if a.Statused {
 					return a
@@ -31,6 +36,11 @@ var Burn = game.GameMutation{
 	Delta: func(p, g game.Game, context game.Context) game.Game {
 		targets := g.GetTargets(context)
 		for _, target := range targets {
+			resolved := target.Resolve(g)
+			if resolved.Statused {
+				continue
+			}
+
 			g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
 				if a.Statused {
 					return a
@@ -52,6 +62,11 @@ var Paralyze = game.GameMutation{
 	Delta: func(p, g game.Game, context game.Context) game.Game {
 		targets := g.GetTargets(context)
 		for _, target := range targets {
+			resolved := target.Resolve(g)
+			if resolved.Statused {
+				continue
+			}
+
 			g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
 				if a.Statused {
 					return a
@@ -73,6 +88,11 @@ var Poison = game.GameMutation{
 	Delta: func(p, g game.Game, context game.Context) game.Game {
 		targets := g.GetTargets(context)
 		for _, target := range targets {
+			resolved := target.Resolve(g)
+			if resolved.Statused {
+				continue
+			}
+
 			g.UpdateActor(target.ID, func(a game.Actor) game.Actor {
 				if a.Statused {
 					return a

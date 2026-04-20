@@ -35,7 +35,7 @@ func MakeLuckyStrikes() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				conf := game.GetActiveActionConfig(g, config)
+				conf, _ := game.GetActiveActionConfig(g, config)
 				crit_result := game.MakeCriticalCheck(conf)
 				damage_config := game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor())
 				damage_config.Repeat = true

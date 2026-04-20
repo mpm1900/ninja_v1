@@ -133,12 +133,12 @@ func RatioDamage(ratio float64) GameMutation {
 }
 
 type damageHandler struct {
-	action   ActionConfig
-	config   DamageConfig
-	context  Context
-	source   ResolvedActor
-	resolved []ResolvedActor
-	defense  ActorStat
+	action          ActionConfig
+	config          DamageConfig
+	context         Context
+	source          ResolvedActor
+	resolvedTargets []ResolvedActor
+	defense         ActorStat
 
 	total  int
 	totals []int
@@ -149,15 +149,15 @@ type damageHandler struct {
 }
 
 func newDamageHandler(g Game, action ActionConfig, config DamageConfig, context Context, source ResolvedActor) *damageHandler {
-	resolved := resolveTargets(g, context)
+	resolvedTargets := resolveTargets(g, context)
 	return &damageHandler{
 		action:             action,
 		config:             config,
 		context:            context,
 		source:             source,
-		resolved:           resolved,
+		resolvedTargets:    resolvedTargets,
 		defense:            getDefenseStat(*action.Stat),
-		totals:             make([]int, len(resolved)),
+		totals:             make([]int, len(resolvedTargets)),
 		repeatTransactions: make([]GameTransaction, 0),
 		sideEffectTxs:      make([]GameTransaction, 0),
 	}
@@ -167,7 +167,13 @@ func (e *damageHandler) run(g *Game) {
 	for {
 		missed := false
 
-		for ti, target := range e.resolved {
+		for ti, target := range e.resolvedTargets {
+			if target.HasJutsuImmunity(e.action.Jutsu) {
+				log := NewLogContext(fmt.Sprintf("$source$ was immune to %s", e.action.Jutsu), MakeContextForActor(target.Actor))
+				g.PushLog(log)
+				continue
+			}
+
 			if e.resolveTargetHit(g, ti, target) {
 				missed = true
 			}
@@ -207,7 +213,7 @@ func (e *damageHandler) resolveTargetHit(g *Game, targetIndex int, target Resolv
 		e.source,
 		[]ResolvedActor{target},
 		e.config.IgnoreModifiers,
-		len(e.resolved),
+		len(e.resolvedTargets),
 		*e.action.Stat,
 		e.defense,
 		*e.action.Power,
@@ -289,7 +295,7 @@ func (e *damageHandler) buildSideEffects() {
 		e.sideEffectTxs = append(e.sideEffectTxs, recoilTx)
 	}
 
-	for i, target := range e.resolved {
+	for i, target := range e.resolvedTargets {
 		if target.Reflect > 0.0 && *e.context.SourceActorID != target.ID {
 			reflectDamage := int(target.Reflect * float64(e.totals[i]))
 			reflectTx := MakeTransaction(PureDamage(reflectDamage, false), context)

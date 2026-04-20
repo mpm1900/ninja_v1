@@ -35,7 +35,7 @@ func MakeFireball() game.Action {
 			if roll > 10 {
 				continue
 			}
-			transactions = append(transactions, applyBurn(target)...)
+			transactions = append(transactions, applyBurn(config, target)...)
 		}
 
 		return transactions

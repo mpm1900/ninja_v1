@@ -232,16 +232,17 @@ type Actor struct {
 	// [AuxAbility]
 	// - take priority over Ability
 	// - set to nil on switch-out
-	AuxAbility        *Modifier              `json:"-"`
-	Item              *Modifier              `json:"item"`
-	Stages            map[ActorStat]int      `json:"staged_stats"`
-	AuxStats          map[ActorStat]int      `json:"aux_stats"`
-	DamageMultipliers map[AttackStat]float64 `json:"-"`
-	DamageReduction   map[AttackStat]float64 `json:"-"`
-	Actions           []Action               `json:"actions"`
-	Immunities        []uuid.UUID            `json:"-"`
-	Summon            *Summon                `json:"summon,omitempty"`
-	AppliedModifiers  map[uuid.UUID]int      `json:"applied_modifiers"`
+	AuxAbility        *Modifier                `json:"-"`
+	Item              *Modifier                `json:"item"`
+	Stages            map[ActorStat]int        `json:"staged_stats"`
+	AuxStats          map[ActorStat]int        `json:"aux_stats"`
+	DamageMultipliers map[AttackStat]float64   `json:"-"`
+	DamageReduction   map[AttackStat]float64   `json:"-"`
+	Actions           []Action                 `json:"actions"`
+	Immunities        map[uuid.UUID]struct{}   `json:"-"`
+	JutsuImmunities   map[ActionJutsu]struct{} `json:"-"`
+	Summon            *Summon                  `json:"summon,omitempty"`
+	AppliedModifiers  map[uuid.UUID]int        `json:"applied_modifiers"`
 }
 
 type ResolvedActor struct {
@@ -347,15 +348,16 @@ func MakeActor(
 	clonedDef := def.Clone()
 	actions = append(actions, Switch)
 	return Actor{
-		ActorDef:   clonedDef,
-		ID:         uuid.New(),
-		PlayerID:   playerID,
-		Level:      GetLevel(experience),
-		Experience: experience,
-		Focus:      focus,
-		Item:       item,
-		Ability:    ability,
-		Immunities: []uuid.UUID{},
+		ActorDef:        clonedDef,
+		ID:              uuid.New(),
+		PlayerID:        playerID,
+		Level:           GetLevel(experience),
+		Experience:      experience,
+		Focus:           focus,
+		Item:            item,
+		Ability:         ability,
+		Immunities:      map[uuid.UUID]struct{}{},
+		JutsuImmunities: map[ActionJutsu]struct{}{},
 		ActorState: ActorState{
 			ActiveTurns:        0,
 			Alive:              true,
@@ -423,10 +425,17 @@ func (a *Actor) SetPosition(positionID *uuid.UUID) {
 	}
 }
 func (a *Actor) PushImmunities(ids ...uuid.UUID) {
-	a.Immunities = append(a.Immunities, ids...)
+	for _, id := range ids {
+		a.Immunities[id] = struct{}{}
+	}
 }
 func (a Actor) HasImmunity(id uuid.UUID) bool {
-	return slices.Contains(a.Immunities, id)
+	_, ok := a.Immunities[id]
+	return ok
+}
+func (a Actor) HasJutsuImmunity(jutsu ActionJutsu) bool {
+	_, ok := a.JutsuImmunities[jutsu]
+	return ok
 }
 func (a *Actor) SetSummon(summon *Summon) {
 	if summon != nil {

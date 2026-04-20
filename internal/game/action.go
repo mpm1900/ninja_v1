@@ -23,6 +23,7 @@ type ActionJutsu string
 
 const (
 	Bukijutsu ActionJutsu = "bukijutsu"
+	Dojutsu   ActionJutsu = "dojutsu"
 	Fuinjutsu ActionJutsu = "fuinjutsu"
 	Genjutsu  ActionJutsu = "genjutsu"
 	Ninjutsu  ActionJutsu = "ninjutsu"
@@ -223,10 +224,10 @@ func MakeAccuracyCheck(g *Game, action ActionConfig, source ResolvedActor, targe
 	}
 }
 
-func GetActiveActionConfig(g Game, fallback ActionConfig) ActionConfig {
+func GetActiveActionConfig(g Game, fallback ActionConfig) (ActionConfig, bool) {
 	if g.ActiveTransaction == nil {
-		return fallback
+		return fallback, false
 	}
 
-	return g.ActiveTransaction.Mutation.Config
+	return g.ActiveTransaction.Mutation.Config, true
 }
