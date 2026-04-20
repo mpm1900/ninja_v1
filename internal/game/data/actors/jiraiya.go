@@ -29,7 +29,6 @@ var Jiraiya = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsFire,
 		game.NsEarth,
-		game.NsYang,
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,

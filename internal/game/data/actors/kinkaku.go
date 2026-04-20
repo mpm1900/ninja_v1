@@ -29,7 +29,6 @@ var Kinkaku = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsLightning,
 		game.NsWater,
-		game.NsPure,
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,

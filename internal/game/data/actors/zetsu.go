@@ -30,7 +30,6 @@ var Zetsu = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsYin,
 		game.NsYang,
-		game.NsWood,
 	}),
 	Abilities: []game.Modifier{
 		modifiers.Regneration,

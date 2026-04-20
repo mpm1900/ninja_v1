@@ -31,6 +31,7 @@ const variants = cva<t>(
         ice: 'bg-cyan-700 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
         explosion:
           'bg-rose-900 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
+        magnet: 'bg-violet-800 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
         storm:
           'bg-blue-900 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
         wood: 'bg-olive-600 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
@@ -76,7 +77,7 @@ function NatureBadge({
     .filter((n) => n !== undefined)
 
   return (
-    <Tooltip>
+    <Tooltip delayDuration={200}>
       <TooltipTrigger asChild>
         <span
           data-role="nature"

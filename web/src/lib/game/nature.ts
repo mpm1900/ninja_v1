@@ -77,6 +77,7 @@ const natureNames: Partial<Record<NatureSet, string>> = {
   water: '水',
   yin: '陰',
   yang: '陽',
+  magnet: '磁',
   ice: '氷',
   explosion: '爆',
   storm: '嵐',

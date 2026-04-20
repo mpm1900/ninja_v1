@@ -1,6 +1,8 @@
 package game
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 )
 
@@ -147,4 +149,80 @@ func SwitchIn(count int) Action {
 			},
 		},
 	}
+}
+
+func makeAttack(
+	ID uuid.UUID,
+	config ActionConfig,
+	with func(g Game, context Context, transactions []GameTransaction) []GameTransaction,
+) Action {
+	return Action{
+		ID:              ID,
+		Config:          config,
+		TargetType:      TargetPositionID,
+		TargetPredicate: ComposeAF(OtherFilter, TargetableFilter),
+		ContextValidate: PositionsLengthFilter(*config.TargetCount),
+		ActionMutation: ActionMutation{
+			Priority: ActionPriorityDefault,
+			Filter: ComposeGF(
+				SourceIsAlive,
+			),
+			Delta: func(p Game, g Game, context Context) []GameTransaction {
+				transactions := []GameTransaction{}
+
+				conf, _ := GetActiveActionConfig(g, config)
+				fmt.Printf("Using config: %+v\n", conf)
+				crit_result := MakeCriticalCheck(conf)
+				damages := NewDamage(conf, NewDamageConfig(crit_result.Ratio, RandomDamageFactor()))
+				transactions = append(
+					transactions,
+					MakeDamageTransactions(context, damages)...,
+				)
+
+				return with(g, context, transactions)
+			},
+		},
+	}
+}
+
+var struggleID = uuid.MustParse("33ac9155-7427-4774-bc32-2d3161fa9b47")
+
+var Struggle = MakeStruggle()
+
+func MakeStruggle() Action {
+	config := ActionConfig{
+		Name:        "Struggle",
+		Description: "Deals 1/4th HP in recoil damage. Can be used when no other actions are available.",
+		TargetCount: Ptr(1),
+		Nature:      Ptr(NsPure),
+		Power:       Ptr(50),
+		Stat:        Ptr(StatAttack),
+		Jutsu:       Taijutsu,
+		Cooldown:    Ptr(0),
+		CritChance:  Ptr(5),
+		CritMod:     1.5,
+	}
+
+	action := makeAttack(
+		struggleID,
+		config,
+		func(g Game, context Context, transactions []GameTransaction) []GameTransaction {
+			source, ok := g.GetSource(context)
+			if !ok {
+				return transactions
+			}
+
+			recoilDamage := RatioDamage(0.25)
+			recoilContext := MakeContextForActor(source)
+			transactions = append(
+				transactions,
+				MakeDamageTransactions(recoilContext, recoilDamage)...,
+			)
+
+			return transactions
+		},
+	)
+	action.Meta.Struggle = true
+
+	return action
 }

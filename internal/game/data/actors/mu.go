@@ -30,7 +30,6 @@ var Mu = game.ActorDef{
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsEarth,
-		game.NsWater,
 		game.NsParticle,
 	}),
 	Abilities:   []game.Modifier{},

@@ -30,9 +30,8 @@ var Gaara = game.ActorDef{
 	NatureDamage:     game.NewNatureSetValues(),
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsWind,
 		game.NsEarth,
-		game.NsLightning,
+		game.NsMagnet,
 	}),
 	Abilities: []game.Modifier{
 		modifiers.SandAura,

@@ -27,7 +27,6 @@ var Deidara = game.ActorDef{
 	NatureDamage:     game.NewNatureSetValues(),
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsLightning,
 		game.NsEarth,
 		game.NsExplosion,
 	}),

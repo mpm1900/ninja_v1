@@ -28,7 +28,6 @@ var Haku = game.ActorDef{
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsWater,
-		game.NsWind,
 		game.NsIce,
 	}),
 	Abilities:   []game.Modifier{},

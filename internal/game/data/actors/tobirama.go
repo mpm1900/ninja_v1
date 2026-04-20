@@ -31,7 +31,6 @@ var Tobirama = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsWater,
 		game.NsLightning,
-		game.NsYin,
 	}),
 	Abilities: []game.Modifier{
 		modifiers.ConsumeChakra,

@@ -26,8 +26,6 @@ var Kaguya = game.ActorDef{
 	NatureDamage:     game.NewNatureSetValues(),
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsYin,
-		game.NsYang,
 		game.NsYinYang,
 	}),
 	Abilities:   []game.Modifier{},

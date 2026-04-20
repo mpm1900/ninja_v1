@@ -11,6 +11,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	game.Switch.ID:      game.Switch,
 	game.SwitchInIds[1]: game.SwitchIn(1),
 	game.SwitchInIds[2]: game.SwitchIn(2),
+	game.Struggle.ID:    game.Struggle,
 
 	actions.ShadowClone.ID:     actions.ShadowClone,
 	actions.SummonGamabunta.ID: actions.SummonGamabunta,

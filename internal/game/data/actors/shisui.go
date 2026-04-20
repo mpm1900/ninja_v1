@@ -31,7 +31,6 @@ var Shisui = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsFire,
 		game.NsWind,
-		game.NsYin,
 	}),
 	Abilities: []game.Modifier{
 		modifiers.PriorityFailure,

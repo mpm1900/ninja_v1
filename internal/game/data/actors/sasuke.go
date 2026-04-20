@@ -31,7 +31,6 @@ var Sasuke = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsFire,
 		game.NsLightning,
-		game.NsYin,
 	}),
 	Abilities: []game.Modifier{
 		modifiers.AddImmunities(*modifiers.Intimidate.GroupID),

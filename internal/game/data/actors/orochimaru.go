@@ -27,7 +27,6 @@ var Orochimaru = game.ActorDef{
 	NatureDamage:     game.NewNatureSetValues(),
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsWind,
 		game.NsEarth,
 		game.NsYin,
 	}),

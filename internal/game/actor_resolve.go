@@ -93,6 +93,7 @@ func (ah *actorResolveHandler) resolveNatures(resolved *ResolvedActor) {
 }
 
 func (ah *actorResolveHandler) resolveActions(resolved *ResolvedActor) {
+	allDisabled := true
 	for i, a := range resolved.Actions {
 		// static cooldown offset
 		if resolved.Actions[i].Config.Cooldown == nil {
@@ -114,9 +115,15 @@ func (ah *actorResolveHandler) resolveActions(resolved *ResolvedActor) {
 			if resolved.SwitchLocked && a.Meta.Switch {
 				resolved.Actions[i].Disabled = true
 			}
+
+			if !a.Meta.Switch && !resolved.Actions[i].Disabled {
+				allDisabled = false
+			}
 		}
+	}
 
-		// if everything is disabled, add struggle
-
+	// if everything is disabled, add struggle
+	if allDisabled {
+		resolved.Actions = append(resolved.Actions, MakeStruggle())
 	}
 }

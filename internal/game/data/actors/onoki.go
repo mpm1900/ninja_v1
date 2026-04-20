@@ -30,7 +30,6 @@ var Onoki = game.ActorDef{
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsEarth,
-		game.NsWind,
 		game.NsParticle,
 	}),
 	Abilities:   []game.Modifier{},

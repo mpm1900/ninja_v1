@@ -16,7 +16,7 @@ func MakeShadowPossession() game.Action {
 	config := game.ActionConfig{
 		Name:        "Shadow Possession",
 		Description: "Increases an ally's speed or paralyzes an enemy.",
-		Nature:      game.Ptr(game.NsYang),
+		Nature:      game.Ptr(game.NsYin),
 		Accuracy:    game.Ptr(100),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(30),

@@ -65,8 +65,8 @@ function BattleActions({ actor }: { actor: Actor }) {
                   enabled={
                     idle &&
                     !!actor.position_ID &&
-                    action_enabled &&
-                    !((choice_locked && !is_switch) || switch_locked)
+                    action_enabled
+
                   }
                   context={context}
                   onContextChange={setContext}

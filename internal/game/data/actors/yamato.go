@@ -28,11 +28,10 @@ var Yamato = game.ActorDef{
 	NatureDamage:     game.NewNatureSetValues(),
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsEarth,
 		game.NsWater,
 		game.NsWood,
 	}),
-	Abilities:   []game.Modifier{
+	Abilities: []game.Modifier{
 		modifiers.NeutralizingChakra,
 	},
 	ActionCount: 4,

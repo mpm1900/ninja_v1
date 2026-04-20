@@ -28,7 +28,6 @@ var Minato = game.ActorDef{
 	NatureDamage:     game.NewNatureSetValues(),
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsFire,
 		game.NsWind,
 		game.NsLightning,
 	}),

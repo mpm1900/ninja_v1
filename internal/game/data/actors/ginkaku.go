@@ -29,7 +29,6 @@ var Ginkaku = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsEarth,
 		game.NsWind,
-		game.NsPure,
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,

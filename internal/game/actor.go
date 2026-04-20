@@ -476,7 +476,7 @@ func (a *Actor) DecrementCooldowns() {
 	}
 }
 func (a *Actor) RecoverStamina(g Game, ratio float64) {
-	resolved := a.Resolve(g)
+	resolved := a.ResolveStats(g)
 	amount := Round(float64(resolved.Stats[StatStamina]) * ratio)
 	a.StaminaDamage = max(a.StaminaDamage-amount, 0)
 }
@@ -660,7 +660,15 @@ func resolveActor(actor Actor, g Game, bypassModifiers bool) ResolvedActor {
 	handler := newActorResolveHandler(actor, g, bypassModifiers)
 
 	resolved := handler.resolveMutations()
+	handler.resolveNatures(&resolved)
 	handler.resolveActions(&resolved)
+	return resolved
+}
+
+func resolveActorStats(actor Actor, g Game, bypassModifiers bool) ResolvedActor {
+	handler := newActorResolveHandler(actor, g, bypassModifiers)
+
+	resolved := handler.resolveMutations()
 	handler.resolveNatures(&resolved)
 	return resolved
 }
@@ -678,10 +686,13 @@ func (a Actor) getActor() Actor {
 func (a Actor) ResolveModifierless(g Game) ResolvedActor {
 	return resolveActor(a.getActor(), g, true)
 }
+func (a Actor) ResolveStats(g Game) ResolvedActor {
+	return resolveActorStats(a.getActor(), g, false)
+}
 func (a Actor) Resolve(g Game) ResolvedActor {
 	actor := a.getActor()
 	resolved := resolveActor(actor, g, false)
-	unmodified := resolveActor(actor, g, true)
+	unmodified := resolveActorStats(actor, g, true)
 	resolved.UnmodifiedStats = maps.Clone(unmodified.Stats)
 	resolved.Ability = actor.GetAbility()
 

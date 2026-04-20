@@ -37,7 +37,6 @@ var Kakashi = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsLightning,
 		game.NsEarth,
-		game.NsYin,
 	}),
 	Abilities: []game.Modifier{
 		modifiers.AccuracyUpSource,

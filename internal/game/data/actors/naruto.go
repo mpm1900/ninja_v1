@@ -31,7 +31,6 @@ var Naruto = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsPure,
 		game.NsWind,
-		game.NsYang,
 	}),
 	Abilities: []game.Modifier{
 		modifiers.IchirakuRamen,
