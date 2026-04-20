@@ -219,14 +219,14 @@ function ActorAvatar({
   return (
     <div
       className={cn(
-        'relative px-3 py-2 -mb-2 -mr-1 rounded-sm rounded-tr-none rounded-tl-4xl rounded-br-4xl shadow-[2px_1px_0px_rgba(0,0,0,1)]',
+        'relative px-1 pb-2 -mb-3.5 -mr-1 rounded-sm rounded-tr-none rounded-tl-4xl rounded-br-4xl shadow-[2px_1px_0px_rgba(0,0,0,1)]',
         frameVariants({
           variant: getVariant({ selected, targeted }),
         }),
         'border-r-0',
       )}
     >
-      <ActorThumbnail actor={actor} size={50} imgClass="rounded-bl-xl" />
+      <ActorThumbnail actor={actor} size={64} imgClass="rounded-bl-xl" />
       <ActorStatus actor={actor} />
     </div>
   )

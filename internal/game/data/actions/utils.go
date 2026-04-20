@@ -57,7 +57,7 @@ func makeBasicAttack(ID uuid.UUID, config game.ActionConfig) game.Action {
 	return makeBasicAttackWith(ID, config, nil, nil)
 }
 
-func applyBurn(config game.ActionConfig, actor game.Actor) []game.GameTransaction {
+func applyStatus(config game.ActionConfig, actor game.Actor, modifier game.Modifier, mutation game.GameMutation) []game.GameTransaction {
 	transactions := []game.GameTransaction{}
 
 	if mutations.CheckJutsuImmunity(config, actor) {
@@ -69,48 +69,26 @@ func applyBurn(config game.ActionConfig, actor game.Actor) []game.GameTransactio
 		return transactions
 	}
 
-	mut_ctx := game.Context{
-		SourcePlayerID: &actor.PlayerID,
-		SourceActorID:  &actor.ID,
-		ParentActorID:  nil, // do not remove on switch
-		TargetActorIDs: []uuid.UUID{actor.ID},
-	}
+	ctx := game.MakeContextForActor(actor)
+	ctx.ParentActorID = nil // do not remove on switch
 
-	mod := mutations.AddStatus(true, modifiers.Burned)
-	mod_tx := game.MakeTransaction(mod, mut_ctx)
+	mod := mutations.AddStatus(true, modifier)
+	mod_tx := game.MakeTransaction(mod, ctx)
 
-	mut := mutations.Burn
-	mut_tx := game.MakeTransaction(mut, mut_ctx)
+	mut_tx := game.MakeTransaction(mutation, ctx)
 	transactions = append(transactions, mod_tx, mut_tx)
 
 	return transactions
 }
 
+func applyBurn(config game.ActionConfig, actor game.Actor) []game.GameTransaction {
+	return applyStatus(config, actor, modifiers.Burned, mutations.Burn)
+}
+
 func applyParalysis(config game.ActionConfig, actor game.Actor) []game.GameTransaction {
-	transactions := []game.GameTransaction{}
+	return applyStatus(config, actor, modifiers.Paralysis, mutations.Paralyze)
+}
 
-	if mutations.CheckJutsuImmunity(config, actor) {
-		log_ctx := game.MakeContextForActor(actor)
-		log := game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", config.Jutsu), log_ctx)
-		tx := game.AddLogs(log)
-		transactions = append(transactions, game.MakeTransaction(tx, log_ctx))
-
-		return transactions
-	}
-
-	mut_ctx := game.Context{
-		SourcePlayerID: &actor.PlayerID,
-		SourceActorID:  &actor.ID,
-		ParentActorID:  nil, // do not remove on switch
-		TargetActorIDs: []uuid.UUID{actor.ID},
-	}
-
-	mod := mutations.AddStatus(true, modifiers.Paralysis)
-	mod_tx := game.MakeTransaction(mod, mut_ctx)
-
-	mut := mutations.Paralyze
-	mut_tx := game.MakeTransaction(mut, mut_ctx)
-	transactions = append(transactions, mod_tx, mut_tx)
-
-	return transactions
+func applySleep(config game.ActionConfig, actor game.Actor) []game.GameTransaction {
+	return applyStatus(config, actor, modifiers.Sleeping, mutations.Sleep)
 }

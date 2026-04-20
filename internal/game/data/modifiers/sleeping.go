@@ -8,19 +8,19 @@ import (
 	"github.com/google/uuid"
 )
 
-var paralysisID = uuid.MustParse("b269dcbc-a6a0-5ea3-9ed5-6e8b5fee8024")
+var sleepingID = uuid.MustParse("b8778c2e-12e3-410f-b857-b304f2f7dd1e")
 
-var Paralysis game.Modifier = game.Modifier{
-	ID:          paralysisID,
-	GroupID:     &paralysisID,
-	Name:        "Paralyzed",
-	Description: "Paralyzed: Speed x0.25.",
-	Icon:        "paralyzed",
+var Sleeping game.Modifier = game.Modifier{
+	ID:          sleepingID,
+	GroupID:     &sleepingID,
+	Name:        "Sleeping",
+	Description: "Sleeping",
+	Icon:        "sleeping",
 	Show:        true,
 	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
-			&paralysisID,
+			&sleepingID,
 			game.MutPriorityPostStagedStats,
 			game.ComposeAF(game.SourceFilter, game.ActiveFilter),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {
@@ -29,7 +29,6 @@ var Paralysis game.Modifier = game.Modifier{
 					actor.Stats[game.StatAttack] = game.Round(float64(actor.Stats[game.StatAttack]) * 1.5)
 				}
 
-				actor.Stats[game.StatSpeed] = game.Round(float64(actor.Stats[game.StatSpeed]) * 0.25)
 				return actor
 			},
 		),

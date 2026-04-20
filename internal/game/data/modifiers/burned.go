@@ -47,10 +47,10 @@ var Burned game.Modifier = game.Modifier{
 				keys := maps.Keys(actor.AppliedModifiers)
 				if slices.Contains(slices.Collect(keys), Guts.ID) {
 					actor.Stats[game.StatAttack] = game.Round(float64(actor.Stats[game.StatAttack]) * 1.5)
-					return actor
+				} else {
+					actor.Stats[game.StatAttack] = game.Round(float64(actor.Stats[game.StatAttack]) * 0.5)
 				}
 
-				actor.Stats[game.StatAttack] = game.Round(float64(actor.Stats[game.StatAttack]) * 0.5)
 				return actor
 			},
 		),
