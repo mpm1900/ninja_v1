@@ -47,6 +47,7 @@ func MakeSummonGamabunta() game.Action {
 	return game.Action{
 		ID:              uuid.MustParse("17967cc9-5b82-43d4-9cd6-3a4a2c70ca39"),
 		Config:          config,
+		Summon:          true,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.NoneFilter,
 		ContextValidate: game.TargetLengthFilter(0),
@@ -56,30 +57,7 @@ func MakeSummonGamabunta() game.Action {
 			Delta: func(p, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
 				transactions := []game.GameTransaction{}
 
-				mut := game.GameMutation{
-					Delta: func(mp, mg game.Game, mc game.Context) game.Game {
-						mg.UpdateActor(*mc.SourceActorID, func(a game.Actor) game.Actor {
-							summon := game.MakeActor(
-								Gamabunta,
-								a.PlayerID,
-								a.Experience,
-								nil,
-								nil,
-								GamabuntaActions,
-								game.FocusNone,
-								map[game.ActorStat]int{},
-							)
-							a.SetSummonFromActor(&summon, false)
-							return a
-						})
-						return mg
-					},
-				}
-
-				transactions = append(
-					transactions,
-					game.MakeTransaction(mut, context),
-				)
+				transactions = append(transactions, applySummon(context, Gamabunta, GamabuntaActions)...)
 
 				return transactions
 			},

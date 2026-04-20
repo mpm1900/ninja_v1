@@ -83,6 +83,7 @@ type Action struct {
 	ActionMutation
 	ID              uuid.UUID                       `json:"ID"`
 	Config          ActionConfig                    `json:"config"`
+	Summon          bool                            `json:"summon"`
 	Locked          bool                            `json:"locked"`
 	Disabled        bool                            `json:"disabled"`
 	TargetType      ActionTargetType                `json:"target_type"`

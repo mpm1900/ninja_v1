@@ -92,3 +92,38 @@ func applyParalysis(config game.ActionConfig, actor game.Actor) []game.GameTrans
 func applySleep(config game.ActionConfig, actor game.Actor) []game.GameTransaction {
 	return applyStatus(config, actor, modifiers.Sleeping, mutations.Sleep)
 }
+
+func applySummon(context game.Context, def game.ActorDef, actions []game.Action) []game.GameTransaction {
+	transactions := []game.GameTransaction{}
+
+	mut := game.GameMutation{
+		Delta: func(mp, mg game.Game, mc game.Context) game.Game {
+			mg.UpdateActor(*mc.SourceActorID, func(a game.Actor) game.Actor {
+				summon := game.MakeActor(
+					def,
+					a.PlayerID,
+					a.Experience,
+					nil,
+					nil,
+					actions,
+					game.FocusNone,
+					map[game.ActorStat]int{},
+				)
+				a.SetSummonFromActor(&summon, false)
+				return a
+			})
+			mg.UpdatePlayer(*mc.SourcePlayerID, func(p game.Player) game.Player {
+				p.UsedSummon = true
+				return p
+			})
+			return mg
+		},
+	}
+
+	transactions = append(
+		transactions,
+		game.MakeTransaction(mut, context),
+	)
+
+	return transactions
+}

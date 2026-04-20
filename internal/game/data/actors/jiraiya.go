@@ -38,6 +38,6 @@ var Jiraiya = game.ActorDef{
 		actions.Haze.ID,
 		actions.ToadSong.ID,
 		actions.Fireball.ID,
-		actions.LeafJab.ID,
+		actions.SummonGamabunta.ID,
 	},
 }

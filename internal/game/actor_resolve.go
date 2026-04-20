@@ -116,6 +116,11 @@ func (ah *actorResolveHandler) resolveActions(resolved *ResolvedActor) {
 				resolved.Actions[i].Disabled = true
 			}
 
+			player, ok := ah.game.GetPlayerByID(resolved.PlayerID)
+			if ok && player.UsedSummon && a.Summon {
+				resolved.Actions[i].Disabled = true
+			}
+
 			if !a.Meta.Switch && !resolved.Actions[i].Disabled {
 				allDisabled = false
 			}

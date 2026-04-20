@@ -455,6 +455,7 @@ func (a *Actor) SetSummonFromActor(actor *Actor, proxy bool) {
 		Proxy:  proxy,
 	}
 	a.SetSummon(&summon)
+	a.LastUsedActionID = nil
 }
 func (a *Actor) SetActionCooldown(actionID uuid.UUID, cooldown int) {
 	for i := range a.Actions {

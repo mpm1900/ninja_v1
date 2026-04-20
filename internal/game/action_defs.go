@@ -186,7 +186,6 @@ func makeAttack(
 }
 
 var struggleID = uuid.MustParse("33ac9155-7427-4774-bc32-2d3161fa9b47")
-
 var Struggle = MakeStruggle()
 
 func MakeStruggle() Action {
@@ -226,3 +225,5 @@ func MakeStruggle() Action {
 
 	return action
 }
+
+var CancelSummon = Action{}
