@@ -33,7 +33,7 @@ var WaterAbsorb game.Modifier = game.Modifier{
 						return a
 					}
 
-					a.NatureResistance[game.NatureWater] = -1.0
+					a.NatureResistance[game.NatureWater] *= -1.0
 					return a
 				},
 			},

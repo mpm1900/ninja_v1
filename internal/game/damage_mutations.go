@@ -45,11 +45,11 @@ func ApplyDamageWith(g *Game, source_ID *uuid.UUID, target ResolvedActor, damage
 	g.UpdateActor(target.ID, func(a Actor) Actor {
 		if a.Summon != nil && a.Summon.Proxy && a.Summon.Alive {
 			summonHP := a.Summon.Stats[StatHP]
-			a.Summon.Damage += damage
+			a.Summon.Damage += clampDamage(damage)
 			a.Summon.Alive = summonHP > a.Summon.Damage
 			g.PushLog(NewLogContext("| $source$'s summon took the attack.", logCtx))
 		} else {
-			a.Damage += clampDamage(damage)
+			a.Damage += damage
 			if source_ID != nil {
 				a.LastReceivedDamage[*source_ID] = clampDamage(damage)
 			}
