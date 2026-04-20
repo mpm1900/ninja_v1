@@ -15,13 +15,13 @@ function ActorStatus({ actor }: { actor: Actor }) {
       )}
     >
       {actor.statused ? (
-        <span>
+        <span className='-mt-0.5 block'>
           {actor.sleeping && 'SLEEP'}
           {actor.paralyzed && 'PARA'}
           {actor.burned && 'BURN'}
         </span>
       ) : (
-        <span>LV {actor.level}</span>
+        <span className='-mt-0.5 block'>LV {actor.level}</span>
       )}
     </div>
   )

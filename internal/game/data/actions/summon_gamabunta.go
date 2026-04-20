@@ -41,7 +41,6 @@ func MakeSummonGamabunta() game.Action {
 		Nature:      &nature,
 		Jutsu:       game.Ninjutsu,
 		Description: "",
-		Cooldown:    game.Ptr(10),
 	}
 
 	return game.Action{
@@ -57,7 +56,10 @@ func MakeSummonGamabunta() game.Action {
 			Delta: func(p, g game.Game, context game.Context) []game.Transaction[game.GameMutation] {
 				transactions := []game.GameTransaction{}
 
-				transactions = append(transactions, applySummon(context, Gamabunta, GamabuntaActions)...)
+				transactions = append(
+					transactions,
+					applySummon(context, Gamabunta, GamabuntaActions)...,
+				)
 
 				return transactions
 			},

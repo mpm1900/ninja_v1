@@ -5,13 +5,15 @@ import { NatureBadge } from './nature-badge'
 
 type ActionCardProps = ComponentProps<'button'> & {
   action: Action
-  selected?: boolean
+  selected?: boolean,
+  usedSummon?: boolean
 }
 
 function ActionCard({
   action,
   selected = false,
   disabled = false,
+  usedSummon = false,
   className,
   ...props
 }: ActionCardProps) {
@@ -65,7 +67,7 @@ function ActionCard({
                 </div>
               ) : disabled ? (
                 <div className="text-[10px] uppercase tracking-wide text-destructive">
-                  disabled
+                  {action.summon && usedSummon ? "summon used" : "disabled"}
                 </div>
               ) : (
                 <div className="text-[10px] uppercase tracking-wide text-white/50">

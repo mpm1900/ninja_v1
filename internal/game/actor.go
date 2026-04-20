@@ -643,6 +643,14 @@ func (a Actor) Clone() Actor {
 	b.Natures = maps.Clone(a.Natures)
 	b.Actions = slices.Clone(a.Actions)
 
+	if a.Summon != nil {
+		s := new(Summon)
+		*s = *a.Summon
+		s.Actor = a.Summon.Actor.Clone()
+		s.Parent = &b
+		b.Summon = s
+	}
+
 	if a.AppliedModifiers != nil {
 		b.AppliedModifiers = maps.Clone(a.AppliedModifiers)
 	} else {

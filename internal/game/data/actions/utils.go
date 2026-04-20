@@ -105,7 +105,7 @@ func applySummon(context game.Context, def game.ActorDef, actions []game.Action)
 					a.Experience,
 					nil,
 					nil,
-					actions,
+					append(actions, game.CancelSummon),
 					game.FocusNone,
 					map[game.ActorStat]int{},
 				)

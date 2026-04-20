@@ -17,6 +17,7 @@ type Action = {
     description: string
     target_count?: number
   }
+  summon: boolean
   locked: boolean
   cooldown: number | null
   disabled: boolean

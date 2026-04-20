@@ -114,9 +114,6 @@ var Switch = Action{
 var SwitchInIds map[int]uuid.UUID = map[int]uuid.UUID{
 	1: uuid.MustParse("f4e25f49-35c1-405d-a34a-c8ba22f595f8"),
 	2: uuid.MustParse("11a552fc-a768-4f58-aef1-fecba66d95f8"),
-	3: uuid.MustParse("6bc3023c-2b4d-4bc3-8712-dc9f6124f70e"),
-	4: uuid.MustParse("6a842cd4-ab84-4a8a-9f8b-f964d5f87f72"),
-	5: uuid.MustParse("a8bdb03b-b6bf-4425-8de3-c3ce9e541f32"),
 }
 
 func SwitchIn(count int) Action {
@@ -226,4 +223,42 @@ func MakeStruggle() Action {
 	return action
 }
 
-var CancelSummon = Action{}
+var cancelSummonID = uuid.MustParse("a0491437-2cda-407e-9fc8-4022b2e1f5e3")
+var CancelSummon = Action{
+	ID: cancelSummonID,
+	Config: ActionConfig{
+		Name:        "Cancel Summon",
+		Description: "Unsummons the user's summon.",
+	},
+	TargetType: TargetActorID,
+	TargetPredicate: func(g Game, a Actor, ctx Context) bool {
+		return false
+	},
+	ContextValidate: func(ctx Context) bool {
+		return true
+	},
+	ActionMutation: ActionMutation{
+		Priority: ActionPriorityDefault,
+		Filter:   SourceIsAlive,
+		Delta: func(p, g Game, context Context) []Transaction[GameMutation] {
+			transactions := []GameTransaction{}
+
+			mut := GameMutation{
+				Delta: func(mp, mg Game, mc Context) Game {
+					mg.UpdateActor(*mc.SourceActorID, func(a Actor) Actor {
+						a.SetSummon(nil)
+						return a
+					})
+					return mg
+				},
+			}
+
+			transactions = append(
+				transactions,
+				MakeTransaction(mut, context),
+			)
+
+			return transactions
+		},
+	},
+}
