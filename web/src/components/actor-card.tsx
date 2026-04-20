@@ -18,8 +18,8 @@ import { gameStore } from '#/lib/stores/game'
 const frameVariants = cva('border border-transparent', {
   variants: {
     variant: {
-      default: 'bg-zinc-900 text-zinc-200 border-zinc-600',
-      selected: 'bg-zinc-300 text-zinc-900 border-white text-shadow-none!',
+      default: 'bg-stone-900 text-stone-200 border-stone-700',
+      selected: 'bg-stone-300 text-stone-900 border-white text-shadow-none!',
       targeted: 'bg-red-900 text-zinc-200 border-red-500',
     },
   },
@@ -133,7 +133,7 @@ function ActorCard({
                   'border-l-0',
                 )}
               >
-                <span className={cn('font-semibold text-lg text-nowrap')}>
+                <span className={cn('font-semibold text-lg text-nowrap', !selected && 'text-shadow-[1px_1px_0px_#000000]')}>
                   {actor.name}
                 </span>
               </div>
@@ -219,7 +219,7 @@ function ActorAvatar({
   return (
     <div
       className={cn(
-        'relative p-2 -mb-2 -mr-1 rounded-sm rounded-tr-none rounded-l-2xl shadow-[2px_1px_0px_rgba(0,0,0,1)]',
+        'relative px-3 py-2 -mb-2 -mr-1 rounded-sm rounded-tr-none rounded-tl-4xl rounded-br-4xl shadow-[2px_1px_0px_rgba(0,0,0,1)]',
         frameVariants({
           variant: getVariant({ selected, targeted }),
         }),
