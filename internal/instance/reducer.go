@@ -1,7 +1,6 @@
 package instance
 
 import (
-	"maps"
 	"ninja_v1/internal/game"
 	data "ninja_v1/internal/game/data"
 	"slices"
@@ -125,92 +124,6 @@ func Reducer(instance *Instance, request Request) int {
 			teamActors[i] = actor
 		}
 		instance.Game.SetPlayerActors(request.ClientID, teamActors)
-		return state
-	case AddActor:
-		if request.Context.SourceActorID == nil {
-			return none
-		}
-
-		def, ok := data.ACTORS[*request.Context.SourceActorID]
-		if !ok {
-			return none
-		}
-
-		config := ActorConfig{
-			AbilityID: nil,
-			ActionIDs: def.ActionIDs,
-			AuxStats:  map[game.ActorStat]int{},
-			ItemID:    nil,
-			Focus:     nil,
-		}
-
-		hydrated := HydrateActorConfig(config, def.Abilities)
-		player, ok := instance.Game.GetPlayerByID(request.ClientID)
-		if !ok {
-			return none
-		}
-
-		actors := instance.Game.GetActorsByPlayer(player.ID)
-		if len(actors) >= player.TeamCapacity {
-			return none
-		}
-
-		var ability *game.Modifier = nil
-		if len(def.Abilities) > 0 {
-			ability = &def.Abilities[0]
-		}
-
-		actor := game.MakeActor(
-			def,
-			request.ClientID,
-			/* 24 13824 */ 1000000,
-			ability,
-			hydrated.Item,
-			hydrated.Actions,
-			hydrated.Focus,
-			hydrated.AuxStats,
-		)
-		instance.Game.AddActor(actor)
-		return state
-	case RemoveActor:
-		index := slices.IndexFunc(instance.Game.Actors, func(a game.Actor) bool {
-			return a.ID == *request.Context.SourceActorID
-		})
-
-		if index == -1 {
-			return none
-		}
-
-		actor := instance.Game.Actors[index]
-		instance.Game.SetPosition(actor, nil)
-		instance.Game.RemoveActor(actor.ID)
-		return state
-	case UpdateActor:
-		if request.Context.SourceActorID == nil || request.ActorConfig == nil {
-			return none
-		}
-
-		config := *request.ActorConfig
-		instance.Game.UpdateActor(*request.Context.SourceActorID, func(a game.Actor) game.Actor {
-			hydrated := HydrateActorConfig(config, a.Abilities)
-
-			if config.ActionIDs != nil {
-				a.SetActions(config.ActionIDs, data.ACTIONS)
-			}
-			a.Focus = hydrated.Focus
-			if hydrated.Ability != nil {
-				a.Ability = hydrated.Ability
-			}
-			if hydrated.Item != nil {
-				a.Item = hydrated.Item
-			}
-			if hydrated.AuxStats != nil {
-				a.AuxStats = maps.Clone(hydrated.AuxStats)
-			}
-
-			return a
-		})
-
 		return state
 
 	case PushAction:

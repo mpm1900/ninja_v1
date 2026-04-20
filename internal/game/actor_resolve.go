@@ -121,6 +121,18 @@ func (ah *actorResolveHandler) resolveActions(resolved *ResolvedActor) {
 				resolved.Actions[i].Disabled = true
 			}
 
+			_, ok = ah.game.FindQueuedAction(func(t Transaction[Action]) bool {
+				if t.Context.SourcePlayerID == nil {
+					return false
+				}
+				is_player := *t.Context.SourcePlayerID == resolved.PlayerID
+				return is_player && t.Mutation.Summon
+			})
+
+			if ok && a.Summon {
+				resolved.Actions[i].Disabled = true
+			}
+
 			if !a.Meta.Switch && !resolved.Actions[i].Disabled {
 				allDisabled = false
 			}

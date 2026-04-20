@@ -11,9 +11,6 @@ type RequestType = string
 
 const (
 	SetTeam        RequestType = "set-team"
-	AddActor       RequestType = "add-actor"
-	RemoveActor    RequestType = "remove-actor" //TEMP
-	UpdateActor    RequestType = "update-actor"
 	PushAction     RequestType = "push-action"
 	RemoveAction   RequestType = "remove-action"
 	RunGameActions RequestType = "run-game-actions" // TEMP

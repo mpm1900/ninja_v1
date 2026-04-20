@@ -24,9 +24,15 @@ function BattleCards({ actor }: { actor: Actor }) {
   const status = useStore(gameStore, (g) => g.status)
   const actions = useStore(gameStore, (g) => g.actions)
   const action_ID = useStore(battleContext, (c) => c.action_ID)
-  const player = useStore(gameStore, g => g.players.find(p => p.ID === actor.player_ID))
+  const player = useStore(gameStore, (g) =>
+    g.players.find((p) => p.ID === actor.player_ID)
+  )
   const has_queued_action = queued_actions[actor.ID]
   const idle = status === 'idle'
+  const ally_summon_action = actions.find(
+    (tx) =>
+      tx.context.source_player_ID === actor.player_ID && tx.mutation.summon
+  )
   const staged_action = actions.find(
     (tx) => tx.context.source_actor_ID === actor.ID
   )
@@ -80,10 +86,7 @@ function BattleCards({ actor }: { actor: Actor }) {
                 <ActionCard
                   action={a}
                   usedSummon={!!player?.used_summon}
-                  disabled={
-                    (!!staged_action && !selected) ||
-                    a.disabled
-                  }
+                  disabled={(!!staged_action && !selected) || a.disabled}
                   selected={selected}
                   onClick={() => setContextAction(a.ID)}
                   style={{

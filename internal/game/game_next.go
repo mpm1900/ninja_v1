@@ -127,14 +127,14 @@ func (g *Game) NextAction() bool {
 		transaction.Context = c
 	}
 
-	g.ActiveTransaction = &transaction
+	g.ActiveTransaction = MakeGameActiveTransaction(transaction)
 	g.RunAction(transaction)
 	return true
 }
 
 func (g *Game) NextPrompt() bool {
 	transaction, err := g.Prompts.Dequeue()
-	g.ActiveTransaction = &transaction
+	g.ActiveTransaction = MakeGameActiveTransaction(transaction)
 	if err != nil {
 		return false
 	}
@@ -147,7 +147,7 @@ func (g *Game) NextTrigger() bool {
 	transaction, err := g.Triggers.Dequeue()
 	a_tx := Transaction[Action]{}
 	a_tx.Context = transaction.Context
-	g.ActiveTransaction = &a_tx
+	g.ActiveTransaction = MakeGameActiveTransaction(a_tx)
 	if err != nil {
 		return false
 	}

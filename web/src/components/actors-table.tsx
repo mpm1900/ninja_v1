@@ -2,13 +2,11 @@ import { getTotalBaseStats, type ActorDef } from '#/lib/game/actor'
 import {
   createColumnHelper,
   flexRender,
-  functionalUpdate,
   getCoreRowModel,
   getExpandedRowModel,
   getSortedRowModel,
   useReactTable,
   type Row,
-  type RowSelectionState,
   type SortingState,
 } from '@tanstack/react-table'
 import {
@@ -19,7 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from './ui/table'
-import { Checkbox } from './ui/checkbox'
 import { ActorStatBase } from './actor-stat'
 import { Button } from './ui/button'
 import { ChevronDown, ChevronLeft } from 'lucide-react'
@@ -31,12 +28,6 @@ import { StatBadge } from './stat-badge'
 
 const helper = createColumnHelper<ActorDef>()
 const columns = [
-  helper.display({
-    id: 'select',
-    cell: ({ row }) => (
-      <Checkbox checked={row.getIsSelected()} disabled={!row.getCanSelect()} />
-    ),
-  }),
   helper.accessor('name', {}),
   helper.accessor('clan', {
     header: '',
@@ -193,16 +184,10 @@ const columns = [
 function ActorsTable({
   data,
   enabled,
-  rowSelection,
-  onRowSelectionChange,
-  onRowCheckedChange,
   subRow,
 }: {
   data: Array<ActorDef>
   enabled: boolean
-  rowSelection: RowSelectionState
-  onRowSelectionChange?: (rowSelection: RowSelectionState) => void
-  onRowCheckedChange?: (actor: ActorDef, selected: boolean) => void
   subRow?: (props: { row: Row<ActorDef> }) => ReactNode
 }) {
   const [sorting, setSorting] = useState<SortingState>([
@@ -218,13 +203,8 @@ function ActorsTable({
     getSortedRowModel: getSortedRowModel(),
     enableRowSelection: enabled,
     // onExpandedChange: setExpanded,
-    onRowSelectionChange: (updater) => {
-      onRowSelectionChange?.(functionalUpdate(updater, rowSelection))
-    },
     onSortingChange: setSorting,
     state: {
-      expanded: rowSelection,
-      rowSelection,
       sorting,
     },
   })
@@ -248,12 +228,7 @@ function ActorsTable({
       <TableBody>
         {table.getRowModel().rows.map((row) => (
           <Fragment key={row.id}>
-            <TableRow
-              onClick={() => {
-                if (!row.getCanSelect()) return
-                onRowCheckedChange?.(row.original, !row.getIsSelected())
-              }}
-            >
+            <TableRow>
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}

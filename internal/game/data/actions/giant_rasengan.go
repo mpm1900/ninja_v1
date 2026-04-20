@@ -35,10 +35,9 @@ func MakeGiantRasengan() game.Action {
 }
 
 func MakeRasenganRecharge() game.Action {
-	logf := "%s must recharge."
 	config := game.ActionConfig{
-		Name:        "Recharging...",
-		LogSuccessF: &logf,
+		Name:       "Recharging...",
+		LogSuccess: game.Ptr("$source$ must recharge."),
 	}
 	return game.Action{
 		ID:              uuid.MustParse("2eaa6398-06a5-56fe-b90d-e9db6f044744"),

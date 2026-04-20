@@ -19,6 +19,11 @@ type GameLog struct {
 	Context Context   `json:"context"`
 }
 
+type GameActiveTransaction struct {
+	Transaction[Action]
+	Message string `json:"message"`
+}
+
 const (
 	GameStatusRunning GameStatus = "running"
 	GameStatusIdle    GameStatus = "idle"
@@ -29,10 +34,10 @@ const (
  * Game is the main state container state for a game instance
  */
 type Game struct {
-	Status            GameStatus           `json:"status"`
-	Turn              Turn                 `json:"turn"`
-	ActiveTransaction *Transaction[Action] `json:"active_transaction"`
-	Players           []Player             `json:"players"`
+	Status            GameStatus             `json:"status"`
+	Turn              Turn                   `json:"turn"`
+	ActiveTransaction *GameActiveTransaction `json:"active_transaction"`
+	Players           []Player               `json:"players"`
 
 	state     GameState
 	Actors    []Actor                 `json:"actors"`
@@ -74,6 +79,13 @@ type Game struct {
 	 * [ActionRegistry]
 	 */
 	ActionRegistry map[uuid.UUID]Action
+}
+
+func MakeGameActiveTransaction(tx Transaction[Action]) *GameActiveTransaction {
+	return &GameActiveTransaction{
+		Transaction: tx,
+		Message:     "",
+	}
 }
 
 func NewLog(text string) GameLog {
@@ -301,6 +313,15 @@ func (g Game) GetQueuedAction(context Context) (Action, bool) {
 	}
 
 	return Action{}, false
+}
+func (g Game) FindQueuedAction(predicate func(Transaction[Action]) bool) (Transaction[Action], bool) {
+	for _, action := range g.Actions {
+		if predicate(action) {
+			return action, true
+		}
+	}
+
+	return Transaction[Action]{}, false
 }
 func (g Game) GetActiveAction() (Action, bool) {
 	if g.ActiveTransaction != nil {
@@ -678,13 +699,13 @@ func (g *Game) NextTurn() {
 }
 
 type GameJSON struct {
-	Status             GameStatus           `json:"status"`
-	Turn               Turn                 `json:"turn"`
-	ActiveTransaction  *Transaction[Action] `json:"active_transaction"`
-	Players            []Player             `json:"players"`
-	Actors             []ResolvedActor      `json:"actors"`
-	State              GameState            `json:"state"`
-	AppliedGameStateTx []uuid.UUID          `json:"applied_game_state_tx"`
+	Status             GameStatus             `json:"status"`
+	Turn               Turn                   `json:"turn"`
+	ActiveTransaction  *GameActiveTransaction `json:"active_transaction"`
+	Players            []Player               `json:"players"`
+	Actors             []ResolvedActor        `json:"actors"`
+	State              GameState              `json:"state"`
+	AppliedGameStateTx []uuid.UUID            `json:"applied_game_state_tx"`
 
 	Modifiers    []Transaction[Modifier]     `json:"modifiers"`
 	Transactions []Transaction[GameMutation] `json:"-"`

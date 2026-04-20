@@ -45,8 +45,8 @@ type ActionConfig struct {
 	TargetCount *int        `json:"target_count,omitempty"`
 	Jutsu       ActionJutsu `json:"jutsu"`
 	Description string      `json:"description"`
-	LogSuccessF *string     `json:"-"`
-	LogFailureF *string     `json:"-"`
+	LogSuccess  *string     `json:"-"`
+	LogFailure  *string     `json:"-"`
 }
 
 type ActionTargetType string
@@ -131,8 +131,8 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 		context.ActionID = &action.ID
 		logStart := NewLogContext("$source$ used $action$", context)
 		logFail := NewLogContext("$action$ failed.", context)
-		if action.Config.LogFailureF != nil {
-			logFail = NewLog(fmt.Sprintf(*action.Config.LogFailureF, action.Config.Name))
+		if action.Config.LogFailure != nil {
+			logFail = NewLogContext(*action.Config.LogFailure, context)
 		}
 
 		game.PushLog(logStart)
@@ -160,8 +160,8 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 			})
 		}
 		log := NewLogContext("$source$ used $action$", context)
-		if action.Config.LogSuccessF != nil {
-			log = NewLog(fmt.Sprintf(*action.Config.LogSuccessF, source.Name, action.Config.Name))
+		if action.Config.LogSuccess != nil {
+			log = NewLogContext(*action.Config.LogSuccess, context)
 		}
 		game.PushLog(log)
 	}
