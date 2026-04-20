@@ -23,7 +23,6 @@ type ActionJutsu string
 
 const (
 	Bukijutsu ActionJutsu = "bukijutsu"
-	Dojutsu   ActionJutsu = "dojutsu"
 	Fuinjutsu ActionJutsu = "fuinjutsu"
 	Genjutsu  ActionJutsu = "genjutsu"
 	Ninjutsu  ActionJutsu = "ninjutsu"

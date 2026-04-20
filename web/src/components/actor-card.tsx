@@ -116,7 +116,7 @@ function ActorCard({
       <div
         className={cn(
           is_player && 'cursor-pointer',
-          'group/item flex items-center rounded-md text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50 p-2 w-92'
+          'group/item flex items-center rounded-md text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50 px-2 pt-0 pb-3 w-92'
         )}
         {...rest}
       >
@@ -182,7 +182,7 @@ function ActorStages({ actor }: { actor: Actor | undefined }) {
   if (!actor) return null
 
   return (
-    <div className="absolute -bottom-1.5 flex gap-1 px-2">
+    <div className="absolute -bottom-2.5 flex gap-1 px-2">
       {Object.entries(actor.staged_stats)
         .filter(([key]) => key !== 'evasion' && key !== 'accuracy')
         .map(([key, stage]) => (

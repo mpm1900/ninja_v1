@@ -59,7 +59,7 @@ function PlayerPositions({
                 animate={{
                   y: 0,
                   opacity: 1,
-                  scale: is_selected || is_source ? 1.1 : 0.95,
+                  scale: is_selected || is_source ? 1.15 : 1,
                 }}
                 exit={{ y: 24 * coef, opacity: 0 }}
                 transition={{
