@@ -9,7 +9,7 @@ import (
 var FlameBullet = MakeFlameBullet()
 
 func MakeFlameBullet() game.Action {
-	ID := uuid.MustParse("aaf5174b-f386-54b1-84c4-0c062937c770")
+	ID := uuid.MustParse("46389f19-31f5-4814-b8ab-32a22be9258f")
 
 	config := game.ActionConfig{
 		Name:        "Flame Bullet",
@@ -26,5 +26,7 @@ func MakeFlameBullet() game.Action {
 		CritMod:     1.5,
 	}
 
-	return makeBasicAttack(ID, config)
+	action := makeBasicAttack(ID, config)
+	action.Priority = game.ActionPriorityP1
+	return action
 }

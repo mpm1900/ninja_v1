@@ -23,6 +23,7 @@ import { useState, type ReactNode } from 'react'
 import { StatBadge } from './stat-badge'
 import { Checkbox } from './ui/checkbox'
 import { Button } from './ui/button'
+import { cn } from '#/lib/utils'
 
 const helper = createColumnHelper<Action>()
 const columns = [
@@ -119,6 +120,7 @@ function ActionsTable({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    enableRowPinning: true,
     enableRowSelection: total > Object.keys(rowSelection).length,
     onRowSelectionChange: (updater) => {
       onRowSelectionChange(functionalUpdate(updater, rowSelection))
@@ -127,7 +129,13 @@ function ActionsTable({
       setSorting(functionalUpdate(updater, sorting))
     },
     getRowId: (a) => a.ID,
+    keepPinnedRows: true,
     state: {
+      rowPinning: {
+        top: Object.entries(rowSelection)
+          .filter(([, selected]) => !!selected)
+          .map(([id]) => id),
+      },
       rowSelection,
       sorting,
     },
@@ -135,6 +143,29 @@ function ActionsTable({
       total,
     },
   })
+
+  const renderRow = (row: Row<Action>) => (
+    <Fragment key={row.id}>
+      <TableRow
+        className={cn(row.getIsPinned() && 'bg-muted/50')}
+        onClick={() => row.toggleSelected()}
+      >
+        {row.getVisibleCells().map((cell) => (
+          <TableCell
+            key={cell.id}
+            className={cell.column.id === 'description' ? 'w-full max-w-0' : ''}
+          >
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </TableCell>
+        ))}
+      </TableRow>
+      {subRow && row.getCanSelect() && row.getIsSelected() && (
+        <tr>
+          <td colSpan={row.getAllCells().length}>{subRow({ row })}</td>
+        </tr>
+      )}
+    </Fragment>
+  )
 
   return (
     <Table>
@@ -157,25 +188,8 @@ function ActionsTable({
         ))}
       </TableHeader>
       <TableBody>
-        {table.getRowModel().rows.map((row) => (
-          <Fragment key={row.id}>
-            <TableRow onClick={() => row.toggleSelected()}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell
-                  key={cell.id}
-                  className={cell.column.id === 'description' ? 'w-full max-w-0' : ''}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-            {subRow && row.getCanSelect() && row.getIsSelected() && (
-              <tr>
-                <td colSpan={row.getAllCells().length}>{subRow({ row })}</td>
-              </tr>
-            )}
-          </Fragment>
-        ))}
+        {table.getTopRows().map(renderRow)}
+        {table.getCenterRows().map(renderRow)}
       </TableBody>
     </Table>
   )

@@ -6,20 +6,20 @@ import (
 	"github.com/google/uuid"
 )
 
-var HeavyPunch = MakeHeavyPunch()
+var ChidoriSpear = MakeChidoriSpear()
 
-func MakeHeavyPunch() game.Action {
-	ID := uuid.MustParse("420bad58-1238-4124-909e-09ef76d743e8")
+func MakeChidoriSpear() game.Action {
+	ID := uuid.MustParse("d55c8221-fc03-4ae0-9737-cb5c7db88f73")
+
 	config := game.ActionConfig{
-		Name:        "Heavy Punch",
-		Description: "30% chance to paralyze the target.",
-		Nature:      game.Ptr(game.NsTai),
+		Name:        "Chidori Spear",
+		Description: "20% chance to paralyze the target.",
+		Nature:      game.Ptr(game.NsLightning),
 		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(80),
-		Stat:        game.Ptr(game.StatAttack),
+		Power:       game.Ptr(85),
+		Stat:        game.Ptr(game.StatChakraAttack),
+		Cost:        game.Ptr(50),
 		TargetCount: game.Ptr(1),
-		Cost:        game.Ptr(0),
-		Cooldown:    game.Ptr(0),
 		Jutsu:       game.Ninjutsu,
 		CritChance:  game.Ptr(5),
 		CritMod:     1.5,
@@ -28,7 +28,7 @@ func MakeHeavyPunch() game.Action {
 	return makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
 		targets := g.GetTargets(context)
 		for _, target := range targets {
-			transactions = append(transactions, chanceParalysis(config, target, 30)...)
+			transactions = append(transactions, chanceParalysis(config, target, 20)...)
 		}
 
 		return transactions

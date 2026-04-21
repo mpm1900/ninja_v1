@@ -38,6 +38,9 @@ var Sasuke = game.ActorDef{
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Chidori.ID,
+		actions.ChidoriSpear.ID,
+		actions.ChidoriStream.ID,
+		actions.Kirin.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
 		actions.GreatFireball.ID,

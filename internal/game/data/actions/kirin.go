@@ -6,22 +6,22 @@ import (
 	"github.com/google/uuid"
 )
 
-var HeavyPunch = MakeHeavyPunch()
+var Kirin = MakeKirin()
 
-func MakeHeavyPunch() game.Action {
-	ID := uuid.MustParse("420bad58-1238-4124-909e-09ef76d743e8")
+func MakeKirin() game.Action {
+	ID := uuid.MustParse("d55c8221-fc03-4ae0-9737-cb5c7db88f73")
+
 	config := game.ActionConfig{
-		Name:        "Heavy Punch",
-		Description: "30% chance to paralyze the target.",
-		Nature:      game.Ptr(game.NsTai),
-		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(80),
-		Stat:        game.Ptr(game.StatAttack),
+		Name:        "Kirin",
+		Description: "30% chance to paralyze the target. Always crits.",
+		Nature:      game.Ptr(game.NsLightning),
+		Accuracy:    game.Ptr(70),
+		Power:       game.Ptr(100),
+		Stat:        game.Ptr(game.StatChakraAttack),
+		Cost:        game.Ptr(50),
 		TargetCount: game.Ptr(1),
-		Cost:        game.Ptr(0),
-		Cooldown:    game.Ptr(0),
 		Jutsu:       game.Ninjutsu,
-		CritChance:  game.Ptr(5),
+		CritChance:  game.Ptr(100),
 		CritMod:     1.5,
 	}
 

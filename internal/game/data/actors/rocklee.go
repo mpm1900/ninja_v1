@@ -36,5 +36,6 @@ var RockLee = game.ActorDef{
 		actions.DragonDance.ID,
 		actions.LeafJab.ID,
 		actions.HeavyPunch.ID,
+		actions.Asakujaku.ID,
 	},
 }

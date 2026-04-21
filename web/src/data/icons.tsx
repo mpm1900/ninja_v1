@@ -16,6 +16,7 @@ import {
   GiHandheldFan,
   GiSandstorm,
   GiHealthIncrease,
+  GiWaterRecycling,
 } from 'react-icons/gi'
 import { PiCaretDoubleUpDuotone, PiOnigiriFill } from 'react-icons/pi'
 import type { IconType } from 'react-icons/lib'
@@ -136,6 +137,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   stunned: GiStarSwirl,
   taunted: Anger,
   uchiha_fan: GiHandheldFan,
+  water_absorb: GiWaterRecycling
 }
 
 export { Akatsuki, SHINOBI_ICONS, MODIFIER_ICONS }

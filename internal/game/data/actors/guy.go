@@ -41,7 +41,7 @@ var Guy = game.ActorDef{
 		actions.LuckyStrikes.ID,
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
-		actions.Fireball.ID,
+		actions.Asakujaku.ID,
 		actions.LeafJab.ID,
 		actions.HeavyPunch.ID,
 	},

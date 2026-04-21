@@ -13,7 +13,7 @@ func MakePhoenixFlower() game.Action {
 	config := game.ActionConfig{
 		Name:        "Phoenix Flower",
 		Description: "Hits up-to 6 times. High critical chance.",
-		Accuracy:    game.Ptr(85),
+		Accuracy:    game.Ptr(90),
 		Power:       game.Ptr(20),
 		Stat:        game.Ptr(game.StatAttack),
 		Nature:      game.Ptr(game.NsFire),

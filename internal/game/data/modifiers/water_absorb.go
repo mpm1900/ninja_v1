@@ -11,6 +11,7 @@ var waterAbsorbID = uuid.MustParse("ebc37353-4eff-5b89-b7f5-361849f2028b")
 var WaterAbsorb game.Modifier = game.Modifier{
 	ID:          waterAbsorbID,
 	Name:        "Water Absorb",
+	Icon:        "water_absorb",
 	Description: "Water damage heals this shinobi.",
 	Show:        true,
 	GroupID:     &waterAbsorbID,

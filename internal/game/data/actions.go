@@ -8,12 +8,14 @@ import (
 )
 
 var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
+	// SYSTEM
 	game.Switch.ID:       game.Switch,
 	game.SwitchInIds[1]:  game.SwitchIn(1),
 	game.SwitchInIds[2]:  game.SwitchIn(2),
 	game.Struggle.ID:     game.Struggle,
 	game.CancelSummon.ID: game.CancelSummon,
 
+	// SUMMONS
 	actions.ShadowClone.ID:     actions.ShadowClone,
 	actions.SummonGamabunta.ID: actions.SummonGamabunta,
 
@@ -26,13 +28,12 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.MirageCrow.ID:      actions.MirageCrow,
 	actions.Sekiryoku.ID:       actions.Sekiryoku,
 
-	actions.HiddenMist.ID:      actions.HiddenMist,
-	actions.Surf.ID:            actions.Surf,
-	actions.LuckyStrikes.ID:    actions.LuckyStrikes,
-	actions.GreatTreeSpear.ID:  actions.GreatTreeSpear,
-	actions.C0UltimateArt.ID:   actions.C0UltimateArt,
-	actions.C1Bird.ID:          actions.C1Bird,
-	actions.SearingMigraine.ID: actions.SearingMigraine,
+	actions.HiddenMist.ID:     actions.HiddenMist,
+	actions.Surf.ID:           actions.Surf,
+	actions.LuckyStrikes.ID:   actions.LuckyStrikes,
+	actions.GreatTreeSpear.ID: actions.GreatTreeSpear,
+	actions.C0UltimateArt.ID:  actions.C0UltimateArt,
+	actions.C1Bird.ID:         actions.C1Bird,
 
 	actions.GiantRasengan.ID:    actions.GiantRasengan,
 	actions.Rasengan.ID:         actions.Rasengan,
@@ -44,14 +45,21 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.LeafJab.ID:     actions.LeafJab,
 	actions.DragonDance.ID: actions.DragonDance,
 
+	// FIRE ATTACKS
 	actions.Fireball.ID:              actions.Fireball,
 	actions.GreatFireball.ID:         actions.GreatFireball,
 	actions.FlameBullet.ID:           actions.FlameBullet,
 	actions.PhoenixFlower.ID:         actions.PhoenixFlower,
 	actions.DragonFire.ID:            actions.DragonFire,
+	actions.SearingMigraine.ID:       actions.SearingMigraine,
 	actions.GreatFireAnnihilation.ID: actions.GreatFireAnnihilation,
+	actions.Asakujaku.ID:             actions.Asakujaku,
 
-	actions.Chidori.ID:          actions.Chidori,
+	actions.Chidori.ID:       actions.Chidori,
+	actions.ChidoriSpear.ID:  actions.ChidoriSpear,
+	actions.ChidoriStream.ID: actions.ChidoriStream,
+	actions.Kirin.ID:         actions.Kirin,
+
 	actions.Curse.ID:            actions.Curse,
 	actions.Recover.ID:          actions.Recover,
 	actions.LeechSeed.ID:        actions.LeechSeed,

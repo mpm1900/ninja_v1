@@ -6,21 +6,21 @@ import (
 	"github.com/google/uuid"
 )
 
-var GreatFireAnnihilation = MakeGreatFireAnnihilation()
+var ChidoriStream = MakeChidoriStream()
 
-func MakeGreatFireAnnihilation() game.Action {
-	ID := uuid.MustParse("d97ee3bb-7afa-47de-9f8d-2ee77ba6dfe6")
+func MakeChidoriStream() game.Action {
+	ID := uuid.MustParse("8973e59d-dc43-4eac-99e2-68e6ca114aa9")
 
 	config := game.ActionConfig{
-		Name:        "Great Fire Annihilation",
-		Description: "Hits all enemy shinobi. 20% chance to burn targets.",
-		Nature:      game.Ptr(game.NsFire),
+		Name:        "Chidori Stream",
+		Description: "Hits all enemy shinobi. 20% chance to paralyze targets.",
+		Nature:      game.Ptr(game.NsLightning),
 		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(90),
+		Power:       game.Ptr(80),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(0),
 		Cost:        game.Ptr(30),
-		Cooldown:    game.Ptr(2),
+		Cooldown:    game.Ptr(0),
 		Jutsu:       game.Ninjutsu,
 		CritChance:  game.Ptr(5),
 		CritMod:     1.5,
@@ -29,7 +29,7 @@ func MakeGreatFireAnnihilation() game.Action {
 	action := makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
 		targets := g.GetTargets(context)
 		for _, target := range targets {
-			transactions = append(transactions, chanceBurn(config, target, 20)...)
+			transactions = append(transactions, chanceParalysis(config, target, 20)...)
 		}
 
 		return transactions
