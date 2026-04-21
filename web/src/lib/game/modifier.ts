@@ -5,6 +5,7 @@ type Modifier = {
   group_ID: string
   name: string
   description: string
+  parent_description: string
   duration: number | null
   icon?: string
   show: boolean

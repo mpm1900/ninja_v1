@@ -7,9 +7,11 @@ function ModifierTooltip({
   modifier,
   contentProps = {},
   children,
+  description,
   ...triggerProps
 }: Omit<React.ComponentProps<typeof TooltipTrigger>, 'asChild'> & {
   modifier: Modifier
+  description?: (modifier: Modifier) => string
   contentProps?: React.ComponentProps<typeof TooltipContent>
 }) {
   const {
@@ -43,7 +45,7 @@ function ModifierTooltip({
           )}
         </div>
         <div className="text-muted-foreground text-xs w-full break-words">
-          {modifier.description}
+          {description ? description(modifier) : modifier.description}
         </div>
       </TooltipContent>
     </Tooltip>

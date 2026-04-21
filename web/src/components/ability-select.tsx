@@ -34,6 +34,7 @@ function AbilitySelect({
                   key={ability.ID}
                   modifier={ability}
                   contentProps={{ side: 'right' }}
+                  description={m => m.parent_description || m.description}
                 >
                   <SelectItem value={ability.ID}>{ability.name}</SelectItem>
                 </ModifierTooltip>
