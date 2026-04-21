@@ -6,17 +6,16 @@ import (
 	"github.com/google/uuid"
 )
 
-var Fireball = MakeFireball()
+var DragonFire = MakeDragonFire()
 
-func MakeFireball() game.Action {
-	ID := uuid.MustParse("aaf5174b-f386-54b1-84c4-0c062937c770")
+func MakeDragonFire() game.Action {
+	ID := uuid.MustParse("dca159df-75fb-4cf0-85c5-db69d987a029")
 
 	config := game.ActionConfig{
-		Name:        "Fireball",
-		Description: "10% chance to burn target.",
+		Name:        "Dragon Fire",
+		Description: "5% chance to burn target. Never Misses.",
 		Nature:      game.Ptr(game.NsFire),
-		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(70),
+		Power:       game.Ptr(80),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(0),
@@ -32,7 +31,7 @@ func MakeFireball() game.Action {
 		func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, chanceBurn(config, target, 10)...)
+				transactions = append(transactions, chanceBurn(config, target, 5)...)
 			}
 
 			return transactions

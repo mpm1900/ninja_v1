@@ -33,7 +33,7 @@ var Hashirama = game.ActorDef{
 		game.NsWood,
 	}),
 	Abilities: []game.Modifier{
-		modifiers.Regneration,
+		modifiers.Regeneration,
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{

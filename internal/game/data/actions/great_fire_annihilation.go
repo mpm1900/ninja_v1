@@ -1,8 +1,6 @@
 package actions
 
 import (
-	"fmt"
-	"math/rand"
 	"ninja_v1/internal/game"
 
 	"github.com/google/uuid"
@@ -15,31 +13,35 @@ func MakeGreatFireAnnihilation() game.Action {
 
 	config := game.ActionConfig{
 		Name:        "Great Fire Annihilation",
-		Description: "30% chance to burn target.",
+		Description: "Hits all enemy shinobi. 20% chance to burn target.",
 		Nature:      game.Ptr(game.NsFire),
 		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(100),
+		Power:       game.Ptr(90),
 		Stat:        game.Ptr(game.StatChakraAttack),
-		TargetCount: game.Ptr(1),
+		TargetCount: game.Ptr(0),
 		Cost:        game.Ptr(30),
-		Cooldown:    game.Ptr(1),
+		Cooldown:    game.Ptr(2),
 		Jutsu:       game.Ninjutsu,
 		CritChance:  game.Ptr(5),
 		CritMod:     1.5,
 	}
 
-	return makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
+	action := makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
 		targets := g.GetTargets(context)
 		for _, target := range targets {
-			// on 30% chance
-			roll := rand.Intn(100)
-			if roll > 30 {
-				continue
-			}
-			fmt.Println("BURN! roll=", roll)
-			transactions = append(transactions, applyBurn(config, target)...)
+			transactions = append(transactions, chanceBurn(config, target, 20)...)
 		}
 
 		return transactions
 	}, nil)
+	action.TargetPredicate = game.NoneFilter
+	action.MapContext = func(g game.Game, context game.Context) game.Context {
+		other_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherTeamFilter))
+		for _, t := range other_actors {
+			context.TargetPositionIDs = append(context.TargetPositionIDs, *t.PositionID)
+		}
+		return context
+	}
+
+	return action
 }

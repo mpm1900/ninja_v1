@@ -13,11 +13,10 @@ func MakeAmaterasu() game.Action {
 
 	config := game.ActionConfig{
 		Name:        "Amaterasu",
-		Description: "Burns target.",
+		Description: "Burns target. Never misses.",
 		Nature:      game.Ptr(game.NsYin),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(1),
-		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(20),
 		Cost:        game.Ptr(30),
 		Jutsu:       game.Genjutsu,

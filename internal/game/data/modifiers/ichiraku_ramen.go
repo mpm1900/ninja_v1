@@ -34,7 +34,7 @@ var IchirakuRamen game.Modifier = game.Modifier{
 	GroupID:     &ichirakuRamenID,
 	Icon:        "ichiraku_ramen",
 	Name:        "Ichiraku Ramen",
-	Description: "End of turn: heal 1/16 HP.",
+	Description: "End of turn: heal 1/16th HP.",
 	Show:        true,
 	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{

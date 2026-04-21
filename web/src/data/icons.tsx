@@ -14,13 +14,15 @@ import {
   GiMinotaur,
   GiNightSleep,
   GiHandheldFan,
+  GiSandstorm,
+  GiHealthIncrease,
 } from 'react-icons/gi'
 import { PiCaretDoubleUpDuotone, PiOnigiriFill } from 'react-icons/pi'
 import type { IconType } from 'react-icons/lib'
-import { WiSandstorm } from 'react-icons/wi'
 import { MdFileUploadOff } from 'react-icons/md'
 import { GrFastForward } from 'react-icons/gr'
 import { TbTagPlus } from 'react-icons/tb'
+import { HiScale } from 'react-icons/hi2'
 
 const Aburame: IconType = (props) => (
   <img src="/icons/aburame.svg" alt="aburame" {...(props as any)} />
@@ -110,6 +112,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   fast_thinking: GrFastForward,
   gedo_shard: GiTopaz,
   guts: GiMinotaur,
+  haze: HiScale,
   healing_tactics: GiHealing,
   ichiraku_ramen: GiNoodles,
   intimidate: GiBeastEye,
@@ -119,7 +122,8 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   ),
   priority_failure: MdFileUploadOff,
   protected: GiShieldcomb,
-  sand_aura: WiSandstorm,
+  regeneration: GiHealthIncrease,
+  sand_aura: GiSandstorm,
   seal_up: TbTagPlus,
   shinobi_vest: GiKevlarVest,
   sleeping: GiNightSleep,

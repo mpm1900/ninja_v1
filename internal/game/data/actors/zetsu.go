@@ -32,7 +32,7 @@ var Zetsu = game.ActorDef{
 		game.NsYang,
 	}),
 	Abilities: []game.Modifier{
-		modifiers.Regneration,
+		modifiers.Regeneration,
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{

@@ -35,6 +35,8 @@ var Hiruzen = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.Haze.ID,
 		actions.Fireball.ID,
+		actions.GreatFireball.ID,
+		actions.DragonFire.ID,
 		actions.LeafJab.ID,
 		actions.ReaperDeathSeal.ID,
 	},

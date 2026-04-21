@@ -6,10 +6,10 @@ import (
 	"github.com/google/uuid"
 )
 
-var regnerationID = uuid.MustParse("23d1b13b-4ad6-464e-a005-936cbc121ae1")
-var RegnerationTrigger game.Trigger = game.Trigger{
+var regenerationID = uuid.MustParse("23d1b13b-4ad6-464e-a005-936cbc121ae1")
+var RegenerationTrigger game.Trigger = game.Trigger{
 	ID:         uuid.New(),
-	ModifierID: regnerationID,
+	ModifierID: regenerationID,
 	On:         game.OnActorLeave,
 	Check:      game.Match__SourceActor_SourceActor,
 	ActionMutation: game.ActionMutation{
@@ -32,17 +32,18 @@ var RegnerationTrigger game.Trigger = game.Trigger{
 	},
 }
 
-var Regneration game.Modifier = game.Modifier{
-	ID:          regnerationID,
-	GroupID:     &regnerationID,
-	Name:        "Regneration",
+var Regeneration game.Modifier = game.Modifier{
+	ID:          regenerationID,
+	GroupID:     &regenerationID,
+	Icon:        "regeneration",
+	Name:        "Regeneration",
 	Description: "On exit: heal for 1/4th HP.",
 	Show:        true,
 	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
-		game.NewNoopSource(&regnerationID),
+		game.NewNoopSource(&regenerationID),
 	},
 	Triggers: []game.Trigger{
-		RegnerationTrigger,
+		RegenerationTrigger,
 	},
 }
