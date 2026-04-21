@@ -87,8 +87,9 @@ function ActionCard({
       </div>
 
       <div className="flex *:flex-1 text-[11px] border-t border-b bg-white shadow-md z-2">
+        <StatChip label='Acc' value={accuracyLabel} />
         <StatChip label="Power" value={action.config.power ?? '-'} />
-        <StatChip label={'Acc'} value={accuracyLabel} />
+        <StatChip label="Priority" value={action.priority || '-'} />
       </div>
       <div
         className={`flex-1 px-3 py-2 text-xs text-black font-bold rounded-b-md bg-[url('/paper.jpg')] relative`}

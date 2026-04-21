@@ -29,7 +29,7 @@ func MakeHiddenMist() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				for _, tx := range g.Modifiers {
+				for _, tx := range g.GetModifiers() {
 					if tx.Context.SourcePlayerID == nil {
 						continue
 					}
@@ -42,10 +42,10 @@ func MakeHiddenMist() game.Action {
 
 				}
 
-				su := modifiers.HiddenMist
-				su.Duration = 5
-				modifiers := []game.Modifier{su}
-				mutation := mutations.AddModifiers(false, modifiers...)
+				mod := modifiers.HiddenMist
+				mod.Show = true
+				mod.Duration = 5
+				mutation := mutations.AddModifiers(false, mod)
 				context.ParentActorID = nil
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)

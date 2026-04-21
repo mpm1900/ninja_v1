@@ -38,6 +38,6 @@ var Sakura = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.Haze.ID,
 		actions.Fireball.ID,
-		actions.LeafJab.ID,
+		actions.HeavyPunch.ID,
 	},
 }

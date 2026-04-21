@@ -39,10 +39,11 @@ var Hashirama = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.BodyReplacement.ID,
 		actions.Tailwind.ID,
-		//actions.LeechSeed.ID,
+		actions.LeechSeed.ID,
 		actions.Haze.ID,
-		//actions.GreatTreeSpear.ID,
-		//actions.LeafJab.ID,
+		actions.GreatTreeSpear.ID,
+		actions.LeafJab.ID,
 		actions.ShadowClone.ID,
+		actions.HeavyPunch.ID,
 	},
 }

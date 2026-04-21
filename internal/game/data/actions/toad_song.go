@@ -42,10 +42,9 @@ func MakeToadSong() game.Action {
 					}
 				}
 
-				su := modifiers.ToadSong
-				su.Duration = 5
-				modifiers := []game.Modifier{su}
-				mutation := mutations.AddModifiers(false, modifiers...)
+				mod := modifiers.ToadSong
+				mod.Duration = 5
+				mutation := mutations.AddModifiers(false, mod)
 				context.ParentActorID = nil
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)
