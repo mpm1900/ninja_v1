@@ -81,4 +81,5 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.ReaperDeathSeal.ID:  actions.ReaperDeathSeal,
 	actions.PerishSong.ID:       actions.PerishSong,
 	actions.ShadowPossession.ID: actions.ShadowPossession,
+	actions.Revival.ID:          actions.Revival,
 }

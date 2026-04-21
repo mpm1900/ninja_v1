@@ -15,11 +15,11 @@ var PainNaraka = game.ActorDef{
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            65,
 		game.StatStamina:       95,
-		game.StatAttack:        115,
+		game.StatAttack:        110,
 		game.StatDefense:       90,
 		game.StatChakraAttack:  80,
 		game.StatChakraDefense: 90,
-		game.StatSpeed:         60,
+		game.StatSpeed:         45,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},
@@ -35,5 +35,6 @@ var PainNaraka = game.ActorDef{
 		actions.MindTransfer.ID,
 		actions.TempleOfNirvana.ID,
 		actions.Flash.ID,
+		actions.Revival.ID,
 	},
 }

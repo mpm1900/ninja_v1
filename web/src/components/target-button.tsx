@@ -47,6 +47,7 @@ function TargetButton({
         removeHoverTarget(actor.ID)
       }}
       onClick={() => {
+        console.log(targetType)
         if (targetType === 'target-actor-id') {
           onContextChange({
             ...context,

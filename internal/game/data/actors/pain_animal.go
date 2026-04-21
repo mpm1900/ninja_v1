@@ -9,7 +9,7 @@ import (
 
 var PainAnimal = game.ActorDef{
 	ActorID:      uuid.MustParse("f6ac5c74-c27b-4879-8fbb-e61699d6049a"),
-	SpriteURL:    "/sprites/pain_human_64.png",
+	SpriteURL:    "/sprites/pain_animal_64.png",
 	Name:         "Pain (Animal Path)",
 	Affiliations: []string{game.AffAkatsuki, game.AffAme},
 	Stats: map[game.ActorStat]int{
