@@ -2,7 +2,7 @@ package game
 
 import (
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 
 	"github.com/google/uuid"
 )
@@ -176,7 +176,7 @@ func GetAccuracy(game Game, source ResolvedActor, target ResolvedActor, ignoreMo
 }
 
 func MakeActionRoll() int {
-	return rand.Intn(100)
+	return rand.IntN(100)
 }
 
 type ChanceResult struct {

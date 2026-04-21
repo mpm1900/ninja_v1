@@ -259,7 +259,7 @@ func (e *damageHandler) applySingleHit(g *Game, target ResolvedActor, damage int
 	}
 
 	if e.config.Critical > 1.0 {
-		g.PushLog(NewLog(fmt.Sprintf("Critical Hit! (x%f)", e.config.Critical)))
+		g.PushLog(NewLog(fmt.Sprintf("| Critical Hit! (x%f)", e.config.Critical)))
 	}
 }
 func (e *damageHandler) queueRepeatHit(target ResolvedActor, damage int) {

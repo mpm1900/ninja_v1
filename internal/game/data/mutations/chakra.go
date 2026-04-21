@@ -1,7 +1,6 @@
 package mutations
 
 import (
-	"fmt"
 	"ninja_v1/internal/game"
 )
 
@@ -13,7 +12,6 @@ func UseStaminaSource(amount int) game.GameMutation {
 			}
 
 			g.UpdateActor(*context.SourceActorID, func(a game.Actor) game.Actor {
-				fmt.Printf("%d, %d\n", a.StaminaDamage, amount)
 				a.StaminaDamage += amount
 				return a
 			})

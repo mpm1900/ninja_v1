@@ -3,7 +3,7 @@ package game
 import (
 	"maps"
 	"math"
-	"math/rand"
+	"math/rand/v2"
 	"slices"
 
 	"github.com/google/uuid"
@@ -708,7 +708,7 @@ func (r ResolvedActor) CanAct(game *Game, context Context) bool {
 
 	if r.Paralyzed {
 		// check for 1/4 chance
-		roll := rand.Intn(100)
+		roll := rand.IntN(100)
 		if roll > 75 {
 			log := NewLogContext("$source$ could not move.", context)
 			game.PushLog(log)

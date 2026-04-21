@@ -2,7 +2,7 @@ package actions
 
 import (
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/modifiers"
 	"ninja_v1/internal/game/data/mutations"
@@ -86,7 +86,7 @@ func applyBurn(config game.ActionConfig, actor game.Actor) []game.GameTransactio
 	return applyStatus(config, actor, modifiers.Burned, mutations.Burn)
 }
 func chanceBurn(config game.ActionConfig, actor game.Actor, chance int) []game.GameTransaction {
-	roll := rand.Intn(100)
+	roll := rand.IntN(100)
 	if roll > chance {
 		return []game.GameTransaction{}
 	}
@@ -98,7 +98,7 @@ func applyParalysis(config game.ActionConfig, actor game.Actor) []game.GameTrans
 	return applyStatus(config, actor, modifiers.Paralysis, mutations.Paralyze)
 }
 func chanceParalysis(config game.ActionConfig, actor game.Actor, chance int) []game.GameTransaction {
-	roll := rand.Intn(100)
+	roll := rand.IntN(100)
 	if roll > chance {
 		return []game.GameTransaction{}
 	}

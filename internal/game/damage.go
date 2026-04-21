@@ -3,7 +3,7 @@ package game
 import (
 	"fmt"
 	"maps"
-	"math/rand"
+	"math/rand/v2"
 	"slices"
 )
 
@@ -42,7 +42,7 @@ func NewDamageConfig(critical float64, random float64) DamageConfig {
 }
 
 func RandomDamageFactor() float64 {
-	roll := rand.Intn(15) + 89
+	roll := rand.IntN(15) + 89
 	value := float64(roll) / 100.0
 	fmt.Println("random: ", value)
 	return value

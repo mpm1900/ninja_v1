@@ -1,7 +1,7 @@
 package mutations
 
 import (
-	"math/rand"
+	"math/rand/v2"
 	"ninja_v1/internal/game"
 )
 
@@ -19,7 +19,7 @@ var Sleep = game.GameMutation{
 					return a
 				}
 
-				a.SleepCounter = rand.Intn(3) + 1
+				a.SleepCounter = rand.IntN(3) + 1
 				a.Sleeping = true
 				a.Statused = true
 
