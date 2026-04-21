@@ -46,6 +46,7 @@ var SealOfMindProtectionTrigger game.Trigger = game.Trigger{
 var SealOfMindProtection game.Modifier = game.Modifier{
 	ID:          sompID,
 	GroupID:     &sompID,
+	Icon:        "seal_up",
 	Name:        "Seal of Mind Protection",
 	Description: "On mental debuff: remove it and break this seal.",
 	Show:        true,

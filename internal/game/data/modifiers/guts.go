@@ -17,6 +17,7 @@ func makeGutsMutation() game.ActorMutation {
 var Guts game.Modifier = game.Modifier{
 	ID:          gutsID,
 	GroupID:     &gutsID,
+	Icon:        "guts",
 	Name:        "Guts",
 	Description: "Status conditions increase Attack by 50%.",
 	Show:        true,

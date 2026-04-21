@@ -1,5 +1,6 @@
 import { cn } from '#/lib/utils'
 import {
+  GiComa,
   GiFlamer,
   GiLightningTrio,
   GiShieldcomb,
@@ -9,10 +10,17 @@ import {
   GiDoubled,
   GiBeastEye,
   GiHealing,
+  GiTopaz,
+  GiMinotaur,
+  GiNightSleep,
+  GiHandheldFan,
 } from 'react-icons/gi'
-import { PiCaretDoubleUpDuotone } from "react-icons/pi";
+import { PiCaretDoubleUpDuotone, PiOnigiriFill } from 'react-icons/pi'
 import type { IconType } from 'react-icons/lib'
-import { WiSandstorm } from "react-icons/wi";
+import { WiSandstorm } from 'react-icons/wi'
+import { MdFileUploadOff } from 'react-icons/md'
+import { GrFastForward } from 'react-icons/gr'
+import { TbTagPlus } from 'react-icons/tb'
 
 const Aburame: IconType = (props) => (
   <img src="/icons/aburame.svg" alt="aburame" {...(props as any)} />
@@ -89,29 +97,41 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   burned: ({ className, ...props }) => (
     <GiFlamer className={cn('text-orange-400', className)} {...props} />
   ),
-  paralyzed: ({ className, ...props }) => (
-    <GiLightningTrio className={cn('text-yellow-400', className)} {...props} />
-  ),
-  protected: GiShieldcomb,
-  stunned: GiStarSwirl,
-  taunted: Anger,
-  ichiraku_ramen: GiNoodles,
-  shinobi_vest: GiKevlarVest,
-  cmo_strength: ({ className, ...props }) => (
-    <GiDoubled className={cn('text-orange-300', className)} {...props} />
-  ),
+  coerced: GiComa,
   cmo_chakra: ({ className, ...props }) => (
     <GiDoubled className={cn('text-indigo-400', className)} {...props} />
   ),
   cmo_speed: ({ className, ...props }) => (
     <GiDoubled className={cn('text-emerald-300', className)} {...props} />
   ),
-  speed_up: ({ className, ...props }) => (
-    <PiCaretDoubleUpDuotone className={cn('text-emerald-400', className)} {...props} />
+  cmo_strength: ({ className, ...props }) => (
+    <GiDoubled className={cn('text-orange-300', className)} {...props} />
   ),
-  sand_aura: WiSandstorm,
-  intimidate: GiBeastEye,
+  fast_thinking: GrFastForward,
+  gedo_shard: GiTopaz,
+  guts: GiMinotaur,
   healing_tactics: GiHealing,
+  ichiraku_ramen: GiNoodles,
+  intimidate: GiBeastEye,
+  onigiri: PiOnigiriFill,
+  paralyzed: ({ className, ...props }) => (
+    <GiLightningTrio className={cn('text-yellow-400', className)} {...props} />
+  ),
+  priority_failure: MdFileUploadOff,
+  protected: GiShieldcomb,
+  sand_aura: WiSandstorm,
+  seal_up: TbTagPlus,
+  shinobi_vest: GiKevlarVest,
+  sleeping: GiNightSleep,
+  speed_up: ({ className, ...props }) => (
+    <PiCaretDoubleUpDuotone
+      className={cn('text-emerald-400', className)}
+      {...props}
+    />
+  ),
+  stunned: GiStarSwirl,
+  taunted: Anger,
+  uchiha_fan: GiHandheldFan,
 }
 
 export { Akatsuki, SHINOBI_ICONS, MODIFIER_ICONS }

@@ -35,6 +35,7 @@ var SealOfImmortalityTrigger game.Trigger = game.Trigger{
 var SealOfImmortality game.Modifier = game.Modifier{
 	ID:          sealOfImmortalityID,
 	GroupID:     &sealOfImmortalityID,
+	Icon:        "seal_up",
 	Name:        "Seal of Immortality",
 	Description: "Full HP only: survive lethal damage once.",
 	Show:        true,

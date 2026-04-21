@@ -9,10 +9,11 @@ import (
 var priorityFailureID = uuid.MustParse("7fdf20ca-b003-5082-8980-a0c6990169d0")
 var PriorityFailure = game.Modifier{
 	ID:          priorityFailureID,
-	Name:        "Priority Failure",
-	Description: "Enemy priority actions are disabled.",
-	Show:        true,
 	GroupID:     &priorityFailureID,
+	Icon:        "priority_failure",
+	Name:        "Priority Failure",
+	Description: "Priority actions are disabled.",
+	Show:        true,
 	Duration:    0,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(

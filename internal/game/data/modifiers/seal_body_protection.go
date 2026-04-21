@@ -50,6 +50,7 @@ var SealOfBodyProtectionTrigger game.Trigger = game.Trigger{
 var SealOfBodyProtection game.Modifier = game.Modifier{
 	ID:          sobpID,
 	GroupID:     &sobpID,
+	Icon:        "seal_up",
 	Name:        "Seal of Body Protection",
 	Description: "On stat drop: remove it and break this seal.",
 	Show:        true,

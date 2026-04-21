@@ -38,6 +38,7 @@ var OnigiriIDTrigger game.Trigger = game.Trigger{
 var Onigiri game.Modifier = game.Modifier{
 	ID:          onigiriID,
 	GroupID:     &onigiriID,
+	Icon:        "onigiri",
 	Name:        "Onigiri",
 	Description: "HP <=50%: heal 1/4th HP.",
 	Show:        true,

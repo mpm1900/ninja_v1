@@ -20,6 +20,7 @@ var HealingTacticsTrigger game.Trigger = game.Trigger{
 			targets := g.GetActorsFilters(context, game.ComposeAF(
 				game.ActiveFilter,
 				game.AliveFilter,
+				game.OtherFilter,
 				game.TeamFilter,
 			))
 
