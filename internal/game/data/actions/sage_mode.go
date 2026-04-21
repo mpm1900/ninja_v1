@@ -30,19 +30,13 @@ func MakeSageMode() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				for _, tx := range g.Modifiers {
-					if tx.Context.SourcePlayerID == nil {
-						continue
-					}
-
-					if *tx.Context.SourcePlayerID == *context.SourcePlayerID && tx.Mutation.ID == modifiers.ToadSong.ID {
-						log := game.NewLogContext("$action$ failed.", context)
-						log_tx := game.MakeTransaction(game.AddLogs(log), context)
-						return append(transactions, log_tx)
-					}
+				if checkPlayerHasModifier(g, context, modifiers.SageMode.ID) {
+					log := game.NewLogContext("$action$ failed.", context)
+					log_tx := game.MakeTransaction(game.AddLogs(log), context)
+					return append(transactions, log_tx)
 				}
 
-				mod := modifiers.ToadSong
+				mod := modifiers.SageMode
 				mod.Duration = 5
 				mutation := mutations.AddModifiers(false, mod)
 				context.ParentActorID = nil

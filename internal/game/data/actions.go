@@ -19,6 +19,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.ShadowClone.ID:     actions.ShadowClone,
 	actions.SummonGamabunta.ID: actions.SummonGamabunta,
 
+	actions.SummonAlly.ID:      actions.SummonAlly,
 	actions.Distraction.ID:     actions.Distraction,
 	actions.Taunt.ID:           actions.Taunt,
 	actions.BodyReplacement.ID: actions.BodyReplacement,

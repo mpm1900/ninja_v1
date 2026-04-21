@@ -39,5 +39,6 @@ var Hiruzen = game.ActorDef{
 		actions.DragonFire.ID,
 		actions.LeafJab.ID,
 		actions.ReaperDeathSeal.ID,
+		actions.SummonAlly.ID,
 	},
 }

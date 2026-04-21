@@ -144,3 +144,18 @@ func applySummon(context game.Context, def game.ActorDef, actions []game.Action)
 
 	return transactions
 }
+
+func checkPlayerHasModifier(g game.Game, context game.Context, modifierID uuid.UUID) bool {
+	for _, tx := range g.GetModifiers() {
+		if tx.Context.SourcePlayerID == nil {
+			continue
+		}
+
+		if *tx.Context.SourcePlayerID == *context.SourcePlayerID && tx.Mutation.ID == modifierID {
+			return true
+		}
+
+	}
+
+	return false
+}

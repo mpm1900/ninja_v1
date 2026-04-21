@@ -24,7 +24,35 @@ func NewStageDelta(
 	)
 
 	return game.Modifier{
-		ID:       uuid.MustParse("a27a82f5-2a33-5113-82a6-8821edfaa999"),
+		ID:       uuid.New(),
+		GroupID:  groupID,
+		Duration: game.ModifierDurationInf,
+		ActorMutations: []game.ActorMutation{
+			mut,
+		},
+	}
+}
+
+func NewStageDeltaFromMap(
+	stages map[game.ActorStat]int,
+	groupID *uuid.UUID,
+	filter func(game.Game, game.Actor, game.Context) bool,
+	priority int,
+) game.Modifier {
+	mut := game.MakeActorMutation(
+		groupID,
+		priority,
+		filter,
+		func(g game.Game, actor game.Actor, context game.Context) game.Actor {
+			for stat, delta := range stages {
+				actor.Stages[stat] = actor.Stages[stat] + delta
+			}
+			return actor
+		},
+	)
+
+	return game.Modifier{
+		ID:       uuid.New(),
 		GroupID:  groupID,
 		Duration: game.ModifierDurationInf,
 		ActorMutations: []game.ActorMutation{
@@ -169,8 +197,8 @@ var AccuracyUpTarget = MakeStatDeltaTargetWithShow(game.StatAccuracy, &AccuracyU
 var TailwindID = uuid.MustParse("cd2010e6-90d8-530f-be90-79634690e33d")
 var Tailwind = MakeStatMultTeam(game.StatSpeed, "Tailwind", &TailwindID, 2.0, game.MutPriorityPostStagedStats)
 
-var ToadSongID = uuid.MustParse("764b5ee9-9136-5994-b598-40c3881e79dc")
-var ToadSong = MakeStatMultTeam(game.StatSpeed, "Toad Song", &ToadSongID, -1, game.MutPriorityPostSet)
+var SageModeID = uuid.MustParse("764b5ee9-9136-5994-b598-40c3881e79dc")
+var SageMode = MakeStatMultTeam(game.StatSpeed, "Sage Mode", &SageModeID, -1, game.MutPriorityPostSet)
 
 var HiddenMistID = uuid.MustParse("2d007fb7-270b-492c-b114-f752f9c7a17a")
 var HiddenMist = MakeStatDeltaOtherTeam(game.StatAccuracy, "Hidden Mist", &HiddenMistID, -2)

@@ -41,5 +41,6 @@ var Yamato = game.ActorDef{
 		actions.Fireball.ID,
 		actions.LeafJab.ID,
 		actions.GreatTreeSpear.ID,
+		actions.SummonAlly.ID,
 	},
 }
