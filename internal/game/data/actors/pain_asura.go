@@ -3,26 +3,23 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
-	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
 
-var Pain = game.ActorDef{
-	ActorID:      uuid.MustParse("f344914c-26d5-5e7b-8673-ad73d5b8f334"),
-	SpriteURL:    "/sprites/pain_64.png",
-	Name:         "Pain",
-	Clan:         game.ClanUzumaki,
+var PainAsura = game.ActorDef{
+	ActorID:      uuid.MustParse("333051db-f9be-4d81-8520-e3553d509142"),
+	SpriteURL:    "/sprites/pain_asura_64.png",
+	Name:         "Pain (Asura Path)",
 	Affiliations: []string{game.AffAkatsuki, game.AffAme},
-
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            106,
-		game.StatStamina:       120,
-		game.StatAttack:        90,
-		game.StatDefense:       100,
-		game.StatChakraAttack:  130,
-		game.StatChakraDefense: 144,
-		game.StatSpeed:         100,
+		game.StatHP:            65,
+		game.StatStamina:       75,
+		game.StatAttack:        125,
+		game.StatDefense:       70,
+		game.StatChakraAttack:  125,
+		game.StatChakraDefense: 70,
+		game.StatSpeed:         115,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},
@@ -31,17 +28,12 @@ var Pain = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsYinYang,
 	}),
-	Abilities: []game.Modifier{
-		modifiers.VesselOfPain,
-		modifiers.SpeedBoost,
-		modifiers.Raincaller,
-	},
+	Abilities:   []game.Modifier{},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Sekiryoku.ID,
 		actions.BodyReplacement.ID,
 		actions.Tailwind.ID,
 		actions.MindTransfer.ID,
-		actions.Surf.ID,
 	},
 }

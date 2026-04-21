@@ -37,5 +37,6 @@ var Kabuto = game.ActorDef{
 		actions.Tailwind.ID,
 		actions.Distraction.ID,
 		actions.TempleOfNirvana.ID,
+		actions.PerishSong.ID,
 	},
 }
