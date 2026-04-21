@@ -13,6 +13,7 @@ var cmoStrengthID = uuid.MustParse("4d1ea730-f18b-5e72-843c-fe5845fc9acf")
 var CurseMarkOfChakra game.Modifier = game.Modifier{
 	ID:          cmoChakraID,
 	GroupID:     &cmoChakraID,
+	Icon:        "cmo_chakra",
 	Name:        "Curse Mark of Chakra",
 	Description: "Chakra Attack x1.5; one action only.",
 	Show:        true,
@@ -33,12 +34,13 @@ var CurseMarkOfChakra game.Modifier = game.Modifier{
 }
 
 var CurseMarkOfSpeed game.Modifier = game.Modifier{
-	ID:       cmoSpeedID,
-	GroupID:  &cmoSpeedID,
+	ID:          cmoSpeedID,
+	GroupID:     &cmoSpeedID,
+	Icon:        "cmo_speed",
 	Name:        "Curse Mark of Speed",
 	Description: "Speed x1.5; one action only.",
 	Show:        true,
-	Duration: game.ModifierDurationInf,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&cmoSpeedID,
@@ -55,12 +57,13 @@ var CurseMarkOfSpeed game.Modifier = game.Modifier{
 }
 
 var CurseMarkOfStrength game.Modifier = game.Modifier{
-	ID:       cmoStrengthID,
-	GroupID:  &cmoStrengthID,
+	ID:          cmoStrengthID,
+	GroupID:     &cmoStrengthID,
+	Icon:        "cmo_strength",
 	Name:        "Curse Mark of Strength",
 	Description: "Attack x1.5; one action only.",
 	Show:        true,
-	Duration: game.ModifierDurationInf,
+	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
 			&cmoStrengthID,

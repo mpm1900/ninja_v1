@@ -71,6 +71,7 @@ var SandAuraTrigger game.Trigger = game.Trigger{
 var SandAura = game.Modifier{
 	ID:          sandAuraID,
 	GroupID:     &sandAuraID,
+	Icon:        "sand_aura",
 	Name:        "Sand Aura",
 	Description: "On enter: start sandstorm.",
 	Show:        true,

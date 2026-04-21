@@ -41,6 +41,7 @@ var IntimidateTrigger game.Trigger = game.Trigger{
 var Intimidate game.Modifier = game.Modifier{
 	ID:          intimidateID,
 	GroupID:     &intimidateID,
+	Icon:        "intimidate",
 	Name:        "Intimidate",
 	Description: "On enter: all enemies gain Attack Down.",
 	Show:        true,

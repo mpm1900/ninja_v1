@@ -1,6 +1,8 @@
 package game
 
 import (
+	"maps"
+
 	"github.com/google/uuid"
 )
 
@@ -57,6 +59,12 @@ func (ah *actorResolveHandler) applyModifierMutation(mutation ActorMutation) (Ac
 	return next, true
 }
 
+func toResolved(actor Actor, pre Actor) ResolvedActor {
+	return ResolvedActor{
+		Actor:     actor,
+		BaseStats: maps.Clone(pre.Stats),
+	}
+}
 func (ah *actorResolveHandler) resolveMutations() ResolvedActor {
 	for _, mutation := range ah.mutations {
 		next, did_apply := ah.applyModifierMutation(mutation)

@@ -1,5 +1,18 @@
-import { GiFlamer, GiLightningTrio, GiShieldcomb, GiStarSwirl } from 'react-icons/gi'
+import { cn } from '#/lib/utils'
+import {
+  GiFlamer,
+  GiLightningTrio,
+  GiShieldcomb,
+  GiStarSwirl,
+  GiNoodles,
+  GiKevlarVest,
+  GiDoubled,
+  GiBeastEye,
+  GiHealing,
+} from 'react-icons/gi'
+import { PiCaretDoubleUpDuotone } from "react-icons/pi";
 import type { IconType } from 'react-icons/lib'
+import { WiSandstorm } from "react-icons/wi";
 
 const Aburame: IconType = (props) => (
   <img src="/icons/aburame.svg" alt="aburame" {...(props as any)} />
@@ -73,16 +86,32 @@ const SHINOBI_ICONS: Record<string, IconType> = {
 }
 
 const MODIFIER_ICONS: Record<string, IconType> = {
-  burned: GiFlamer,
-  paralyzed: GiLightningTrio,
+  burned: ({ className, ...props }) => (
+    <GiFlamer className={cn('text-orange-400', className)} {...props} />
+  ),
+  paralyzed: ({ className, ...props }) => (
+    <GiLightningTrio className={cn('text-yellow-400', className)} {...props} />
+  ),
   protected: GiShieldcomb,
   stunned: GiStarSwirl,
   taunted: Anger,
-}
-const MODIFIER_CLASSES: Record<string, string> = {
-  burned: 'text-orange-400',
-  paralyzed: 'text-yellow-400',
-  protected: '',
+  ichiraku_ramen: GiNoodles,
+  shinobi_vest: GiKevlarVest,
+  cmo_strength: ({ className, ...props }) => (
+    <GiDoubled className={cn('text-orange-300', className)} {...props} />
+  ),
+  cmo_chakra: ({ className, ...props }) => (
+    <GiDoubled className={cn('text-indigo-400', className)} {...props} />
+  ),
+  cmo_speed: ({ className, ...props }) => (
+    <GiDoubled className={cn('text-emerald-300', className)} {...props} />
+  ),
+  speed_up: ({ className, ...props }) => (
+    <PiCaretDoubleUpDuotone className={cn('text-emerald-400', className)} {...props} />
+  ),
+  sand_aura: WiSandstorm,
+  intimidate: GiBeastEye,
+  healing_tactics: GiHealing,
 }
 
-export { Akatsuki, SHINOBI_ICONS, MODIFIER_ICONS, MODIFIER_CLASSES }
+export { Akatsuki, SHINOBI_ICONS, MODIFIER_ICONS }

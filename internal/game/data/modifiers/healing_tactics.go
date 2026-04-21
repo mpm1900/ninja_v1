@@ -39,6 +39,7 @@ var HealingTacticsTrigger game.Trigger = game.Trigger{
 var HealingTactics game.Modifier = game.Modifier{
 	ID:          healingTacticsID,
 	GroupID:     &healingTacticsID,
+	Icon:        "healing_tactics",
 	Name:        "Healing Tactics",
 	Description: "On enter: allies heal 1/4th HP.",
 	Show:        true,

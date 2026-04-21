@@ -32,6 +32,7 @@ var IchirakuRamenTrigger game.Trigger = game.Trigger{
 var IchirakuRamen game.Modifier = game.Modifier{
 	ID:          ichirakuRamenID,
 	GroupID:     &ichirakuRamenID,
+	Icon:        "ichiraku_ramen",
 	Name:        "Ichiraku Ramen",
 	Description: "End of turn: heal 1/16 HP.",
 	Show:        true,

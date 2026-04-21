@@ -1,4 +1,4 @@
-import { MODIFIER_CLASSES, MODIFIER_ICONS } from '#/data/icons'
+import { MODIFIER_ICONS } from '#/data/icons'
 import type { Actor } from '#/lib/game/actor'
 import type { Modifier } from '#/lib/game/modifier'
 import { cn } from '#/lib/utils'
@@ -19,8 +19,8 @@ function ActorModifier({
         {Icon ? (
           <Icon
             className={cn(
-              'size-6 my-1',
-              modifier?.icon && MODIFIER_CLASSES[modifier.icon]
+              'size-6 my-1 drop-shadow-[1px_2px_0px_rgba(0,0,0,1)]',
+              modifier?.icon
             )}
           />
         ) : (

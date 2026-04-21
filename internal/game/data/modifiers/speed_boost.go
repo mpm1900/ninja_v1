@@ -31,6 +31,7 @@ var SpeedBoostTrigger game.Trigger = game.Trigger{
 var SpeedBoost game.Modifier = game.Modifier{
 	ID:          speedBoostID,
 	GroupID:     &speedBoostID,
+	Icon:        "speed_up",
 	Name:        "Speed Boost",
 	Description: "On turn end: gain Speed Up.",
 	Show:        true,
