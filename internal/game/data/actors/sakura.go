@@ -39,5 +39,6 @@ var Sakura = game.ActorDef{
 		actions.Haze.ID,
 		actions.Fireball.ID,
 		actions.HeavyPunch.ID,
+		actions.SageMode.ID,
 	},
 }

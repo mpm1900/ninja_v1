@@ -183,7 +183,7 @@ func (e *damageHandler) run(g *Game) {
 			break
 		}
 
-		if e.config.RepeatMax < 0 || e.config.RepeatMax > e.repeats {
+		if e.config.RepeatMax < 0 || e.config.RepeatMax >= e.repeats {
 			e.repeats++
 		} else {
 			break

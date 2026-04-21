@@ -63,7 +63,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.Curse.ID:            actions.Curse,
 	actions.Recover.ID:          actions.Recover,
 	actions.LeechSeed.ID:        actions.LeechSeed,
-	actions.ToadSong.ID:         actions.ToadSong,
+	actions.SageMode.ID:         actions.SageMode,
 	actions.PowerBoost.ID:       actions.PowerBoost,
 	actions.Amaterasu.ID:        actions.Amaterasu,
 	actions.Disable.ID:          actions.Disable,

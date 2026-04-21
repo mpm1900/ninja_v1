@@ -8,12 +8,12 @@ import (
 	"github.com/google/uuid"
 )
 
-var ToadSong = MakeToadSong()
+var SageMode = MakeSageMode()
 
-func MakeToadSong() game.Action {
+func MakeSageMode() game.Action {
 	nature := game.NsYang
 	config := game.ActionConfig{
-		Name:        "Toad Song",
+		Name:        "Sage Mode",
 		Nature:      &nature,
 		Jutsu:       game.Senjutsu,
 		Description: "Inverts the speed of all active shinobi.",

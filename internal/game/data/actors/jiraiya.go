@@ -36,7 +36,7 @@ var Jiraiya = game.ActorDef{
 		actions.Rasengan.ID,
 		actions.GiantRasengan.ID,
 		actions.Haze.ID,
-		actions.ToadSong.ID,
+		actions.SageMode.ID,
 		actions.FlameBullet.ID,
 		actions.Fireball.ID,
 		actions.GreatFireball.ID,

@@ -45,5 +45,6 @@ var Hashirama = game.ActorDef{
 		actions.LeafJab.ID,
 		actions.ShadowClone.ID,
 		actions.HeavyPunch.ID,
+		actions.SageMode.ID,
 	},
 }
