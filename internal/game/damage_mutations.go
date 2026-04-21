@@ -200,13 +200,26 @@ func (e *damageHandler) resolveTargetHit(g *Game, targetIndex int, target Resolv
 		return false
 	}
 
+	targetContext := e.context
+	targetContext.TargetActorIDs = []uuid.UUID{target.ID}
+	targetContext.TargetPositionIDs = []uuid.UUID{}
+
 	result := MakeAccuracyCheck(g, e.action, e.source, target, e.config.IgnoreModifiers)
 	if !result.Success {
 		if !e.config.Repeat || e.repeats == 0 {
 			g.PushLog(NewLog(fmt.Sprintf("%s missed!", e.action.Name)))
 			g.PushLog(NewLog(fmt.Sprintf("roll = %d, acc = %d", result.Roll, result.Chance)))
 		}
+
+		if e.config.OnFailure != nil {
+			e.sideEffectTxs = append(e.sideEffectTxs, e.config.OnFailure(*g, targetContext)...)
+		}
+
 		return true
+	}
+
+	if e.config.OnSuccess != nil {
+		e.sideEffectTxs = append(e.sideEffectTxs, e.config.OnSuccess(*g, targetContext)...)
 	}
 
 	damages := GetDamage(

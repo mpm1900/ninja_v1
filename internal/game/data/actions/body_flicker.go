@@ -25,14 +25,20 @@ func MakeBodyFlicker() game.Action {
 		CritMod:     1.5,
 	}
 
-	action := makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
-		switch_mux := game.RemovePositions
-		switch_ctx := game.NewContext()
-		switch_ctx.TargetActorIDs = append(switch_ctx.TargetActorIDs, *context.SourceActorID)
-		switch_tx := game.MakeTransaction(switch_mux, switch_ctx)
-		transactions = append(transactions, switch_tx)
+	action := makeBasicAttackWith(
+		ID,
+		config,
+		func(g game.Game, context game.Context) []game.GameTransaction {
+			transactions := []game.GameTransaction{}
+			switch_mux := game.RemovePositions
+			switch_ctx := game.NewContext()
+			switch_ctx.TargetActorIDs = append(switch_ctx.TargetActorIDs, *context.SourceActorID)
+			switch_tx := game.MakeTransaction(switch_mux, switch_ctx)
+			transactions = append(transactions, switch_tx)
 
-		return transactions
-	}, nil)
+			return transactions
+		},
+		nil,
+	)
 	return action
 }

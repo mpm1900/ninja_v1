@@ -24,14 +24,20 @@ func MakeAmaterasu() game.Action {
 		CritMod:     1.5,
 	}
 
-	action := makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
-		targets := g.GetTargets(context)
-		for _, target := range targets {
-			transactions = append(transactions, applyBurn(config, target)...)
-		}
+	action := makeBasicAttackWith(
+		ID,
+		config,
+		func(g game.Game, context game.Context) []game.GameTransaction {
+			transactions := []game.GameTransaction{}
+			targets := g.GetTargets(context)
+			for _, target := range targets {
+				transactions = append(transactions, applyBurn(config, target)...)
+			}
 
-		return transactions
-	}, nil)
+			return transactions
+		},
+		nil,
+	)
 
 	return action
 }

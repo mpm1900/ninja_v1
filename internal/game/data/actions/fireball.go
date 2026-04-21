@@ -29,7 +29,8 @@ func MakeFireball() game.Action {
 	return makeBasicAttackWith(
 		ID,
 		config,
-		func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
+		func(g game.Game, context game.Context) []game.GameTransaction {
+			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {
 				transactions = append(transactions, chanceBurn(config, target, 10)...)

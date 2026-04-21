@@ -26,14 +26,20 @@ func MakeGreatFireAnnihilation() game.Action {
 		CritMod:     1.5,
 	}
 
-	action := makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
-		targets := g.GetTargets(context)
-		for _, target := range targets {
-			transactions = append(transactions, chanceBurn(config, target, 20)...)
-		}
+	action := makeBasicAttackWith(
+		ID,
+		config,
+		func(g game.Game, context game.Context) []game.GameTransaction {
+			transactions := []game.GameTransaction{}
+			targets := g.GetTargets(context)
+			for _, target := range targets {
+				transactions = append(transactions, chanceBurn(config, target, 20)...)
+			}
 
-		return transactions
-	}, nil)
+			return transactions
+		},
+		nil,
+	)
 	action.TargetPredicate = game.NoneFilter
 	action.MapContext = func(g game.Game, context game.Context) game.Context {
 		other_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherTeamFilter))

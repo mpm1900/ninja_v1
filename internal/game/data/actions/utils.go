@@ -13,7 +13,7 @@ import (
 func makeBasicAttackWith(
 	ID uuid.UUID,
 	config game.ActionConfig,
-	with func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction,
+	onSuccess func(g game.Game, context game.Context) []game.GameTransaction,
 	before func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction,
 ) game.Action {
 	return game.Action{
@@ -36,19 +36,19 @@ func makeBasicAttackWith(
 					transactions = before(g, context, transactions)
 				}
 
-				conf, _ := game.GetActiveActionConfig(g, config)
-				crit_result := game.MakeCriticalCheck(conf)
-				damages := game.NewDamage(conf, game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor()))
+				action_config, _ := game.GetActiveActionConfig(g, config)
+				crit_result := game.MakeCriticalCheck(action_config)
+				dmg_config := game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor())
+				if onSuccess != nil {
+					dmg_config.OnSuccess = onSuccess
+				}
+				damages := game.NewDamage(action_config, dmg_config)
 				transactions = append(
 					transactions,
 					game.MakeDamageTransactions(context, damages)...,
 				)
 
-				if with == nil {
-					return transactions
-				}
-
-				return with(g, context, transactions)
+				return transactions
 			},
 		},
 	}

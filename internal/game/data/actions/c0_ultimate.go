@@ -25,18 +25,24 @@ func MakeC0UltimateArt() game.Action {
 		CritMod:     1.5,
 	}
 
-	action := makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
-		source, ok := g.GetSource(context)
-		if !ok {
+	action := makeBasicAttackWith(
+		ID,
+		config,
+		func(g game.Game, context game.Context) []game.GameTransaction {
+			transactions := []game.GameTransaction{}
+			source, ok := g.GetSource(context)
+			if !ok {
+				return transactions
+			}
+
+			self_dmg := game.RatioDamage(1.0)
+			self_dmg_ctx := game.MakeContextForActor(source)
+			transactions = append(transactions, game.MakeTransaction(self_dmg, self_dmg_ctx))
+
 			return transactions
-		}
-
-		self_dmg := game.RatioDamage(1.0)
-		self_dmg_ctx := game.MakeContextForActor(source)
-		transactions = append(transactions, game.MakeTransaction(self_dmg, self_dmg_ctx))
-
-		return transactions
-	}, nil)
+		},
+		nil,
+	)
 	action.TargetPredicate = game.NoneFilter
 	action.MapContext = func(g game.Game, context game.Context) game.Context {
 		other_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherFilter))

@@ -26,16 +26,22 @@ func MakeRasenshuriken() game.Action {
 		CritMod:     1.5,
 	}
 
-	return makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
-		source, ok := g.GetSource(context)
-		if !ok {
+	return makeBasicAttackWith(
+		ID,
+		config,
+		func(g game.Game, context game.Context) []game.GameTransaction {
+			transactions := []game.GameTransaction{}
+			source, ok := g.GetSource(context)
+			if !ok {
+				return transactions
+			}
+
+			mutation := mutations.AddModifiers(false, modifiers.ChakraAttackDown2Source)
+			transaction := game.MakeTransaction(mutation, game.MakeContextForActor(source))
+			transactions = append(transactions, transaction)
+
 			return transactions
-		}
-
-		mutation := mutations.AddModifiers(false, modifiers.ChakraAttackDown2Source)
-		transaction := game.MakeTransaction(mutation, game.MakeContextForActor(source))
-		transactions = append(transactions, transaction)
-
-		return transactions
-	}, nil)
+		},
+		nil,
+	)
 }

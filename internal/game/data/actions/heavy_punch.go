@@ -25,12 +25,18 @@ func MakeHeavyPunch() game.Action {
 		CritMod:     1.5,
 	}
 
-	return makeBasicAttackWith(ID, config, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
-		targets := g.GetTargets(context)
-		for _, target := range targets {
-			transactions = append(transactions, chanceParalysis(config, target, 30)...)
-		}
+	return makeBasicAttackWith(
+		ID,
+		config,
+		func(g game.Game, context game.Context) []game.GameTransaction {
+			transactions := []game.GameTransaction{}
+			targets := g.GetTargets(context)
+			for _, target := range targets {
+				transactions = append(transactions, chanceParalysis(config, target, 30)...)
+			}
 
-		return transactions
-	}, nil)
+			return transactions
+		},
+		nil,
+	)
 }
