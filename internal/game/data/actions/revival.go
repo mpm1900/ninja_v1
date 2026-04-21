@@ -24,7 +24,7 @@ func MakeRevival() game.Action {
 		TargetPredicate: game.ComposeAF(game.TeamFilter, game.InactiveFilter, game.NotAliveFilter),
 		ContextValidate: game.TargetLengthFilter(1),
 		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityP3,
+			Priority: game.ActionPriorityDefault,
 			Filter: game.ComposeGF(
 				game.SourceIsAlive,
 				game.SourceIsActionOffCooldown,

@@ -1,7 +1,5 @@
 (function () {
-  console.log('running')
   if (!VANTA) return null
-  console.log(VANTA)
   setTimeout(() => {
     VANTA.FOG({
       el: "#body",

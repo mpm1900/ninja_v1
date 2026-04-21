@@ -81,9 +81,7 @@ function nextAction(actor: Actor, previous_action_IDs: {
   const preferredActionID = (previous_action_IDs[actor.ID] as string | null) ?? null
   const preferredAction = actor.actions.find((a) => a.ID === preferredActionID)
   const fallbackActionID = actor.actions.find(a => !a.disabled)?.ID ?? null
-  const fallbackAction = actor.actions.find(a => a.ID === fallbackActionID)
   let nextActionID = preferredActionID ?? fallbackActionID
-  console.log(preferredAction, fallbackAction)
   if (preferredAction?.disabled === true) {
     nextActionID = fallbackActionID
   }
@@ -143,7 +141,6 @@ function setContextSource(source_ID: string, game: Game) {
   if (!source) return
 
   const prev_ID = nextAction(source, battleContext.state.previous_action_IDs)
-  console.log('prevID', prev_ID)
   battleContext.setState((s) => ({
     ...s,
     action_ID: prev_ID,
