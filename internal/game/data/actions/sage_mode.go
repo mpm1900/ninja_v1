@@ -38,6 +38,7 @@ func MakeSageMode() game.Action {
 
 				mod := modifiers.SageMode
 				mod.Duration = 5
+				mod.Icon = "sage_mode"
 				mutation := mutations.AddModifiers(false, mod)
 				context.ParentActorID = nil
 				transaction := game.MakeTransaction(mutation, context)

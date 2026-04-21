@@ -18,12 +18,17 @@ import {
   GiHealthIncrease,
   GiWaterRecycling,
 } from 'react-icons/gi'
-import { PiCaretDoubleUpDuotone, PiOnigiriFill } from 'react-icons/pi'
+import {
+  PiCaretDoubleUpDuotone,
+  PiOnigiriFill,
+  PiArrowFatLinesDownBold,
+} from 'react-icons/pi'
 import type { IconType } from 'react-icons/lib'
 import { MdFileUploadOff } from 'react-icons/md'
 import { GrFastForward } from 'react-icons/gr'
 import { TbTagPlus } from 'react-icons/tb'
 import { HiScale } from 'react-icons/hi2'
+import { FaFrog } from "react-icons/fa6";
 
 const Aburame: IconType = (props) => (
   <img src="/icons/aburame.svg" alt="aburame" {...(props as any)} />
@@ -110,6 +115,24 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   cmo_strength: ({ className, ...props }) => (
     <GiDoubled className={cn('text-orange-300', className)} {...props} />
   ),
+  std_chakra: ({ className, ...props }) => (
+    <PiArrowFatLinesDownBold
+      className={cn('text-indigo-400', className)}
+      {...props}
+    />
+  ),
+  std_speed: ({ className, ...props }) => (
+    <PiArrowFatLinesDownBold
+      className={cn('text-emerald-300', className)}
+      {...props}
+    />
+  ),
+  std_strength: ({ className, ...props }) => (
+    <PiArrowFatLinesDownBold
+      className={cn('text-orange-300', className)}
+      {...props}
+    />
+  ),
   fast_thinking: GrFastForward,
   gedo_shard: GiTopaz,
   guts: GiMinotaur,
@@ -124,6 +147,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   priority_failure: MdFileUploadOff,
   protected: GiShieldcomb,
   regeneration: GiHealthIncrease,
+  sage_mode: FaFrog,
   sand_aura: GiSandstorm,
   seal_up: TbTagPlus,
   shinobi_vest: GiKevlarVest,
@@ -137,7 +161,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   stunned: GiStarSwirl,
   taunted: Anger,
   uchiha_fan: GiHandheldFan,
-  water_absorb: GiWaterRecycling
+  water_absorb: GiWaterRecycling,
 }
 
 export { Akatsuki, SHINOBI_ICONS, MODIFIER_ICONS }

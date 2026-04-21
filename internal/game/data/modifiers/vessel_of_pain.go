@@ -11,6 +11,7 @@ var vesselOfPainID = uuid.MustParse("606b4892-56fa-58c4-af72-63f7ea3ef669")
 var VesselOfPain game.Modifier = game.Modifier{
 	ID:                vesselOfPainID,
 	GroupID:           &vesselOfPainID,
+	Icon:              "std_chakra",
 	Name:              "Vessel of Pain",
 	Description:       "Chakra Attack x0.75.",
 	ParentDescription: "Other shinobi: Chakra Attack x0.75.",
