@@ -17,6 +17,7 @@ var Paralysis game.Modifier = game.Modifier{
 	Description: "Paralyzed: Speed x0.25.",
 	Icon:        "paralyzed",
 	Show:        true,
+	Status:      true,
 	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(

@@ -19,7 +19,7 @@ func MakeFireball() game.Action {
 		Power:       game.Ptr(70),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(1),
-		Cost:        game.Ptr(0),
+		Cost:        game.Ptr(200),
 		Cooldown:    game.Ptr(0),
 		Jutsu:       game.Ninjutsu,
 		CritChance:  game.Ptr(5),

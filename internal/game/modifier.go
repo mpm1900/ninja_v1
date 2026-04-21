@@ -23,6 +23,7 @@ type Modifier struct {
 	Duration    int        `json:"duration"`
 	Icon        string     `json:"icon"`
 	Show        bool       `json:"show"`
+	Status      bool       `json:"status"`
 
 	ActorMutations     []ActorMutation     `json:"-"`
 	GameStateMutations []GameStateMutation `json:"-"`

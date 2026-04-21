@@ -643,14 +643,6 @@ func (g *Game) RunPrompt(transaction Transaction[Action]) {
 }
 
 func (g *Game) RunAction(transaction Transaction[Action]) {
-	if transaction.Context.SourceActorID != nil {
-		cost := transaction.Mutation.Cost
-		if cost.Delta != nil {
-			costTx := MakeTransaction(cost, transaction.Context)
-			g.Transactions = append(g.Transactions, costTx)
-		}
-	}
-
 	transactions := ResolveAction(g, transaction)
 	g.Transactions = append(g.Transactions, transactions...)
 }

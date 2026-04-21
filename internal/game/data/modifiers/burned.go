@@ -37,6 +37,7 @@ var Burned game.Modifier = game.Modifier{
 	Description: "Burned: Attack x0.5. On turn end: lose 1/16th HP.",
 	Icon:        "burned",
 	Show:        true,
+	Status:      true,
 	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(

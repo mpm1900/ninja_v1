@@ -2,7 +2,7 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
-	"ninja_v1/internal/game/data/mutations"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -27,7 +27,7 @@ func MakeRecover() game.Action {
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.ComposeAF(game.ActiveFilter),
 		ContextValidate: game.TargetLengthFilter(*config.TargetCount),
-		Cost:            mutations.UseStaminaSource(chakraCost),
+		Cost:            modifiers.UseStaminaCost(chakraCost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter:   game.SourceIsAlive,

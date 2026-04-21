@@ -723,6 +723,12 @@ func (r ResolvedActor) CanAct(game *Game, context Context) bool {
 				a.Sleeping = false
 				return a
 			})
+			game.FilterModifiers(func(modifier Transaction[Modifier]) bool {
+				if modifier.Context.SourceActorID == nil {
+					return true
+				}
+				return *modifier.Context.SourceActorID != r.ID || modifier.Mutation.Status == false
+			})
 			log := NewLogContext("$source$ woke up.", context)
 			game.PushLog(log)
 		} else {

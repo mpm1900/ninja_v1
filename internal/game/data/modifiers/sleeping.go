@@ -17,6 +17,7 @@ var Sleeping game.Modifier = game.Modifier{
 	Description: "Sleeping",
 	Icon:        "sleeping",
 	Show:        true,
+	Status:      true,
 	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(

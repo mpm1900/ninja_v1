@@ -124,6 +124,14 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 		}
 	}
 
+	if transaction.Context.SourceActorID != nil {
+		cost := transaction.Mutation.Cost
+		if cost.Delta != nil {
+			costTx := MakeTransaction(cost, transaction.Context)
+			game.Transactions = append(game.Transactions, costTx)
+		}
+	}
+
 	/**
 	 * Action Can-Act Checks
 	 */
