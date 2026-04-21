@@ -184,7 +184,7 @@ function ActorStages({ actor }: { actor: Actor | undefined }) {
   return (
     <div className="absolute -bottom-2.5 flex gap-1 px-2">
       {Object.entries(actor.staged_stats)
-        .filter(([key]) => key !== 'evasion' && key !== 'accuracy')
+        //.filter(([key]) => key !== 'evasion' && key !== 'accuracy')
         .map(([key, stage]) => (
           <StageBadge key={key} stage={stage as any} stat={key as any} />
         ))}

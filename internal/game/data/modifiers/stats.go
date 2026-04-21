@@ -86,6 +86,11 @@ func MakeStatDeltaTeam(stat game.ActorStat, name string, groupID *uuid.UUID, del
 	modifier.Name = name
 	return modifier
 }
+func MakeStatDeltaOtherTeam(stat game.ActorStat, name string, groupID *uuid.UUID, delta int) game.Modifier {
+	modifier := NewStageDelta(stat, groupID, game.ComposeAF(game.ActiveFilter, game.OtherTeamFilter), game.MutPriorityDefault, delta)
+	modifier.Name = name
+	return modifier
+}
 
 func MakeStatDeltaAll(stat game.ActorStat, name string, groupID *uuid.UUID, delta int) game.Modifier {
 	modifier := NewStageDelta(stat, groupID, game.ActiveFilter, game.MutPriorityDefault, delta)
@@ -166,6 +171,9 @@ var Tailwind = MakeStatMultTeam(game.StatSpeed, "Tailwind", &TailwindID, 2.0, ga
 
 var ToadSongID = uuid.MustParse("764b5ee9-9136-5994-b598-40c3881e79dc")
 var ToadSong = MakeStatMultTeam(game.StatSpeed, "Toad Song", &ToadSongID, -1, game.MutPriorityPostSet)
+
+var HiddenMistID = uuid.MustParse("2d007fb7-270b-492c-b114-f752f9c7a17a")
+var HiddenMist = MakeStatDeltaOtherTeam(game.StatAccuracy, "Hidden Mist", &HiddenMistID, -2)
 
 // HAZE
 var hazeID = uuid.MustParse("1f9dc965-2621-5e04-aa5e-6484bcf9a723")

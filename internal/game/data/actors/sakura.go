@@ -1,0 +1,43 @@
+package actors
+
+import (
+	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
+
+	"github.com/google/uuid"
+)
+
+var Sakura = game.ActorDef{
+	ActorID:      uuid.MustParse("dfa5199c-4d51-4db8-955b-a260fc01fc24"),
+	SpriteURL:    "/sprites/sakura_64.png",
+	Name:         "Sakura Haruno",
+	Affiliations: []string{game.AffKonoha},
+
+	Stats: map[game.ActorStat]int{
+		game.StatHP:            71,
+		game.StatStamina:       100,
+		game.StatAttack:        121,
+		game.StatDefense:       106,
+		game.StatChakraAttack:  60,
+		game.StatChakraDefense: 80,
+		game.StatSpeed:         70,
+		game.StatEvasion:       100,
+		game.StatAccuracy:      100,
+	},
+	NatureDamage:     game.NewNatureSetValues(),
+	NatureResistance: game.NewNatureSetValues(),
+	Natures: game.MapNatures([]game.NatureSet{
+		game.NsEarth,
+		game.NsWater,
+	}),
+	Abilities: []game.Modifier{
+		modifiers.HealingTactics,
+	},
+	ActionCount: 4,
+	ActionIDs: []uuid.UUID{
+		actions.Haze.ID,
+		actions.Fireball.ID,
+		actions.LeafJab.ID,
+	},
+}

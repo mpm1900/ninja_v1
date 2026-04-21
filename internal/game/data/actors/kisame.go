@@ -40,5 +40,6 @@ var Kisame = game.ActorDef{
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
 		actions.LeafJab.ID,
+		actions.HiddenMist.ID,
 	},
 }

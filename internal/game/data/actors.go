@@ -27,6 +27,7 @@ var ACTORS map[uuid.UUID]game.ActorDef = map[uuid.UUID]game.ActorDef{
 	actors.Raikage.ActorID:    actors.Raikage,
 	actors.Guy.ActorID:        actors.Guy,
 	actors.RockLee.ActorID:    actors.RockLee,
+	actors.Sakura.ActorID:     actors.Sakura,
 	actors.Kakashi.ActorID:    actors.Kakashi,
 	actors.Asuma.ActorID:      actors.Asuma,
 	actors.Hiruzen.ActorID:    actors.Hiruzen,

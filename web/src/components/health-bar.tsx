@@ -70,7 +70,7 @@ function HealthBar({
         <div className="pointer-events-none absolute -inset-1 rounded-sm bg-gradient-to-r from-cyan-400/15 via-indigo-400/10 to-red-500/15 blur-md" />
       )}
 
-      <div className="relative h-6 overflow-hidden rounded-sm border border-transparent bg-black">
+      <div className="relative h-6 overflow-hidden rounded-sm border border-transparent bg-black shadow-[1px_1px_0_rgba(0,0,0,1)]">
         {/* CHAKRA LAYER (behind, border-like energy shell) */}
         <div className="absolute inset-0 bg-slate-800" />
         <motion.div
