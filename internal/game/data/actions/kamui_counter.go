@@ -13,7 +13,7 @@ func MakeKamuiCounter() game.Action {
 	ID := uuid.MustParse("09b013e2-436d-4bd4-bf0a-9b2827b9c131")
 	config := game.ActionConfig{
 		Name:        "Kamui: Counter",
-		Description: "+1 priority. Fails unless the target has a pending attack.",
+		Description: "Fails unless the target has a pending attack. +1 priority.",
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(70),
 		Stat:        game.Ptr(game.StatAttack),

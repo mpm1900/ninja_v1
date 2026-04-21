@@ -7,38 +7,9 @@ import {
   type NatureSet,
 } from '#/lib/game/nature'
 import { NatureBadge } from './nature-badge'
+import { NastureSetDetails } from './natureset-details'
 import { TeamBuilderActorAttributes } from './team-builder-actor-attributes'
 import { TeamBuilderStats } from './team-builder-stats'
-
-function NatureWR({ nature }: { nature: NatureSet }) {
-  const weaknesses = getWeakness(nature)
-  const resistances = getResistance(nature)
-  if (weaknesses.length == 0 && resistances.length == 0) {
-    return null
-  }
-  return (
-    <div>
-      <NatureBadge nature={nature} className="text-xs" />
-      {weaknesses.length > 0 && (
-        <>
-          <span className="text-xs text-muted-foreground"> is weak to </span>
-          {weaknesses?.map((n) => (
-            <NatureBadge key={n} nature={n} className="text-xs" />
-          ))}
-        </>
-      )}
-
-      {resistances.length > 0 && (
-        <>
-          <span className="text-xs text-muted-foreground"> but resists </span>
-          {resistances?.map((n) => (
-            <NatureBadge key={n} nature={n} className="text-xs" />
-          ))}
-        </>
-      )}
-    </div>
-  )
-}
 
 function TeamBuilderActorConfig({
   def,
@@ -106,42 +77,9 @@ function TeamBuilderActorConfig({
                 )
               }}
             />
-            <div>
-              <div className="flex justify-between items-center">
-                {(Object.keys(def.natures) as Array<NatureSet>)
-                  .sort((a, b) => natureIndexes[a] - natureIndexes[b])
-                  .map((nature) => (
-                    <NatureBadge key={nature} nature={nature} />
-                  ))}
-                <div className="text-muted-foreground text-xs flex-1 text-center">
-                  {' '}
-                  is weak to{' '}
-                </div>
-                {getWeakness(...(Object.keys(def.natures) as Array<NatureSet>))
-                  .sort((a, b) => natureIndexes[a] - natureIndexes[b])
-                  .map((nature) => (
-                    <NatureBadge key={nature} nature={nature} />
-                  ))}
-              </div>
-              <div className="flex justify-between items-center">
-                {(Object.keys(def.natures) as Array<NatureSet>)
-                  .sort((a, b) => natureIndexes[a] - natureIndexes[b])
-                  .map((nature) => (
-                    <NatureBadge key={nature} nature={nature} />
-                  ))}
-                <div className="text-muted-foreground text-xs flex-1 text-center">
-                  {' '}
-                  resists{' '}
-                </div>
-                {getResistance(
-                  ...(Object.keys(def.natures) as Array<NatureSet>)
-                )
-                  .sort((a, b) => natureIndexes[a] - natureIndexes[b])
-                  .map((nature) => (
-                    <NatureBadge key={nature} nature={nature} />
-                  ))}
-              </div>
-            </div>
+            <NastureSetDetails
+              natures={Object.keys(def.natures) as Array<NatureSet>}
+            />
           </div>
 
           <TeamBuilderStats
