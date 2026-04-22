@@ -42,3 +42,13 @@ func MakeBodyReplacement() game.Action {
 		},
 	}
 }
+
+// proxies
+var Kamui = MakeKamui()
+
+func MakeKamui() game.Action {
+	action := MakeBodyReplacement()
+	action.ID = uuid.MustParse("04669c33-cb56-480a-9c94-187b2acab8e1")
+	action.Config.Name = "Kamui"
+	return action
+}
