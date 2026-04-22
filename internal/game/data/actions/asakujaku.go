@@ -23,7 +23,7 @@ func MakeAsakujaku() game.Action {
 		Cost:        game.Ptr(0),
 		Cooldown:    game.Ptr(0),
 		Jutsu:       game.Taijutsu,
-		CritChance:  game.Ptr(15),
+		CritChance:  game.Ptr(getCriticalStage(1)),
 		CritMod:     1.5,
 	}
 

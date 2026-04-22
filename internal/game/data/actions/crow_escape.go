@@ -12,16 +12,13 @@ var MirageCrow = MakeMirageCrow()
 
 func MakeMirageCrow() game.Action {
 	ID := uuid.MustParse("355753f0-5332-5ee4-b438-899d1a71c184")
-	nature := game.NsYin
-	targetCount := 1
-	chakraCost := 30
 
 	config := game.ActionConfig{
 		Name:        "Crow Escape",
 		Description: "Lowers the target's Chakra Attack stat by 2 stages. User then switches out.",
-		Nature:      &nature,
-		TargetCount: &targetCount,
-		Cost:        &chakraCost,
+		Nature:      game.Ptr(game.NsYin),
+		TargetCount: game.Ptr(1),
+		Cost:        game.Ptr(30),
 		Jutsu:       game.Genjutsu,
 	}
 
@@ -31,7 +28,7 @@ func MakeMirageCrow() game.Action {
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
 		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            modifiers.UseStaminaCost(chakraCost),
+		Cost:            modifiers.UseStaminaCost(*config.Cost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter: game.ComposeGF(

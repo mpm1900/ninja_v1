@@ -11,10 +11,9 @@ import (
 var Tailwind = MakeTailwind()
 
 func MakeTailwind() game.Action {
-	nature := game.NsWind
 	config := game.ActionConfig{
 		Name:        "Tailwind",
-		Nature:      &nature,
+		Nature:      game.Ptr(game.NsWind),
 		Jutsu:       game.Ninjutsu,
 		Description: "Doubles the speed of the user's party for 4 turns. This effect does not stack.",
 	}

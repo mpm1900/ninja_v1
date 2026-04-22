@@ -40,5 +40,6 @@ var Hiruzen = game.ActorDef{
 		actions.LeafJab.ID,
 		actions.ReaperDeathSeal.ID,
 		actions.SummonAlly.ID,
+		actions.Firestorm.ID,
 	},
 }

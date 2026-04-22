@@ -9,10 +9,9 @@ import (
 var CopyJutsu = MakeCopyJutsu()
 
 func MakeCopyJutsu() game.Action {
-	nature := game.NsYin
 	config := game.ActionConfig{
 		Name:        "Copy Jutsu",
-		Nature:      &nature,
+		Nature:      game.Ptr(game.NsYin),
 		Jutsu:       game.Ninjutsu,
 		Description: "Switches abilities with the target temporarily.",
 	}

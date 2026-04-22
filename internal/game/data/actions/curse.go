@@ -9,10 +9,9 @@ import (
 var Curse = MakeCurse()
 
 func MakeCurse() game.Action {
-	nature := game.NsJashin
 	config := game.ActionConfig{
 		Name:   "Curse",
-		Nature: &nature,
+		Nature: game.Ptr(game.NsJashin),
 		Jutsu:  game.Fuinjutsu,
 	}
 	return game.Action{

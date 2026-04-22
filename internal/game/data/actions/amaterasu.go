@@ -20,7 +20,7 @@ func MakeAmaterasu() game.Action {
 		Power:       game.Ptr(20),
 		Cost:        game.Ptr(30),
 		Jutsu:       game.Genjutsu,
-		CritChance:  game.Ptr(5),
+		CritChance:  game.Ptr(getCriticalStage(0)),
 		CritMod:     1.5,
 	}
 

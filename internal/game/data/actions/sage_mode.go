@@ -11,10 +11,9 @@ import (
 var SageMode = MakeSageMode()
 
 func MakeSageMode() game.Action {
-	nature := game.NsYang
 	config := game.ActionConfig{
 		Name:        "Sage Mode",
-		Nature:      &nature,
+		Nature:      game.Ptr(game.NsYang),
 		Jutsu:       game.Senjutsu,
 		Description: "Inverts the speed of all active shinobi.",
 	}

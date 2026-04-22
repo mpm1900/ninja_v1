@@ -11,10 +11,9 @@ import (
 var DragonDance = MakeDragonDance()
 
 func MakeDragonDance() game.Action {
-	nature := game.NsTai
 	config := game.ActionConfig{
 		Name:        "Dragon Dance",
-		Nature:      &nature,
+		Nature:      game.Ptr(game.NsTai),
 		Jutsu:       game.Taijutsu,
 		Description: "Raises the user's Speed and Physical Attack stats.",
 	}

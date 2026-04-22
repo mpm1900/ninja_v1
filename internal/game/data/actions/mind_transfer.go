@@ -9,10 +9,9 @@ import (
 var MindTransfer = MakeMindTransfer()
 
 func MakeMindTransfer() game.Action {
-	nature := game.NsYin
 	config := game.ActionConfig{
 		Name:        "Mind Transfer",
-		Nature:      &nature,
+		Nature:      game.Ptr(game.NsYin),
 		Jutsu:       game.Ninjutsu,
 		Description: "Switches abilities with the target temporarily.",
 	}

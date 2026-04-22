@@ -10,10 +10,9 @@ import (
 var Distraction = MakeDistraction()
 
 func MakeDistraction() game.Action {
-	nature := game.NsYin
 	config := game.ActionConfig{
 		Name:        "Distraction",
-		Nature:      &nature,
+		Nature:      game.Ptr(game.NsYin),
 		Jutsu:       game.Genjutsu,
 		Description: "Changes the target of single-target enemy actions.",
 	}

@@ -11,12 +11,10 @@ import (
 var Disable = MakeDisable()
 
 func MakeDisable() game.Action {
-	cooldown := 1
-	nature := game.NsYin
 	config := game.ActionConfig{
 		Name:        "Disable",
-		Nature:      &nature,
-		Cooldown:    &cooldown,
+		Nature:      game.Ptr(game.NsYin),
+		Cooldown:    game.Ptr(1),
 		Jutsu:       game.Genjutsu,
 		Description: "Disables the target's last used action.",
 	}

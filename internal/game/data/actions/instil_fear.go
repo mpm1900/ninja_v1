@@ -11,12 +11,11 @@ var InstilFear = MakeInstilFear()
 
 func MakeInstilFear() game.Action {
 	ID := uuid.MustParse("0b2947a8-5caf-4588-b4d5-192443bd51e3")
-	nature := game.NsYin
 
 	config := game.ActionConfig{
 		Name:        "Instil Fear",
 		Description: "Paralyzes the target.",
-		Nature:      &nature,
+		Nature:      game.Ptr(game.NsYin),
 		TargetCount: game.Ptr(1),
 		Accuracy:    game.Ptr(100),
 		Cost:        game.Ptr(30),

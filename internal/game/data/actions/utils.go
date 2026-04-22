@@ -159,3 +159,15 @@ func checkPlayerHasModifier(g game.Game, context game.Context, modifierID uuid.U
 
 	return false
 }
+
+var criticalStages = map[int]float64{
+	0: 4.167,
+	1: 12.5,
+	2: 50.0,
+	3: 1,
+}
+func getCriticalStage(stage int) int {
+	stage = max(0, stage)
+	stage = min(stage, len(criticalStages)-1)
+	return game.Round(criticalStages[stage])
+}

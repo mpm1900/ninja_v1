@@ -11,10 +11,9 @@ import (
 var Taunt = MakeTaunt()
 
 func MakeTaunt() game.Action {
-	nature := game.NsPure
 	config := game.ActionConfig{
 		Name:        "Taunt",
-		Nature:      &nature,
+		Nature:      game.Ptr(game.NsPure),
 		Jutsu:       game.Ninjutsu,
 		Description: "Forces target to use only attacking moves.",
 	}

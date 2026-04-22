@@ -2,24 +2,26 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/modifiers"
+	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
 
-var Fireball = MakeFireball()
+var Firestorm = MakeFirestorm()
 
-func MakeFireball() game.Action {
+func MakeFirestorm() game.Action {
 	ID := uuid.MustParse("aaf5174b-f386-54b1-84c4-0c062937c770")
 
 	config := game.ActionConfig{
-		Name:        "Fireball",
-		Description: "10% chance to burn target.",
+		Name:        "Firestorm",
+		Description: "10% chance to burn target. Lowers user's Chakra attack by 2 stages.",
 		Nature:      game.Ptr(game.NsFire),
-		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(70),
+		Accuracy:    game.Ptr(90),
+		Power:       game.Ptr(130),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(1),
-		Cost:        game.Ptr(50),
+		Cost:        game.Ptr(100),
 		Cooldown:    game.Ptr(0),
 		Jutsu:       game.Ninjutsu,
 		CritChance:  game.Ptr(5),
@@ -31,10 +33,16 @@ func MakeFireball() game.Action {
 		config,
 		func(g game.Game, context game.Context) []game.GameTransaction {
 			transactions := []game.GameTransaction{}
+
 			targets := g.GetTargets(context)
 			for _, target := range targets {
 				transactions = append(transactions, chanceBurn(config, target, 10)...)
 			}
+
+			mod := modifiers.ChakraAttackDown2Source
+			mut := mutations.AddModifiers(false, mod)
+			chakraDownTx := game.MakeTransaction(mut, context)
+			transactions = append(transactions, chakraDownTx)
 
 			return transactions
 		},

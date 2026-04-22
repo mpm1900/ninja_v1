@@ -11,12 +11,11 @@ var TempleOfNirvana = MakeTempleOfNirvana()
 
 func MakeTempleOfNirvana() game.Action {
 	ID := uuid.MustParse("d59535f2-9cb5-4268-854e-4d9a1d6b7c70")
-	nature := game.NsYin
 
 	config := game.ActionConfig{
 		Name:        "Temple Of Nirvana",
 		Description: "Puts target to sleep",
-		Nature:      &nature,
+		Nature:      game.Ptr(game.NsYin),
 		TargetCount: game.Ptr(1),
 		Accuracy:    game.Ptr(100),
 		Cost:        game.Ptr(30),

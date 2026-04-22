@@ -9,11 +9,10 @@ import (
 var BloodPrice = MakeBloodPrice()
 
 func MakeBloodPrice() game.Action {
-	nature := game.NsJashin
 	config := game.ActionConfig{
 		Name:        "Blood Price",
 		Description: "Deals damage equal to 1.5x the amount damage last dealt to the user by the target.",
-		Nature:      &nature,
+		Nature:      game.Ptr(game.NsJashin),
 		Jutsu:       game.Fuinjutsu,
 	}
 	return game.Action{

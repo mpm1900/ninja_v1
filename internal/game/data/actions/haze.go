@@ -11,10 +11,9 @@ import (
 var Haze = MakeHaze()
 
 func MakeHaze() game.Action {
-	nature := game.NsIce
 	config := game.ActionConfig{
 		Name:        "Haze",
-		Nature:      &nature,
+		Nature:      game.Ptr(game.NsIce),
 		Jutsu:       game.Ninjutsu,
 		Description: "Nullifies all stat ups/downs.",
 	}

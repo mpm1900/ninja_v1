@@ -11,14 +11,11 @@ import (
 var LeechSeed = MakeLeechSeed()
 
 func MakeLeechSeed() game.Action {
-	nature := game.NsYang
-	targetCount := 1
-	chakraCost := 30
 	config := game.ActionConfig{
 		Name:        "Leech Seed",
-		Nature:      &nature,
-		TargetCount: &targetCount,
-		Cost:        &chakraCost,
+		Nature:      game.Ptr(game.NsYang),
+		TargetCount: game.Ptr(1),
+		Cost:        game.Ptr(30),
 		Jutsu:       game.Senjutsu,
 	}
 
@@ -28,7 +25,7 @@ func MakeLeechSeed() game.Action {
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
 		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
-		Cost:            modifiers.UseStaminaCost(chakraCost),
+		Cost:            modifiers.UseStaminaCost(*config.Cost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
 			Filter:   game.SourceIsAlive,

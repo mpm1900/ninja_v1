@@ -9,10 +9,9 @@ import (
 var ShadowClone = MakeShadowClone()
 
 func MakeShadowClone() game.Action {
-	nature := game.NsYin
 	config := game.ActionConfig{
 		Name:        "Shadow Clone",
-		Nature:      &nature,
+		Nature:      game.Ptr(game.NsYin),
 		Jutsu:       game.Ninjutsu,
 		Description: "Summons a shadow clone to take damage. Pay 1/4th of Max HP.",
 	}

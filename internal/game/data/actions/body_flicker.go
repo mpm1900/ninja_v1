@@ -21,7 +21,7 @@ func MakeBodyFlicker() game.Action {
 		Power:       game.Ptr(70),
 		Accuracy:    game.Ptr(100),
 		Stat:        game.Ptr(game.StatAttack),
-		CritChance:  game.Ptr(5),
+		CritChance:  game.Ptr(getCriticalStage(0)),
 		CritMod:     1.5,
 	}
 

@@ -11,12 +11,10 @@ import (
 var Coercion = MakeCoercion()
 
 func MakeCoercion() game.Action {
-	cooldown := 1
-	nature := game.NsYin
 	config := game.ActionConfig{
 		Name:        "Coercion",
-		Nature:      &nature,
-		Cooldown:    &cooldown,
+		Nature:      game.Ptr(game.NsYin),
+		Cooldown:    game.Ptr(1),
 		Jutsu:       game.Genjutsu,
 		Description: "Forces the target to use only their last used action.",
 	}
