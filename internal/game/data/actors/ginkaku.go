@@ -33,7 +33,7 @@ var Ginkaku = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
-		actions.Surf.ID,
+		actions.CollidingWave.ID,
 		actions.DragonDance.ID,
 		actions.WhirlwindKick.ID,
 	},

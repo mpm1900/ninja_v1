@@ -35,11 +35,13 @@ var Kisame = game.ActorDef{
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
-		actions.Surf.ID,
-		actions.Chidori.ID,
+		actions.CollidingWave.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
 		actions.WhirlwindKick.ID,
 		actions.HiddenMist.ID,
+		actions.WaterDragon.ID,
+		actions.SharkBomb.ID,
+		actions.GreatWaterfall.ID,
 	},
 }

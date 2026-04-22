@@ -6,13 +6,13 @@ import (
 	"github.com/google/uuid"
 )
 
-var Surf = MakeSurf()
+var CollidingWave = MakeCollidingWave()
 
-func MakeSurf() game.Action {
+func MakeCollidingWave() game.Action {
 	ID := uuid.MustParse("74d5a7d7-cb62-58b4-9ace-e80bf7f0fd40")
 
 	config := game.ActionConfig{
-		Name:        "Surf",
+		Name:        "Colliding Wave",
 		Description: "Hits all other active shinobi.",
 		Nature:      game.Ptr(game.NsWater),
 		Accuracy:    game.Ptr(100),

@@ -41,6 +41,6 @@ var Nagato = game.ActorDef{
 		actions.BodyReplacement.ID,
 		actions.Tailwind.ID,
 		actions.MindTransfer.ID,
-		actions.Surf.ID,
+		actions.CollidingWave.ID,
 	},
 }

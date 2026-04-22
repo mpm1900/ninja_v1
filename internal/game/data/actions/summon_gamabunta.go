@@ -29,7 +29,7 @@ var Gamabunta game.ActorDef = game.ActorDef{
 }
 
 var GamabuntaActions []game.Action = []game.Action{
-	Surf,
+	CollidingWave,
 }
 
 var SummonGamabunta = MakeSummonGamabunta()

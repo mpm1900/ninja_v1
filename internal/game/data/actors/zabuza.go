@@ -34,8 +34,9 @@ var Zabuza = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
-		actions.Surf.ID,
+		actions.CollidingWave.ID,
 		actions.WhirlwindKick.ID,
 		actions.HiddenMist.ID,
+		actions.WaterDragon.ID,
 	},
 }

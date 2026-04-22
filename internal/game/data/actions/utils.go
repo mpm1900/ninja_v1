@@ -58,6 +58,35 @@ func makeBasicAttack(ID uuid.UUID, config game.ActionConfig) game.Action {
 	return makeBasicAttackWith(ID, config, nil, nil)
 }
 
+func applyModifier(config game.ActionConfig, actor game.Actor, modifier game.Modifier) []game.GameTransaction {
+	transactions := []game.GameTransaction{}
+
+	if mutations.CheckJutsuImmunity(config, actor) {
+		log_ctx := game.MakeContextForActor(actor)
+		log := game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", config.Jutsu), log_ctx)
+		tx := game.AddLogs(log)
+		transactions = append(transactions, game.MakeTransaction(tx, log_ctx))
+
+		return transactions
+	}
+
+	ctx := game.MakeContextForActor(actor)
+
+	mod := mutations.AddModifiers(true, modifier)
+	mod_tx := game.MakeTransaction(mod, ctx)
+	transactions = append(transactions, mod_tx)
+
+	return transactions
+}
+func chanceModifier(config game.ActionConfig, actor game.Actor, modifier game.Modifier, chance int) []game.GameTransaction {
+	roll := rand.IntN(100)
+	if roll > chance {
+		return []game.GameTransaction{}
+	}
+
+	return applyModifier(config, actor, modifier)
+}
+
 func applyStatus(config game.ActionConfig, actor game.Actor, modifier game.Modifier, mutation game.GameMutation) []game.GameTransaction {
 	transactions := []game.GameTransaction{}
 
@@ -166,6 +195,7 @@ var criticalStages = map[int]float64{
 	2: 50.0,
 	3: 1,
 }
+
 func getCriticalStage(stage int) int {
 	stage = max(0, stage)
 	stage = min(stage, len(criticalStages)-1)

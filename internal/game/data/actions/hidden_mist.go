@@ -15,7 +15,7 @@ func MakeHiddenMist() game.Action {
 		Name:        "Hidden Mist",
 		Nature:      game.Ptr(game.NsWater),
 		Jutsu:       game.Ninjutsu,
-		Description: "All non-water shinobi have Accuracy down x2.",
+		Description: "All non-water shinobi have Accuracy down x2 for 5 turns.",
 	}
 	return game.Action{
 		ID:              uuid.MustParse("a8c7fab6-c3e0-4933-ab1a-3d05376c05b1"),
@@ -29,22 +29,23 @@ func MakeHiddenMist() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				for _, tx := range g.GetModifiers() {
-					if tx.Context.SourcePlayerID == nil {
-						continue
-					}
-
-					if *tx.Context.SourcePlayerID == *context.SourcePlayerID && tx.Mutation.ID == modifiers.HiddenMist.ID {
-						log := game.NewLogContext("$action$ failed.", context)
-						log_tx := game.MakeTransaction(game.AddLogs(log), context)
-						return append(transactions, log_tx)
-					}
-
+				if checkPlayerHasModifier(g, context, modifiers.HiddenMist.ID) {
+					log := game.NewLogContext("$action$ failed.", context)
+					log_tx := game.MakeTransaction(game.AddLogs(log), context)
+					return append(transactions, log_tx)
 				}
 
 				mod := modifiers.HiddenMist
 				mod.Show = true
 				mod.Duration = 5
+				filter := mod.ActorMutations[0].Filter
+				mod.ActorMutations[0].Filter = func(g game.Game, a game.Actor, context game.Context) bool {
+					_, ok := a.Natures[game.NsWater]
+					if ok {
+						return false
+					}
+					return filter(g, a, context)
+				}
 				mutation := mutations.AddModifiers(false, mod)
 				context.ParentActorID = nil
 				transaction := game.MakeTransaction(mutation, context)
