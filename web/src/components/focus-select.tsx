@@ -1,4 +1,4 @@
-import { actorFocuses, type ActorFocus } from '#/lib/game/actor'
+import { ACTOR_FOCUS_DETAILS, actorFocuses, type ActorFocus } from '#/lib/game/actor'
 import { Field, FieldContent, FieldLabel } from './ui/field'
 import {
   Select,
@@ -29,7 +29,7 @@ function FocusSelect({
             <SelectGroup>
               {actorFocuses.map((focus) => (
                 <SelectItem key={focus} value={focus}>
-                  {focus}
+                  {focus} (+{ACTOR_FOCUS_DETAILS[focus].up}, -{ACTOR_FOCUS_DETAILS[focus].down})
                 </SelectItem>
               ))}
             </SelectGroup>

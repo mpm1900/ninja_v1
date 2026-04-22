@@ -15,7 +15,7 @@ func MakeChidori() game.Action {
 		Description: "Deals 30% recoil damage.",
 		Nature:      game.Ptr(game.NsLightning),
 		Accuracy:    game.Ptr(95),
-		Power:       game.Ptr(100),
+		Power:       game.Ptr(105),
 		Stat:        game.Ptr(game.StatAttack),
 		Cost:        game.Ptr(50),
 		TargetCount: game.Ptr(1),

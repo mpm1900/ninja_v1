@@ -28,6 +28,7 @@ var ACTORS map[uuid.UUID]game.ActorDef = map[uuid.UUID]game.ActorDef{
 	actors.PainNaraka.ActorID: actors.PainNaraka,
 	actors.PainPreta.ActorID:  actors.PainPreta,
 	actors.Jiraiya.ActorID:    actors.Jiraiya,
+	actors.Tsunade.ActorID:    actors.Tsunade,
 	actors.Orochimaru.ActorID: actors.Orochimaru,
 	actors.Yamato.ActorID:     actors.Yamato,
 	actors.Raikage.ActorID:    actors.Raikage,

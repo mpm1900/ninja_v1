@@ -22,7 +22,7 @@ func MakeRasenshuriken() game.Action {
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(50),
 		Jutsu:       game.Ninjutsu,
-		CritChance:  game.Ptr(5),
+		CritChance:  game.Ptr(getCriticalStage(0)),
 		CritMod:     1.5,
 	}
 

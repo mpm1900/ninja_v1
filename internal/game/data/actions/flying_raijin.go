@@ -12,7 +12,7 @@ func MakeFlyingRaijin() game.Action {
 	ID := uuid.MustParse("1a54031e-0ae6-49ed-b8b5-931c692417bf")
 	config := game.ActionConfig{
 		Name:        "Flying Raijin",
-		Description: "+2 priority.",
+		Description: "+2 priority. High critical hit chance.",
 		Nature:      game.Ptr(game.NsTai),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(80),
@@ -21,7 +21,7 @@ func MakeFlyingRaijin() game.Action {
 		Cost:        game.Ptr(0),
 		Cooldown:    game.Ptr(1),
 		Jutsu:       game.Ninjutsu,
-		CritChance:  game.Ptr(5),
+		CritChance:  game.Ptr(getCriticalStage(1)),
 		CritMod:     1.5,
 	}
 

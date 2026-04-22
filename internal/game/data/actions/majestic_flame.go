@@ -22,7 +22,7 @@ func MakeMajesticFlame() game.Action {
 		Cost:        game.Ptr(120),
 		Cooldown:    game.Ptr(2),
 		Jutsu:       game.Ninjutsu,
-		CritChance:  game.Ptr(5),
+		CritChance:  game.Ptr(getCriticalStage(0)),
 		CritMod:     1.5,
 	}
 

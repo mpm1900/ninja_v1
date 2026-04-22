@@ -19,7 +19,7 @@ func MakeLuckyStrikes() game.Action {
 		Cost:        game.Ptr(30),
 		TargetCount: game.Ptr(1),
 		Jutsu:       game.Taijutsu,
-		CritChance:  game.Ptr(5),
+		CritChance:  game.Ptr(getCriticalStage(0)),
 		CritMod:     1.5,
 	}
 	return game.Action{

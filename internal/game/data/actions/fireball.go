@@ -22,7 +22,7 @@ func MakeFireball() game.Action {
 		Cost:        game.Ptr(50),
 		Cooldown:    game.Ptr(0),
 		Jutsu:       game.Ninjutsu,
-		CritChance:  game.Ptr(5),
+		CritChance:  game.Ptr(getCriticalStage(0)),
 		CritMod:     1.5,
 	}
 

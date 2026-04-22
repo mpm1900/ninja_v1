@@ -20,7 +20,7 @@ func MakeHumanBoulder() game.Action {
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(0),
 		Jutsu:       game.Taijutsu,
-		CritChance:  game.Ptr(5),
+		CritChance:  game.Ptr(getCriticalStage(0)),
 		CritMod:     1.5,
 	}
 	return makeBasicAttack(ID, config)
