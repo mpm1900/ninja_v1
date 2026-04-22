@@ -13,7 +13,7 @@ func MakeChidoriStream() game.Action {
 
 	config := game.ActionConfig{
 		Name:        "Chidori Stream",
-		Description: "Hits all enemy shinobi. 20% chance to paralyze targets.",
+		Description: "Hits all enemy shinobi. 10% chance to paralyze targets.",
 		Nature:      game.Ptr(game.NsLightning),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(80),
@@ -33,7 +33,7 @@ func MakeChidoriStream() game.Action {
 			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, chanceParalysis(config, target, 20)...)
+				transactions = append(transactions, chanceParalysis(config, target, 10)...)
 			}
 
 			return transactions

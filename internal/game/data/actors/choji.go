@@ -35,7 +35,7 @@ var Choji = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
-		actions.LeafJab.ID,
+		actions.WhirlwindKick.ID,
 		actions.HumanBoulder.ID,
 		actions.HeavyPunch.ID,
 	},

@@ -42,9 +42,11 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.Rasenshuriken.ID:    actions.Rasenshuriken,
 	actions.FlyingRaijin.ID:     actions.FlyingRaijin,
 
-	actions.HeavyPunch.ID:  actions.HeavyPunch,
-	actions.LeafJab.ID:     actions.LeafJab,
-	actions.DragonDance.ID: actions.DragonDance,
+	actions.HeavyPunch.ID:    actions.HeavyPunch,
+	actions.WhirlwindKick.ID: actions.WhirlwindKick,
+	actions.DragonDance.ID:   actions.DragonDance,
+	actions.IronSkin.ID:      actions.IronSkin,
+	actions.IronBody.ID:      actions.IronBody,
 
 	// FIRE ATTACKS
 	actions.Fireball.ID:              actions.Fireball,
@@ -54,13 +56,18 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.DragonFire.ID:            actions.DragonFire,
 	actions.SearingMigraine.ID:       actions.SearingMigraine,
 	actions.GreatFireAnnihilation.ID: actions.GreatFireAnnihilation,
+	actions.MajesticFlame.ID:         actions.MajesticFlame,
 	actions.Asakujaku.ID:             actions.Asakujaku,
 	actions.Firestorm.ID:             actions.Firestorm,
 
 	actions.Chidori.ID:       actions.Chidori,
 	actions.ChidoriSpear.ID:  actions.ChidoriSpear,
 	actions.ChidoriStream.ID: actions.ChidoriStream,
+	actions.Raikiri.ID:       actions.Raikiri,
 	actions.Kirin.ID:         actions.Kirin,
+	actions.FalseDarkness.ID: actions.FalseDarkness,
+
+	actions.PressureDamage.ID: actions.PressureDamage,
 
 	actions.Curse.ID:            actions.Curse,
 	actions.Recover.ID:          actions.Recover,

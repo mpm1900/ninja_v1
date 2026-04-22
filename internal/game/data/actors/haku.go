@@ -35,7 +35,7 @@ var Haku = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.DragonDance.ID,
 		actions.Surf.ID,
-		actions.LeafJab.ID,
+		actions.WhirlwindKick.ID,
 		actions.HiddenMist.ID,
 	},
 }

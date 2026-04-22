@@ -34,7 +34,7 @@ var RockLee = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.LuckyStrikes.ID,
 		actions.DragonDance.ID,
-		actions.LeafJab.ID,
+		actions.WhirlwindKick.ID,
 		actions.HeavyPunch.ID,
 		actions.Asakujaku.ID,
 	},

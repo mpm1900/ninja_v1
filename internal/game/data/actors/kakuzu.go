@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -29,12 +30,17 @@ var Kakuzu = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsEarth,
 	}),
-	Abilities:   []game.Modifier{},
+	Abilities: []game.Modifier{
+		modifiers.ConsumeChakra,
+	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
-		actions.Chidori.ID,
+		actions.IronSkin.ID,
+		actions.IronBody.ID,
 		actions.DragonDance.ID,
 		actions.SearingMigraine.ID,
-		actions.LeafJab.ID,
+		actions.FalseDarkness.ID,
+		actions.PressureDamage.ID,
+		actions.WhirlwindKick.ID,
 	},
 }

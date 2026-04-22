@@ -35,7 +35,7 @@ var Zabuza = game.ActorDef{
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Surf.ID,
-		actions.LeafJab.ID,
+		actions.WhirlwindKick.ID,
 		actions.HiddenMist.ID,
 	},
 }

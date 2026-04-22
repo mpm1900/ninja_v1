@@ -6,25 +6,24 @@ import (
 	"github.com/google/uuid"
 )
 
-var LeafJab = MakeLeafJab()
+var WhirlwindKick = MakeWhirlwindKick()
 
-func MakeLeafJab() game.Action {
+func MakeWhirlwindKick() game.Action {
 	ID := uuid.MustParse("b23ace96-eb09-5bf7-b884-7ef8e8fc544d")
 	config := game.ActionConfig{
-		Name:        "Leaf Jab",
-		Description: "+1 priority.",
+		Name:        "Whirlwind Kick",
+		Description: "High critical chance.",
 		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(50),
+		Power:       game.Ptr(80),
 		Stat:        game.Ptr(game.StatAttack),
-		Nature:      game.Ptr(game.NsWood),
-		Cost:        game.Ptr(30),
+		Nature:      game.Ptr(game.NsTai),
+		Cost:        game.Ptr(0),
 		TargetCount: game.Ptr(1),
 		Jutsu:       game.Taijutsu,
-		CritChance:  game.Ptr(5),
+		CritChance:  game.Ptr(getCriticalStage(2)),
 		CritMod:     1.5,
 	}
 
 	action := makeBasicAttack(ID, config)
-	action.Priority = game.ActionPriorityP1
 	return action
 }

@@ -39,6 +39,6 @@ var Kimimaro = game.ActorDef{
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
-		actions.LeafJab.ID,
+		actions.WhirlwindKick.ID,
 	},
 }

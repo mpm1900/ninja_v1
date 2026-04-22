@@ -35,6 +35,6 @@ var KillerBee = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.Surf.ID,
 		actions.DragonDance.ID,
-		actions.LeafJab.ID,
+		actions.WhirlwindKick.ID,
 	},
 }

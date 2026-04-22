@@ -42,7 +42,7 @@ var Minato = game.ActorDef{
 		actions.DragonDance.ID,
 		actions.SageMode.ID,
 		actions.Fireball.ID,
-		actions.LeafJab.ID,
+		actions.WhirlwindKick.ID,
 		actions.FlyingRaijin.ID,
 		actions.SummonAlly.ID,
 	},

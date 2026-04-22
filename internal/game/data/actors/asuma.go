@@ -37,7 +37,7 @@ var Asuma = game.ActorDef{
 		actions.Fireball.ID,
 		actions.DragonFire.ID,
 		actions.Firestorm.ID,
-		actions.LeafJab.ID,
+		actions.WhirlwindKick.ID,
 		actions.HeavyPunch.ID,
 	},
 }

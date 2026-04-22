@@ -11,7 +11,7 @@ import (
 var Firestorm = MakeFirestorm()
 
 func MakeFirestorm() game.Action {
-	ID := uuid.MustParse("aaf5174b-f386-54b1-84c4-0c062937c770")
+	ID := uuid.MustParse("5756b76d-dd39-460c-b5fa-431b80200f3b")
 
 	config := game.ActionConfig{
 		Name:        "Firestorm",

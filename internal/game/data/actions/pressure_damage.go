@@ -8,15 +8,15 @@ import (
 	"github.com/google/uuid"
 )
 
-var SearingMigraine = MakeSearingMigraine()
+var PressureDamage = MakePressureDamage()
 
-func MakeSearingMigraine() game.Action {
-	ID := uuid.MustParse("dc6edab6-535f-508f-b791-e197283eae86")
+func MakePressureDamage() game.Action {
+	ID := uuid.MustParse("22f9cca5-b709-444d-a1d1-72f3707b08cc")
 
 	config := game.ActionConfig{
-		Name:        "Searing Migraine",
-		Description: "Hits all enemy shinobi. Grants the user Fire nature until end of turn.",
-		Nature:      game.Ptr(game.NsFire),
+		Name:        "Pressure Damage",
+		Description: "Hits all enemy shinobi. Grants the user Wind nature until end of turn.",
+		Nature:      game.Ptr(game.NsWind),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(75),
 		Stat:        game.Ptr(game.StatChakraAttack),
@@ -29,7 +29,7 @@ func MakeSearingMigraine() game.Action {
 	}
 
 	action := makeBasicAttackWith(ID, config, nil, func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction {
-		add_mut := mutations.AddModifiers(false, modifiers.AddNature(game.NsFire, 0))
+		add_mut := mutations.AddModifiers(false, modifiers.AddNature(game.NsWind, 0))
 		add_tx := game.MakeTransaction(add_mut, context)
 		transactions = append(transactions, add_tx)
 		return transactions

@@ -6,37 +6,40 @@ import (
 	"github.com/google/uuid"
 )
 
-var Kirin = MakeKirin()
+var MajesticFlame = MakeMajesticFlame()
 
-func MakeKirin() game.Action {
-	ID := uuid.MustParse("d55c8221-fc03-4ae0-9737-cb5c7db88f73")
+func MakeMajesticFlame() game.Action {
+	ID := uuid.MustParse("19c9f58e-9012-417f-af58-1c09d448f0dc")
 
 	config := game.ActionConfig{
-		Name:        "Kirin",
-		Description: "30% chance to paralyze the target. Always crits.",
-		Nature:      game.Ptr(game.NsLightning),
-		Accuracy:    game.Ptr(70),
+		Name:        "Majestic Flame",
+		Description: "40% chance to burn targets.",
+		Nature:      game.Ptr(game.NsFire),
+		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(100),
 		Stat:        game.Ptr(game.StatChakraAttack),
-		Cost:        game.Ptr(50),
 		TargetCount: game.Ptr(1),
+		Cost:        game.Ptr(120),
+		Cooldown:    game.Ptr(2),
 		Jutsu:       game.Ninjutsu,
-		CritChance:  game.Ptr(getCriticalStage(4)),
+		CritChance:  game.Ptr(5),
 		CritMod:     1.5,
 	}
 
-	return makeBasicAttackWith(
+	action := makeBasicAttackWith(
 		ID,
 		config,
 		func(g game.Game, context game.Context) []game.GameTransaction {
 			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, chanceParalysis(config, target, 30)...)
+				transactions = append(transactions, chanceBurn(config, target, 20)...)
 			}
 
 			return transactions
 		},
 		nil,
 	)
+
+	return action
 }

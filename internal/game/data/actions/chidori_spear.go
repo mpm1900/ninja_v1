@@ -9,14 +9,14 @@ import (
 var ChidoriSpear = MakeChidoriSpear()
 
 func MakeChidoriSpear() game.Action {
-	ID := uuid.MustParse("d55c8221-fc03-4ae0-9737-cb5c7db88f73")
+	ID := uuid.MustParse("f89e4aba-35c8-4ddf-ab0b-bb809d5deb69")
 
 	config := game.ActionConfig{
 		Name:        "Chidori Spear",
 		Description: "20% chance to paralyze the target.",
 		Nature:      game.Ptr(game.NsLightning),
 		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(85),
+		Power:       game.Ptr(90),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		Cost:        game.Ptr(50),
 		TargetCount: game.Ptr(1),

@@ -36,6 +36,6 @@ var Shino = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
-		actions.LeafJab.ID,
+		actions.WhirlwindKick.ID,
 	},
 }

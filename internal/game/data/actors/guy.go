@@ -42,7 +42,7 @@ var Guy = game.ActorDef{
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Asakujaku.ID,
-		actions.LeafJab.ID,
+		actions.WhirlwindKick.ID,
 		actions.HeavyPunch.ID,
 	},
 }

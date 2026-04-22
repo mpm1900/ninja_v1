@@ -39,6 +39,5 @@ var Onoki = game.ActorDef{
 		actions.Chidori.ID,
 		actions.DragonDance.ID,
 		actions.Fireball.ID,
-		actions.LeafJab.ID,
 	},
 }

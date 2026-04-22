@@ -87,7 +87,7 @@ const columns = [
   }),
   helper.accessor('config.cooldown', {
     header: 'C/D',
-    cell: ({ row }) => row.original.config.cooldown ?? '-',
+    cell: ({ row }) => row.original.config.cooldown || '-',
   }),
   helper.accessor('config.description', {
     id: 'description',

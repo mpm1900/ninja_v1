@@ -42,7 +42,7 @@ var Tobirama = game.ActorDef{
 		actions.LeechSeed.ID,
 		actions.Haze.ID,
 		actions.GreatTreeSpear.ID,
-		actions.LeafJab.ID,
+		actions.WhirlwindKick.ID,
 		actions.ShadowClone.ID,
 	},
 }
