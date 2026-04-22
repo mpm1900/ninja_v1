@@ -138,8 +138,25 @@ func chanceParalysis(config game.ActionConfig, actor game.Actor, chance int) []g
 func applySleep(config game.ActionConfig, actor game.Actor) []game.GameTransaction {
 	return applyStatus(config, actor, modifiers.Sleeping, mutations.Sleep)
 }
+func chanceSleep(config game.ActionConfig, actor game.Actor, chance int) []game.GameTransaction {
+	roll := rand.IntN(100)
+	if roll > chance {
+		return []game.GameTransaction{}
+	}
+
+	return applySleep(config, actor)
+}
+
 func applyPoison(config game.ActionConfig, actor game.Actor) []game.GameTransaction {
 	return applyStatus(config, actor, modifiers.Poisoned, mutations.Poison)
+}
+func chancePoison(config game.ActionConfig, actor game.Actor, chance int) []game.GameTransaction {
+	roll := rand.IntN(100)
+	if roll > chance {
+		return []game.GameTransaction{}
+	}
+
+	return applyPoison(config, actor)
 }
 
 func applySummon(context game.Context, def game.ActorDef, actions []game.Action) []game.GameTransaction {
@@ -196,7 +213,7 @@ var criticalStages = map[int]float64{
 	0: 4.167,
 	1: 12.5,
 	2: 50.0,
-	3: 1,
+	3: 100.0,
 }
 
 func getCriticalStage(stage int) int {

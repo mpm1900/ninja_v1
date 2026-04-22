@@ -24,6 +24,7 @@ type DamageTerms struct {
 type DamageConfig struct {
 	Critical        float64
 	Random          float64
+	IgnoreProtect   bool
 	IgnoreModifiers bool
 	Repeat          bool
 	RepeatMax       int
@@ -36,6 +37,7 @@ func NewDamageConfig(critical float64, random float64) DamageConfig {
 		Critical:        critical,
 		Random:          random,
 		IgnoreModifiers: critical > 1,
+		IgnoreProtect:   false,
 		Repeat:          false,
 		RepeatMax:       0,
 	}

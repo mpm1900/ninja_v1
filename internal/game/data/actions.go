@@ -68,12 +68,14 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.RasenganRecharge.ID: actions.RasenganRecharge,
 	actions.FlyingRaijin.ID:     actions.FlyingRaijin,
 
-	actions.LuckyStrikes.ID:  actions.LuckyStrikes,
-	actions.HeavyPunch.ID:    actions.HeavyPunch,
-	actions.WhirlwindKick.ID: actions.WhirlwindKick,
-	actions.DragonStance.ID:  actions.DragonStance,
-	actions.SwordsStance.ID:  actions.SwordsStance,
-	actions.KusariChains.ID:  actions.KusariChains,
+	actions.LuckyStrikes.ID:        actions.LuckyStrikes,
+	actions.HeavyPunch.ID:          actions.HeavyPunch,
+	actions.WhirlwindKick.ID:       actions.WhirlwindKick,
+	actions.DragonStance.ID:        actions.DragonStance,
+	actions.SwordsStance.ID:        actions.SwordsStance,
+	actions.KusariChains.ID:        actions.KusariChains,
+	actions.CamelliaDance.ID:       actions.CamelliaDance,
+	actions.ClematisDanceFlower.ID: actions.ClematisDanceFlower,
 
 	actions.IronSkin.ID:     actions.IronSkin,
 	actions.IronBody.ID:     actions.IronBody,
@@ -105,4 +107,6 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.VacuumBlast.ID:    actions.VacuumBlast,
 
 	actions.PoisonSting.ID: actions.PoisonSting,
+
+	actions.SnakeStrike.ID: actions.SnakeStrike,
 }

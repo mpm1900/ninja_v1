@@ -195,7 +195,7 @@ func (e *damageHandler) run(g *Game) {
 }
 
 func (e *damageHandler) resolveTargetHit(g *Game, targetIndex int, target ResolvedActor) bool {
-	if target.Protected {
+	if target.Protected && !e.config.IgnoreProtect {
 		g.PushLog(NewLogContext("| $source$ was protected.", e.context.WithSource(target.ID)))
 		return false
 	}
@@ -274,7 +274,17 @@ func (e *damageHandler) queueRepeatHit(target ResolvedActor, damage int) {
 	logMux.Filter = TargetsAreOneAlive
 	logTx := MakeTransaction(logMux, e.context)
 
-	e.repeatTransactions = append(e.repeatTransactions, logTx, repeatTx)
+	if e.config.Critical > 1.0 {
+		critlog := NewLog(fmt.Sprintf("| Critical Hit! (x%f)", e.config.Critical))
+		critlogMux := AddLogs(critlog)
+		critlogMux.Filter = TargetsAreOneAlive
+		critlogTx := MakeTransaction(critlogMux, e.context)
+		e.repeatTransactions = append(e.repeatTransactions, logTx, critlogTx)
+	} else {
+		e.repeatTransactions = append(e.repeatTransactions, logTx)
+	}
+
+	e.repeatTransactions = append(e.repeatTransactions, repeatTx)
 }
 func (e *damageHandler) logNatureEffectiveness(g *Game, target ResolvedActor) {
 	var natures []Nature

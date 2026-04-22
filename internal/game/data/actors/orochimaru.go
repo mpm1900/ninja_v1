@@ -27,7 +27,7 @@ var Orochimaru = game.ActorDef{
 	NatureDamage:     game.NewNatureSetValues(),
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsEarth,
+		game.NsWind,
 		game.NsYin,
 	}),
 	Abilities:   []game.Modifier{},
@@ -39,5 +39,6 @@ var Orochimaru = game.ActorDef{
 		actions.WhirlwindKick.ID,
 		actions.MindTransfer.ID,
 		actions.PatternBreak.ID,
+		actions.SnakeStrike.ID,
 	},
 }

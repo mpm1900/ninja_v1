@@ -85,7 +85,7 @@ function GameLog() {
     <Accordion
       defaultValue={['log']}
       type="multiple"
-      className="bg-black/70 px-3 border border-zinc-900 min-w-80 mt-4"
+      className="bg-black/70 px-3 border border-zinc-900 min-w-96 mt-4"
     >
       <AccordionItem value="log">
         <AccordionTrigger>Log</AccordionTrigger>
