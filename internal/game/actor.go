@@ -201,12 +201,14 @@ type ActorState struct {
 	 *  ResolveAction will not check if the source has a modifier "Paralysis,"
 	 *  It instead checks the flag set by Paralysis here.
 	 */
-	Statused     bool `json:"statused"`
-	Burned       bool `json:"burned"`
-	Paralyzed    bool `json:"paralyzed"`
-	Poisoned     bool `json:"poisoned"`
-	Sleeping     bool `json:"sleeping"`
-	SleepCounter int  `json:"-"`
+	Statused        bool `json:"statused"`
+	Burned          bool `json:"burned"`
+	Paralyzed       bool `json:"paralyzed"`
+	Poisoned        bool `json:"poisoned"`
+	PoisonedCounter int  `json:"-"`
+	Sleeping        bool `json:"sleeping"`
+	SleepCounter    int  `json:"-"`
+
 	/**
 	 * Metadata fields used for tracking and filters
 	 */
@@ -421,6 +423,7 @@ func (a *Actor) SetPosition(positionID *uuid.UUID) {
 		a.AuxAbility = nil
 		a.LastUsedActionID = nil
 		a.InactiveTurns = 0
+		a.PoisonedCounter = 0
 		a.SetSummon(nil)
 	}
 }

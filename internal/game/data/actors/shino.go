@@ -37,5 +37,6 @@ var Shino = game.ActorDef{
 		actions.DragonStance.ID,
 		actions.Fireball.ID,
 		actions.WhirlwindKick.ID,
+		actions.PoisonSting.ID,
 	},
 }

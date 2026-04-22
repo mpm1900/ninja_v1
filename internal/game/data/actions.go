@@ -101,4 +101,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.Rasenshuriken.ID:  actions.Rasenshuriken,
 	actions.PressureDamage.ID: actions.PressureDamage,
 	actions.BodyFlicker.ID:    actions.BodyFlicker,
+	actions.VacuumBlast.ID:    actions.VacuumBlast,
+
+	actions.PoisonSting.ID: actions.PoisonSting,
 }

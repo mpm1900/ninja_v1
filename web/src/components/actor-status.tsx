@@ -11,6 +11,7 @@ function ActorStatus({ actor }: { actor: Actor }) {
           'bg-orange-200 border-orange-700 text-orange-900': actor.burned,
           'bg-indigo-300 border-indigo-700 text-indigo-900': actor.sleeping,
           'bg-yellow-200 border-yellow-700 text-yellow-900': actor.paralyzed,
+          'bg-lime-200 border-lime-700 text-yellow-900': actor.poisoned,
         }
       )}
     >
@@ -19,6 +20,7 @@ function ActorStatus({ actor }: { actor: Actor }) {
           {actor.sleeping && 'SLEEP'}
           {actor.paralyzed && 'PARA'}
           {actor.burned && 'BURN'}
+          {actor.poisoned && 'POISON'}
         </span>
       ) : (
         <span className='-mt-0.5 block'>LV {actor.level}</span>

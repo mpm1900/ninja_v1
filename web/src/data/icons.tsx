@@ -17,6 +17,7 @@ import {
   GiSandstorm,
   GiHealthIncrease,
   GiWaterRecycling,
+  GiPoisonBottle,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -143,6 +144,9 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   onigiri: PiOnigiriFill,
   paralyzed: ({ className, ...props }) => (
     <GiLightningTrio className={cn('text-yellow-400', className)} {...props} />
+  ),
+  poisoned: ({ className, ...props }) => (
+    <GiPoisonBottle className={cn('text-lime-500', className)} {...props} />
   ),
   priority_failure: MdFileUploadOff,
   protected: GiShieldcomb,

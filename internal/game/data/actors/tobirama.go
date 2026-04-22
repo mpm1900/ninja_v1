@@ -44,5 +44,6 @@ var Tobirama = game.ActorDef{
 		actions.GreatTreeSpear.ID,
 		actions.WhirlwindKick.ID,
 		actions.ShadowClone.ID,
+		actions.VacuumBlast.ID,
 	},
 }

@@ -99,6 +99,7 @@ var Poison = game.GameMutation{
 				}
 
 				a.Poisoned = true
+				a.PoisonedCounter = 1
 				a.Statused = true
 
 				return a

@@ -19,7 +19,7 @@ func MakeKamuiSlash() game.Action {
 		Stat:        game.Ptr(game.StatAttack),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(60),
-		Cooldown:    game.Ptr(1),
+		Cooldown:    game.Ptr(0),
 		Jutsu:       game.Ninjutsu,
 		CritChance:  game.Ptr(getCriticalStage(0)),
 		CritMod:     1.5,

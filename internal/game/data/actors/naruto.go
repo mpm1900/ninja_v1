@@ -45,6 +45,7 @@ var Naruto = game.ActorDef{
 		actions.WhirlwindKick.ID,
 		actions.SummonGamabunta.ID,
 		actions.Rasenshuriken.ID,
+		actions.VacuumBlast.ID,
 		actions.ShadowClone.ID,
 	},
 }

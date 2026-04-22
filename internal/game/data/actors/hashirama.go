@@ -46,5 +46,6 @@ var Hashirama = game.ActorDef{
 		actions.ShadowClone.ID,
 		actions.HeavyPunch.ID,
 		actions.SageMode.ID,
+		actions.VacuumBlast.ID,
 	},
 }

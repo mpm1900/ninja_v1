@@ -138,6 +138,9 @@ func chanceParalysis(config game.ActionConfig, actor game.Actor, chance int) []g
 func applySleep(config game.ActionConfig, actor game.Actor) []game.GameTransaction {
 	return applyStatus(config, actor, modifiers.Sleeping, mutations.Sleep)
 }
+func applyPoison(config game.ActionConfig, actor game.Actor) []game.GameTransaction {
+	return applyStatus(config, actor, modifiers.Poisoned, mutations.Poison)
+}
 
 func applySummon(context game.Context, def game.ActorDef, actions []game.Action) []game.GameTransaction {
 	transactions := []game.GameTransaction{}

@@ -16,6 +16,9 @@ var END_OF_TURN_TRIGGER Trigger = Trigger{
 						if t > 0 {
 							g.Actors[i].DecrementCooldowns()
 							g.Actors[i].RecoverStamina(g, 0.08)
+							if g.Actors[i].Poisoned {
+								g.Actors[i].PoisonedCounter++
+							}
 						}
 						g.Actors[i].IncrementTurns()
 					}

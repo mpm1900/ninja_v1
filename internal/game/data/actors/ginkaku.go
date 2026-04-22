@@ -36,5 +36,6 @@ var Ginkaku = game.ActorDef{
 		actions.CollidingWave.ID,
 		actions.DragonStance.ID,
 		actions.WhirlwindKick.ID,
+		actions.VacuumBlast.ID,
 	},
 }

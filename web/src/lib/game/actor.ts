@@ -100,6 +100,7 @@ type ActorState = {
   statused: boolean
   burned: boolean
   paralyzed: boolean
+  poisoned: boolean
   sleeping: boolean
 }
 
