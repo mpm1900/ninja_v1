@@ -33,7 +33,7 @@ var Haku = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
-		actions.DragonDance.ID,
+		actions.DragonStance.ID,
 		actions.CollidingWave.ID,
 		actions.WhirlwindKick.ID,
 		actions.HiddenMist.ID,

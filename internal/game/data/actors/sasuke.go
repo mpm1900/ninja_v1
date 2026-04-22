@@ -41,7 +41,7 @@ var Sasuke = game.ActorDef{
 		actions.ChidoriSpear.ID,
 		actions.ChidoriStream.ID,
 		actions.Kirin.ID,
-		actions.DragonDance.ID,
+		actions.DragonStance.ID,
 		actions.Fireball.ID,
 		actions.GreatFireball.ID,
 		actions.Amaterasu.ID,

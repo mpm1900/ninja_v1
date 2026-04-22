@@ -40,7 +40,7 @@ var Madara = game.ActorDef{
 		actions.Flash.ID,
 		actions.BodyReplacement.ID,
 		actions.Taunt.ID,
-		actions.DragonDance.ID,
+		actions.DragonStance.ID,
 		actions.Fireball.ID,
 		actions.GreatFireball.ID,
 		actions.WhirlwindKick.ID,

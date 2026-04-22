@@ -45,7 +45,7 @@ var Kakashi = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.Raikiri.ID,
 		actions.Chidori.ID,
-		actions.DragonDance.ID,
+		actions.DragonStance.ID,
 		actions.Fireball.ID,
 		actions.WhirlwindKick.ID,
 		actions.CopyJutsu.ID,

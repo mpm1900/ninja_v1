@@ -8,11 +8,11 @@ import (
 	"github.com/google/uuid"
 )
 
-var DragonDance = MakeDragonDance()
+var DragonStance = MakeDragonStance()
 
-func MakeDragonDance() game.Action {
+func MakeDragonStance() game.Action {
 	config := game.ActionConfig{
-		Name:        "Dragon Dance",
+		Name:        "Dragon Stance",
 		Nature:      game.Ptr(game.NsTai),
 		Jutsu:       game.Taijutsu,
 		Description: "Raises the user's Speed and Physical Attack stats.",

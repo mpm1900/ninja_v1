@@ -37,7 +37,7 @@ var Onoki = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.LuckyStrikes.ID,
 		actions.Chidori.ID,
-		actions.DragonDance.ID,
+		actions.DragonStance.ID,
 		actions.Fireball.ID,
 	},
 }

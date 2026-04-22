@@ -33,7 +33,7 @@ var Zabuza = game.ActorDef{
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Chidori.ID,
-		actions.DragonDance.ID,
+		actions.DragonStance.ID,
 		actions.CollidingWave.ID,
 		actions.WhirlwindKick.ID,
 		actions.HiddenMist.ID,

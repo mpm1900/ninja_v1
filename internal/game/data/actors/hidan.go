@@ -37,7 +37,7 @@ var Hidan = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.Distraction.ID,
 		actions.Chidori.ID,
-		actions.DragonDance.ID,
+		actions.DragonStance.ID,
 		actions.BloodPrice.ID,
 		actions.WhirlwindKick.ID,
 		actions.Curse.ID,

@@ -70,7 +70,9 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.LuckyStrikes.ID:  actions.LuckyStrikes,
 	actions.HeavyPunch.ID:    actions.HeavyPunch,
 	actions.WhirlwindKick.ID: actions.WhirlwindKick,
-	actions.DragonDance.ID:   actions.DragonDance,
+	actions.DragonStance.ID:  actions.DragonStance,
+	actions.SwordsStance.ID:  actions.SwordsStance,
+	actions.KusariChains.ID:  actions.KusariChains,
 
 	actions.IronSkin.ID:     actions.IronSkin,
 	actions.IronBody.ID:     actions.IronBody,

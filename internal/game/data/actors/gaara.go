@@ -38,7 +38,7 @@ var Gaara = game.ActorDef{
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
-		actions.DragonDance.ID,
+		actions.DragonStance.ID,
 		actions.WhirlwindKick.ID,
 	},
 }
