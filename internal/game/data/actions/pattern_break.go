@@ -18,7 +18,7 @@ func MakePatternBreak() game.Action {
 		Description: "Target cannot repeat actions.",
 	}
 	return game.Action{
-		ID:              uuid.MustParse("c62f29ad-2f3e-5e5e-b045-bb0ed58837bc"),
+		ID:              uuid.MustParse("1f17c177-bf08-451e-a052-c1e681e8d499"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),

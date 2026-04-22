@@ -24,7 +24,7 @@ func MakePhoenixFlower() game.Action {
 		CritMod:     1.5,
 	}
 	return game.Action{
-		ID:              uuid.MustParse("4ac4894c-2ff3-5142-b087-a8924837cefc"),
+		ID:              uuid.MustParse("c6a59042-5fa2-4ec6-b83f-b705d5cd5c9e"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
