@@ -37,6 +37,7 @@ var Shikamaru = game.ActorDef{
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
+		actions.PatternBreak.ID,
 		actions.Haze.ID,
 		actions.Tailwind.ID,
 		actions.Distraction.ID,

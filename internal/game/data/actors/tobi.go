@@ -38,5 +38,6 @@ var Tobi = game.ActorDef{
 		actions.KamuiCounter.ID,
 		actions.KamuiSlash.ID,
 		actions.SageMode.ID,
+		actions.PatternBreak.ID,
 	},
 }
