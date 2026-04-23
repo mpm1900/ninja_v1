@@ -116,7 +116,7 @@ function ActorCard({
       <div
         className={cn(
           is_player && 'cursor-pointer',
-          'group/item flex items-center rounded-md text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50 px-2 pt-0 pb-3 w-92'
+          'group/item flex items-center rounded-md text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50 px-2 pt-0 pb-3 w-108'
         )}
         {...rest}
       >
@@ -130,10 +130,15 @@ function ActorCard({
                   frameVariants({
                     variant: getVariant({ selected, targeted }),
                   }),
-                  'border-l-0',
+                  'border-l-0'
                 )}
               >
-                <span className={cn('font-semibold text-lg text-nowrap', !selected && 'text-shadow-[1px_1px_0px_#000000]')}>
+                <span
+                  className={cn(
+                    'font-semibold text-lg text-nowrap',
+                    !selected && 'text-shadow-[1px_1px_0px_#000000]'
+                  )}
+                >
                   {actor.name}
                 </span>
               </div>
@@ -141,7 +146,7 @@ function ActorCard({
                 <ActorNatures actor={actor} />
               ) : (
                 <Badge
-                  className="mb-0.5"
+                  className="mb-0.5 max-w-36"
                   onClick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
@@ -157,7 +162,10 @@ function ActorCard({
                     })
                   }}
                 >
-                  {action_tx.mutation.config.name} {!has_queued_action && <X />}
+                  <span className="truncate">
+                    {action_tx.mutation.config.name}{' '}
+                  </span>
+                  {!has_queued_action && <X />}
                 </Badge>
               )}
             </div>
@@ -223,7 +231,7 @@ function ActorAvatar({
         frameVariants({
           variant: getVariant({ selected, targeted }),
         }),
-        'border-r-0',
+        'border-r-0'
       )}
     >
       <ActorThumbnail actor={actor} size={64} imgClass="rounded-bl-xl" />
