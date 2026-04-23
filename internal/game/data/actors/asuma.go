@@ -33,12 +33,12 @@ var Asuma = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
-		actions.Haze.ID,
+		actions.FlyingSwallow.ID,
 		actions.Fireball.ID,
 		actions.DragonFire.ID,
 		actions.Firestorm.ID,
-		actions.WhirlwindKick.ID,
 		actions.HeavyPunch.ID,
 		actions.VacuumBlast.ID,
+		actions.WindSlash.ID,
 	},
 }

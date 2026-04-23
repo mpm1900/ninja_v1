@@ -143,6 +143,7 @@ var AttackUpTarget = MakeStatDeltaTarget(game.StatAttack, &AttackUpID, 1, "Attac
 var AttackUp2Target = MakeStatDeltaTarget(game.StatAttack, &AttackUpID, 2, "Attack Up (2)")
 var AttackDownTarget = MakeStatDeltaTarget(game.StatAttack, &AttackDownID, -1, "Attack Down")
 var AttackDown2Target = MakeStatDeltaTarget(game.StatAttack, &AttackDownID, -2, "Attack Down (2)")
+var MaxAttackSource = MakeStatDeltaSource(game.StatAttack, &AttackUpID, +6, "Max Attack")
 var DefenseUpID = uuid.MustParse("215a8ec8-3b79-528e-89a7-f99759652315")
 var DefenseDownID = uuid.MustParse("dd82e0f3-43e0-581e-a471-894801fb3d47")
 var DefenseUpSource = MakeStatDeltaSource(game.StatDefense, &DefenseUpID, 1, "Defense Up")

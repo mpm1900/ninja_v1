@@ -8,34 +8,32 @@ import (
 	"github.com/google/uuid"
 )
 
-var DragonStance = MakeDragonStance()
+var Barrier = MakeBarrier()
 
-func MakeDragonStance() game.Action {
+func MakeBarrier() game.Action {
 	config := game.ActionConfig{
-		Name:        "Dragon Stance",
-		Nature:      game.Ptr(game.NsTai),
-		Jutsu:       game.Taijutsu,
-		Description: "Raises the user's Speed and Attack stats.",
+		Name:        "Barrier",
+		Nature:      game.Ptr(game.NsYin),
+		Cooldown:    game.Ptr(1),
+		Jutsu:       game.Ninjutsu,
+		Description: "Protects the user's team from actions that target more than one shinobi. +4 priority, 1 turn cooldown.",
 	}
 	return game.Action{
-		ID:              uuid.MustParse("435490c1-ede2-5875-9edf-1c36d4917741"),
+		ID:              uuid.MustParse("d3765608-4b30-5c4c-b5a9-f4132f0bbb7c"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.NoneFilter,
 		ContextValidate: game.TargetLengthFilter(0),
 		ActionMutation: game.ActionMutation{
-			Priority: game.ActionPriorityDefault,
-			Filter:   game.SourceIsAlive,
+			Priority: game.ActionPriorityP3,
+			Filter: game.ComposeGF(
+				game.SourceIsAlive,
+				game.SourceIsActionOffCooldown,
+			),
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
-				tju := modifiers.AttackUpSource
-				su := modifiers.SpeedUpSource
 
-				modifiers := []game.Modifier{
-					tju,
-					su,
-				}
-				mutation := mutations.AddModifiers(false, modifiers...)
+				mutation := mutations.AddModifiers(false, modifiers.SpreadProtected)
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)
 

@@ -8,14 +8,14 @@ import (
 	"github.com/google/uuid"
 )
 
-var DragonStance = MakeDragonStance()
+var Expansion = MakeExpansion()
 
-func MakeDragonStance() game.Action {
+func MakeExpansion() game.Action {
 	config := game.ActionConfig{
-		Name:        "Dragon Stance",
-		Nature:      game.Ptr(game.NsTai),
+		Name:        "Expansion",
+		Nature:      game.Ptr(game.NsYang),
 		Jutsu:       game.Taijutsu,
-		Description: "Raises the user's Speed and Attack stats.",
+		Description: "Raises the user's Attack and Defense stats.",
 	}
 	return game.Action{
 		ID:              uuid.MustParse("435490c1-ede2-5875-9edf-1c36d4917741"),
@@ -28,14 +28,7 @@ func MakeDragonStance() game.Action {
 			Filter:   game.SourceIsAlive,
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
-				tju := modifiers.AttackUpSource
-				su := modifiers.SpeedUpSource
-
-				modifiers := []game.Modifier{
-					tju,
-					su,
-				}
-				mutation := mutations.AddModifiers(false, modifiers...)
+				mutation := mutations.AddModifiers(false, modifiers.AttackUpSource, modifiers.DefenseUpSource)
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)
 

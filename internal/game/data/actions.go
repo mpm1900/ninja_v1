@@ -23,6 +23,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.Distraction.ID:      actions.Distraction,
 	actions.Taunt.ID:            actions.Taunt,
 	actions.BodyReplacement.ID:  actions.BodyReplacement,
+	actions.Barrier.ID:          actions.Barrier,
 	actions.Kamui.ID:            actions.Kamui,
 	actions.Tailwind.ID:         actions.Tailwind,
 	actions.InstilFear.ID:       actions.InstilFear,
@@ -50,6 +51,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.Revival.ID:          actions.Revival,
 	actions.TeamHeal.ID:         actions.TeamHeal,
 	actions.PatternBreak.ID:     actions.PatternBreak,
+	actions.ChilliPill.ID:       actions.ChilliPill,
 
 	actions.HiddenMist.ID:     actions.HiddenMist,
 	actions.CollidingWave.ID:  actions.CollidingWave,
@@ -62,6 +64,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.C0UltimateArt.ID: actions.C0UltimateArt,
 	actions.C1Bird.ID:        actions.C1Bird,
 
+	actions.FlyingSwallow.ID:    actions.FlyingSwallow,
 	actions.Sekiryoku.ID:        actions.Sekiryoku,
 	actions.GiantRasengan.ID:    actions.GiantRasengan,
 	actions.Rasengan.ID:         actions.Rasengan,
@@ -79,6 +82,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 
 	actions.IronSkin.ID:     actions.IronSkin,
 	actions.IronBody.ID:     actions.IronBody,
+	actions.Expansion.ID:    actions.Expansion,
 	actions.HumanBoulder.ID: actions.HumanBoulder,
 
 	// FIRE ATTACKS
@@ -105,6 +109,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.PressureDamage.ID: actions.PressureDamage,
 	actions.BodyFlicker.ID:    actions.BodyFlicker,
 	actions.VacuumBlast.ID:    actions.VacuumBlast,
+	actions.WindSlash.ID:      actions.WindSlash,
 
 	actions.PoisonSting.ID: actions.PoisonSting,
 
