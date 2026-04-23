@@ -33,10 +33,7 @@ var Deidara = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
-		actions.Chidori.ID,
-		actions.DragonStance.ID,
-		actions.Fireball.ID,
-		actions.WhirlwindKick.ID,
+		actions.Expansion.ID,
 		actions.C0UltimateArt.ID,
 		actions.C1Bird.ID,
 	},

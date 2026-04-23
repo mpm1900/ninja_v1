@@ -28,6 +28,10 @@ func MakeSandstorm() game.Modifier {
 				mut_ctx := context
 				mut_ctx.TargetActorIDs = []uuid.UUID{}
 				for _, target := range g.GetActiveActors() {
+					_, ok := target.Natures[game.NsEarth]
+					if ok {
+						continue
+					}
 					mut_ctx.TargetActorIDs = append(mut_ctx.TargetActorIDs, target.ID)
 				}
 				return []game.Transaction[game.GameMutation]{

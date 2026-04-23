@@ -80,10 +80,12 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.CamelliaDance.ID:       actions.CamelliaDance,
 	actions.ClematisDanceFlower.ID: actions.ClematisDanceFlower,
 
-	actions.IronSkin.ID:     actions.IronSkin,
-	actions.IronBody.ID:     actions.IronBody,
-	actions.Expansion.ID:    actions.Expansion,
-	actions.HumanBoulder.ID: actions.HumanBoulder,
+	actions.IronSkin.ID:        actions.IronSkin,
+	actions.IronBody.ID:        actions.IronBody,
+	actions.Expansion.ID:       actions.Expansion,
+	actions.HumanBoulder.ID:    actions.HumanBoulder,
+	actions.RockFist.ID:        actions.RockFist,
+	actions.EarthDomePrison.ID: actions.EarthDomePrison,
 
 	// FIRE ATTACKS
 	actions.Fireball.ID:              actions.Fireball,

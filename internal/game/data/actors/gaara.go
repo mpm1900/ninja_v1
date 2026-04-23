@@ -40,5 +40,6 @@ var Gaara = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.DragonStance.ID,
 		actions.WhirlwindKick.ID,
+		actions.EarthDomePrison.ID,
 	},
 }

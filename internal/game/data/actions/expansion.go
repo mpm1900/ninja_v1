@@ -18,7 +18,7 @@ func MakeExpansion() game.Action {
 		Description: "Raises the user's Attack and Defense stats.",
 	}
 	return game.Action{
-		ID:              uuid.MustParse("435490c1-ede2-5875-9edf-1c36d4917741"),
+		ID:              uuid.MustParse("94c7641b-c089-4c38-ae4d-56869f3d9ca6"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.NoneFilter,
