@@ -34,6 +34,7 @@ var Tobirama = game.ActorDef{
 	}),
 	Abilities: []game.Modifier{
 		modifiers.ConsumeChakra,
+		modifiers.MoldBreaker,
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
@@ -45,5 +46,6 @@ var Tobirama = game.ActorDef{
 		actions.WhirlwindKick.ID,
 		actions.ShadowClone.ID,
 		actions.VacuumBlast.ID,
+		actions.GreatWaterfall.ID,
 	},
 }

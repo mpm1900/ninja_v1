@@ -9,6 +9,8 @@ type TriggerOn string
 const (
 	OnActorEnter    TriggerOn = "on-actor-enter"
 	OnActorLeave    TriggerOn = "on-actor-leave"
+	OnActionStart   TriggerOn = "on-action-start"
+	OnActionEnd     TriggerOn = "on-action-end"
 	OnImmortalSave  TriggerOn = "on-immortal-save"
 	OnDamageReceive TriggerOn = "on-damage-receive"
 	OnDeath         TriggerOn = "on-death"

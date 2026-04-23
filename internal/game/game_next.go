@@ -128,7 +128,9 @@ func (g *Game) NextAction() bool {
 	}
 
 	g.ActiveTransaction = MakeGameActiveTransaction(transaction)
+	g.On(OnActionStart, &transaction.Context)
 	g.RunAction(transaction)
+	g.On(OnActionEnd, &transaction.Context)
 	return true
 }
 

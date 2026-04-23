@@ -15,7 +15,7 @@ func MakeGraft() game.Action {
 	config := game.ActionConfig{
 		Name:        "Graft",
 		Description: "Heals an ally or damages an enemy.",
-		Nature:      game.Ptr(game.NsYang),
+		Nature:      game.Ptr(game.NsWood),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(70),
 		Stat:        game.Ptr(game.StatChakraAttack),

@@ -24,6 +24,7 @@ import {
   PiCaretDoubleUpDuotone,
   PiOnigiriFill,
   PiArrowFatLinesDownBold,
+  PiPlantBold,
 } from 'react-icons/pi'
 import type { IconType } from 'react-icons/lib'
 import { MdFileUploadOff } from 'react-icons/md'
@@ -157,6 +158,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   sage_mode: FaFrog,
   sand_aura: GiSandstorm,
   seal_up: TbTagPlus,
+  seeded: PiPlantBold,
   shinobi_vest: GiKevlarVest,
   sleeping: GiNightSleep,
   speed_up: ({ className, ...props }) => (

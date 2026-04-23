@@ -10,7 +10,7 @@ import (
 var KusariChains = MakeKusariChains()
 
 func MakeKusariChains() game.Action {
-	ID := uuid.MustParse("65a8447d-4262-454d-a4ad-062993b1f8ad")
+	ID := uuid.MustParse("fba5ad6e-d2ee-4b3a-b524-fc2bb6473a09")
 
 	config := game.ActionConfig{
 		Name:        "Kusari Chains",

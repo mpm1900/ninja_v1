@@ -6,16 +6,16 @@ import (
 	"github.com/google/uuid"
 )
 
-var GreatTreeSpear = MakeGreatTreeSpear()
+var FlowerBomb = MakeFlowerBomb()
 
-func MakeGreatTreeSpear() game.Action {
-	ID := uuid.MustParse("00888b4b-973f-5bf5-9a41-bba1c9b629b8")
+func MakeFlowerBomb() game.Action {
+	ID := uuid.MustParse("134b2304-7829-4739-864e-5e8b77bf0a41")
 	config := game.ActionConfig{
-		Name:        "Great Tree Spear",
+		Name:        "Flower Bomb",
 		Description: "30% chance to poison target.",
 		Nature:      game.Ptr(game.NsWood),
-		Accuracy:    game.Ptr(70),
-		Power:       game.Ptr(120),
+		Accuracy:    game.Ptr(100),
+		Power:       game.Ptr(90),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(90),

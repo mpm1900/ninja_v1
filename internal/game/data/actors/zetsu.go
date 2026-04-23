@@ -28,8 +28,8 @@ var Zetsu = game.ActorDef{
 	NatureDamage:     game.NewNatureSetValues(),
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsYin,
-		game.NsYang,
+		game.NsWood,
+		game.NsYinYang,
 	}),
 	Abilities: []game.Modifier{
 		modifiers.Regeneration,
@@ -40,5 +40,6 @@ var Zetsu = game.ActorDef{
 		actions.TempleOfNirvana.ID,
 		actions.Distraction.ID,
 		actions.Graft.ID,
+		actions.FlowerBomb.ID,
 	},
 }

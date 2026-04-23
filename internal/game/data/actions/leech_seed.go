@@ -12,7 +12,8 @@ var LeechSeed = MakeLeechSeed()
 
 func MakeLeechSeed() game.Action {
 	config := game.ActionConfig{
-		Name:        "Leech Seed",
+		Name:        "Plant Roots",
+		Description: "Saps health from target every turn.",
 		Nature:      game.Ptr(game.NsYang),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(30),
@@ -81,15 +82,12 @@ var LeechSeedTrigger game.Trigger = game.Trigger{
 				ratio := 0.125
 				hp_loss := game.Round(float64(resolved_parent.Stats[game.StatHP]) * ratio)
 				hp_loss_ctx := context
-				hp_loss_ctx.TargetActorIDs = []uuid.UUID{resolved_parent.ID}
-				hp_loss_ctx.TargetPositionIDs = []uuid.UUID{}
+				hp_loss_ctx.TargetPositionIDs = []uuid.UUID{*resolved_parent.PositionID}
 				hp_loss_mut := game.PureDamage(hp_loss, false)
 				hp_loss_tx := game.MakeTransaction(hp_loss_mut, hp_loss_ctx)
 
 				heal_mut := game.PureHeal(hp_loss)
-				heal_ctx := context
-				heal_ctx.TargetActorIDs = []uuid.UUID{target.ID}
-				heal_ctx.TargetPositionIDs = []uuid.UUID{}
+				heal_ctx := game.MakeContextForActor(target)
 				heal_tx := game.MakeTransaction(heal_mut, heal_ctx)
 
 				transactions = append(transactions, hp_loss_tx, heal_tx)
@@ -104,6 +102,7 @@ var LeechSeedModifier game.Modifier = game.Modifier{
 	ID:       leechSeedModifierID,
 	GroupID:  &leechSeedModifierID,
 	Name:     "Seeded",
+	Icon:     "seeded",
 	Show:     true,
 	Duration: game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
