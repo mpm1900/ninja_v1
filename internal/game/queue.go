@@ -26,3 +26,12 @@ func (q *Queue[T]) Dequeue() (T, error) {
 	*q = (*q)[1:]
 	return value, nil
 }
+func (q Queue[T]) Peek() (T, error) {
+	if len(q) == 0 {
+		var zero T
+		return zero, fmt.Errorf("queue is empty")
+	}
+
+	value := (q)[0]
+	return value, nil
+}

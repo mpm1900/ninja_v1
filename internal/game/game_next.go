@@ -72,6 +72,7 @@ func (g *Game) Validate() bool {
 }
 
 func (g *Game) NextPhase() {
+	g.ActiveTransaction = nil
 	switch g.Turn.Phase {
 	case TurnStart:
 		g.Turn.Phase = TurnMain
@@ -98,6 +99,27 @@ func (g *Game) NextTransaction() bool {
 
 	*g = n
 	return true
+}
+
+func (g *Game) PreAction() bool {
+	g.SortActions()
+	transaction, err := g.Actions.Peek()
+	if err != nil {
+		return false
+	}
+	if !g.Turn.PreAction {
+		g.Turn.PreAction = true
+		g.ActiveTransaction = MakeGameActiveTransaction(transaction)
+		count := g.On(OnActionStart, &transaction.Context)
+		return count > 0
+	}
+
+	return false
+}
+
+func (g *Game) PostAction(context Context) {
+	g.Turn.PreAction = false
+	g.On(OnActionEnd, &context)
 }
 
 func (g *Game) NextAction() bool {
@@ -128,12 +150,10 @@ func (g *Game) NextAction() bool {
 	}
 
 	g.ActiveTransaction = MakeGameActiveTransaction(transaction)
-	g.On(OnActionStart, &transaction.Context)
 	g.RunAction(transaction)
-	g.On(OnActionEnd, &transaction.Context)
+	g.PostAction(transaction.Context)
 	return true
 }
-
 func (g *Game) NextPrompt() bool {
 	transaction, err := g.Prompts.Dequeue()
 	g.ActiveTransaction = MakeGameActiveTransaction(transaction)
@@ -158,25 +178,32 @@ func (g *Game) NextTrigger() bool {
 	return true
 }
 
+func (g Game) GetBaseTick() time.Duration {
+	if g.Turn.PreAction {
+		return 0
+	}
+	return time.Second / 2
+}
+
 func (g *Game) Next() bool {
-	g.Tick = time.Second / 2
+	g.Tick = g.GetBaseTick()
 	if g.NextTransaction() {
 		return true
 	}
 
-	g.Tick = time.Second / 2
+	g.Tick = g.GetBaseTick()
 	if g.AllPromptsReady() {
 		if g.NextPrompt() {
 			return true
 		}
 	}
 
-	g.Tick = time.Second / 2
+	g.Tick = g.GetBaseTick()
 	if g.NextTrigger() {
 		return true
 	}
 
-	g.Tick = time.Second / 2
+	g.Tick = g.GetBaseTick()
 	if g.AllPromptsReady() {
 		if g.NextPrompt() {
 			return true
@@ -187,13 +214,15 @@ func (g *Game) Next() bool {
 		return false
 	}
 
+	if g.PreAction() {
+		return true
+	}
 	g.Tick = time.Second * 2
 	if g.NextAction() {
 		return true
 	}
 
-	g.Tick = time.Second / 2
-	g.ActiveTransaction = nil
+	g.Tick = g.GetBaseTick()
 	g.NextPhase()
 
 	return false

@@ -656,8 +656,7 @@ func (g *Game) RunTrigger(transaction Transaction[Trigger]) {
 	transactions := ResolveTrigger(*g, transaction)
 	g.Transactions = append(transactions, g.Transactions...)
 }
-
-func (g *Game) On(on TriggerOn, context *Context) {
+func (g *Game) On(on TriggerOn, context *Context) int {
 	triggers := make([]Transaction[Trigger], 0)
 	for _, trigger := range g.GetTriggers(on, context) {
 		if trigger.Mutation.On == on {
@@ -665,7 +664,9 @@ func (g *Game) On(on TriggerOn, context *Context) {
 		}
 	}
 
+	count := len(triggers)
 	g.Triggers = append(g.Triggers, triggers...)
+	return count
 }
 
 func (g *Game) JumpTransaction(transaction Transaction[GameMutation]) {

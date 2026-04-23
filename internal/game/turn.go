@@ -11,13 +11,15 @@ const (
 )
 
 type Turn struct {
-	Count int       `json:"count"`
-	Phase TurnPhase `json:"phase"`
+	Count     int       `json:"count"`
+	PreAction bool      `json:"-"`
+	Phase     TurnPhase `json:"phase"`
 }
 
 func NewTurn() Turn {
 	return Turn{
-		Count: 0,
-		Phase: TurnInit,
+		Count:     0,
+		Phase:     TurnInit,
+		PreAction: false,
 	}
 }
