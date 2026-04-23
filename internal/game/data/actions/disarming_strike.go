@@ -22,7 +22,7 @@ func MakeDisarmingStrike() game.Action {
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(50),
 		Cooldown:    game.Ptr(0),
-		Jutsu:       game.Ninjutsu,
+		Jutsu:       game.Taijutsu,
 		CritChance:  game.Ptr(getCriticalStage(0)),
 		CritMod:     1.5,
 	}

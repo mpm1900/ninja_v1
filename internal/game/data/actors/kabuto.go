@@ -38,5 +38,6 @@ var Kabuto = game.ActorDef{
 		actions.Distraction.ID,
 		actions.TempleOfNirvana.ID,
 		actions.PerishSong.ID,
+		actions.ThirtyTwoPalms.ID,
 	},
 }
