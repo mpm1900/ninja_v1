@@ -129,3 +129,19 @@ var Revive = game.GameMutation{
 		return g
 	},
 }
+
+var RemoveItem = game.GameMutation{
+	Delta: func(p, g game.Game, context game.Context) game.Game {
+		source, ok := g.GetSource(context)
+		if !ok {
+			return g
+		}
+
+		g.UpdateActor(source.ID, func(a game.Actor) game.Actor {
+			a.Item = nil
+			return a
+		})
+
+		return g
+	},
+}

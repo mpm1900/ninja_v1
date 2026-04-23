@@ -51,5 +51,6 @@ var Itachi = game.ActorDef{
 		actions.InstilFear.ID,
 		actions.PerishSong.ID,
 		actions.Taunt.ID,
+		actions.DisarmingStrike.ID,
 	},
 }
