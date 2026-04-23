@@ -36,7 +36,7 @@ func MakeFirestorm() game.Action {
 
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, chanceBurn(config, target, 10)...)
+				transactions = append(transactions, chanceBurn(config, context, target, 10)...)
 			}
 
 			mod := modifiers.ChakraAttackDown2Source

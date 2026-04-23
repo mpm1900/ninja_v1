@@ -32,7 +32,7 @@ func MakeRockFist() game.Action {
 			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, chanceParalysis(config, target, 30)...)
+				transactions = append(transactions, chanceParalysis(config, context, target, 30)...)
 			}
 
 			return transactions

@@ -32,7 +32,7 @@ func MakeChidoriSpear() game.Action {
 			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, chanceParalysis(config, target, 20)...)
+				transactions = append(transactions, chanceParalysis(config, context, target, 20)...)
 			}
 
 			return transactions

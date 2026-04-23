@@ -75,6 +75,13 @@ func AddModifiers(checkWarded bool, modifiers ...game.Modifier) game.GameMutatio
 						g.PushLog(game.NewLogContext("| $source$ was immune.", log_ctx))
 						continue
 					}
+					if (modifier.GroupID != nil && resolved.HasImmunity(*modifier.GroupID)) || resolved.HasImmunity(modifier.ID) {
+						mod_tx.Context.FilterOutTarget(actor)
+
+						log_ctx := game.MakeContextForActor(resolved.Actor)
+						g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", modifier.Name), log_ctx))
+						continue
+					}
 					if context.ModifierID != nil {
 						parent_mod, ok := g.GetModifierByID(*context.ModifierID)
 						if ok && resolved.HasImmunity(*context.ModifierID) {
@@ -102,7 +109,9 @@ func AddModifiers(checkWarded bool, modifiers ...game.Modifier) game.GameMutatio
 					}
 
 					hasApplicableTarget = true
-					g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ gained %s.", modifier.Name), context.WithSource(actor.ID)))
+					if hasCandidate {
+						g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ gained %s.", modifier.Name), context.WithSource(actor.ID)))
+					}
 				}
 
 				if hasCandidate && !hasApplicableTarget {

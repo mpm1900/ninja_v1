@@ -41,6 +41,7 @@ var Sakura = game.ActorDef{
 		actions.BodyReplacement.ID,
 		actions.GreatWaterfall.ID,
 		actions.RockFist.ID,
+		actions.CherryBlossomImpact.ID,
 		actions.SageMode.ID,
 		actions.TeamHeal.ID,
 	},

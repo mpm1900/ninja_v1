@@ -79,6 +79,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.KusariChains.ID:        actions.KusariChains,
 	actions.CamelliaDance.ID:       actions.CamelliaDance,
 	actions.ClematisDanceFlower.ID: actions.ClematisDanceFlower,
+	actions.CherryBlossomImpact.ID: actions.CherryBlossomImpact,
 
 	actions.IronSkin.ID:        actions.IronSkin,
 	actions.IronBody.ID:        actions.IronBody,
@@ -100,12 +101,13 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.Firestorm.ID:             actions.Firestorm,
 	actions.PunishingFire.ID:         actions.PunishingFire,
 
-	actions.Chidori.ID:       actions.Chidori,
-	actions.ChidoriSpear.ID:  actions.ChidoriSpear,
-	actions.ChidoriStream.ID: actions.ChidoriStream,
-	actions.Raikiri.ID:       actions.Raikiri,
-	actions.Kirin.ID:         actions.Kirin,
-	actions.FalseDarkness.ID: actions.FalseDarkness,
+	actions.Chidori.ID:        actions.Chidori,
+	actions.ChidoriSpear.ID:   actions.ChidoriSpear,
+	actions.ChidoriStream.ID:  actions.ChidoriStream,
+	actions.Raikiri.ID:        actions.Raikiri,
+	actions.Kirin.ID:          actions.Kirin,
+	actions.FalseDarkness.ID:  actions.FalseDarkness,
+	actions.LightningHound.ID: actions.LightningHound,
 
 	actions.Rasenshuriken.ID:  actions.Rasenshuriken,
 	actions.PressureDamage.ID: actions.PressureDamage,

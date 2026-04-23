@@ -34,7 +34,7 @@ func MakeAsakujaku() game.Action {
 			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, chanceBurn(config, target, 10)...)
+				transactions = append(transactions, chanceBurn(config, context, target, 10)...)
 			}
 
 			return transactions

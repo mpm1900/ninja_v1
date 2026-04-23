@@ -33,7 +33,7 @@ func MakeGreatFireAnnihilation() game.Action {
 			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, chanceBurn(config, target, 20)...)
+				transactions = append(transactions, chanceBurn(config, context, target, 20)...)
 			}
 
 			return transactions

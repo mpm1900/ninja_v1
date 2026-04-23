@@ -34,7 +34,7 @@ func MakeGreatWaterfall() game.Action {
 			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, chanceModifier(config, target, modifiers.Stunned, 20)...)
+				transactions = append(transactions, chanceModifier(config, context, target, modifiers.Stunned, 20)...)
 			}
 
 			return transactions

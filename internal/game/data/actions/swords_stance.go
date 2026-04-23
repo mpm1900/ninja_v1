@@ -28,8 +28,8 @@ func MakeSwordsStance() game.Action {
 			Filter:   game.SourceIsAlive,
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
-				mod := modifiers.AttackUp2Source
 
+				mod := modifiers.AttackUp2Source
 				mutation := mutations.AddModifiers(false, mod)
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)

@@ -32,7 +32,7 @@ func MakeDragonFire() game.Action {
 			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, chanceBurn(config, target, 5)...)
+				transactions = append(transactions, chanceBurn(config, context, target, 5)...)
 			}
 
 			return transactions

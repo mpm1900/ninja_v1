@@ -33,7 +33,7 @@ var Sasuke = game.ActorDef{
 		game.NsLightning,
 	}),
 	Abilities: []game.Modifier{
-		modifiers.AddImmunities(*modifiers.Intimidate.GroupID),
+		modifiers.InnerFocus,
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{

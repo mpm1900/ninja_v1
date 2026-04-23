@@ -33,7 +33,7 @@ func MakeChidoriStream() game.Action {
 			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, chanceParalysis(config, target, 10)...)
+				transactions = append(transactions, chanceParalysis(config, context, target, 10)...)
 			}
 
 			return transactions

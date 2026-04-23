@@ -37,11 +37,11 @@ func MakeSnakeStrike() game.Action {
 				roll := rand.IntN(3)
 				switch roll {
 				case 0:
-					transactions = append(transactions, chanceParalysis(config, target, 30)...)
+					transactions = append(transactions, chanceParalysis(config, context, target, 30)...)
 				case 1:
-					transactions = append(transactions, chancePoison(config, target, 30)...)
+					transactions = append(transactions, chancePoison(config, context, target, 30)...)
 				case 2:
-					transactions = append(transactions, chanceSleep(config, target, 30)...)
+					transactions = append(transactions, chanceSleep(config, context, target, 30)...)
 				}
 			}
 

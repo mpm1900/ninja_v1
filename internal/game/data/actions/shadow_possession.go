@@ -53,7 +53,7 @@ func MakeShadowPossession() game.Action {
 					} else {
 						transactions = append(
 							transactions,
-							applyParalysis(config, target)...,
+							applyParalysis(config, context, target)...,
 						)
 					}
 				}

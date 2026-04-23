@@ -6,20 +6,19 @@ import (
 	"github.com/google/uuid"
 )
 
-var GreatFireball = MakeGreatFireball()
+var CherryBlossomImpact = MakeCherryBlossomImpact()
 
-func MakeGreatFireball() game.Action {
-	ID := uuid.MustParse("57ddb3d7-0853-4a64-885b-18d93286c806")
-
+func MakeCherryBlossomImpact() game.Action {
+	ID := uuid.MustParse("5188108e-d87b-4405-9006-ef0667ea4a62")
 	config := game.ActionConfig{
-		Name:        "Great Fireball",
-		Description: "20% chance to burn target.",
-		Nature:      game.Ptr(game.NsFire),
+		Name:        "Cherry Blossom Impact",
+		Description: "30% chance to burn the target.",
+		Nature:      game.Ptr(game.NsTai),
 		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(90),
-		Stat:        game.Ptr(game.StatChakraAttack),
+		Power:       game.Ptr(60),
+		Stat:        game.Ptr(game.StatAttack),
 		TargetCount: game.Ptr(1),
-		Cost:        game.Ptr(60),
+		Cost:        game.Ptr(0),
 		Cooldown:    game.Ptr(0),
 		Jutsu:       game.Ninjutsu,
 		CritChance:  game.Ptr(getCriticalStage(0)),
@@ -33,7 +32,7 @@ func MakeGreatFireball() game.Action {
 			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, chanceBurn(config, context, target, 20)...)
+				transactions = append(transactions, chanceBurn(config, context, target, 30)...)
 			}
 
 			return transactions
