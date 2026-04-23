@@ -127,9 +127,6 @@ func AddModifiers(checkWarded bool, modifiers ...game.Modifier) game.GameMutatio
 	}
 }
 
-/**
- * currently not used
- */
 func RemoveModifierTxByID(ID uuid.UUID) game.GameMutation {
 	return game.GameMutation{
 		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {

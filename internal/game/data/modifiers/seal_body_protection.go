@@ -9,7 +9,7 @@ import (
 
 var sobpID = uuid.MustParse("096e2442-b231-53da-9892-91b0dea908b9")
 var SealOfBodyProtectionTrigger game.Trigger = game.Trigger{
-	ID:         uuid.MustParse("0a179ac1-8811-5319-9c4b-bb23c1f57ed8"),
+	ID:         uuid.New(),
 	ModifierID: sobpID,
 	On:         game.OnModifierAdd,
 	Check: game.ComposeTF(

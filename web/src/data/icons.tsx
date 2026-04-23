@@ -18,6 +18,7 @@ import {
   GiHealthIncrease,
   GiWaterRecycling,
   GiPoisonBottle,
+  GiShieldReflect,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -164,6 +165,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
       {...props}
     />
   ),
+  status_reflection: GiShieldReflect,
   stunned: GiStarSwirl,
   taunted: Anger,
   uchiha_fan: GiHandheldFan,

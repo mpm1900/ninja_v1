@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -28,7 +29,9 @@ var PainPreta = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsYinYang,
 	}),
-	Abilities:   []game.Modifier{},
+	Abilities: []game.Modifier{
+		modifiers.StatusReflection,
+	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.PerishSong.ID,
