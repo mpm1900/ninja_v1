@@ -28,6 +28,7 @@ type Modifier struct {
 	// flags
 	Status  bool `json:"status"`
 	Weather bool `json:"weather"`
+	Terrain bool `json:"terrain"`
 
 	ActorMutations     []ActorMutation     `json:"-"`
 	GameStateMutations []GameStateMutation `json:"-"`

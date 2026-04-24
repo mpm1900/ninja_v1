@@ -35,6 +35,7 @@ var PainDeva = game.ActorDef{
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
+		actions.CreateRain.ID,
 		actions.Sekiryoku.ID,
 		actions.ShinraTensei.ID,
 		actions.NegateJutsu.ID,

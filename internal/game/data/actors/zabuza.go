@@ -37,6 +37,7 @@ var Zabuza = game.ActorDef{
 		actions.CollidingWave.ID,
 		actions.WhirlwindKick.ID,
 		actions.HiddenMist.ID,
+		actions.CreateRain.ID,
 		actions.WaterDragon.ID,
 	},
 }

@@ -36,6 +36,7 @@ var Sakura = game.ActorDef{
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
+		actions.CreateRain.ID,
 		actions.Haze.ID,
 		actions.Distraction.ID,
 		actions.BodyReplacement.ID,

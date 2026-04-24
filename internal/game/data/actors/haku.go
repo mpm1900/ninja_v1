@@ -37,5 +37,6 @@ var Haku = game.ActorDef{
 		actions.CollidingWave.ID,
 		actions.WhirlwindKick.ID,
 		actions.HiddenMist.ID,
+		actions.CreateRain.ID,
 	},
 }

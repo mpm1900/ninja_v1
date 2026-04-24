@@ -38,6 +38,7 @@ var Tobirama = game.ActorDef{
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
+		actions.CreateRain.ID,
 		actions.BodyReplacement.ID,
 		actions.Tailwind.ID,
 		actions.LeechSeed.ID,

@@ -61,6 +61,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.BlackNeedle.ID:  actions.BlackNeedle,
 
 	actions.HiddenMist.ID:     actions.HiddenMist,
+	actions.CreateRain.ID:     actions.CreateRain,
 	actions.CollidingWave.ID:  actions.CollidingWave,
 	actions.WaterDragon.ID:    actions.WaterDragon,
 	actions.SharkBomb.ID:      actions.SharkBomb,
