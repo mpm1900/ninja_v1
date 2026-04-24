@@ -42,4 +42,9 @@ var PainNaraka = game.ActorDef{
 		actions.SummonAlly.ID,
 		actions.BlackNeedle.ID,
 	},
+	Immunities: map[uuid.UUID]struct{}{
+		modifiers.FeelingOfPain.ID: {},
+		modifiers.VoiceOfPain.ID:   {},
+		modifiers.VesselOfPain.ID:  {},
+	},
 }

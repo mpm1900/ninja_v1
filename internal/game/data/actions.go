@@ -25,6 +25,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.BodyReplacement.ID:  actions.BodyReplacement,
 	actions.Barrier.ID:          actions.Barrier,
 	actions.Kamui.ID:            actions.Kamui,
+	actions.NegateJutsu.ID:      actions.NegateJutsu,
 	actions.Tailwind.ID:         actions.Tailwind,
 	actions.InstilFear.ID:       actions.InstilFear,
 	actions.Flash.ID:            actions.Flash,

@@ -39,11 +39,16 @@ var PainPreta = game.ActorDef{
 		actions.PerishSong.ID,
 		actions.Taunt.ID,
 		actions.RetreatingStrike.ID,
-		actions.BodyReplacement.ID,
+		actions.NegateJutsu.ID,
 		actions.CopyJutsu.ID,
 		actions.Fireball.ID,
 		actions.ChannelChakra.ID,
 		actions.Expansion.ID,
 		actions.BlackNeedle.ID,
+	},
+	Immunities: map[uuid.UUID]struct{}{
+		modifiers.FeelingOfPain.ID: {},
+		modifiers.VoiceOfPain.ID:   {},
+		modifiers.VesselOfPain.ID:  {},
 	},
 }

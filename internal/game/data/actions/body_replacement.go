@@ -52,3 +52,12 @@ func MakeKamui() game.Action {
 	action.Config.Name = "Kamui"
 	return action
 }
+
+var NegateJutsu = MakeNegateJutsu()
+
+func MakeNegateJutsu() game.Action {
+	action := MakeBodyReplacement()
+	action.ID = uuid.MustParse("923b1582-fd96-4f97-9957-1cdd9169600f")
+	action.Config.Name = "Negate Jutsu"
+	return action
+}

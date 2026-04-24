@@ -19,7 +19,7 @@ func MakeBarrier() game.Action {
 		Description: "Protects the user's team from multi-target actions. +3 priority, 1 turn cooldown.",
 	}
 	return game.Action{
-		ID:              uuid.MustParse("d3765608-4b30-5c4c-b5a9-f4132f0bbb7c"),
+		ID:              uuid.MustParse("fd909d15-b6c4-4892-a5d2-9af752d52cc8"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.NoneFilter,

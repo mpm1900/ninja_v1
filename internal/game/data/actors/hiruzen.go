@@ -20,7 +20,7 @@ var Hiruzen = game.ActorDef{
 		game.StatDefense:       97,
 		game.StatChakraAttack:  110,
 		game.StatChakraDefense: 97,
-		game.StatSpeed:         100,
+		game.StatSpeed:         90,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},

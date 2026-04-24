@@ -9,7 +9,7 @@ import (
 var RetreatingStrike = MakeRetreatingStrike()
 
 func MakeRetreatingStrike() game.Action {
-	ID := uuid.MustParse("f052f07c-bb06-4f44-8b26-ec2f17401446")
+	ID := uuid.MustParse("a6c3bd65-c750-4260-bfc2-bcada542c663")
 
 	config := game.ActionConfig{
 		Name:        "Retreating Strike",

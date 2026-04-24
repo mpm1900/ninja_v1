@@ -138,6 +138,9 @@ type ActorDef struct {
 	Abilities   []Modifier  `json:"abilities"`
 	ActionIDs   []uuid.UUID `json:"action_IDs,omitempty"`
 	ActionCount int         `json:"action_count"`
+
+	Immunities      map[uuid.UUID]struct{}   `json:"-"`
+	JutsuImmunities map[ActionJutsu]struct{} `json:"-"`
 }
 
 type ActorStateType string
@@ -234,17 +237,15 @@ type Actor struct {
 	// [AuxAbility]
 	// - take priority over Ability
 	// - set to nil on switch-out
-	AuxAbility        *Modifier                `json:"-"`
-	Item              *Modifier                `json:"item"`
-	Stages            map[ActorStat]int        `json:"staged_stats"`
-	AuxStats          map[ActorStat]int        `json:"aux_stats"`
-	DamageMultipliers map[AttackStat]float64   `json:"-"`
-	DamageReduction   map[AttackStat]float64   `json:"-"`
-	Actions           []Action                 `json:"actions"`
-	Immunities        map[uuid.UUID]struct{}   `json:"-"`
-	JutsuImmunities   map[ActionJutsu]struct{} `json:"-"`
-	Summon            *Summon                  `json:"summon,omitempty"`
-	AppliedModifiers  map[uuid.UUID]int        `json:"applied_modifiers"`
+	AuxAbility        *Modifier              `json:"-"`
+	Item              *Modifier              `json:"item"`
+	Stages            map[ActorStat]int      `json:"staged_stats"`
+	AuxStats          map[ActorStat]int      `json:"aux_stats"`
+	DamageMultipliers map[AttackStat]float64 `json:"-"`
+	DamageReduction   map[AttackStat]float64 `json:"-"`
+	Actions           []Action               `json:"actions"`
+	Summon            *Summon                `json:"summon,omitempty"`
+	AppliedModifiers  map[uuid.UUID]int      `json:"applied_modifiers"`
 }
 
 type ResolvedActor struct {
@@ -333,6 +334,8 @@ func (ad ActorDef) Clone() ActorDef {
 	}
 
 	cloned.ActionIDs = slices.Clone(ad.ActionIDs)
+	cloned.Immunities = maps.Clone(ad.Immunities)
+	cloned.JutsuImmunities = maps.Clone(ad.JutsuImmunities)
 
 	return cloned
 }
@@ -350,16 +353,14 @@ func MakeActor(
 	clonedDef := def.Clone()
 	actions = append(actions, Switch)
 	return Actor{
-		ActorDef:        clonedDef,
-		ID:              uuid.New(),
-		PlayerID:        playerID,
-		Level:           GetLevel(experience),
-		Experience:      experience,
-		Focus:           focus,
-		Item:            item,
-		Ability:         ability,
-		Immunities:      map[uuid.UUID]struct{}{},
-		JutsuImmunities: map[ActionJutsu]struct{}{},
+		ActorDef:   clonedDef,
+		ID:         uuid.New(),
+		PlayerID:   playerID,
+		Level:      GetLevel(experience),
+		Experience: experience,
+		Focus:      focus,
+		Item:       item,
+		Ability:    ability,
 		ActorState: ActorState{
 			ActiveTurns:        0,
 			Alive:              true,

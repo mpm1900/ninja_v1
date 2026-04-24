@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -34,5 +35,13 @@ var PainAnimal = game.ActorDef{
 		actions.BodyReplacement.ID,
 		actions.RetreatingStrike.ID,
 		actions.BlackNeedle.ID,
+		actions.SummonAlly.ID,
+		actions.DragonStance.ID,
+		actions.RetreatingStrike.ID,
+	},
+	Immunities: map[uuid.UUID]struct{}{
+		modifiers.FeelingOfPain.ID: {},
+		modifiers.VoiceOfPain.ID:   {},
+		modifiers.VesselOfPain.ID:  {},
 	},
 }

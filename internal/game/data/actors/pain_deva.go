@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -28,16 +29,23 @@ var PainDeva = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsYinYang,
 	}),
-	Abilities:   []game.Modifier{},
+	Abilities: []game.Modifier{
+		modifiers.Raincaller,
+		modifiers.VoiceOfPain,
+	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Sekiryoku.ID,
 		actions.ShinraTensei.ID,
-		actions.BodyReplacement.ID,
+		actions.NegateJutsu.ID,
 		actions.Tailwind.ID,
 		actions.MindTransfer.ID,
-		actions.SummonAlly.ID,
 		actions.RetreatingStrike.ID,
 		actions.BlackNeedle.ID,
+	},
+	Immunities: map[uuid.UUID]struct{}{
+		modifiers.FeelingOfPain.ID: {},
+		modifiers.VoiceOfPain.ID:   {},
+		modifiers.VesselOfPain.ID:  {},
 	},
 }

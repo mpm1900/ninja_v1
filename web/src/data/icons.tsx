@@ -139,6 +139,12 @@ const MODIFIER_ICONS: Record<string, IconType> = {
       {...props}
     />
   ),
+  std_defense: ({ className, ...props }) => (
+    <PiArrowFatLinesDownBold
+      className={cn('text-red-300', className)}
+      {...props}
+    />
+  ),
   fast_thinking: GrFastForward,
   gedo_shard: GiTopaz,
   guts: GiMinotaur,

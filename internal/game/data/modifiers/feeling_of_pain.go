@@ -13,8 +13,8 @@ var FeelingOfPain game.Modifier = game.Modifier{
 	GroupID:           &feelingOfPainID,
 	Icon:              "std_strength",
 	Name:              "Feeling of Pain",
-	Description:       "Defense x0.75.",
-	ParentDescription: "Other shinobi: Defense x0.75.",
+	Description:       "Attack x0.75.",
+	ParentDescription: "Other shinobi: Attack x0.75.",
 	Show:              true,
 	Duration:          game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
@@ -23,7 +23,7 @@ var FeelingOfPain game.Modifier = game.Modifier{
 			game.MutPriorityPostStagedStats,
 			game.ComposeAF(game.OtherFilter, game.ActiveFilter),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {
-				actor.Stats[game.StatDefense] = game.Round(float64(actor.Stats[game.StatDefense]) * 0.75)
+				actor.Stats[game.StatAttack] = game.Round(float64(actor.Stats[game.StatAttack]) * 0.75)
 				return actor
 			},
 		),
