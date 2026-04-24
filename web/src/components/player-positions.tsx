@@ -81,7 +81,7 @@ function PlayerPositions({
                     summonClass={!flip ? 'top-auto! bottom-0!' : ''}
                   />
                 ) : (
-                  <Item className="p-6 w-86">
+                  <Item className="p-6 w-96">
                     <span className="text-center w-full text-muted-foreground">
                       Empty
                     </span>

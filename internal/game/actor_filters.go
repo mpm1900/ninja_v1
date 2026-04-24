@@ -121,6 +121,12 @@ func HasAppliedModifier(modifierID uuid.UUID) func(Game, Actor, Context) bool {
 		return false
 	}
 }
+func GameHasWeather(weather GameWeather) func(Game, Actor, Context) bool {
+	return func(g Game, a Actor, ctx Context) bool {
+		state, _ := g.GetState(ctx)
+		return state.Weather == weather
+	}
+}
 
 /**
  * RESOLVED FILTERS

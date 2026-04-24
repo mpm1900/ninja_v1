@@ -7,9 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
-var rainWeatherID = uuid.MustParse("b28933cd-ad6a-5b83-acff-4dd084dad6e5")
 var raincallerID = uuid.MustParse("912e5e72-263e-5f6f-8f9f-32d1a746cc49")
-var RainWeather = SetWeather(rainWeatherID, game.GameWeatherRain, "Heavy Rain")
 
 var RaincallerTrigger game.Trigger = game.Trigger{
 	ID:         uuid.New(),
@@ -27,10 +25,13 @@ var RaincallerTrigger game.Trigger = game.Trigger{
 				return transactions
 			}
 
-			mod := RainWeather
+			filter := FilterWeather()
+			transactions = append(transactions, filter)
+
+			mod := RainWeather()
 			mod.Duration = 4
-			mutation := mutations.AddModifiers(false, mod)
-			transaction := game.MakeTransaction(mutation, game.NewContext())
+			mut := mutations.AddModifiers(false, mod)
+			transaction := game.MakeTransaction(mut, game.NewContext())
 			transactions = append(transactions, transaction)
 
 			return transactions
@@ -41,6 +42,7 @@ var RaincallerTrigger game.Trigger = game.Trigger{
 var Raincaller game.Modifier = game.Modifier{
 	ID:          raincallerID,
 	GroupID:     &raincallerID,
+	Icon:        "raincaller",
 	Name:        "Raincaller",
 	Description: "On enter: start rain.",
 	Show:        true,

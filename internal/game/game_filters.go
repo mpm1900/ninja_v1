@@ -59,6 +59,12 @@ func TrueGameFilter(parent Game, game Game, context Context) bool {
 func FalseGameFilter(parent Game, game Game, context Context) bool {
 	return false
 }
+func HasWeather(weather GameWeather) func(Game, Game, Context) bool {
+	return func(parent, game Game, context Context) bool {
+		state, _ := game.GetState(context)
+		return state.Weather == weather
+	}
+}
 func SourceIsAlive(parent Game, game Game, context Context) bool {
 	source, ok := game.GetSource(context)
 	if !ok {
@@ -121,6 +127,7 @@ func SourceHasHpRatio(ratio float64) func(Game, Game, Context) bool {
 		return float64(hp-source.Damage)/float64(hp) > ratio
 	}
 }
+
 func TargetsAreActive(parent Game, game Game, context Context) bool {
 	targets := game.GetTargets(context)
 	for _, target := range targets {

@@ -39,6 +39,16 @@ func NewNoopParent(groupID *uuid.UUID) ActorMutation {
 		},
 	)
 }
+func NewNoopActive(groupID *uuid.UUID) ActorMutation {
+	return MakeActorMutation(
+		groupID,
+		0,
+		ActiveFilter,
+		func(g Game, a Actor, c Context) Actor {
+			return a
+		},
+	)
+}
 
 var SwitchPositions = GameMutation{
 	Delta: func(p Game, g Game, context Context) Game {

@@ -35,6 +35,7 @@ import { TbTagPlus } from 'react-icons/tb'
 import { HiScale } from 'react-icons/hi2'
 import { FaFrog } from 'react-icons/fa6'
 import { TbScanEye } from 'react-icons/tb'
+import { BsCloudRainHeavyFill, BsCloudRain } from "react-icons/bs";
 
 const Aburame: IconType = (props) => (
   <img src="/icons/aburame.svg" alt="aburame" {...(props as any)} />
@@ -166,9 +167,12 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   ),
   priority_failure: MdFileUploadOff,
   protected: GiShieldcomb,
+  raincaller: BsCloudRainHeavyFill,
+  raining: BsCloudRain,
   regeneration: GiHealthIncrease,
   sage_mode: FaFrog,
   sand_aura: GiSandstorm,
+  sandstorm: GiSandstorm,
   seal_up: TbTagPlus,
   seeded: PiPlantBold,
   shinobi_vest: GiKevlarVest,
