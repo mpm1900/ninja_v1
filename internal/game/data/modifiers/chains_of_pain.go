@@ -6,20 +6,20 @@ import (
 	"github.com/google/uuid"
 )
 
-var vesselOfPainID = uuid.MustParse("606b4892-56fa-58c4-af72-63f7ea3ef669")
+var chainsOfPainID = uuid.MustParse("4735395b-d05d-4e68-9eca-2b5990de4afb")
 
-var VesselOfPain game.Modifier = game.Modifier{
-	ID:                vesselOfPainID,
-	GroupID:           &vesselOfPainID,
+var ChainsOfPain game.Modifier = game.Modifier{
+	ID:                chainsOfPainID,
+	GroupID:           &chainsOfPainID,
 	Icon:              "std_chakra",
-	Name:              "Vessel of Pain",
+	Name:              "Chains of Pain",
 	Description:       "Chakra Attack x0.75.",
 	ParentDescription: "Other shinobi: Chakra Attack x0.75.",
 	Show:              true,
 	Duration:          game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
-			&vesselOfPainID,
+			&chainsOfPainID,
 			game.MutPriorityPostStagedStats,
 			game.ComposeAF(game.OtherFilter, game.ActiveFilter),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {

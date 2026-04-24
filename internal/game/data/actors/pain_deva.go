@@ -45,8 +45,9 @@ var PainDeva = game.ActorDef{
 		actions.BlackNeedle.ID,
 	},
 	Immunities: map[uuid.UUID]struct{}{
-		modifiers.FeelingOfPain.ID: {},
-		modifiers.VoiceOfPain.ID:   {},
-		modifiers.VesselOfPain.ID:  {},
+		modifiers.BurdenOfPain.ID:    {},
+		modifiers.ChainsOfPain.ID:    {},
+		modifiers.JudgementOfPain.ID: {},
+		modifiers.VoiceOfPain.ID:     {},
 	},
 }

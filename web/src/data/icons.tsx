@@ -123,12 +123,6 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   cmo_strength: ({ className, ...props }) => (
     <GiDoubled className={cn('text-orange-300', className)} {...props} />
   ),
-  std_chakra: ({ className, ...props }) => (
-    <PiArrowFatLinesDownBold
-      className={cn('text-indigo-400', className)}
-      {...props}
-    />
-  ),
   physical_reduction_up: ({ className, ...props }) => (
     <GiArmorUpgrade className={cn('text-orange-300', className)} {...props} />
   ),
@@ -147,6 +141,18 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   std_defense: ({ className, ...props }) => (
     <PiArrowFatLinesDownBold
       className={cn('text-red-300', className)}
+      {...props}
+    />
+  ),
+  std_chakra: ({ className, ...props }) => (
+    <PiArrowFatLinesDownBold
+      className={cn('text-indigo-400', className)}
+      {...props}
+    />
+  ),
+  std_chakra_defense: ({ className, ...props }) => (
+    <PiArrowFatLinesDownBold
+      className={cn('text-blue-400', className)}
       {...props}
     />
   ),

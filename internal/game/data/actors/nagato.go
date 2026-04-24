@@ -31,7 +31,7 @@ var Nagato = game.ActorDef{
 		game.NsYinYang,
 	}),
 	Abilities: []game.Modifier{
-		modifiers.VesselOfPain,
+		modifiers.BurdenOfPain,
 		modifiers.SpeedBoost,
 		modifiers.Raincaller,
 	},

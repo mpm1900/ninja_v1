@@ -30,6 +30,7 @@ var PainNaraka = game.ActorDef{
 		game.NsYinYang,
 	}),
 	Abilities: []game.Modifier{
+		modifiers.JudgementOfPain,
 		modifiers.NeutralizingChakra,
 	},
 	ActionCount: 4,
@@ -43,8 +44,9 @@ var PainNaraka = game.ActorDef{
 		actions.BlackNeedle.ID,
 	},
 	Immunities: map[uuid.UUID]struct{}{
-		modifiers.FeelingOfPain.ID: {},
-		modifiers.VoiceOfPain.ID:   {},
-		modifiers.VesselOfPain.ID:  {},
+		modifiers.BurdenOfPain.ID:    {},
+		modifiers.ChainsOfPain.ID:    {},
+		modifiers.JudgementOfPain.ID: {},
+		modifiers.VoiceOfPain.ID:     {},
 	},
 }

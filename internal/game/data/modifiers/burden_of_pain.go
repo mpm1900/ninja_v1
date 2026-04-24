@@ -6,20 +6,20 @@ import (
 	"github.com/google/uuid"
 )
 
-var feelingOfPainID = uuid.MustParse("a1adcca5-e175-4454-a615-3e8be849e8ab")
+var burdenOfPainID = uuid.MustParse("606b4892-56fa-58c4-af72-63f7ea3ef669")
 
-var FeelingOfPain game.Modifier = game.Modifier{
-	ID:                feelingOfPainID,
-	GroupID:           &feelingOfPainID,
-	Icon:              "std_strength",
-	Name:              "Feeling of Pain",
+var BurdenOfPain game.Modifier = game.Modifier{
+	ID:                burdenOfPainID,
+	GroupID:           &burdenOfPainID,
+	Icon:              "std_attack",
+	Name:              "Burden of Pain",
 	Description:       "Attack x0.75.",
 	ParentDescription: "Other shinobi: Attack x0.75.",
 	Show:              true,
 	Duration:          game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
-			&feelingOfPainID,
+			&burdenOfPainID,
 			game.MutPriorityPostStagedStats,
 			game.ComposeAF(game.OtherFilter, game.ActiveFilter),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {

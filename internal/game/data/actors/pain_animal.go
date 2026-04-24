@@ -40,8 +40,9 @@ var PainAnimal = game.ActorDef{
 		actions.RetreatingStrike.ID,
 	},
 	Immunities: map[uuid.UUID]struct{}{
-		modifiers.FeelingOfPain.ID: {},
-		modifiers.VoiceOfPain.ID:   {},
-		modifiers.VesselOfPain.ID:  {},
+		modifiers.BurdenOfPain.ID:    {},
+		modifiers.ChainsOfPain.ID:    {},
+		modifiers.JudgementOfPain.ID: {},
+		modifiers.VoiceOfPain.ID:     {},
 	},
 }

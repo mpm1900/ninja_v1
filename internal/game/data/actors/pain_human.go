@@ -30,7 +30,7 @@ var PainHuman = game.ActorDef{
 		game.NsYinYang,
 	}),
 	Abilities: []game.Modifier{
-		modifiers.FeelingOfPain,
+		modifiers.BurdenOfPain,
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
@@ -44,8 +44,9 @@ var PainHuman = game.ActorDef{
 		actions.BlackNeedle.ID,
 	},
 	Immunities: map[uuid.UUID]struct{}{
-		modifiers.FeelingOfPain.ID: {},
-		modifiers.VoiceOfPain.ID:   {},
-		modifiers.VesselOfPain.ID:  {},
+		modifiers.BurdenOfPain.ID:    {},
+		modifiers.ChainsOfPain.ID:    {},
+		modifiers.JudgementOfPain.ID: {},
+		modifiers.VoiceOfPain.ID:     {},
 	},
 }
