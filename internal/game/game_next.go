@@ -166,6 +166,7 @@ func (g *Game) NextPrompt() bool {
 }
 
 func (g *Game) NextTrigger() bool {
+	g.SortTriggers()
 	transaction, err := g.Triggers.Dequeue()
 	a_tx := Transaction[Action]{}
 	a_tx.Context = transaction.Context

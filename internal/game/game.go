@@ -575,6 +575,15 @@ func (g *Game) SortActions() {
 		return b_res.Stats[StatSpeed] - a_res.Stats[StatSpeed]
 	})
 }
+func (g *Game) SortTriggers() {
+	slices.SortFunc(g.Triggers, func(a, b Transaction[Trigger]) int {
+		if a.Mutation.Priority != b.Mutation.Priority {
+			return b.Mutation.Priority - a.Mutation.Priority
+		}
+
+		return 0
+	})
+}
 
 func (g *Game) PushAction(transaction Transaction[Action]) bool {
 	for _, t := range g.Actions {
@@ -649,10 +658,13 @@ func (g *Game) RunAction(transaction Transaction[Action]) {
 
 func (g *Game) RunTrigger(transaction Transaction[Trigger]) {
 	modifier, ok := g.GetModifierByID(transaction.Mutation.ModifierID)
-	if ok {
-		text := fmt.Sprintf("%s: %s", strings.ToUpper(string(transaction.Mutation.On)), modifier.Name)
-		g.PushLog(NewLog(text))
+	if !ok {
+		return
 	}
+
+	text := fmt.Sprintf("%s: %s", strings.ToUpper(string(transaction.Mutation.On)), modifier.Name)
+	g.PushLog(NewLog(text))
+
 	transactions := ResolveTrigger(*g, transaction)
 	g.Transactions = append(transactions, g.Transactions...)
 }
