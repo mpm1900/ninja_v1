@@ -17,6 +17,7 @@ func MakeSummonAlly() game.Action {
 		ID: uuid.MustParse("c06b7803-7b52-4e20-a359-e92695920896"),
 		Config: game.ActionConfig{
 			Name:        "Summon Ally",
+			Nature:      game.Ptr(game.NsYin),
 			Description: "Summons ally to battle, they gain user's stat up/downs. Switches user out.",
 		},
 		TargetType:      game.TargetActorID,

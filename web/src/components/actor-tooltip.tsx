@@ -12,6 +12,8 @@ import { gameStore } from '#/lib/stores/game'
 import { clientsStore } from '#/lib/stores/clients'
 import { sendContextMessage } from '#/lib/stores/socket'
 import { setActionID } from '#/lib/stores/battle-context'
+import { cn } from '#/lib/utils'
+import { Separator } from './ui/separator'
 
 function SwitchButton({ actor }: { actor: Actor }) {
   const active = useActiveActor()
@@ -72,7 +74,11 @@ function ActorTooltip({
     <HoverCard openDelay={100} closeDelay={100}>
       <HoverCardTrigger {...props} />
       {!disabled && (
-        <HoverCardContent sideOffset={8} collisionPadding={8} className='w-auto'>
+        <HoverCardContent
+          sideOffset={8}
+          collisionPadding={8}
+          className="w-auto"
+        >
           <div className="flex justify-between">
             <div>{actor.name}</div>
             <div>
@@ -83,7 +89,7 @@ function ActorTooltip({
                 ))}
             </div>
           </div>
-          <div className='flex'>
+          <div className="flex items-start">
             <table className="[&_td]:px-2 [&_td]:whitespace-nowrap">
               <tbody>
                 <tr>
@@ -95,7 +101,11 @@ function ActorTooltip({
                 <tr>
                   <td>Stamina</td>
                   <td>
-                    <ActorStat actor={actor} showBase={false} stat={'stamina'} />
+                    <ActorStat
+                      actor={actor}
+                      showBase={false}
+                      stat={'stamina'}
+                    />
                   </td>
                 </tr>
                 <tr>
@@ -107,7 +117,11 @@ function ActorTooltip({
                 <tr>
                   <td>Defense</td>
                   <td>
-                    <ActorStat actor={actor} showBase={false} stat={'defense'} />
+                    <ActorStat
+                      actor={actor}
+                      showBase={false}
+                      stat={'defense'}
+                    />
                   </td>
                 </tr>
                 <tr>
@@ -138,11 +152,27 @@ function ActorTooltip({
                 </tr>
               </tbody>
             </table>
-            <div>
-              {actor.actions.map(a => (
-                <div className='text-nowrap'>{a.config.name}</div>
-              ))}
-            </div>
+            <Separator orientation='vertical' />
+            <table className="[&_td]:px-2 [&_td]:whitespace-nowrap">
+              <tbody>
+                {actor.actions
+                  .filter((a) => !a.meta.switch)
+                  .map((a) => (
+                    <tr
+                      className={cn({
+                        'text-destructive': a.disabled,
+                      })}
+                    >
+                      <td>
+                        {a.config.nature && (
+                          <NatureBadge nature={a.config.nature} />
+                        )}
+                      </td>
+                      <td>{a.config.name}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
           </div>
           <SwitchButton actor={actor} />
         </HoverCardContent>

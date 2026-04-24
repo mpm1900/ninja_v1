@@ -23,6 +23,10 @@ type Action = {
   disabled: boolean
   priority: number
   target_type: 'target-actor-id' | 'target-position-type'
+  meta: {
+    switch: boolean
+    struggle: boolean
+  }
 }
 
 type ActionTransaction = {
