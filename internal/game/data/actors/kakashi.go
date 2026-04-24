@@ -53,5 +53,6 @@ var Kakashi = game.ActorDef{
 		actions.KamuiCounter.ID,
 		actions.KamuiSlash.ID,
 		actions.ShadowClone.ID,
+		actions.MudWall.ID,
 	},
 }

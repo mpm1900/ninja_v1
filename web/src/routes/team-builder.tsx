@@ -123,7 +123,7 @@ function RouteComponent() {
                     if (!def) return null
 
                     return (
-                      <div className="flex-1 space-y-4 overflow-auto">
+                      <div className="flex-1 flex flex-col gap-2 overflow-auto">
                         <div className="flex justify-between items-end gap-6">
                           <form.Field name="name">
                             {(field) => (

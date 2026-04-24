@@ -176,7 +176,10 @@ function ActionsTable({
               <TableHead
                 key={header.id}
                 colSpan={header.colSpan}
-                className={header.column.id === 'description' ? 'w-full' : ''}
+                className={cn(
+                  'sticky top-0 z-10 bg-background',
+                  header.column.id === 'description' ? 'w-full' : ''
+                )}
               >
                 {flexRender(
                   header.column.columnDef.header,

@@ -21,6 +21,7 @@ const card_transition: Transition = {
 
 function BattleCards({ actor }: { actor: Actor }) {
   const queued_actions = useStore(gameStore, (g) => g.queued_actions)
+  const prompt = useStore(gameStore, g => g.prompt)
   const status = useStore(gameStore, (g) => g.status)
   const actions = useStore(gameStore, (g) => g.actions)
   const action_ID = useStore(battleContext, (c) => c.action_ID)
@@ -28,7 +29,8 @@ function BattleCards({ actor }: { actor: Actor }) {
     g.players.find((p) => p.ID === actor.player_ID)
   )
   const has_queued_action = queued_actions[actor.ID]
-  const idle = status === 'idle'
+  const idle = status === 'idle' && !prompt
+  // todo come back to this
   const ally_summon_action = actions.find(
     (tx) =>
       tx.context.source_player_ID === actor.player_ID && tx.mutation.summon

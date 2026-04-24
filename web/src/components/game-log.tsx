@@ -10,14 +10,13 @@ import { ScrollArea } from './ui/scroll-area'
 
 function GameLogItem({
   item,
-  game,
   clientID,
 }: {
   item: GameLogType
-  game: Game
   clientID: string
 }) {
-  const source = game.actors.find((a) => a.ID === item.context.source_actor_ID)
+  const actors = useStore(gameStore, g => g.actors)
+  const source = actors.find((a) => a.ID === item.context.source_actor_ID)
   const action = source?.actions?.find((a) => a.ID === item.context.action_ID)
 
   const sourceText = source?.name ?? 'Unknown'
@@ -54,12 +53,12 @@ function GameLogItem({
 }
 
 function GameLogList() {
-  const game = useStore(gameStore, (s) => s)
+  const log = useStore(gameStore, (s) => s.log)
   const clientID = useStore(clientsStore, (s) => s.me?.ID ?? '')
   const endRef = useRef<HTMLLIElement | null>(null)
 
   const lastLogID =
-    game.log.length > 0 ? game.log[game.log.length - 1].ID : null
+    log.length > 0 ? log[log.length - 1].ID : null
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: 'end' })
@@ -67,13 +66,13 @@ function GameLogList() {
 
   return (
     <ul>
-      {game.log.map((item, index) => (
+      {log.map((item, index) => (
         <li
           key={item.ID}
-          ref={index === game.log.length - 1 ? endRef : undefined}
+          ref={index === log.length - 1 ? endRef : undefined}
           className="text-muted-foreground"
         >
-          <GameLogItem item={item} game={game} clientID={clientID} />
+          <GameLogItem item={item} clientID={clientID} />
         </li>
       ))}
     </ul>

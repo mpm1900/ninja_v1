@@ -7,7 +7,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { ClientOnly, createFileRoute, redirect } from '@tanstack/react-router'
 import { gameStore } from '#/lib/stores/game'
 import { clientsStore } from '#/lib/stores/clients'
-import { ActionQueue } from '#/components/action-queue'
 import { PromptController } from '#/components/prompt-controller'
 import { AppHeader } from '#/components/app-header'
 import { actionsQuery } from '#/lib/queries/actions'
@@ -43,8 +42,6 @@ function App() {
         <AppHeader />
         <div className="flex min-w-0">
           <div className="min-w-0 space-y-2 flex-1 overflow-auto">
-            <ActionQueue />
-
             <div className="flex justify-between">
               <div className="flex flex-col">
                 <div className="px-4 left-0 z-10">

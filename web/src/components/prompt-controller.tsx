@@ -29,7 +29,7 @@ function PromptControl({
   onContextChange: (context: Context) => void
 }) {
   const action = prompt?.mutation
-  const game = useStore(gameStore, (g) => g)
+  const actors = useStore(gameStore, (g) => g.actors)
   const { valid } = useValidateContext(context, prompt?.ID)
 
   const client = useStore(clientsStore, (c) => c.me!)
@@ -40,7 +40,7 @@ function PromptControl({
     <>
       {action && (
         <div className="p-2 grid grid-cols-2 gap-2">
-          {game.actors
+          {actors
             .filter((a) => t_context?.target_actor_IDs?.includes(a.ID))
             .map((a) => (
               <TargetButton
@@ -78,9 +78,8 @@ function PromptControl({
 }
 
 function PromptController() {
-  const game = useStore(gameStore, (g) => g)
-  const prompt = game.prompt
-
+  const status = useStore(gameStore, (g) => g.status)
+  const prompt = useStore(gameStore, (g) => g.prompt)
   const [context, setContext] = useState(prompt?.context)
 
   useEffect(() => {
@@ -89,7 +88,7 @@ function PromptController() {
 
   return (
     <>
-      <AlertDialog open={!!prompt && game.status === 'idle'}>
+      <AlertDialog open={!!prompt && status === 'idle'}>
         {prompt && context && (
           <AlertDialogContent>
             <AlertDialogHeader>
@@ -106,7 +105,7 @@ function PromptController() {
           </AlertDialogContent>
         )}
       </AlertDialog>
-      <AlertDialog open={!prompt && game.status === 'waiting'}>
+      <AlertDialog open={!prompt && status === 'waiting'}>
         <AlertDialogContent className=''>
           <AlertDialogHeader>
             <AlertDialogTitle>Waiting on other players...</AlertDialogTitle>

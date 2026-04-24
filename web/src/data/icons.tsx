@@ -20,6 +20,7 @@ import {
   GiPoisonBottle,
   GiShieldReflect,
   GiHeartOrgan,
+  GiArmorUpgrade,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -126,6 +127,9 @@ const MODIFIER_ICONS: Record<string, IconType> = {
       className={cn('text-indigo-400', className)}
       {...props}
     />
+  ),
+  physical_reduction_up: ({ className, ...props }) => (
+    <GiArmorUpgrade className={cn('text-orange-300', className)} {...props} />
   ),
   std_speed: ({ className, ...props }) => (
     <PiArrowFatLinesDownBold

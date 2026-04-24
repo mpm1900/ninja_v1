@@ -43,7 +43,9 @@ function AppHeader() {
   const instanceID = useStore(socketStore, (s) => s.instanceID)
   const status = useStore(socketStore, (s) => s.status)
   const client = useStore(clientsStore, (c) => c.me)
-  const game = useStore(gameStore, (g) => g)
+  const turn = useStore(gameStore, (g) => g.turn)
+  const game_status = useStore(gameStore, (g) => g.status)
+  const actions = useStore(gameStore, g => g.actions)
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   })
@@ -55,9 +57,9 @@ function AppHeader() {
           <GiNinjaHead />
         </Link>
         <div className="flex items-center">
-          {game.status === 'running' && <Loader2 className="animate-spin" />}
-          {game.status === 'idle' && <Check />}
-          {game.status === 'waiting' && <Loader2 className="animate-spin" />}
+          {game_status === 'running' && <Loader2 className="animate-spin" />}
+          {game_status === 'idle' && <Check />}
+          {game_status === 'waiting' && <Loader2 className="animate-spin" />}
         </div>
         {user && (
           <InstanceCombobox
@@ -87,12 +89,12 @@ function AppHeader() {
           </TabsList>
         </Tabs>
         <Badge>
-          {game.turn.count}: {game.turn.phase}
+          {turn.count}: {turn.phase}
         </Badge>
         {client && (
           <div className="flex gap-2">
             <Button
-              disabled={game.actions.length == 0 || game.status === 'running'}
+              disabled={actions.length == 0 || game_status === 'running'}
               onClick={() => {
                 sendContextMessage({
                   type: 'run-game-actions',
@@ -104,7 +106,7 @@ function AppHeader() {
               Run
             </Button>
             <Button
-              disabled={!client || game.status === 'running'}
+              disabled={!client || game_status === 'running'}
               onClick={() => {
                 sendContextMessage({
                   type: 'validate-state',

@@ -38,7 +38,7 @@ function TeamBuilderActorConfig({
           <div className="flex flex-col gap-2 min-w-1/4">
             <div className="flex">
               <img src={def.sprite_url} className="object-cover size-16" />
-              <div>
+              <div className='p-2'>
                 <div>{def.name}</div>
                 <div className="flex">
                   {(Object.keys(def.natures) as Array<NatureSet>)
