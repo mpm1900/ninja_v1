@@ -13,10 +13,10 @@ func MakeCopyJutsu() game.Action {
 		Name:        "Copy Jutsu",
 		Nature:      game.Ptr(game.NsYin),
 		Jutsu:       game.Ninjutsu,
-		Description: "Switches abilities with the target temporarily.",
+		Description: "Copies target's last used action.",
 	}
 	return game.Action{
-		ID:              uuid.MustParse("7d55195c-b6be-4f4a-960f-951421740943"),
+		ID:              uuid.MustParse("7bc916c9-f762-472c-ac29-d5e7996b64e3"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.ComposeAF(game.TeamFilter, game.OtherFilter, game.TargetableFilter),

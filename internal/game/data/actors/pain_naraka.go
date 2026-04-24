@@ -35,5 +35,7 @@ var PainNaraka = game.ActorDef{
 		actions.TempleOfNirvana.ID,
 		actions.Flash.ID,
 		actions.Revival.ID,
+		actions.RetreatingStrike.ID,
+		actions.SummonAlly.ID,
 	},
 }

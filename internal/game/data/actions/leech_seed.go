@@ -60,7 +60,7 @@ func MakeLeechSeed() game.Action {
 var leechSeedModifierID = uuid.MustParse("531ca1a4-40af-5de4-a3c6-99f8468cd368")
 
 var LeechSeedTrigger game.Trigger = game.Trigger{
-	ID:         uuid.MustParse("e02419ec-50f8-5e75-bbaf-43b233e9aaa7"),
+	ID:         uuid.New(),
 	ModifierID: leechSeedModifierID,
 	On:         game.OnTurnEnd,
 	Check: func(p game.Game, g game.Game, ctx game.Context, t game.Transaction[game.Modifier]) bool {

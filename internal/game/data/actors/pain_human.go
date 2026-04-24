@@ -38,5 +38,7 @@ var PainHuman = game.ActorDef{
 		actions.MindTransfer.ID,
 		actions.InstilFear.ID,
 		actions.Flash.ID,
+		actions.RetreatingStrike.ID,
+		actions.SummonAlly.ID,
 	},
 }

@@ -36,5 +36,6 @@ var PainDeva = game.ActorDef{
 		actions.Tailwind.ID,
 		actions.MindTransfer.ID,
 		actions.SummonAlly.ID,
+		actions.RetreatingStrike.ID,
 	},
 }
