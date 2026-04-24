@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -14,11 +15,11 @@ var PainHuman = game.ActorDef{
 	Affiliations: []string{game.AffAkatsuki, game.AffAme},
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            65,
-		game.StatStamina:       75,
+		game.StatStamina:       100,
 		game.StatAttack:        75,
-		game.StatDefense:       130,
+		game.StatDefense:       110,
 		game.StatChakraAttack:  75,
-		game.StatChakraDefense: 130,
+		game.StatChakraDefense: 110,
 		game.StatSpeed:         95,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
@@ -28,12 +29,14 @@ var PainHuman = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsYinYang,
 	}),
-	Abilities:   []game.Modifier{},
+	Abilities: []game.Modifier{
+		modifiers.NeutralizingChakra,
+	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.PerishSong.ID,
 		actions.MindTransfer.ID,
-		actions.TempleOfNirvana.ID,
+		actions.InstilFear.ID,
 		actions.Flash.ID,
 	},
 }

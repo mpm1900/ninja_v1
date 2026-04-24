@@ -33,6 +33,8 @@ var Orochimaru = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
+		actions.BodyReplacement.ID,
+		actions.Recover.ID,
 		actions.Chidori.ID,
 		actions.DragonStance.ID,
 		actions.Fireball.ID,

@@ -14,7 +14,7 @@ var PainNaraka = game.ActorDef{
 	Affiliations: []string{game.AffAkatsuki, game.AffAme},
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            65,
-		game.StatStamina:       95,
+		game.StatStamina:       100,
 		game.StatAttack:        110,
 		game.StatDefense:       90,
 		game.StatChakraAttack:  80,
@@ -32,7 +32,6 @@ var PainNaraka = game.ActorDef{
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.PerishSong.ID,
-		actions.MindTransfer.ID,
 		actions.TempleOfNirvana.ID,
 		actions.Flash.ID,
 		actions.Revival.ID,

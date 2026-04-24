@@ -14,7 +14,7 @@ var PainAnimal = game.ActorDef{
 	Affiliations: []string{game.AffAkatsuki, game.AffAme},
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            65,
-		game.StatStamina:       75,
+		game.StatStamina:       100,
 		game.StatAttack:        81,
 		game.StatDefense:       71,
 		game.StatChakraAttack:  74,

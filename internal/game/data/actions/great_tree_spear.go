@@ -16,7 +16,7 @@ func MakeGreatTreeSpear() game.Action {
 		Nature:      game.Ptr(game.NsWood),
 		Accuracy:    game.Ptr(70),
 		Power:       game.Ptr(120),
-		Stat:        game.Ptr(game.StatChakraAttack),
+		Stat:        game.Ptr(game.StatAttack),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(90),
 		Jutsu:       game.Ninjutsu,

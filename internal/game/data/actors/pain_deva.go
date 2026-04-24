@@ -13,11 +13,11 @@ var PainDeva = game.ActorDef{
 	Name:         "Pain (Deva Path)",
 	Affiliations: []string{game.AffAkatsuki, game.AffAme},
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            105,
+		game.StatHP:            65,
 		game.StatStamina:       100,
 		game.StatAttack:        115,
 		game.StatDefense:       85,
-		game.StatChakraAttack:  90,
+		game.StatChakraAttack:  110,
 		game.StatChakraDefense: 75,
 		game.StatSpeed:         100,
 		game.StatEvasion:       100,

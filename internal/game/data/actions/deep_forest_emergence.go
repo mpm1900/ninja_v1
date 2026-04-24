@@ -17,7 +17,7 @@ func MakeDeepForestEmergence() game.Action {
 		Nature:      game.Ptr(game.NsWood),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(110),
-		Stat:        game.Ptr(game.StatChakraAttack),
+		Stat:        game.Ptr(game.StatAttack),
 		TargetCount: game.Ptr(0),
 		Cost:        game.Ptr(100),
 		Cooldown:    game.Ptr(2),

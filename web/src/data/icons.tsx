@@ -19,6 +19,7 @@ import {
   GiWaterRecycling,
   GiPoisonBottle,
   GiShieldReflect,
+  GiHeartOrgan,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -110,6 +111,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
     <GiFlamer className={cn('text-orange-400', className)} {...props} />
   ),
   coerced: GiComa,
+  consume_chakra: GiHeartOrgan,
   cmo_chakra: ({ className, ...props }) => (
     <GiDoubled className={cn('text-indigo-400', className)} {...props} />
   ),

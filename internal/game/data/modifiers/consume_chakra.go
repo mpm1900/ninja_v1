@@ -32,6 +32,7 @@ var ConsumeChakraTrigger game.Trigger = game.Trigger{
 var ConsumeChakra game.Modifier = game.Modifier{
 	ID:          consumeChakraID,
 	GroupID:     &consumeChakraID,
+	Icon:        "consume_chakra",
 	Name:        "Consume Chakra",
 	Description: "On kill: gain Chakra Attack Up.",
 	Show:        true,
