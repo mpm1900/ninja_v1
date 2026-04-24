@@ -35,5 +35,6 @@ var PainAsura = game.ActorDef{
 		actions.BodyReplacement.ID,
 		actions.Tailwind.ID,
 		actions.MindTransfer.ID,
+		actions.BlackNeedle.ID,
 	},
 }

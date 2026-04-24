@@ -30,15 +30,17 @@ var PainHuman = game.ActorDef{
 		game.NsYinYang,
 	}),
 	Abilities: []game.Modifier{
-		modifiers.NeutralizingChakra,
+		modifiers.FeelingOfPain,
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
+		actions.Distraction.ID,
 		actions.PerishSong.ID,
 		actions.MindTransfer.ID,
 		actions.InstilFear.ID,
 		actions.Flash.ID,
 		actions.RetreatingStrike.ID,
 		actions.SummonAlly.ID,
+		actions.BlackNeedle.ID,
 	},
 }

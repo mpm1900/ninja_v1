@@ -15,7 +15,7 @@ func MakeSekiryoku() game.Action {
 	config := game.ActionConfig{
 		Name:        "Sekiryoku",
 		Description: "Forces target to switch out.",
-		Nature:      game.Ptr(game.NsPure),
+		Nature:      game.Ptr(game.NsYinYang),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(30),
 		Jutsu:       game.Ninjutsu,

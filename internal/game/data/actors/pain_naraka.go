@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -28,7 +29,9 @@ var PainNaraka = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsYinYang,
 	}),
-	Abilities:   []game.Modifier{},
+	Abilities: []game.Modifier{
+		modifiers.NeutralizingChakra,
+	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.PerishSong.ID,
@@ -37,5 +40,6 @@ var PainNaraka = game.ActorDef{
 		actions.Revival.ID,
 		actions.RetreatingStrike.ID,
 		actions.SummonAlly.ID,
+		actions.BlackNeedle.ID,
 	},
 }

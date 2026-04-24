@@ -33,5 +33,6 @@ var PainAnimal = game.ActorDef{
 	ActionIDs: []uuid.UUID{
 		actions.BodyReplacement.ID,
 		actions.RetreatingStrike.ID,
+		actions.BlackNeedle.ID,
 	},
 }

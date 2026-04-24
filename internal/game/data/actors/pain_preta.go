@@ -37,13 +37,13 @@ var PainPreta = game.ActorDef{
 		actions.Recover.ID,
 		actions.Tailwind.ID,
 		actions.PerishSong.ID,
-		actions.Expansion.ID,
 		actions.Taunt.ID,
 		actions.RetreatingStrike.ID,
 		actions.BodyReplacement.ID,
 		actions.CopyJutsu.ID,
 		actions.Fireball.ID,
-
-		actions.TempleOfNirvana.ID,
+		actions.ChannelChakra.ID,
+		actions.Expansion.ID,
+		actions.BlackNeedle.ID,
 	},
 }

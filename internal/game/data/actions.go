@@ -52,6 +52,12 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.TeamHeal.ID:         actions.TeamHeal,
 	actions.PatternBreak.ID:     actions.PatternBreak,
 	actions.ChilliPill.ID:       actions.ChilliPill,
+	actions.Expansion.ID:        actions.Expansion,
+	actions.ChannelChakra.ID:    actions.ChannelChakra,
+
+	actions.Sekiryoku.ID:    actions.Sekiryoku,
+	actions.ShinraTensei.ID: actions.ShinraTensei,
+	actions.BlackNeedle.ID:  actions.BlackNeedle,
 
 	actions.HiddenMist.ID:     actions.HiddenMist,
 	actions.CollidingWave.ID:  actions.CollidingWave,
@@ -67,7 +73,6 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.C1Bird.ID:        actions.C1Bird,
 
 	actions.FlyingSwallow.ID:    actions.FlyingSwallow,
-	actions.Sekiryoku.ID:        actions.Sekiryoku,
 	actions.GiantRasengan.ID:    actions.GiantRasengan,
 	actions.Rasengan.ID:         actions.Rasengan,
 	actions.RasenganRecharge.ID: actions.RasenganRecharge,
@@ -88,7 +93,6 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 
 	actions.IronSkin.ID:        actions.IronSkin,
 	actions.IronBody.ID:        actions.IronBody,
-	actions.Expansion.ID:       actions.Expansion,
 	actions.HumanBoulder.ID:    actions.HumanBoulder,
 	actions.RockFist.ID:        actions.RockFist,
 	actions.EarthDomePrison.ID: actions.EarthDomePrison,
