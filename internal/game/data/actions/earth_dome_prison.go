@@ -37,7 +37,7 @@ func MakeEarthDomePrison() game.Action {
 			for _, target := range targets {
 				ctx := game.MakeContextForActor(target)
 				ctx.SourceActorID = context.SourceActorID
-				mod := modifiers.SpeedDownSource
+				mod := modifiers.SpeedDownTarget
 				mutation := mutations.AddModifiers(false, mod)
 				transaction := game.MakeTransaction(mutation, ctx)
 				transactions = append(transactions, transaction)
