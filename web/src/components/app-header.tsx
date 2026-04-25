@@ -20,7 +20,7 @@ import { Tabs, TabsList, TabsTrigger } from './ui/tabs'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { NULL_CONTEXT } from '#/lib/game/context'
 import { Button } from './ui/button'
-import { GiNinjaHead } from 'react-icons/gi'
+import { GiSharpShuriken } from 'react-icons/gi'
 import { useLogout } from '#/lib/mutations/logout'
 import { useUser } from '#/lib/queries/auth'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
@@ -32,6 +32,8 @@ function getActiveTable(pathname: string) {
       return 'battle'
     case '/team-builder':
       return 'team-builder'
+    case '/lobby':
+      return 'lobby'
     default:
       return 'debug'
   }
@@ -45,7 +47,7 @@ function AppHeader() {
   const client = useStore(clientsStore, (c) => c.me)
   const turn = useStore(gameStore, (g) => g.turn)
   const game_status = useStore(gameStore, (g) => g.status)
-  const actions = useStore(gameStore, g => g.actions)
+  const actions = useStore(gameStore, (g) => g.actions)
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   })
@@ -54,13 +56,9 @@ function AppHeader() {
     <header className="flex justify-between p-2">
       <div className="flex items-center gap-2">
         <Link to="/" className="pl-2">
-          <GiNinjaHead />
+          <GiSharpShuriken />
         </Link>
-        <div className="flex items-center">
-          {game_status === 'running' && <Loader2 className="animate-spin" />}
-          {game_status === 'idle' && <Check />}
-          {game_status === 'waiting' && <Loader2 className="animate-spin" />}
-        </div>
+
         {user && (
           <InstanceCombobox
             icon={
@@ -84,15 +82,15 @@ function AppHeader() {
             <TabsTrigger value="team-builder" asChild>
               <Link to="/team-builder">Team Builder</Link>
             </TabsTrigger>
-            <TabsTrigger value="debug" asChild>
-              <Link to="/debug">Debug</Link>
+            <TabsTrigger value="lobby" asChild>
+              <Link to="/lobby">Lobby</Link>
             </TabsTrigger>
             <TabsTrigger value="battle" asChild>
               <Link to="/battle">Battle</Link>
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        <Badge>
+        <Badge className="w-30">
           {turn.count}: {turn.phase}
         </Badge>
         {client && (
@@ -123,6 +121,11 @@ function AppHeader() {
             </Button>
           </div>
         )}
+        <div className="flex items-center">
+          {game_status === 'running' && <Loader2 className="animate-spin" />}
+          {game_status === 'idle' && <Check />}
+          {game_status === 'waiting' && <Loader2 className="animate-spin" />}
+        </div>
       </div>
       <div className="flex items-center gap-4 px-2">
         <div className="font-mono text-sm flex items-center">

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TeamBuilderRouteImport } from './routes/team-builder'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LobbyRouteImport } from './routes/lobby'
 import { Route as DebugRouteImport } from './routes/debug'
 import { Route as BattleRouteImport } from './routes/battle'
 import { Route as IndexRouteImport } from './routes/index'
@@ -23,6 +24,11 @@ const TeamBuilderRoute = TeamBuilderRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LobbyRoute = LobbyRouteImport.update({
+  id: '/lobby',
+  path: '/lobby',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DebugRoute = DebugRouteImport.update({
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/battle': typeof BattleRoute
   '/debug': typeof DebugRoute
+  '/lobby': typeof LobbyRoute
   '/login': typeof LoginRoute
   '/team-builder': typeof TeamBuilderRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/battle': typeof BattleRoute
   '/debug': typeof DebugRoute
+  '/lobby': typeof LobbyRoute
   '/login': typeof LoginRoute
   '/team-builder': typeof TeamBuilderRoute
 }
@@ -60,21 +68,30 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/battle': typeof BattleRoute
   '/debug': typeof DebugRoute
+  '/lobby': typeof LobbyRoute
   '/login': typeof LoginRoute
   '/team-builder': typeof TeamBuilderRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/battle' | '/debug' | '/login' | '/team-builder'
+  fullPaths: '/' | '/battle' | '/debug' | '/lobby' | '/login' | '/team-builder'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/battle' | '/debug' | '/login' | '/team-builder'
-  id: '__root__' | '/' | '/battle' | '/debug' | '/login' | '/team-builder'
+  to: '/' | '/battle' | '/debug' | '/lobby' | '/login' | '/team-builder'
+  id:
+    | '__root__'
+    | '/'
+    | '/battle'
+    | '/debug'
+    | '/lobby'
+    | '/login'
+    | '/team-builder'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BattleRoute: typeof BattleRoute
   DebugRoute: typeof DebugRoute
+  LobbyRoute: typeof LobbyRoute
   LoginRoute: typeof LoginRoute
   TeamBuilderRoute: typeof TeamBuilderRoute
 }
@@ -93,6 +110,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lobby': {
+      id: '/lobby'
+      path: '/lobby'
+      fullPath: '/lobby'
+      preLoaderRoute: typeof LobbyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/debug': {
@@ -123,6 +147,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BattleRoute: BattleRoute,
   DebugRoute: DebugRoute,
+  LobbyRoute: LobbyRoute,
   LoginRoute: LoginRoute,
   TeamBuilderRoute: TeamBuilderRoute,
 }

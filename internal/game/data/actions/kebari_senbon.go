@@ -1,22 +1,23 @@
 package actions
 
 import (
+	"math/rand/v2"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
 
-var PhoenixFlower = MakePhoenixFlower()
+var KebariSenbon = MakeKebariSenbon()
 
-func MakePhoenixFlower() game.Action {
+func MakeKebariSenbon() game.Action {
 	config := game.ActionConfig{
-		Name:        "Phoenix Flower",
-		Description: "Hits up-to 6 times. High critical chance.",
-		Accuracy:    game.Ptr(90),
+		Name:        "Kebari Senbon",
+		Description: "Hits 2-6 times. High critical chance.",
+		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(20),
-		Stat:        game.Ptr(game.StatAttack),
-		Nature:      game.Ptr(game.NsFire),
+		Stat:        game.Ptr(game.StatChakraAttack),
+		Nature:      game.Ptr(game.NsYang),
 		Cost:        game.Ptr(50),
 		TargetCount: game.Ptr(1),
 		Jutsu:       game.Bukijutsu,
@@ -24,7 +25,7 @@ func MakePhoenixFlower() game.Action {
 		CritMod:     1.5,
 	}
 	return game.Action{
-		ID:              uuid.MustParse("c6a59042-5fa2-4ec6-b83f-b705d5cd5c9e"),
+		ID:              uuid.MustParse("0de3affc-7513-41b0-8622-c603ccb8ee8a"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
@@ -40,7 +41,7 @@ func MakePhoenixFlower() game.Action {
 				crit_result := game.MakeCriticalCheck(conf)
 				damage_config := game.NewDamageConfig(crit_result.Ratio, game.RandomDamageFactor())
 				damage_config.Repeat = true
-				damage_config.RepeatMax = 6
+				damage_config.RepeatMax = rand.IntN(4) + 2
 				damages := game.NewDamage(conf, damage_config)
 				transactions = append(
 					transactions,

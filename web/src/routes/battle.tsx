@@ -47,7 +47,7 @@ function RouteComponent() {
               </div>
               <GameLog />
             </div>
-            <div className="fixed top-12 px-4 left-0 z-10">
+            <div className="fixed top-12 px-4 py-4 left-0 z-10">
               {enemies.map((player) => (
                 <PlayerThumbnails key={player.ID} player_ID={player.ID} />
               ))}
@@ -66,16 +66,14 @@ function RouteComponent() {
                 key={player.ID}
                 flip={false}
                 player_ID={player.ID}
-                selected={
-                  game.status === 'idle' ? (source_actor_ID ?? '') : ''
-                }
+                selected={game.status === 'idle' ? (source_actor_ID ?? '') : ''}
                 onSelectedChange={(actor_ID) =>
                   setContextSource(actor_ID, game)
                 }
               />
             ))}
           </div>
-          <div className="fixed bottom-0 px-4 flex flex-col items-end right-0 z-10">
+          <div className="fixed bottom-0 px-4 py-4 flex flex-col items-end right-0 z-10">
             {players.map((player) => (
               <PlayerThumbnails key={player.ID} player_ID={player.ID} />
             ))}

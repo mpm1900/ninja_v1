@@ -20,7 +20,7 @@ func MakeFlyingRaijin() game.Action {
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(0),
 		Cooldown:    game.Ptr(1),
-		Jutsu:       game.Ninjutsu,
+		Jutsu:       game.Fuinjutsu,
 		CritChance:  game.Ptr(getCriticalStage(1)),
 		CritMod:     1.5,
 	}

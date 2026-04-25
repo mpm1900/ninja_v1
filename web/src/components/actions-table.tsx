@@ -39,7 +39,7 @@ const columns = [
           (row.original.locked ||
             !row.getCanSelect() ||
             (table.options.meta as any).total ==
-            table.getSelectedRowModel().rows.length)
+              table.getSelectedRowModel().rows.length)
         }
       />
     ),
@@ -56,7 +56,15 @@ const columns = [
     ),
   }),
   helper.accessor('config.nature', {
-    header: 'Nature',
+    header: ({ column }) => (
+      <Button
+        className="-ml-4"
+        variant="ghost"
+        onClick={() => column.toggleSorting()}
+      >
+        Nature
+      </Button>
+    ),
     cell: ({ row }) =>
       row.original.config.nature ? (
         <NatureBadge nature={row.original.config.nature} />
@@ -65,7 +73,15 @@ const columns = [
       ),
   }),
   helper.accessor('config.stat', {
-    header: 'Stat',
+    header: ({ column }) => (
+      <Button
+        className="-ml-4"
+        variant="ghost"
+        onClick={() => column.toggleSorting()}
+      >
+        Stat
+      </Button>
+    ),
     cell: ({ row }) =>
       row.original.config.stat ? (
         <StatBadge
@@ -77,25 +93,47 @@ const columns = [
       ),
   }),
   helper.accessor('config.power', {
-    header: 'Power',
+    header: ({ column }) => (
+      <Button
+        className="-ml-4"
+        variant="ghost"
+        onClick={() => column.toggleSorting()}
+      >
+        Power
+      </Button>
+    ),
     cell: ({ row }) => row.original.config.power ?? '-',
   }),
   helper.accessor('config.accuracy', {
-    header: 'Accuracy',
+    header: ({ column }) => (
+      <Button
+        className="-ml-4"
+        variant="ghost"
+        onClick={() => column.toggleSorting()}
+      >
+        Accuracy
+      </Button>
+    ),
     cell: ({ row }) =>
       row.original.config.accuracy ? `${row.original.config.accuracy}%` : '-',
   }),
   helper.accessor('config.cooldown', {
-    header: 'C/D',
+    header: ({ column }) => (
+      <Button
+        className="-ml-4"
+        variant="ghost"
+        onClick={() => column.toggleSorting()}
+      >
+        C/D
+      </Button>
+    ),
     cell: ({ row }) => row.original.config.cooldown || '-',
   }),
   helper.accessor('config.description', {
     id: 'description',
     header: 'Description',
     cell: ({ row }) => (
-      <span className="block truncate">
-        {row.original.config.description}
-      </span>
+      <span className="block truncate">{row.original.config.description}</span>
     ),
   }),
 ]

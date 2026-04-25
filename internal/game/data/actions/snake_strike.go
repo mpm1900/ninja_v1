@@ -15,7 +15,7 @@ func MakeSnakeStrike() game.Action {
 	config := game.ActionConfig{
 		Name:        "Snake Strike",
 		Description: "30% chance to paralyze, poison, or put target to sleep.",
-		Nature:      game.Ptr(game.NsYang),
+		Nature:      game.Ptr(game.NsYin),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(60),
 		Stat:        game.Ptr(game.StatChakraAttack),

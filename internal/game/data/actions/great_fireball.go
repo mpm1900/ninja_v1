@@ -16,7 +16,7 @@ func MakeGreatFireball() game.Action {
 		Description: "20% chance to burn target.",
 		Nature:      game.Ptr(game.NsFire),
 		Accuracy:    game.Ptr(100),
-		Power:       game.Ptr(90),
+		Power:       game.Ptr(95),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(60),

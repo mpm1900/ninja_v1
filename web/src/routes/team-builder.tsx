@@ -41,7 +41,7 @@ function RouteComponent() {
     clientID: client?.ID ?? '',
     onSubmit: () => {
       nav({
-        to: '/battle',
+        to: '/lobby',
       })
     },
   })

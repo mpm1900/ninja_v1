@@ -13,7 +13,7 @@ var CamelliaDance = MakeCamelliaDance()
 func MakeCamelliaDance() game.Action {
 	config := game.ActionConfig{
 		Name:        "Camellia Dance",
-		Description: "Hits up-to 3 times. Bypasses Protect. Always crits.",
+		Description: "Hits 3 times. Bypasses Protect. Always crits.",
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(25),
 		Stat:        game.Ptr(game.StatAttack),
