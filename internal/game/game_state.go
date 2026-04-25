@@ -12,7 +12,7 @@ const (
 
 const (
 	GameTerrainNone    GameTerrain = "none"
-	GameTerrainHealing GameTerrain = "healing"
+	GameTerrainFlooded GameTerrain = "flooded"
 )
 
 /**

@@ -2,6 +2,8 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/modifiers"
+	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -13,7 +15,7 @@ func MakeCollidingWave() game.Action {
 
 	config := game.ActionConfig{
 		Name:        "Colliding Wave",
-		Description: "Hits all other active shinobi.",
+		Description: "Hits all other active shinobi. Sets flooded terrain.",
 		Nature:      game.Ptr(game.NsWater),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(90),
@@ -25,7 +27,30 @@ func MakeCollidingWave() game.Action {
 		CritMod:     1.5,
 	}
 
-	action := makeBasicAttack(ID, config)
+	action := makeBasicAttackWith(
+		ID,
+		config,
+		func(g game.Game, _, context game.Context) []game.GameTransaction {
+			transactions := []game.GameTransaction{}
+
+			state, _ := g.GetState(context)
+			if state.Weather == game.GameWeatherRain {
+				return transactions
+			}
+
+			filter := modifiers.FilterTerrain()
+			transactions = append(transactions, filter)
+
+			mod := modifiers.FloodedTerrain()
+			mod.Duration = 4
+			mut := mutations.AddModifiers(false, mod)
+			transaction := game.MakeTransaction(mut, game.NewContext())
+			transactions = append(transactions, transaction)
+
+			return transactions
+		},
+		nil,
+	)
 	action.TargetPredicate = game.NoneFilter
 	action.MapContext = func(g game.Game, context game.Context) game.Context {
 		other_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherFilter))

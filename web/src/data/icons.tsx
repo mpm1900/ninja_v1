@@ -34,9 +34,9 @@ import { MdFileUploadOff } from 'react-icons/md'
 import { GrFastForward } from 'react-icons/gr'
 import { TbTagPlus } from 'react-icons/tb'
 import { HiScale } from 'react-icons/hi2'
-import { FaFrog } from 'react-icons/fa6'
+import { FaFrog, FaHouseFloodWater } from 'react-icons/fa6'
 import { TbScanEye } from 'react-icons/tb'
-import { BsCloudRainHeavyFill, BsCloudRain } from "react-icons/bs";
+import { BsCloudRainHeavyFill, BsCloudRain, BsSpeedometer } from "react-icons/bs";
 
 const Aburame: IconType = (props) => (
   <img src="/icons/aburame.svg" alt="aburame" {...(props as any)} />
@@ -158,6 +158,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
     />
   ),
   fast_thinking: GrFastForward,
+  flooded: FaHouseFloodWater,
   gedo_shard: GiTopaz,
   guts: GiMinotaur,
   haze: HiScale,
@@ -184,6 +185,12 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   seeded: PiPlantBold,
   shinobi_vest: GiKevlarVest,
   sleeping: GiNightSleep,
+  rain_speed: ({ className, ...props }) => (
+    <BsSpeedometer
+      className={cn('text-blue-300', className)}
+      {...props}
+    />
+  ),
   speed_up: ({ className, ...props }) => (
     <PiCaretDoubleUpDuotone
       className={cn('text-emerald-400', className)}

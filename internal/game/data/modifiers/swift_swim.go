@@ -11,6 +11,7 @@ var SwiftSwim = game.Modifier{
 	ID:          swiftSwimID,
 	GroupID:     &swiftSwimID,
 	Name:        "Swift Swim",
+	Icon:        "rain_speed",
 	Description: "Doubled speed while raining.",
 	Show:        true,
 	Duration:    game.ModifierDurationInf,

@@ -127,6 +127,12 @@ func GameHasWeather(weather GameWeather) func(Game, Actor, Context) bool {
 		return state.Weather == weather
 	}
 }
+func GameHasTerrain(terrain GameTerrain) func(Game, Actor, Context) bool {
+	return func(g Game, a Actor, ctx Context) bool {
+		state, _ := g.GetState(ctx)
+		return state.Terrain == terrain
+	}
+}
 
 /**
  * RESOLVED FILTERS
