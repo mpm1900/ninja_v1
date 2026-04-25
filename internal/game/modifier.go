@@ -91,11 +91,14 @@ func GetAllActorMutations(g Game, bypassModifiers bool) ([]ActorMutation, []Tran
 			mutations = append(mutations, mut)
 		}
 	}
+
+	mutations = append(mutations, specialMutations...)
+
 	sort.SliceStable(mutations, func(i, j int) bool {
 		return mutations[i].Priority < mutations[j].Priority
 	})
 
-	return append(mutations, specialMutations...), transactions
+	return mutations, transactions
 }
 
 func GetAllGameStateMutations(g Game) ([]GameStateMutation, []Transaction[Modifier]) {
