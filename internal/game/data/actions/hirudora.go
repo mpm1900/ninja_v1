@@ -29,7 +29,7 @@ func MakeHirudora() game.Action {
 	return makeBasicAttackWith(
 		ID,
 		config,
-		func(g game.Game, _ game.Context, context game.Context) []game.GameTransaction {
+		func(g game.Game, _, context game.Context) []game.GameTransaction {
 			transactions := []game.GameTransaction{}
 			source, ok := g.GetSource(context)
 			if !ok {

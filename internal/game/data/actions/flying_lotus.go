@@ -28,7 +28,7 @@ func MakeFlyingLotus() game.Action {
 	action := makeBasicAttackWith(
 		flyingLotusID,
 		config,
-		func(g game.Game, context game.Context, tcontext game.Context) []game.GameTransaction {
+		func(g game.Game, context game.Context, _ game.Context) []game.GameTransaction {
 			transactions := []game.GameTransaction{}
 
 			key := "repeats"
