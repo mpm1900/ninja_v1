@@ -13,12 +13,15 @@ type SocketStatus =
   | 'closing'
   | 'closed'
   | 'error'
+  | 'reconnecting'
 
 type SocketState = {
   instanceID: string | null
   socket: WebSocket | null
   status: SocketStatus
   url: string | null
+  reconnectCount: number
+  isManualDisconnect: boolean
 }
 
 type SocketRequestType =
@@ -53,6 +56,10 @@ type SocketMessageSubscriber = (
   message: SocketResponse | null
 ) => void
 
+const INSTANCE_ID_KEY = 'ninja_instance_id'
+const MAX_RECONNECT_DELAY = 30000
+const INITIAL_RECONNECT_DELAY = 1000
+
 function getSocketUrl(instanceID: string): string {
   const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
   const hostname = window.location.hostname
@@ -61,14 +68,19 @@ function getSocketUrl(instanceID: string): string {
   return `${protocol}://${hostname}:${port}/socket/${instanceID}/connect`
 }
 
+const savedInstanceID = localStorage.getItem(INSTANCE_ID_KEY)
+
 const socketStore = new Store<SocketState>({
-  instanceID: null,
+  instanceID: savedInstanceID,
   socket: null,
   status: 'idle',
   url: null,
+  reconnectCount: 0,
+  isManualDisconnect: false,
 })
 
 const messageSubscribers = new Set<SocketMessageSubscriber>()
+let reconnectTimer: number | null = null
 
 function isCurrentSocket(socket: WebSocket): boolean {
   return socketStore.state.socket === socket
@@ -91,6 +103,11 @@ function clearSocketEventHandlers(socket: WebSocket) {
 function connectSocket(instanceID: string, onOpen?: () => void) {
   if (!instanceID) return
 
+  if (reconnectTimer) {
+    clearTimeout(reconnectTimer)
+    reconnectTimer = null
+  }
+
   const previous = socketStore.state.socket
   if (previous) {
     clearSocketEventHandlers(previous)
@@ -102,6 +119,7 @@ function connectSocket(instanceID: string, onOpen?: () => void) {
     }
   }
 
+  localStorage.setItem(INSTANCE_ID_KEY, instanceID)
   const url = getSocketUrl(instanceID)
   const socket = new WebSocket(url)
 
@@ -109,8 +127,9 @@ function connectSocket(instanceID: string, onOpen?: () => void) {
     ...s,
     instanceID,
     socket,
-    status: 'connecting',
+    status: s.reconnectCount > 0 ? 'reconnecting' : 'connecting',
     url,
+    isManualDisconnect: false,
   }))
 
   socket.onopen = () => {
@@ -118,6 +137,7 @@ function connectSocket(instanceID: string, onOpen?: () => void) {
     socketStore.setState((s) => ({
       ...s,
       status: 'open',
+      reconnectCount: 0,
     }))
     onOpen?.()
   }
@@ -162,31 +182,78 @@ function connectSocket(instanceID: string, onOpen?: () => void) {
     }
   }
 
-  socket.onerror = () => {
+  socket.onerror = (error) => {
     if (!isCurrentSocket(socket)) return
+    console.error('WebSocket error:', error)
     socketStore.setState((s) => ({
       ...s,
       status: 'error',
     }))
   }
 
-  socket.onclose = () => {
+  socket.onclose = (event) => {
     if (!isCurrentSocket(socket)) return
+
+    const { isManualDisconnect } = socketStore.state
+
     socketStore.setState((s) => ({
       ...s,
       socket: null,
-      status: 'closed',
+      status: isManualDisconnect ? 'closed' : 'error',
     }))
+
+    if (!isManualDisconnect) {
+      attemptReconnect()
+    }
   }
 }
 
+function attemptReconnect() {
+  const { instanceID, reconnectCount, isManualDisconnect } = socketStore.state
+  if (!instanceID || isManualDisconnect) return
+
+  const delay = Math.min(
+    INITIAL_RECONNECT_DELAY * Math.pow(2, reconnectCount),
+    MAX_RECONNECT_DELAY
+  )
+
+  console.log(`Attempting to reconnect in ${delay}ms... (attempt ${reconnectCount + 1})`)
+
+  socketStore.setState((s) => ({
+    ...s,
+    reconnectCount: s.reconnectCount + 1,
+    status: 'reconnecting',
+  }))
+
+  reconnectTimer = window.setTimeout(() => {
+    reconnectTimer = null
+    connectSocket(instanceID)
+  }, delay)
+}
+
 function disconnectSocket(code = 1000, reason = 'Manual disconnect') {
+  if (reconnectTimer) {
+    clearTimeout(reconnectTimer)
+    reconnectTimer = null
+  }
+
   const socket = socketStore.state.socket
-  if (!socket) return
+  if (!socket) {
+    socketStore.setState((s) => ({
+      ...s,
+      status: 'closed',
+      instanceID: null,
+      reconnectCount: 0,
+      isManualDisconnect: true,
+    }))
+    localStorage.removeItem(INSTANCE_ID_KEY)
+    return
+  }
 
   socketStore.setState((s) => ({
     ...s,
     status: 'closing',
+    isManualDisconnect: true,
   }))
 
   if (
@@ -199,8 +266,12 @@ function disconnectSocket(code = 1000, reason = 'Manual disconnect') {
       ...s,
       socket: null,
       status: 'closed',
+      instanceID: null,
+      reconnectCount: 0,
     }))
   }
+
+  localStorage.removeItem(INSTANCE_ID_KEY)
 }
 
 function sendSocketMessage(
@@ -208,6 +279,7 @@ function sendSocketMessage(
 ): boolean {
   const socket = socketStore.state.socket
   if (!socket || socket.readyState !== WebSocket.OPEN) {
+    console.warn('Attempted to send message while socket is not open')
     return false
   }
 
@@ -217,6 +289,11 @@ function sendSocketMessage(
 
 function sendContextMessage(request: SocketRequest) {
   return sendSocketMessage(JSON.stringify(request))
+}
+
+// Auto-connect on load if we have a saved instance ID
+if (savedInstanceID) {
+  connectSocket(savedInstanceID)
 }
 
 export type { SocketResponse, SocketMessageSubscriber, ActorConfig }

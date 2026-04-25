@@ -66,9 +66,13 @@ function AppHeader() {
             icon={
               <>
                 {status === 'idle' && <Unplug />}
-                {status === 'connecting' && <Loader />}
+                {(status === 'connecting' || status === 'reconnecting') && (
+                  <Loader className="animate-spin" />
+                )}
                 {status === 'open' && <Signal />}
-                {status === 'closed' && <TriangleAlert />}
+                {(status === 'closed' || status === 'error') && (
+                  <TriangleAlert className="text-destructive" />
+                )}
               </>
             }
             value={instanceID}
