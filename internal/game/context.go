@@ -7,13 +7,14 @@ import (
 )
 
 type Context struct {
-	ActionID          *uuid.UUID  `json:"action_ID"`
-	ModifierID        *uuid.UUID  `json:"modifier_ID"`
-	SourcePlayerID    *uuid.UUID  `json:"source_player_ID"`
-	ParentActorID     *uuid.UUID  `json:"parent_actor_ID"`
-	SourceActorID     *uuid.UUID  `json:"source_actor_ID"`
-	TargetActorIDs    []uuid.UUID `json:"target_actor_IDs"`
-	TargetPositionIDs []uuid.UUID `json:"target_position_IDs"`
+	ActionID          *uuid.UUID     `json:"action_ID"`
+	ModifierID        *uuid.UUID     `json:"modifier_ID"`
+	SourcePlayerID    *uuid.UUID     `json:"source_player_ID"`
+	ParentActorID     *uuid.UUID     `json:"parent_actor_ID"`
+	SourceActorID     *uuid.UUID     `json:"source_actor_ID"`
+	TargetActorIDs    []uuid.UUID    `json:"target_actor_IDs"`
+	TargetPositionIDs []uuid.UUID    `json:"target_position_IDs"`
+	Meta              map[string]int `json:"-"`
 }
 
 func NewContext() Context {
@@ -30,6 +31,21 @@ func MakeContextForActor(actor Actor) Context {
 		TargetActorIDs:    []uuid.UUID{actor.ID},
 		TargetPositionIDs: []uuid.UUID{},
 	}
+}
+func (c *Context) SetMeta(key string, value int) {
+	if c.Meta == nil {
+		c.Meta = map[string]int{}
+	}
+
+	c.Meta[key] = value
+}
+func (c *Context) GetMeta(key string) (int, bool) {
+	if c.Meta == nil {
+		c.Meta = map[string]int{}
+	}
+
+	value, ok := c.Meta[key]
+	return value, ok
 }
 
 func ResolveModifierTransactionContext(

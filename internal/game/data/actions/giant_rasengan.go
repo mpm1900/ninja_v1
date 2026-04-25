@@ -28,7 +28,7 @@ func MakeGiantRasengan() game.Action {
 	action := makeBasicAttackWith(
 		ID,
 		config,
-		func(g game.Game, context game.Context) []game.GameTransaction {
+		func(g game.Game, _ game.Context, context game.Context) []game.GameTransaction {
 			transactions := []game.GameTransaction{}
 			recharge := mutations.QueueAction(RasenganRecharge.ID, context)
 			transactions = append(transactions, game.MakeTransaction(recharge, context))

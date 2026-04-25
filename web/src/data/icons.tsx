@@ -27,6 +27,7 @@ import {
   PiOnigiriFill,
   PiArrowFatLinesDownBold,
   PiPlantBold,
+  PiWindFill,
 } from 'react-icons/pi'
 import type { IconType } from 'react-icons/lib'
 import { MdFileUploadOff } from 'react-icons/md'
@@ -191,6 +192,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   ),
   status_reflection: GiShieldReflect,
   stunned: GiStarSwirl,
+  tailwind: PiWindFill,
   taunted: Anger,
   uchiha_fan: GiHandheldFan,
   water_absorb: GiWaterRecycling,

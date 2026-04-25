@@ -13,7 +13,7 @@ func MakeWhirlwindKick() game.Action {
 	config := game.ActionConfig{
 		Name:        "Whirlwind Kick",
 		Description: "High critical chance.",
-		Accuracy:    game.Ptr(100),
+		Accuracy:    game.Ptr(90),
 		Power:       game.Ptr(80),
 		Stat:        game.Ptr(game.StatAttack),
 		Nature:      game.Ptr(game.NsTai),

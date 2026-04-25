@@ -88,7 +88,7 @@ function clearSocketEventHandlers(socket: WebSocket) {
   socket.onmessage = null
 }
 
-function connectSocket(instanceID: string) {
+function connectSocket(instanceID: string, onOpen?: () => void) {
   if (!instanceID) return
 
   const previous = socketStore.state.socket
@@ -119,6 +119,7 @@ function connectSocket(instanceID: string) {
       ...s,
       status: 'open',
     }))
+    onOpen?.()
   }
 
   socket.onmessage = (event) => {

@@ -212,14 +212,14 @@ func (e *damageHandler) resolveTargetHit(g *Game, targetIndex int, target Resolv
 		}
 
 		if e.config.OnFailure != nil {
-			e.sideEffectTxs = append(e.sideEffectTxs, e.config.OnFailure(*g, targetContext)...)
+			e.sideEffectTxs = append(e.sideEffectTxs, e.config.OnFailure(*g, e.context, targetContext)...)
 		}
 
 		return true
 	}
 
 	if e.config.OnSuccess != nil {
-		e.sideEffectTxs = append(e.sideEffectTxs, e.config.OnSuccess(*g, targetContext)...)
+		e.sideEffectTxs = append(e.sideEffectTxs, e.config.OnSuccess(*g, e.context, targetContext)...)
 	}
 
 	damages := GetDamage(

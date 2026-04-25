@@ -18,6 +18,8 @@ import { useTeamBuilderForm } from '#/hooks/use-team-builder-form'
 import { TeamBuilderActionsTable } from '#/components/team-builder-actions-table'
 import { TeamBuilderList } from '#/components/team-builder-list'
 import { TeamBuilderActorConfig } from '#/components/team-builder-actor-config'
+import { connectSocket, socketStore } from '#/lib/stores/socket'
+import { v4 } from 'uuid'
 
 export const Route = createFileRoute('/team-builder')({
   component: RouteComponent,
@@ -35,14 +37,23 @@ export const Route = createFileRoute('/team-builder')({
 
 function RouteComponent() {
   const nav = Route.useNavigate()
+  const instanceID = useStore(socketStore, (s) => s.instanceID)
   const client = useStore(clientsStore, (s) => s.me)
   const query = useSuspenseQuery(actorsQuery)
   const form = useTeamBuilderForm({
     clientID: client?.ID ?? '',
     onSubmit: () => {
-      nav({
-        to: '/battle',
-      })
+      if (instanceID) {
+        nav({
+          to: '/battle',
+        })
+      } else {
+        connectSocket(v4(), () => {
+          nav({
+            to: '/battle',
+          })
+        })
+      }
     },
   })
 

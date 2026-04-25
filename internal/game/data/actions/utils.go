@@ -13,7 +13,7 @@ import (
 func makeBasicAttackWith(
 	ID uuid.UUID,
 	config game.ActionConfig,
-	onSuccess func(g game.Game, context game.Context) []game.GameTransaction,
+	onSuccess func(g game.Game, context game.Context, tcontext game.Context) []game.GameTransaction,
 	before func(g game.Game, context game.Context, transactions []game.GameTransaction) []game.GameTransaction,
 ) game.Action {
 	return game.Action{

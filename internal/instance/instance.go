@@ -22,6 +22,11 @@ type Instance struct {
 	ReadRequest chan Request `json:"-"`
 }
 
+type InstanceJSON struct {
+	ID      uuid.UUID             `json:"ID"`
+	Clients map[uuid.UUID]*Client `json:"clients,omitempty"`
+}
+
 func NewInstance(ctx context.Context, id uuid.UUID) *Instance {
 	return &Instance{
 		ID:          id,
@@ -32,6 +37,13 @@ func NewInstance(ctx context.Context, id uuid.UUID) *Instance {
 		ReadRequest: make(chan Request),
 
 		Game: game.NewGame(data.ACTIONS),
+	}
+}
+
+func (i Instance) ToJSON() InstanceJSON {
+	return InstanceJSON{
+		ID:      i.ID,
+		Clients: maps.Clone(i.Clients),
 	}
 }
 

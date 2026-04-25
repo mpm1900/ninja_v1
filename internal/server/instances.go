@@ -57,12 +57,14 @@ func (ih *InstancesHandler) GetInstance(instanceID uuid.UUID) (*instance.Instanc
 	return instance, ok
 }
 
-func (ih *InstancesHandler) GetAllInstances() []instance.Instance {
+func (ih *InstancesHandler) GetAllInstances() []instance.InstanceJSON {
 	ih.instancesMu.RLock()
 	defer ih.instancesMu.RUnlock()
-	games := make([]instance.Instance, 0, len(ih.instances))
+	games := make([]instance.InstanceJSON, 0, len(ih.instances))
 	for _, instance := range ih.instances {
-		games = append(games, *instance)
+		if instance != nil {
+			games = append(games, instance.ToJSON())
+		}
 	}
 	return games
 }
@@ -70,7 +72,7 @@ func (ih *InstancesHandler) GetAllInstances() []instance.Instance {
 func (ih *InstancesHandler) HandleGetGames(w http.ResponseWriter, r *http.Request) {
 	games := ih.GetAllInstances()
 	if len(games) == 0 {
-		games = make([]instance.Instance, 0)
+		games = make([]instance.InstanceJSON, 0)
 	}
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(games)

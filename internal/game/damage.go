@@ -28,8 +28,8 @@ type DamageConfig struct {
 	IgnoreModifiers bool
 	Repeat          bool
 	RepeatMax       int
-	OnSuccess       func(Game, Context) []GameTransaction
-	OnFailure       func(Game, Context) []GameTransaction
+	OnSuccess       func(Game, Context, Context) []GameTransaction
+	OnFailure       func(Game, Context, Context) []GameTransaction
 }
 
 func NewDamageConfig(critical float64, random float64) DamageConfig {

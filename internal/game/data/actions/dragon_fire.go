@@ -28,7 +28,7 @@ func MakeDragonFire() game.Action {
 	return makeBasicAttackWith(
 		ID,
 		config,
-		func(g game.Game, context game.Context) []game.GameTransaction {
+		func(g game.Game, _ game.Context, context game.Context) []game.GameTransaction {
 			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {

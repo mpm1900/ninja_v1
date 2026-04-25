@@ -8,20 +8,20 @@ import (
 	"github.com/google/uuid"
 )
 
-var Rasenshuriken = MakeRasenshuriken()
+var Hirudora = MakeHirudora()
 
-func MakeRasenshuriken() game.Action {
-	ID := uuid.MustParse("6b3df363-7052-47fc-af99-7e8eafdc9ee2")
+func MakeHirudora() game.Action {
+	ID := uuid.MustParse("36c88bee-1eb0-4c55-bdc6-b704221ea846")
 	config := game.ActionConfig{
-		Name:        "Rasenshuriken",
-		Description: "Lowers users's Chakra Attack by 2 stages.",
+		Name:        "7th Gate: Hirudora",
+		Description: "Lowers user's Attack by 2 stages.",
 		Nature:      game.Ptr(game.NsWind),
 		Accuracy:    game.Ptr(90),
 		Power:       game.Ptr(130),
-		Stat:        game.Ptr(game.StatChakraAttack),
+		Stat:        game.Ptr(game.StatAttack),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(50),
-		Jutsu:       game.Ninjutsu,
+		Jutsu:       game.Taijutsu,
 		CritChance:  game.Ptr(getCriticalStage(0)),
 		CritMod:     1.5,
 	}
@@ -36,7 +36,7 @@ func MakeRasenshuriken() game.Action {
 				return transactions
 			}
 
-			mutation := mutations.AddModifiers(false, modifiers.ChakraAttackDown2Source)
+			mutation := mutations.AddModifiers(false, modifiers.AttackDown2Source)
 			transaction := game.MakeTransaction(mutation, game.MakeContextForActor(source))
 			transactions = append(transactions, transaction)
 
