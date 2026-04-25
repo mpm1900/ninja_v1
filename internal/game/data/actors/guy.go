@@ -39,7 +39,6 @@ var Guy = game.ActorDef{
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.LuckyStrikes.ID,
-		actions.Chidori.ID,
 		actions.DragonStance.ID,
 		actions.FlyingLotus.ID,
 		actions.Asakujaku.ID,

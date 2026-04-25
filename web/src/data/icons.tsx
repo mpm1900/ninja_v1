@@ -133,7 +133,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
       {...props}
     />
   ),
-  std_strength: ({ className, ...props }) => (
+  std_attack: ({ className, ...props }) => (
     <PiArrowFatLinesDownBold
       className={cn('text-orange-300', className)}
       {...props}

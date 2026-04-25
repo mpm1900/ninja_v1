@@ -47,6 +47,8 @@ var Tobirama = game.ActorDef{
 		actions.WhirlwindKick.ID,
 		actions.ShadowClone.ID,
 		actions.VacuumBlast.ID,
+		actions.WaterDragon.ID,
 		actions.GreatWaterfall.ID,
+		actions.WaterSlicer.ID,
 	},
 }

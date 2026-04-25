@@ -31,6 +31,7 @@ var Kisame = game.ActorDef{
 		game.NsWater,
 	}),
 	Abilities: []game.Modifier{
+		modifiers.SwiftSwim,
 		modifiers.WaterAbsorb,
 	},
 	ActionCount: 4,
@@ -43,5 +44,6 @@ var Kisame = game.ActorDef{
 		actions.WaterDragon.ID,
 		actions.SharkBomb.ID,
 		actions.GreatWaterfall.ID,
+		actions.WaterSlicer.ID,
 	},
 }

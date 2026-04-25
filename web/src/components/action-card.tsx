@@ -34,7 +34,7 @@ function ActionCard({
         'flex flex-col shadow-xl shadow-black/60 hover:shadow-black',
         {
           'border-white hover:border-white shadow-lg shadow-black': selected,
-          'border-orange-400/70 hover:border-orange-400':
+          'border-orange-400/40 hover:border-orange-400':
             action.config.stat === 'attack',
           'border-orange-400': action.config.stat === 'attack' && selected,
           'border-indigo-400/50 hover:border-indigo-400':
