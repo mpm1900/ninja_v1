@@ -36,7 +36,9 @@ type Modifier struct {
 }
 
 func (m *Modifier) DecrementTimers() {
-	m.Duration -= 1
+	if m.Duration > 0 {
+		m.Duration -= 1
+	}
 	if m.Delay > 0 {
 		m.Delay -= 1
 	}

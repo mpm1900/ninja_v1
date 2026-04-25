@@ -33,8 +33,10 @@ func MakeBlindingFlash() game.Action {
 			),
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
+				mod := modifiers.Stunned
+				mod.Duration = 0
 
-				mutation := mutations.AddModifiers(false, modifiers.Stunned)
+				mutation := mutations.AddModifiers(false, mod)
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)
 

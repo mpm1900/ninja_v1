@@ -657,13 +657,15 @@ func (g *Game) RunAction(transaction Transaction[Action]) {
 }
 
 func (g *Game) RunTrigger(transaction Transaction[Trigger]) {
-	modifier, ok := g.GetModifierByID(transaction.Mutation.ModifierID)
-	if !ok {
-		return
-	}
+	if transaction.Mutation.ModifierID != uuid.Nil {
+		modifier, ok := g.GetModifierByID(transaction.Mutation.ModifierID)
+		if !ok {
+			return
+		}
 
-	text := fmt.Sprintf("%s: %s", strings.ToUpper(string(transaction.Mutation.On)), modifier.Name)
-	g.PushLog(NewLog(text))
+		text := fmt.Sprintf("%s: %s", strings.ToUpper(string(transaction.Mutation.On)), modifier.Name)
+		g.PushLog(NewLog(text))
+	}
 
 	transactions := ResolveTrigger(*g, transaction)
 	g.Transactions = append(transactions, g.Transactions...)

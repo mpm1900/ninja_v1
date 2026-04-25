@@ -31,7 +31,7 @@ var PainNaraka = game.ActorDef{
 	}),
 	Abilities: []game.Modifier{
 		modifiers.JudgementOfPain,
-		modifiers.NeutralizingChakra,
+		modifiers.StatusReflection,
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{

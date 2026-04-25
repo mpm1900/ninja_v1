@@ -31,7 +31,7 @@ var PainPreta = game.ActorDef{
 	}),
 	Abilities: []game.Modifier{
 		modifiers.ChainsOfPain,
-		modifiers.StatusReflection,
+		modifiers.NeutralizingChakra,
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
