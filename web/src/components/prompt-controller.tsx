@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react'
 import type { ActionTransaction } from '#/lib/game/action'
 import { useValidateContext } from '#/hooks/use-validate-context'
 import { useGetTargets } from '#/hooks/use-get-targets'
+import { ChevronRight } from 'lucide-react'
 
 function PromptControl({
   prompt,
@@ -35,11 +36,10 @@ function PromptControl({
   const client = useStore(clientsStore, (c) => c.me!)
   const { context: t_context } = useGetTargets(context, prompt?.ID)
 
-
   return (
     <>
       {action && (
-        <div className="p-2 grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-3">
           {actors
             .filter((a) => t_context?.target_actor_IDs?.includes(a.ID))
             .map((a) => (
@@ -69,7 +69,7 @@ function PromptControl({
               })
             }}
           >
-            Select
+            Select <ChevronRight />
           </Button>
         </AlertDialogAction>
       </AlertDialogFooter>
@@ -90,8 +90,8 @@ function PromptController() {
     <>
       <AlertDialog open={!!prompt && status === 'idle'}>
         {prompt && context && (
-          <AlertDialogContent>
-            <AlertDialogHeader>
+          <AlertDialogContent className="bg-stone-900">
+            <AlertDialogHeader className="gap-0">
               <AlertDialogTitle>{prompt.mutation.config.name}</AlertDialogTitle>
               <AlertDialogDescription>
                 Select Shinobi to switch in.
@@ -106,7 +106,7 @@ function PromptController() {
         )}
       </AlertDialog>
       <AlertDialog open={!prompt && status === 'waiting'}>
-        <AlertDialogContent className=''>
+        <AlertDialogContent className="">
           <AlertDialogHeader>
             <AlertDialogTitle>Waiting on other players...</AlertDialogTitle>
             <AlertDialogDescription>

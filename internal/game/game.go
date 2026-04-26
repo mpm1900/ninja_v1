@@ -127,6 +127,21 @@ func NewGame(actionRegistry map[uuid.UUID]Action) Game {
 	}
 }
 
+func (g *Game) Reset() {
+	g.Turn.Count = 0
+	g.Modifiers = []Transaction[Modifier]{}
+
+	for i, _ := range g.Players {
+		for j, _ := range g.Players[i].Positions {
+			g.Players[i].Positions[j].ActorID = nil
+		}
+	}
+
+	for i, _ := range g.Actors {
+		g.Actors[i].PositionID = nil
+	}
+}
+
 /**
  * Getters
  */

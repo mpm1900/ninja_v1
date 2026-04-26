@@ -26,6 +26,7 @@ type SocketState = {
 
 type SocketRequestType =
   | 'set-team'
+  | 'reset'
   | 'push-action'
   | 'remove-action'
   | 'run-game-actions'

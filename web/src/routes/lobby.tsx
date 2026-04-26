@@ -20,6 +20,7 @@ import {
 import { sendContextMessage } from '#/lib/stores/socket'
 import { NULL_CONTEXT } from '#/lib/game/context'
 import { Button } from '#/components/ui/button'
+import { useEffect } from 'react'
 
 export const Route = createFileRoute('/lobby')({
   beforeLoad: ({ context }) => {
@@ -37,6 +38,13 @@ function App() {
   const enemies = game.players.filter((p) => p.ID !== client?.ID)
   const ready = players.length > 0 && enemies.length > 0
   const unstarted = game.status !== 'running' && game.turn.count == 0
+  const nav = Route.useNavigate()
+
+  useEffect(() => {
+    if (game.status === 'running') {
+      nav({ to: '/battle' })
+    }
+  }, [game.status])
 
   return (
     <ClientOnly>
@@ -49,19 +57,31 @@ function App() {
               <CardHeader>
                 <CardTitle>Lobby</CardTitle>
                 <CardAction>
-                  {client && ready && unstarted && (
-                    <Button
-                      asChild
-                      onClick={() => {
-                        sendContextMessage({
-                          type: 'validate-state',
-                          client_ID: client!.ID,
-                          context: NULL_CONTEXT,
-                        })
-                      }}
-                    >
-                      <Link to="/battle">Start Battle</Link>
-                    </Button>
+                  {client && ready && (
+                    unstarted ?
+                      <Button
+                        asChild
+                        onClick={() => {
+                          sendContextMessage({
+                            type: 'validate-state',
+                            client_ID: client!.ID,
+                            context: NULL_CONTEXT,
+                          })
+                        }}
+                      >
+                        <Link to="/battle">Start Battle</Link>
+                      </Button> : <Button
+                        onClick={() => {
+                          sendContextMessage({
+                            type: 'reset',
+                            client_ID: client!.ID,
+                            context: NULL_CONTEXT,
+                          })
+                        }}
+                      >
+                        Reset
+                      </Button>
+
                   )}
                 </CardAction>
               </CardHeader>

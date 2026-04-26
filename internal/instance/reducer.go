@@ -126,6 +126,10 @@ func Reducer(instance *Instance, request Request) int {
 		instance.Game.SetPlayerActors(request.ClientID, teamActors)
 		return state
 
+	case Reset:
+		instance.Game.Reset()
+		return state
+
 	case PushAction:
 		if request.Context.ActionID == nil || request.Context.SourceActorID == nil {
 			return none

@@ -65,10 +65,10 @@ function ActionControl({
   }
 
   return (
-    <div className="flex flex-col items-center gap-2 min-w-xs">
+    <div className="flex flex-col items-center gap-4 min-w-xs">
       {action && (
         <div className="flex flex-col gap-2">
-          <div className="gap-2 grid grid-cols-2">
+          <div className="gap-3 grid grid-cols-2">
             {enemy_actors.map((a) => (
               <TargetButton
                 key={a.ID}
@@ -82,7 +82,7 @@ function ActionControl({
               />
             ))}
           </div>
-          <div className="gap-2 grid grid-cols-2">
+          <div className="gap-3 grid grid-cols-2">
             {player_actors.map((a) => (
               <TargetButton
                 key={a.ID}
