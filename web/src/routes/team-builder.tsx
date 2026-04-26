@@ -79,7 +79,7 @@ function RouteComponent() {
                           <div className="flex gap-2">
                             <Button
                               size="icon"
-                              disabled={!values.name.trim()}
+                              disabled={!values.name.trim() || !isValid}
                               onClick={() => saveTeam(values as TeamConfig)}
                             >
                               <Save />
@@ -87,7 +87,7 @@ function RouteComponent() {
                             <Button
                               size="icon"
                               disabled={
-                                !isValid || isSubmitting || isValidating
+                                !isValid || isSubmitting || isValidating || !client
                               }
                               onClick={form.handleSubmit}
                             >

@@ -80,7 +80,7 @@ function ActorThumbnail({
           <img
             src={actor.sprite_url}
             className={cn(
-              'h-full w-full object-cover absolute inset-0 z-10 rounded-bl-2xl',
+              'h-full w-full object-cover absolute inset-0 z-10',
               imgClass
             )}
             width={size}

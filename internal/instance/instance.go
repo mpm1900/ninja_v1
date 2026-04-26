@@ -67,18 +67,16 @@ func (i *Instance) UnregisterClient(client *Client) bool {
 func (i *Instance) BroadcastGame() {
 	// fmt.Printf("BROADCAST STATE %#v\n", game)
 	for _, client := range i.Clients {
-		select {
-		case client.inbox <- NewGameMessage(client, &i.Game):
-		// if a client is unable to handle the state update,
-		//   unregister them so they don't the loop
-		default:
-			i.UnregisterClient(client)
+		if !client.TryWriteResponse(NewGameMessage(client, &i.Game)) {
+			// If we can't send, it's usually better to just log it for now
+			// rather than immediately unregistering, unless the client is truly dead.
+			// i.UnregisterClient(client)
 		}
 	}
 }
 
 func (i *Instance) PostRegister(client *Client) {
-	client.inbox <- PostRegisterMessage(client, &i.Game)
+	client.TryWriteResponse(PostRegisterMessage(client, &i.Game))
 }
 
 func (i *Instance) TargetIDsResponse(clientID uuid.UUID, context game.Context, targetIDs []uuid.UUID) {
@@ -87,7 +85,7 @@ func (i *Instance) TargetIDsResponse(clientID uuid.UUID, context game.Context, t
 		return
 	}
 
-	client.inbox <- TargetIDsResponse(client, context, targetIDs)
+	client.TryWriteResponse(TargetIDsResponse(client, context, targetIDs))
 }
 func (i *Instance) ValidateContextResponse(clientID uuid.UUID, context game.Context, valid bool) {
 	client, ok := i.Clients[clientID]
@@ -95,19 +93,13 @@ func (i *Instance) ValidateContextResponse(clientID uuid.UUID, context game.Cont
 		return
 	}
 
-	client.inbox <- ValidateContextMessage(client, context, valid)
+	client.TryWriteResponse(ValidateContextMessage(client, context, valid))
 }
 
 func (i *Instance) BroadcastClients() {
 	clients := slices.Collect(maps.Values(i.Clients))
 	for _, client := range i.Clients {
-		select {
-		case client.inbox <- NewClientsMessage(clients):
-		// if a client is unable to handle the state update,
-		//   unregister them so they don't the loop
-		default:
-			i.UnregisterClient(client)
-		}
+		client.TryWriteResponse(NewClientsMessage(clients))
 	}
 }
 

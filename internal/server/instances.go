@@ -20,16 +20,10 @@ type InstancesHandler struct {
 }
 
 func NewInstancesHandler(ctx context.Context) *InstancesHandler {
-	instanceID := uuid.New()
-	defaultInstance := instance.NewInstance(ctx, instanceID)
 	handler := &InstancesHandler{
-		mux: http.NewServeMux(),
-		instances: map[uuid.UUID]*instance.Instance{
-			instanceID: defaultInstance,
-		},
+		mux:       http.NewServeMux(),
+		instances: map[uuid.UUID]*instance.Instance{},
 	}
-
-	go defaultInstance.Run()
 
 	handler.mux.HandleFunc("GET /{instanceID}/connect", handler.handleGameConnection(ctx))
 	return handler

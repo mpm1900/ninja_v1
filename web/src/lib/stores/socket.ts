@@ -5,6 +5,7 @@ import type { Game } from '../game/game'
 import type { Context } from '../game/context'
 import { setContextPlayer } from './battle-context'
 import type { ActorConfig, TeamConfig } from './config'
+import { createIsomorphicFn } from '@tanstack/react-start'
 
 type SocketStatus =
   | 'idle'
@@ -76,7 +77,9 @@ function getSocketUrl(instanceID: string): string {
   return `${protocol}://${hostname}:${port}/socket/${instanceID}/connect`
 }
 
-const savedInstanceID = localStorage.getItem(INSTANCE_ID_KEY)
+const savedInstanceID = createIsomorphicFn()
+  .server(() => null as string | null)
+  .client(() => localStorage.getItem(INSTANCE_ID_KEY))()
 
 const socketStore = new Store<SocketState>({
   instanceID: savedInstanceID,
@@ -89,6 +92,7 @@ const socketStore = new Store<SocketState>({
 
 const messageSubscribers = new Set<SocketMessageSubscriber>()
 let reconnectTimer: number | null = null
+let connectionAbortController: AbortController | null = null
 
 function isCurrentSocket(socket: WebSocket): boolean {
   return socketStore.state.socket === socket
@@ -110,6 +114,13 @@ function clearSocketEventHandlers(socket: WebSocket) {
 
 function connectSocket(instanceID: string, onOpen?: () => void) {
   if (!instanceID) return
+
+  // Cancel any existing connection attempts
+  if (connectionAbortController) {
+    connectionAbortController.abort()
+  }
+  connectionAbortController = new AbortController()
+  const signal = connectionAbortController.signal
 
   if (reconnectTimer) {
     clearTimeout(reconnectTimer)
@@ -141,17 +152,36 @@ function connectSocket(instanceID: string, onOpen?: () => void) {
   }))
 
   socket.onopen = () => {
-    if (!isCurrentSocket(socket)) return
+    if (signal.aborted || !isCurrentSocket(socket)) {
+      socket.close(1000, 'Aborted')
+      return
+    }
+    console.log('WebSocket connection opened')
     socketStore.setState((s) => ({
       ...s,
       status: 'open',
-      reconnectCount: 0,
     }))
+
+    // Only reset reconnect count after a stable connection (e.g., 5 seconds)
+    setTimeout(() => {
+      if (
+        !signal.aborted &&
+        socketStore.state.socket === socket &&
+        socketStore.state.status === 'open'
+      ) {
+        console.log('Connection stable, resetting reconnect count')
+        socketStore.setState((s) => ({
+          ...s,
+          reconnectCount: 0,
+        }))
+      }
+    }, 5000)
+
     onOpen?.()
   }
 
   socket.onmessage = (event) => {
-    if (!isCurrentSocket(socket)) return
+    if (signal.aborted || !isCurrentSocket(socket)) return
 
     let message: SocketResponse | null = null
 
@@ -191,7 +221,7 @@ function connectSocket(instanceID: string, onOpen?: () => void) {
   }
 
   socket.onerror = (error) => {
-    if (!isCurrentSocket(socket)) return
+    if (signal.aborted || !isCurrentSocket(socket)) return
     console.error('WebSocket error:', error)
     socketStore.setState((s) => ({
       ...s,
@@ -200,7 +230,10 @@ function connectSocket(instanceID: string, onOpen?: () => void) {
   }
 
   socket.onclose = (event) => {
-    if (!isCurrentSocket(socket)) return
+    console.log(
+      `WebSocket connection closed: code=${event.code}, reason=${event.reason}, wasClean=${event.wasClean}`
+    )
+    if (signal.aborted || !isCurrentSocket(socket)) return
 
     const { isManualDisconnect } = socketStore.state
 
@@ -225,7 +258,9 @@ function attemptReconnect() {
     MAX_RECONNECT_DELAY
   )
 
-  console.log(`Attempting to reconnect in ${delay}ms... (attempt ${reconnectCount + 1})`)
+  console.log(
+    `Attempting to reconnect in ${delay}ms... (attempt ${reconnectCount + 1})`
+  )
 
   socketStore.setState((s) => ({
     ...s,
@@ -254,7 +289,9 @@ function disconnectSocket(code = 1000, reason = 'Manual disconnect') {
       reconnectCount: 0,
       isManualDisconnect: true,
     }))
-    localStorage.removeItem(INSTANCE_ID_KEY)
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(INSTANCE_ID_KEY)
+    }
     return
   }
 
@@ -299,10 +336,15 @@ function sendContextMessage(request: SocketRequest) {
   return sendSocketMessage(JSON.stringify(request))
 }
 
-// Auto-connect on load if we have a saved instance ID
-if (savedInstanceID) {
-  connectSocket(savedInstanceID)
-}
+const connect = createIsomorphicFn()
+  .server(() => { })
+  .client(() => {
+    if (savedInstanceID) {
+      connectSocket(savedInstanceID)
+    }
+  })
+
+connect()
 
 export type { SocketResponse, SocketMessageSubscriber, ActorConfig }
 export {

@@ -3,9 +3,9 @@ package instance
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"ninja_v1/internal/game"
+	"sync"
 	"time"
 
 	"github.com/google/uuid"
@@ -34,6 +34,7 @@ type Client struct {
 	cancel   context.CancelFunc `json:"-"`
 	instance *Instance          `json:"-"`
 	inbox    chan Response      `json:"-"`
+	once     sync.Once          `json:"-"`
 }
 
 func (c *Client) AttachUser(user *game.User) {
@@ -53,7 +54,7 @@ func NewClient(instance *Instance) *Client {
 
 		//nextState:   make(chan game.Game, 5),
 		//nextClients: make(chan []*Client, 5),
-		inbox: make(chan Response, 5),
+		inbox: make(chan Response, 100),
 	}
 }
 
@@ -71,6 +72,16 @@ func (c *Client) Connect(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+func (c *Client) Close() {
+	c.once.Do(func() {
+		if c.conn != nil {
+			c.conn.Close()
+		}
+		c.instance.Unregister <- c
+		c.cancel()
+	})
+}
+
 func (c *Client) WriteResponse(response *Response) error {
 	json, err := json.Marshal(response)
 	if err != nil {
@@ -81,6 +92,15 @@ func (c *Client) WriteResponse(response *Response) error {
 	}
 
 	return nil
+}
+
+func (c *Client) TryWriteResponse(response Response) bool {
+	select {
+	case c.inbox <- response:
+		return true
+	default:
+		return false
+	}
 }
 
 func (c *Client) listenForRequest(request *Request) error {
@@ -95,11 +115,7 @@ func (c *Client) listenForRequest(request *Request) error {
 }
 
 func (c *Client) listenIn() {
-	defer func() {
-		c.instance.Unregister <- c
-		c.conn.Close()
-		c.cancel()
-	}()
+	defer c.Close()
 
 	pongHandler := func(string) error {
 		c.conn.SetReadDeadline(time.Now().Add(PongWait))
@@ -112,10 +128,6 @@ func (c *Client) listenIn() {
 	for {
 		var request Request
 		if err := c.listenForRequest(&request); err != nil {
-			// if this error is an expected close error
-			// or a message format error,
-			//    then we can close the client
-			fmt.Println(err)
 			break
 		}
 
@@ -131,7 +143,7 @@ func (c *Client) listenOut() {
 	clock := time.NewTicker(PingPeriod)
 	defer func() {
 		clock.Stop()
-		c.conn.Close()
+		c.Close()
 	}()
 
 	for {
@@ -141,8 +153,6 @@ func (c *Client) listenOut() {
 			if err := c.WriteResponse(&response); err != nil {
 				return
 			}
-		// this block ensures that the client doesnt' get disconnected
-		// automatically when the connection is idle
 		case <-clock.C:
 			c.conn.SetWriteDeadline(time.Now().Add(WriteWait))
 			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {

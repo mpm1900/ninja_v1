@@ -32,6 +32,7 @@ var PainAsura = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
+		actions.SelfDestruct.ID,
 		actions.Sekiryoku.ID,
 		actions.BodyReplacement.ID,
 		actions.BlackNeedle.ID,
