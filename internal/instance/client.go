@@ -52,8 +52,6 @@ func NewClient(instance *Instance) *Client {
 		cancel:   cancel,
 		instance: instance,
 
-		//nextState:   make(chan game.Game, 5),
-		//nextClients: make(chan []*Client, 5),
 		inbox: make(chan Response, 100),
 	}
 }
