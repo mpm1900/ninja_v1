@@ -128,8 +128,13 @@ func NewGame(actionRegistry map[uuid.UUID]Action) Game {
 }
 
 func (g *Game) Reset() {
+	g.state = NewGameState()
+	g.ActiveTransaction = nil
 	g.Turn.Count = 0
+	g.Log = []GameLog{}
 	g.Modifiers = []Transaction[Modifier]{}
+	g.Actions = MakeQueue[Transaction[Action]]()
+	g.QueuedActions = make(map[uuid.UUID]Transaction[uuid.UUID])
 
 	for i, _ := range g.Players {
 		for j, _ := range g.Players[i].Positions {
@@ -138,7 +143,7 @@ func (g *Game) Reset() {
 	}
 
 	for i, _ := range g.Actors {
-		g.Actors[i].PositionID = nil
+		g.Actors[i].Reset()
 	}
 }
 

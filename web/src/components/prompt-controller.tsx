@@ -90,7 +90,7 @@ function PromptController() {
     <>
       <AlertDialog open={!!prompt && status === 'idle'}>
         {prompt && context && (
-          <AlertDialogContent className="bg-stone-900">
+          <AlertDialogContent className="bg-stone-950">
             <AlertDialogHeader className="gap-0">
               <AlertDialogTitle>{prompt.mutation.config.name}</AlertDialogTitle>
               <AlertDialogDescription>
@@ -106,7 +106,7 @@ function PromptController() {
         )}
       </AlertDialog>
       <AlertDialog open={!prompt && status === 'waiting'}>
-        <AlertDialogContent className="">
+        <AlertDialogContent className="bg-stone-950">
           <AlertDialogHeader>
             <AlertDialogTitle>Waiting on other players...</AlertDialogTitle>
             <AlertDialogDescription>

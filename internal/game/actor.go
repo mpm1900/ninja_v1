@@ -275,11 +275,9 @@ const (
 func GetLevel(experience int) int {
 	return Round(math.Cbrt(float64(experience)))
 }
-
 func GetBaseExperience(level int) int {
 	return Round(math.Pow(float64(level), 3))
 }
-
 func GetExperienceToNextLevel(level, exp int) int {
 	return GetBaseExperience(level+1) - (GetBaseExperience(level) + exp)
 }
@@ -410,6 +408,23 @@ func MakeActor(
 		Actions:          actions,
 		Summon:           nil,
 	}
+}
+func (a *Actor) Reset() {
+	a.PositionID = nil
+	a.Damage = 0
+	a.StaminaDamage = 0
+	a.Seen = false
+	a.ActiveTurns = 0
+	a.AuxAbility = nil
+	a.LastUsedActionID = nil
+	a.InactiveTurns = 0
+	a.PoisonedCounter = 0
+	a.SleepCounter = 0
+	a.Sleeping = false
+	a.Paralyzed = false
+	a.Poisoned = false
+	a.Statused = false
+	a.SetSummon(nil)
 }
 
 func (a *Actor) SetActions(actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) {
