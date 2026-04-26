@@ -1,11 +1,8 @@
 package actions
 
 import (
-	"fmt"
-	"math/rand/v2"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/modifiers"
-	"ninja_v1/internal/game/data/mutations"
 
 	"github.com/google/uuid"
 )
@@ -56,107 +53,6 @@ func makeBasicAttackWith(
 
 func makeBasicAttack(ID uuid.UUID, config game.ActionConfig) game.Action {
 	return makeBasicAttackWith(ID, config, nil, nil)
-}
-
-func applyModifier(config game.ActionConfig, context game.Context, actor game.Actor, modifier game.Modifier) []game.GameTransaction {
-	transactions := []game.GameTransaction{}
-
-	if mutations.CheckJutsuImmunity(config, actor) {
-		log_ctx := game.MakeContextForActor(actor)
-		log := game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", config.Jutsu), log_ctx)
-		tx := game.AddLogs(log)
-		transactions = append(transactions, game.MakeTransaction(tx, log_ctx))
-
-		return transactions
-	}
-
-	ctx := game.MakeContextForActor(actor)
-	ctx.ModifierID = modifier.GroupID
-	mod := mutations.AddModifiers(true, modifier)
-	mod_tx := game.MakeTransaction(mod, ctx)
-	transactions = append(transactions, mod_tx)
-
-	return transactions
-}
-func chanceModifier(config game.ActionConfig, context game.Context, actor game.Actor, modifier game.Modifier, chance int) []game.GameTransaction {
-	roll := rand.IntN(100)
-	if roll > chance {
-		return []game.GameTransaction{}
-	}
-
-	return applyModifier(config, context, actor, modifier)
-}
-
-func applyStatus(config game.ActionConfig, context game.Context, actor game.Actor, modifier game.Modifier, mutation game.GameMutation) []game.GameTransaction {
-	transactions := []game.GameTransaction{}
-
-	if mutations.CheckJutsuImmunity(config, actor) {
-		log_ctx := game.MakeContextForActor(actor)
-		log := game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", config.Jutsu), log_ctx)
-		tx := game.AddLogs(log)
-		transactions = append(transactions, game.MakeTransaction(tx, log_ctx))
-
-		return transactions
-	}
-
-	ctx := game.MakeContextForActor(actor)
-	ctx.ParentActorID = nil // do not remove on switch
-
-	mod := mutations.AddStatus(true, modifier)
-	mod_tx := game.MakeTransaction(mod, ctx)
-
-	mut_tx := game.MakeTransaction(mutation, ctx)
-	transactions = append(transactions, mod_tx, mut_tx)
-
-	return transactions
-}
-
-func applyBurn(config game.ActionConfig, context game.Context, actor game.Actor) []game.GameTransaction {
-	return applyStatus(config, context, actor, modifiers.Burned, mutations.Burn)
-}
-func chanceBurn(config game.ActionConfig, context game.Context, actor game.Actor, chance int) []game.GameTransaction {
-	roll := rand.IntN(100)
-	if roll > chance {
-		return []game.GameTransaction{}
-	}
-
-	return applyBurn(config, context, actor)
-}
-
-func applyParalysis(config game.ActionConfig, context game.Context, actor game.Actor) []game.GameTransaction {
-	return applyStatus(config, context, actor, modifiers.Paralysis, mutations.Paralyze)
-}
-func chanceParalysis(config game.ActionConfig, context game.Context, actor game.Actor, chance int) []game.GameTransaction {
-	roll := rand.IntN(100)
-	if roll > chance {
-		return []game.GameTransaction{}
-	}
-
-	return applyParalysis(config, context, actor)
-}
-
-func applySleep(config game.ActionConfig, context game.Context, actor game.Actor) []game.GameTransaction {
-	return applyStatus(config, context, actor, modifiers.Sleeping, mutations.Sleep)
-}
-func chanceSleep(config game.ActionConfig, context game.Context, actor game.Actor, chance int) []game.GameTransaction {
-	roll := rand.IntN(100)
-	if roll > chance {
-		return []game.GameTransaction{}
-	}
-
-	return applySleep(config, context, actor)
-}
-
-func applyPoison(config game.ActionConfig, context game.Context, actor game.Actor) []game.GameTransaction {
-	return applyStatus(config, context, actor, modifiers.Poisoned, mutations.Poison)
-}
-func chancePoison(config game.ActionConfig, context game.Context, actor game.Actor, chance int) []game.GameTransaction {
-	roll := rand.IntN(100)
-	if roll > chance {
-		return []game.GameTransaction{}
-	}
-
-	return applyPoison(config, context, actor)
 }
 
 func applySummon(context game.Context, def game.ActorDef, actions []game.Action) []game.GameTransaction {

@@ -9,7 +9,7 @@ import (
 
 var rageID = uuid.MustParse("ab1dcd38-82d6-5a88-9123-91caed67da84")
 var RageTrigger game.Trigger = game.Trigger{
-	ID:         uuid.MustParse("27591068-a257-5554-b654-60d8e46e30f9"),
+	ID:         uuid.New(),
 	ModifierID: rageID,
 	On:         game.OnDamageReceive,
 	Check:      game.Match__TargetActor_SourceActor,

@@ -21,6 +21,7 @@ import {
   GiShieldReflect,
   GiHeartOrgan,
   GiArmorUpgrade,
+  GiPoisonGas,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -173,6 +174,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   poisoned: ({ className, ...props }) => (
     <GiPoisonBottle className={cn('text-lime-500', className)} {...props} />
   ),
+  poison_infused: GiPoisonGas,
   priority_failure: MdFileUploadOff,
   protected: GiShieldcomb,
   raincaller: BsCloudRainHeavyFill,

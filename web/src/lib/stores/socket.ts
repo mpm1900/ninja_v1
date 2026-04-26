@@ -62,6 +62,13 @@ const MAX_RECONNECT_DELAY = 30000
 const INITIAL_RECONNECT_DELAY = 1000
 
 function getSocketUrl(instanceID: string): string {
+  const envUrl = import.meta.env.VITE_BACKEND_URL
+  if (envUrl) {
+    const protocol = envUrl.startsWith('https') ? 'wss' : 'ws'
+    const host = envUrl.replace(/^https?:\/\//, '')
+    return `${protocol}://${host}/socket/${instanceID}/connect`
+  }
+
   const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
   const hostname = window.location.hostname
   const port = '3005'

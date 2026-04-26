@@ -2,6 +2,7 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -33,7 +34,7 @@ func MakeGreatFireball() game.Action {
 			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, chanceBurn(config, context, target, 20)...)
+				transactions = append(transactions, modifiers.ChanceBurn(config, context, target, 20)...)
 			}
 
 			return transactions

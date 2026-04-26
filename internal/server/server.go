@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 	"net/http"
+	"os"
 
 	"ninja_v1/internal/auth"
 	"ninja_v1/internal/db"
@@ -38,13 +39,41 @@ func NewServer(ctx context.Context, queries *db.Queries) *Server {
 	mux.Handle("/api/", http.StripPrefix("/api", api))
 	mux.Handle("/socket/", http.StripPrefix("/socket", authenticatedInstancesHandler))
 
+	// CORS and other global middleware
+	handler := http.Handler(mux)
+	handler = withCORS(handler)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3005"
+	}
+	if port[0] != ':' {
+		port = ":" + port
+	}
+
 	return &Server{
 		Server: &http.Server{
-			Addr:    ":3005",
-			Handler: mux,
+			Addr:    port,
+			Handler: handler,
 		},
 		logger: logger,
 	}
+}
+
+func withCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
 
 func (s *Server) Run() error {

@@ -34,7 +34,7 @@ func MakeKusariChains() game.Action {
 			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, chanceModifier(config, context, target, modifiers.Stunned, 30)...)
+				transactions = append(transactions, modifiers.ChanceModifier(config, context, target, modifiers.Stunned, 30)...)
 			}
 
 			return transactions

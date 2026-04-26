@@ -3,6 +3,7 @@ package actions
 import (
 	"math/rand/v2"
 	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -37,11 +38,11 @@ func MakeSnakeStrike() game.Action {
 				roll := rand.IntN(3)
 				switch roll {
 				case 0:
-					transactions = append(transactions, chanceParalysis(config, context, target, 30)...)
+					transactions = append(transactions, modifiers.ChanceParalysis(config, context, target, 30)...)
 				case 1:
-					transactions = append(transactions, chancePoison(config, context, target, 30)...)
+					transactions = append(transactions, modifiers.ChancePoison(config, context, target, 30)...)
 				case 2:
-					transactions = append(transactions, chanceSleep(config, context, target, 30)...)
+					transactions = append(transactions, modifiers.ChanceSleep(config, context, target, 30)...)
 				}
 			}
 
