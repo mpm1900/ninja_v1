@@ -12,7 +12,7 @@ func Disabled(actionID uuid.UUID) game.Modifier {
 	return game.Modifier{
 		ID:          uuid.New(),
 		Name:        "Disabled",
-		Description: "Disabled shinobi cannot used specific actions.",
+		Description: "Disabled shinobi cannot use specific actions.",
 		Icon:        "disabled",
 		Show:        true,
 		GroupID:     &disabledID,

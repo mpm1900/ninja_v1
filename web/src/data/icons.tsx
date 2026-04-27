@@ -37,7 +37,7 @@ import { GrFastForward } from 'react-icons/gr'
 import { TbTagPlus } from 'react-icons/tb'
 import { HiScale } from 'react-icons/hi2'
 import { FaFrog, FaHouseFloodWater, FaWeightHanging } from 'react-icons/fa6'
-import { TbScanEye } from 'react-icons/tb'
+import { TbScanEye, TbCancel } from 'react-icons/tb'
 import { BsCloudRainHeavyFill, BsCloudRain, BsSpeedometer } from "react-icons/bs";
 
 const Aburame: IconType = (props) => (
@@ -126,6 +126,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   cmo_strength: ({ className, ...props }) => (
     <GiDoubled className={cn('text-orange-300', className)} {...props} />
   ),
+  disabled: TbCancel,
   physical_reduction_up: ({ className, ...props }) => (
     <GiArmorUpgrade className={cn('text-orange-300', className)} {...props} />
   ),
