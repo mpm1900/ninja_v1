@@ -110,7 +110,7 @@ var narutoTransform = game.Modifier{
 	GroupID:     &narutoTransformID,
 	Icon:        "naruto_transform",
 	Name:        "KCM",
-	Description: "On switch out: transform",
+	Description: "On switch in: Transform if it's the second time.",
 	Show:        true,
 	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
