@@ -159,6 +159,7 @@ function ActorTooltip({
                   .filter((a) => !a.meta.switch)
                   .map((a) => (
                     <tr
+                      key={a.ID}
                       className={cn({
                         'text-destructive': a.disabled,
                       })}

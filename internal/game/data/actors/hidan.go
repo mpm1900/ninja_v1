@@ -35,7 +35,7 @@ var Hidan = game.ActorDef{
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
-		actions.Distraction.ID,
+		actions.Redirect.ID,
 		actions.BloodPrice.ID,
 		actions.Curse.ID,
 		actions.PerishSong.ID,

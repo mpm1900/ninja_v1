@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -30,7 +31,9 @@ var Orochimaru = game.ActorDef{
 		game.NsWind,
 		game.NsYin,
 	}),
-	Abilities:   []game.Modifier{},
+	Abilities: []game.Modifier{
+		modifiers.Focused,
+	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.BodyReplacement.ID,

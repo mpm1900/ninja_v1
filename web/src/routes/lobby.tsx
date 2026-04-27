@@ -36,7 +36,7 @@ function App() {
   const game = useStore(gameStore, (g) => g)
   const players = game.players.filter((p) => p.ID === client?.ID)
   const enemies = game.players.filter((p) => p.ID !== client?.ID)
-  const ready = players.length > 0 && enemies.length > 0
+  const ready = players.length > 0
   const unstarted = game.status !== 'running' && game.turn.count == 0
   const nav = Route.useNavigate()
 

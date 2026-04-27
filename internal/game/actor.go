@@ -181,6 +181,7 @@ type ActorState struct {
 	// - warded units are immune to the secondary effects of attacking actions
 	Warded bool `json:"warded"`
 	// [Reflect] how much damage is reflected (PureDamage not affected)
+	Redirectable    bool    `json:"-"`
 	Reflect         float64 `json:"-"`
 	PowerMultiplier float64 `json:"-"`
 	StabMultiplier  float64 `json:"-"`
@@ -372,6 +373,7 @@ func MakeActor(
 			Protected:          false,
 			Safeguarded:        false,
 			Warded:             false,
+			Redirectable:       true,
 			PowerMultiplier:    1.0,
 			StabMultiplier:     1.5,
 			Reflect:            0.0,
@@ -444,6 +446,9 @@ func (a *Actor) SetPosition(positionID *uuid.UUID) {
 	}
 }
 func (a *Actor) PushImmunities(ids ...uuid.UUID) {
+	if a.Immunities == nil {
+		a.Immunities = make(map[uuid.UUID]struct{})
+	}
 	for _, id := range ids {
 		a.Immunities[id] = struct{}{}
 	}
@@ -654,6 +659,9 @@ func (a Actor) Clone() Actor {
 
 	b.Natures = maps.Clone(a.Natures)
 	b.Actions = slices.Clone(a.Actions)
+
+	b.Immunities = maps.Clone(a.Immunities)
+	b.JutsuImmunities = maps.Clone(a.JutsuImmunities)
 
 	if a.Summon != nil {
 		s := new(Summon)

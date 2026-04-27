@@ -38,7 +38,8 @@ var Shisui = game.ActorDef{
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
 		actions.Taunt.ID,
-		actions.Distraction.ID,
+		actions.SharinganGlare.ID,
+		actions.Redirect.ID,
 		actions.PatternBreak.ID,
 		actions.Chidori.ID,
 		actions.DragonStance.ID,

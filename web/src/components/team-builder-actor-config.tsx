@@ -41,14 +41,14 @@ function TeamBuilderActorConfig({
               <div>
                 <div className='w-full px-2 flex gap-6 justify-between'>
                   <div>{def.name}</div>
-                  <div className="flex">
+                  <div className="flex items-start">
                     {(Object.keys(def.natures) as Array<NatureSet>)
                       .sort((a, b) => natureIndexes[a] - natureIndexes[b])
                       .map((nature) => (
                         <NatureBadge
                           key={nature}
                           nature={nature}
-                          className="text-xs block"
+                          className="text-xs"
                         />
                       ))}
                   </div>

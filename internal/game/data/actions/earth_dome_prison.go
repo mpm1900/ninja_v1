@@ -18,7 +18,7 @@ func MakeEarthDomePrison() game.Action {
 		Description: "Lowers target's Speed.",
 		Nature:      game.Ptr(game.NsEarth),
 		Accuracy:    game.Ptr(95),
-		Power:       game.Ptr(75),
+		Power:       game.Ptr(80),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(50),

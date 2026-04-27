@@ -126,7 +126,7 @@ function ActorCard({
             <div className="flex justify-between items-end gap-4">
               <div
                 className={cn(
-                  'pl-2 pr-4 pb-2 pt-1.5 -mb-2 rounded-sm rounded-tl-none shadow-[2px_1px_0px_rgba(0,0,0,1)]',
+                  'pl-2 pr-4 pb-2 pt-1.5 -mb-3 rounded-sm rounded-tl-none shadow-[2px_1px_0px_rgba(0,0,0,1)]',
                   frameVariants({
                     variant: getVariant({ selected, targeted }),
                   }),
@@ -135,8 +135,9 @@ function ActorCard({
               >
                 <span
                   className={cn(
-                    'font-semibold text-lg text-nowrap',
-                    !selected && 'text-shadow-[1px_1px_0px_#000000]'
+                    'font-semibold text-2xl text-nowrap',
+                    !selected && 'text-shadow-[1px_1px_0px_#000000]',
+                    'nanum-brush-script-regular'
                   )}
                 >
                   {actor.name}

@@ -7,7 +7,7 @@ import (
 	"ninja_v1/internal/game/data/mutations"
 )
 
-func ApplyModifier(config game.ActionConfig, context game.Context, actor game.Actor, modifier game.Modifier) []game.GameTransaction {
+func applyModifier(checkWarded bool, config game.ActionConfig, context game.Context, actor game.Actor, modifier game.Modifier) []game.GameTransaction {
 	transactions := []game.GameTransaction{}
 
 	if mutations.CheckJutsuImmunity(config, actor) {
@@ -21,11 +21,17 @@ func ApplyModifier(config game.ActionConfig, context game.Context, actor game.Ac
 
 	ctx := game.MakeContextForActor(actor)
 	ctx.ModifierID = modifier.GroupID
-	mod := mutations.AddModifiers(true, modifier)
+	mod := mutations.AddModifiers(checkWarded, modifier)
 	mod_tx := game.MakeTransaction(mod, ctx)
 	transactions = append(transactions, mod_tx)
 
 	return transactions
+}
+func ApplyModifier(config game.ActionConfig, context game.Context, actor game.Actor, modifier game.Modifier) []game.GameTransaction {
+	return applyModifier(true, config, context, actor, modifier)
+}
+func ApplyModifierBypass(config game.ActionConfig, context game.Context, actor game.Actor, modifier game.Modifier) []game.GameTransaction {
+	return applyModifier(false, config, context, actor, modifier)
 }
 func ChanceModifier(config game.ActionConfig, context game.Context, actor game.Actor, modifier game.Modifier, chance int) []game.GameTransaction {
 	roll := rand.IntN(100)
@@ -36,7 +42,7 @@ func ChanceModifier(config game.ActionConfig, context game.Context, actor game.A
 	return ApplyModifier(config, context, actor, modifier)
 }
 
-func ApplyStatus(config game.ActionConfig, context game.Context, actor game.Actor, modifier game.Modifier, mutation game.GameMutation) []game.GameTransaction {
+func applyStatus(checkWarded bool, config game.ActionConfig, context game.Context, actor game.Actor, modifier game.Modifier, mutation game.GameMutation) []game.GameTransaction {
 	transactions := []game.GameTransaction{}
 
 	if mutations.CheckJutsuImmunity(config, actor) {
@@ -51,13 +57,19 @@ func ApplyStatus(config game.ActionConfig, context game.Context, actor game.Acto
 	ctx := game.MakeContextForActor(actor)
 	ctx.ParentActorID = nil // do not remove on switch
 
-	mod := mutations.AddStatus(true, modifier)
+	mod := mutations.AddStatus(checkWarded, modifier)
 	mod_tx := game.MakeTransaction(mod, ctx)
 
 	mut_tx := game.MakeTransaction(mutation, ctx)
 	transactions = append(transactions, mod_tx, mut_tx)
 
 	return transactions
+}
+func ApplyStatus(config game.ActionConfig, context game.Context, actor game.Actor, modifier game.Modifier, mutation game.GameMutation) []game.GameTransaction {
+	return applyStatus(true, config, context, actor, modifier, mutation)
+}
+func ApplyStatusBypass(config game.ActionConfig, context game.Context, actor game.Actor, modifier game.Modifier, mutation game.GameMutation) []game.GameTransaction {
+	return applyStatus(false, config, context, actor, modifier, mutation)
 }
 
 func ApplyBurn(config game.ActionConfig, context game.Context, actor game.Actor) []game.GameTransaction {

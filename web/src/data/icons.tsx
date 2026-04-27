@@ -22,6 +22,7 @@ import {
   GiHeartOrgan,
   GiArmorUpgrade,
   GiPoisonGas,
+  GiLookAt,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -160,6 +161,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   ),
   fast_thinking: GrFastForward,
   flooded: FaHouseFloodWater,
+  focused: GiLookAt,
   gedo_shard: GiTopaz,
   guts: GiMinotaur,
   haze: HiScale,

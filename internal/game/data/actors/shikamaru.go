@@ -40,7 +40,7 @@ var Shikamaru = game.ActorDef{
 		actions.PatternBreak.ID,
 		actions.Haze.ID,
 		actions.Tailwind.ID,
-		actions.Distraction.ID,
+		actions.Redirect.ID,
 		actions.ShadowPossession.ID,
 	},
 }

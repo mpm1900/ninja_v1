@@ -7,11 +7,11 @@ import (
 	"github.com/google/uuid"
 )
 
-var Distraction = MakeDistraction()
+var Redirect = MakeRedirect()
 
-func MakeDistraction() game.Action {
+func MakeRedirect() game.Action {
 	config := game.ActionConfig{
-		Name:        "Distraction",
+		Name:        "Redirect",
 		Nature:      game.Ptr(game.NsYin),
 		Jutsu:       game.Genjutsu,
 		Description: "Changes the target of single-target enemy actions.",

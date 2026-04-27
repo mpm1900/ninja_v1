@@ -20,7 +20,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.SummonGamabunta.ID: actions.SummonGamabunta,
 
 	actions.SummonAlly.ID:       actions.SummonAlly,
-	actions.Distraction.ID:      actions.Distraction,
+	actions.Redirect.ID:         actions.Redirect,
 	actions.Taunt.ID:            actions.Taunt,
 	actions.BodyReplacement.ID:  actions.BodyReplacement,
 	actions.Barrier.ID:          actions.Barrier,
@@ -135,5 +135,6 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 
 	actions.PoisonSting.ID: actions.PoisonSting,
 
-	actions.SnakeStrike.ID: actions.SnakeStrike,
+	actions.SnakeStrike.ID:    actions.SnakeStrike,
+	actions.SharinganGlare.ID: actions.SharinganGlare,
 }

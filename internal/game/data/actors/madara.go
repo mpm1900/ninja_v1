@@ -47,5 +47,6 @@ var Madara = game.ActorDef{
 		actions.GreatFireAnnihilation.ID,
 		actions.MajesticFlame.ID,
 		actions.Firestorm.ID,
+		actions.SharinganGlare.ID,
 	},
 }
