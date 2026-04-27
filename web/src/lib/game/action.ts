@@ -13,9 +13,7 @@ type Action = {
     accuracy?: number
     stat?: ActorAttackStat
     power?: number
-    recoil?: number
     description: string
-    target_count?: number
   }
   summon: boolean
   locked: boolean

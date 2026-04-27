@@ -22,7 +22,7 @@ var Focused game.Modifier = game.Modifier{
 			game.MutPriorityPostStagedStats,
 			game.ComposeAF(game.SourceFilter, game.ActiveFilter),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {
-				actor.Redirectable = false
+				actor.IgnoreRedirect = true
 				return actor
 			},
 		),

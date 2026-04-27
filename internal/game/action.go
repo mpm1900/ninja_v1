@@ -31,22 +31,23 @@ const (
 )
 
 type ActionConfig struct {
-	Accuracy    *int        `json:"accuracy,omitempty"`
-	Cooldown    *int        `json:"cooldown,omitempty"`
-	Cost        *int        `json:"cost,omitempty"`
-	CritChance  *int        `json:"crit_chance,omitempty"`
-	CritMod     float64     `json:"crit_mod,omitempty"`
-	LifeSteal   *float64    `json:"life_steal,omitempty"`
-	Name        string      `json:"name"`
-	Nature      *NatureSet  `json:"nature,omitempty"`
-	Power       *int        `json:"power,omitempty"`
-	Recoil      *float64    `json:"recoil,omitempty"`
-	Stat        *ActorStat  `json:"stat,omitempty"`
-	TargetCount *int        `json:"target_count,omitempty"`
-	Jutsu       ActionJutsu `json:"jutsu"`
-	Description string      `json:"description"`
-	LogSuccess  *string     `json:"-"`
-	LogFailure  *string     `json:"-"`
+	Accuracy       *int        `json:"accuracy,omitempty"`
+	Cooldown       *int        `json:"cooldown,omitempty"`
+	Cost           *int        `json:"cost,omitempty"`
+	CritChance     *int        `json:"-"`
+	CritMod        float64     `json:"-"`
+	LifeSteal      *float64    `json:"-"`
+	Name           string      `json:"name"`
+	Nature         *NatureSet  `json:"nature,omitempty"`
+	Power          *int        `json:"power,omitempty"`
+	Recoil         *float64    `json:"-"`
+	Stat           *ActorStat  `json:"stat,omitempty"`
+	TargetCount    *int        `json:"-"`
+	Jutsu          ActionJutsu `json:"jutsu"`
+	Description    string      `json:"description"`
+	LogSuccess     *string     `json:"-"`
+	LogFailure     *string     `json:"-"`
+	IgnoreRedirect bool        `json:"-"`
 }
 
 type ActionTargetType string

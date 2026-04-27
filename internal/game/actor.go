@@ -181,7 +181,7 @@ type ActorState struct {
 	// - warded units are immune to the secondary effects of attacking actions
 	Warded bool `json:"warded"`
 	// [Reflect] how much damage is reflected (PureDamage not affected)
-	Redirectable    bool    `json:"-"`
+	IgnoreRedirect  bool    `json:"-"`
 	Reflect         float64 `json:"-"`
 	PowerMultiplier float64 `json:"-"`
 	StabMultiplier  float64 `json:"-"`
@@ -373,7 +373,7 @@ func MakeActor(
 			Protected:          false,
 			Safeguarded:        false,
 			Warded:             false,
-			Redirectable:       true,
+			IgnoreRedirect:     false,
 			PowerMultiplier:    1.0,
 			StabMultiplier:     1.5,
 			Reflect:            0.0,

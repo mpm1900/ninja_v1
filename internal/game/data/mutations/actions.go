@@ -10,6 +10,10 @@ func RedirectSingleTargetEnemyActions(source game.Actor) game.GameMutation {
 	return game.GameMutation{
 		Delta: func(p game.Game, g game.Game, context game.Context) game.Game {
 			for i, a := range g.Actions {
+				if a.Mutation.Config.IgnoreRedirect {
+					continue
+				}
+
 				if a.Context.SourcePlayerID == nil || a.Context.SourceActorID == nil {
 					continue
 				}
@@ -21,11 +25,11 @@ func RedirectSingleTargetEnemyActions(source game.Actor) game.GameMutation {
 
 				if *a.Context.SourcePlayerID != source.PlayerID {
 					c_source, ok := g.GetSource(a.Context)
-					if !ok || !c_source.Redirectable {
+					if !ok {
 						continue
 					}
 					rc_source := c_source.Resolve(g)
-					if !rc_source.Redirectable {
+					if rc_source.IgnoreRedirect {
 						continue
 					}
 
