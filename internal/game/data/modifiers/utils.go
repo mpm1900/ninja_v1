@@ -73,6 +73,12 @@ func ApplyStatusBypass(config game.ActionConfig, context game.Context, actor gam
 }
 
 func ApplyBurn(config game.ActionConfig, context game.Context, actor game.Actor) []game.GameTransaction {
+	_, ok := actor.Natures[game.NsFire]
+	if ok {
+		// fire nature immune to burn
+		return []game.GameTransaction{}
+	}
+
 	return ApplyStatus(config, context, actor, Burned, mutations.Burn)
 }
 func ChanceBurn(config game.ActionConfig, context game.Context, actor game.Actor, chance int) []game.GameTransaction {
@@ -85,6 +91,11 @@ func ChanceBurn(config game.ActionConfig, context game.Context, actor game.Actor
 }
 
 func ApplyParalysis(config game.ActionConfig, context game.Context, actor game.Actor) []game.GameTransaction {
+	_, ok := actor.Natures[game.NsLightning]
+	if ok {
+		// lightning nature immune to paralysis
+		return []game.GameTransaction{}
+	}
 	return ApplyStatus(config, context, actor, Paralysis, mutations.Paralyze)
 }
 func ChanceParalysis(config game.ActionConfig, context game.Context, actor game.Actor, chance int) []game.GameTransaction {

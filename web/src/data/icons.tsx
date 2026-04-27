@@ -36,7 +36,7 @@ import { MdFileUploadOff } from 'react-icons/md'
 import { GrFastForward } from 'react-icons/gr'
 import { TbTagPlus } from 'react-icons/tb'
 import { HiScale } from 'react-icons/hi2'
-import { FaFrog, FaHouseFloodWater } from 'react-icons/fa6'
+import { FaFrog, FaHouseFloodWater, FaWeightHanging } from 'react-icons/fa6'
 import { TbScanEye } from 'react-icons/tb'
 import { BsCloudRainHeavyFill, BsCloudRain, BsSpeedometer } from "react-icons/bs";
 
@@ -206,6 +206,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   tailwind: PiWindFill,
   taunted: Anger,
   uchiha_fan: GiHandheldFan,
+  unburden: FaWeightHanging,
   water_absorb: GiWaterRecycling,
 }
 

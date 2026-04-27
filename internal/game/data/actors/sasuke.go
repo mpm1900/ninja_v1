@@ -34,6 +34,7 @@ var Sasuke = game.ActorDef{
 	}),
 	Abilities: []game.Modifier{
 		modifiers.InnerFocus,
+		modifiers.Unburden,
 	},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{

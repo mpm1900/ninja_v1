@@ -9,7 +9,7 @@ import (
 
 var intimidateID = uuid.MustParse("0a6d78f6-c09b-5463-ad56-e9d549fc7ca9")
 var IntimidateTrigger game.Trigger = game.Trigger{
-	ID:         uuid.MustParse("4af16c70-9c55-5f4c-a5b5-6a24397167c5"),
+	ID:         uuid.New(),
 	ModifierID: intimidateID,
 	On:         game.OnActorEnter,
 	Check:      game.Match__SourceActor_SourceActor,

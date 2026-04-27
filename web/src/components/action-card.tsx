@@ -77,9 +77,9 @@ function ActionCard({
             </div>
           </div>
 
-          {!!action.config.cost && action.config.cost > 0 && (
-            <div className="text-white/90 font-black nanum-brush-script-regular text-4xl h-8 w-8 -mt-0.5">
-              {action.config.cost}
+          {!!action.config.power && action.config.power > 0 && (
+            <div className="text-white/90 font-black nanum-brush-script-regular text-4xl h-8 -mt-0.5">
+              {action.config.power}
             </div>
           )}
         </div>
@@ -88,7 +88,7 @@ function ActionCard({
 
       <div className="flex *:flex-1 text-[11px] border-t border-b bg-white shadow-md z-2">
         <StatChip label='Acc' value={accuracyLabel} />
-        <StatChip label="Power" value={action.config.power ?? '-'} />
+        <StatChip label="Cost" value={action.config.cost ?? '-'} />
         <StatChip label="Priority" value={action.priority || '-'} />
       </div>
       <div

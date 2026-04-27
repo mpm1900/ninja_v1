@@ -170,6 +170,8 @@ var ConsumeItem game.GameMutation = game.GameMutation{
 			return a
 		})
 
+		g.On(game.OnItemConsume, &context)
+
 		return g
 	},
 }

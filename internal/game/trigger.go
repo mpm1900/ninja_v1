@@ -16,6 +16,7 @@ const (
 	OnDeath         TriggerOn = "on-death"
 	OnKill          TriggerOn = "on-kill"
 	OnModifierAdd   TriggerOn = "on-modifier-add"
+	OnItemConsume   TriggerOn = "on-item-consume"
 	OnTurnEnd       TriggerOn = "on-turn-end"
 )
 
