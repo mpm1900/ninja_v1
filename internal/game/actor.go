@@ -162,6 +162,7 @@ type ActorState struct {
 	Stance        ActorStance    `json:"stance"`
 	ActiveTurns   int            `json:"-"`
 	InactiveTurns int            `json:"-"`
+	Enters        int            `json:"-"`
 	Seen          bool           `json:"seen"`
 	// [Alive] whether or not the actor is alive, could
 	// - could be computed, but this is here to not have to call .Resolve() on filters
@@ -365,6 +366,7 @@ func MakeActor(
 			Alive:              true,
 			Damage:             0,
 			InactiveTurns:      0,
+			Enters:             0,
 			PositionID:         nil,
 			LastUsedActionID:   nil,
 			LastReceivedDamage: map[uuid.UUID]int{},
@@ -411,6 +413,17 @@ func MakeActor(
 		Summon:           nil,
 	}
 }
+
+func (a *Actor) Transform(def ActorDef) {
+	clone := def.Clone()
+	a.ActorDef = clone
+	a.Summon = nil
+	a.Ability = nil
+	if len(a.ActorDef.Abilities) > 0 {
+		a.Ability = &a.ActorDef.Abilities[0]
+	}
+}
+
 func (a *Actor) Reset() {
 	a.PositionID = nil
 	a.Damage = 0
@@ -437,6 +450,7 @@ func (a *Actor) SetPosition(positionID *uuid.UUID) {
 	if positionID != nil {
 		a.ActiveTurns = 0
 		a.Seen = true
+		a.Enters++
 	} else {
 		a.AuxAbility = nil
 		a.LastUsedActionID = nil

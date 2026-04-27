@@ -145,3 +145,21 @@ var RemoveItem = game.GameMutation{
 		return g
 	},
 }
+
+func Transform(def game.ActorDef) game.GameMutation {
+	return game.GameMutation{
+		Delta: func(p, g game.Game, context game.Context) game.Game {
+			source, ok := g.GetSource(context)
+			if !ok {
+				return g
+			}
+
+			g.UpdateActor(source.ID, func(a game.Actor) game.Actor {
+				a.Transform(def)
+				return a
+			})
+
+			return g
+		},
+	}
+}
