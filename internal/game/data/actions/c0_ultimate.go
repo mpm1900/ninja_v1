@@ -62,5 +62,6 @@ func MakeSelfDestruct() game.Action {
 	action := MakeC0UltimateArt()
 	action.ID = uuid.MustParse("9cd1049e-d388-47d4-a228-874153cbe5a5")
 	action.Config.Name = "Self Destruct"
+	action.Config.Stat = game.Ptr(game.StatAttack)
 	return action
 }

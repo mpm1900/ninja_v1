@@ -11,7 +11,7 @@ import { type TeamConfig } from '#/lib/stores/config'
 import { useStore } from '@tanstack/react-form'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { Save, Swords } from 'lucide-react'
+import { Save, Swords, Trash } from 'lucide-react'
 import { TeamBuilderSidebar } from '#/components/team-builder-sidebar'
 import { useSavedTeams } from '#/hooks/use-saved-teams'
 import { useTeamBuilderForm } from '#/hooks/use-team-builder-form'
@@ -127,7 +127,7 @@ function RouteComponent() {
                         <div className="flex justify-between items-end gap-6">
                           <form.Field name="name">
                             {(field) => (
-                              <Field>
+                              <Field className='max-w-sm'>
                                 <FieldLabel>Team Name</FieldLabel>
                                 <FieldContent>
                                   <Input
@@ -142,12 +142,13 @@ function RouteComponent() {
                             )}
                           </form.Field>
                           <Button
+                            size='icon'
                             variant="destructive"
                             onClick={() => {
                               form.removeFieldValue('actors', selected_index)
                             }}
                           >
-                            Remove {def.name}
+                            <Trash />
                           </Button>
                         </div>
 

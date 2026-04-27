@@ -90,9 +90,7 @@ function AppHeader() {
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        <Badge className="w-30">
-          {turn.count}: {turn.phase}
-        </Badge>
+
         {client && (
           <div className="flex gap-2">
             <Button

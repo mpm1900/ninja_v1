@@ -9,6 +9,17 @@ import {
   SelectValue,
 } from './ui/select'
 
+function FocusSelectItem({ focus }: { focus: (typeof actorFocuses)[number] }) {
+  const obj = ACTOR_FOCUS_DETAILS[focus]
+  const up = obj.up?.replaceAll('_', ' ')
+  const down = obj.down?.replaceAll('_', ' ')
+  return (
+    <SelectItem value={focus}>
+      <span className='capitalize'>{focus}</span> <span className='opacity-40 capitalize'>(+{up}, -{down})</span>
+    </SelectItem>
+  )
+}
+
 function FocusSelect({
   value,
   onValueChange,
@@ -28,9 +39,7 @@ function FocusSelect({
           <SelectContent>
             <SelectGroup>
               {actorFocuses.map((focus) => (
-                <SelectItem key={focus} value={focus}>
-                  {focus} (+{ACTOR_FOCUS_DETAILS[focus].up}, -{ACTOR_FOCUS_DETAILS[focus].down})
-                </SelectItem>
+                <FocusSelectItem key={focus} focus={focus} />
               ))}
             </SelectGroup>
           </SelectContent>

@@ -48,12 +48,16 @@ var StatusReflectionTrigger game.Trigger = game.Trigger{
 
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				remove_ctx := game.MakeContextForActor(target)
-				transactions = append(transactions, game.MakeTransaction(removeDebuff, remove_ctx))
+				if target.ID != source.ID {
+					remove_ctx := game.MakeContextForActor(target)
+					transactions = append(transactions, game.MakeTransaction(removeDebuff, remove_ctx))
+				}
 			}
 
-			reflect_ctx := game.MakeContextForActor(source)
-			transactions = append(transactions, game.MakeTransaction(reflectDebuff, reflect_ctx))
+			if len(transactions) > 0 {
+				reflect_ctx := game.MakeContextForActor(source)
+				transactions = append(transactions, game.MakeTransaction(reflectDebuff, reflect_ctx))
+			}
 
 			return transactions
 		},

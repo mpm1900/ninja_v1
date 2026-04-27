@@ -224,6 +224,9 @@ func (g *Game) Next() bool {
 	}
 
 	g.Tick = g.GetBaseTick()
+	if !g.Validate() {
+		return false
+	}
 	g.NextPhase()
 
 	return false

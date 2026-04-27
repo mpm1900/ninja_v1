@@ -38,19 +38,22 @@ function TeamBuilderActorConfig({
           <div className="flex flex-col gap-2 min-w-1/4">
             <div className="flex">
               <img src={def.sprite_url} className="object-cover size-16" />
-              <div className='p-2'>
-                <div>{def.name}</div>
-                <div className="flex">
-                  {(Object.keys(def.natures) as Array<NatureSet>)
-                    .sort((a, b) => natureIndexes[a] - natureIndexes[b])
-                    .map((nature) => (
-                      <NatureBadge
-                        key={nature}
-                        nature={nature}
-                        className="text-xs block"
-                      />
-                    ))}
+              <div>
+                <div className='w-full px-2 flex gap-6 justify-between'>
+                  <div>{def.name}</div>
+                  <div className="flex">
+                    {(Object.keys(def.natures) as Array<NatureSet>)
+                      .sort((a, b) => natureIndexes[a] - natureIndexes[b])
+                      .map((nature) => (
+                        <NatureBadge
+                          key={nature}
+                          nature={nature}
+                          className="text-xs block"
+                        />
+                      ))}
+                  </div>
                 </div>
+                <div className='px-2 text-xs text-muted-foreground'>info here</div>
               </div>
             </div>
             <TeamBuilderActorAttributes
