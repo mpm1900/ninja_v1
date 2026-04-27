@@ -12,6 +12,7 @@ var Recover = MakeRecover()
 func MakeRecover() game.Action {
 	config := game.ActionConfig{
 		Name:        "Recover",
+		Description: "Heals user for up-to 1/2th HP.",
 		Nature:      game.Ptr(game.NsYang),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(30),

@@ -46,5 +46,6 @@ var Sasuke = game.ActorDef{
 		actions.Fireball.ID,
 		actions.GreatFireball.ID,
 		actions.Amaterasu.ID,
+		game.Struggle.ID,
 	},
 }

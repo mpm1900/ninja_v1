@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"math/rand/v2"
 
 	"github.com/google/uuid"
 )
@@ -199,7 +200,7 @@ func MakeStruggle() Action {
 	config := ActionConfig{
 		Name:        "Struggle",
 		Description: "Deals 1/4th HP in recoil damage. Can be used when no other actions are available.",
-		TargetCount: Ptr(1),
+		TargetCount: Ptr(0),
 		Nature:      Ptr(NsPure),
 		Power:       Ptr(50),
 		Stat:        Ptr(StatAttack),
@@ -229,6 +230,17 @@ func MakeStruggle() Action {
 		},
 	)
 	action.Meta.Struggle = true
+	action.TargetPredicate = NoneFilter
+	action.MapContext = func(g Game, context Context) Context {
+		other_actors := g.GetActorsFilters(context, ComposeAF(ActiveFilter, OtherTeamFilter))
+		if len(other_actors) == 0 {
+			return context
+		}
+
+		rand_index := rand.IntN(len(other_actors))
+		context.TargetPositionIDs = append(context.TargetPositionIDs, *other_actors[rand_index].PositionID)
+		return context
+	}
 
 	return action
 }
