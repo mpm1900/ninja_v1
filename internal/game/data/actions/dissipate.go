@@ -8,17 +8,17 @@ import (
 	"github.com/google/uuid"
 )
 
-var DragonStance = MakeDragonStance()
+var Dissipate = MakeDissipate()
 
-func MakeDragonStance() game.Action {
+func MakeDissipate() game.Action {
 	config := game.ActionConfig{
-		Name:        "Dragon Stance",
-		Nature:      game.Ptr(game.NsTai),
-		Jutsu:       game.Taijutsu,
-		Description: "Raises the user's Speed and Attack stats.",
+		Name:        "Dissipate",
+		Nature:      game.Ptr(game.NsWind),
+		Jutsu:       game.Ninjutsu,
+		Description: "Raises the user's Evasion.",
 	}
 	return game.Action{
-		ID:              uuid.MustParse("435490c1-ede2-5875-9edf-1c36d4917741"),
+		ID:              uuid.MustParse("aa485c2f-920b-431a-a33d-919decdab2a4"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
 		TargetPredicate: game.NoneFilter,
@@ -29,7 +29,7 @@ func MakeDragonStance() game.Action {
 			Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 				transactions := []game.GameTransaction{}
 
-				mutation := mutations.AddModifiers(false, modifiers.AccuracyUpSource, modifiers.SpeedUpSource)
+				mutation := mutations.AddModifiers(false, modifiers.EvasionUpSource)
 				transaction := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, transaction)
 

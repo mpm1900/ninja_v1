@@ -56,6 +56,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.Expansion.ID:        actions.Expansion,
 	actions.ChannelChakra.ID:    actions.ChannelChakra,
 	actions.Rest.ID:             actions.Rest,
+	actions.Dissipate.ID:        actions.Dissipate,
 
 	actions.Sekiryoku.ID:    actions.Sekiryoku,
 	actions.ShinraTensei.ID: actions.ShinraTensei,

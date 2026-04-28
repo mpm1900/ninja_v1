@@ -23,6 +23,7 @@ import {
   GiArmorUpgrade,
   GiPoisonGas,
   GiLookAt,
+  GiEcology,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -172,6 +173,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   inner_focus: TbScanEye,
   intimidate: GiBeastEye,
   naruto_transform: PiSpiralFill,
+  nature_specialist: GiEcology,
   onigiri: PiOnigiriFill,
   paralyzed: ({ className, ...props }) => (
     <GiLightningTrio className={cn('text-yellow-400', className)} {...props} />

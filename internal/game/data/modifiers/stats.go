@@ -187,12 +187,12 @@ var SpeedDown2Target = MakeStatDeltaTarget(game.StatSpeed, &SpeedDownID, -2, "Sp
 
 var EvasionUpID = uuid.MustParse("4067fc87-e8a8-58bb-bfa1-5e852b2296b6")
 var EvasionDownID = uuid.MustParse("160398fa-03b7-5370-a7a1-b7780c2f943d")
-var EvasionUpSource = MakeStatDeltaSourceWithShow(game.StatEvasion, &EvasionUpID, 1, "Evasion Up")
-var EvasionUpTarget = MakeStatDeltaTargetWithShow(game.StatEvasion, &EvasionUpID, 1, "Evasion Up")
+var EvasionUpSource = MakeStatDeltaSource(game.StatEvasion, &EvasionUpID, 1, "Evasion Up")
+var EvasionUpTarget = MakeStatDeltaTarget(game.StatEvasion, &EvasionUpID, 1, "Evasion Up")
 var AccuracyUpID = uuid.MustParse("79566281-477e-5bce-b2b4-b878b11f2882")
 var AccuracyDownID = uuid.MustParse("0915300e-72d3-5b0c-b5d1-41f894a7d394")
-var AccuracyUpSource = MakeStatDeltaSourceWithShow(game.StatAccuracy, &AccuracyUpID, 1, "Accuracy Up")
-var AccuracyUpTarget = MakeStatDeltaTargetWithShow(game.StatAccuracy, &AccuracyUpID, 1, "Accuracy Up")
+var AccuracyUpSource = MakeStatDeltaSource(game.StatAccuracy, &AccuracyUpID, 1, "Accuracy Up")
+var AccuracyUpTarget = MakeStatDeltaTarget(game.StatAccuracy, &AccuracyUpID, 1, "Accuracy Up")
 
 // NAMED STAT UPS
 var TailwindID = uuid.MustParse("cd2010e6-90d8-530f-be90-79634690e33d")

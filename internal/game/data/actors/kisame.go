@@ -31,6 +31,7 @@ var Kisame = game.ActorDef{
 		game.NsWater,
 	}),
 	Abilities: []game.Modifier{
+		modifiers.NatureSpecialist,
 		modifiers.SwiftSwim,
 		modifiers.WaterAbsorb,
 	},
