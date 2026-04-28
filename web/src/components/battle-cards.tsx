@@ -30,11 +30,6 @@ function BattleCards({ actor }: { actor: Actor }) {
   )
   const has_queued_action = queued_actions[actor.ID]
   const idle = status === 'idle' && !prompt
-  // todo come back to this
-  const ally_summon_action = actions.find(
-    (tx) =>
-      tx.context.source_player_ID === actor.player_ID && tx.mutation.summon
-  )
   const staged_action = actions.find(
     (tx) => tx.context.source_actor_ID === actor.ID
   )
