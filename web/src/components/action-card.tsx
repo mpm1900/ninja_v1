@@ -36,11 +36,18 @@ function ActionCard({
           'border-white hover:border-white shadow-lg shadow-black': selected,
           'border-orange-400/40 hover:border-orange-400':
             action.config.stat === 'attack',
-          'border-orange-400': action.config.stat === 'attack' && selected,
+          'border-orange-400': action.config.stat === 'defense' && selected,
+          'border-red-400/40 hover:border-red-400':
+            action.config.stat === 'defense',
+          'border-red-400': action.config.stat === 'attack' && selected,
           'border-indigo-400/50 hover:border-indigo-400':
             action.config.stat === 'chakra_attack',
           'border-indigo-400':
             action.config.stat === 'chakra_attack' && selected,
+          'border-blue-400/50 hover:border-blue-400':
+            action.config.stat === 'chakra_defense',
+          'border-blue-400':
+            action.config.stat === 'chakra_defense' && selected,
         },
         className
       )}
@@ -88,7 +95,7 @@ function ActionCard({
 
       <div className="flex *:flex-1 text-[11px] border-t border-b bg-white shadow-md z-2">
         <StatChip label='Acc' value={accuracyLabel} />
-        <StatChip label="Cost" value={action.config.cost ?? '-'} />
+        <StatChip label="Cost" value={action.config.cost || '-'} />
         <StatChip label="Priority" value={action.priority || '-'} />
       </div>
       <div

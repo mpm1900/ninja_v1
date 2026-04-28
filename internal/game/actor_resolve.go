@@ -104,15 +104,15 @@ func (ah *actorResolveHandler) resolveActions(resolved *ResolvedActor) {
 	allDisabled := true
 	for i, a := range resolved.Actions {
 		// static cooldown offset
-		if resolved.Actions[i].Config.Cooldown == nil {
-			resolved.Actions[i].Config.Cooldown = Ptr(resolved.CooldownOffset)
-		} else {
-			*resolved.Actions[i].Config.Cooldown += resolved.CooldownOffset
+		baseCooldown := 0
+		if a.Config.Cooldown != nil {
+			baseCooldown = *a.Config.Cooldown
 		}
+		resolved.Actions[i].Config.Cooldown = Ptr(baseCooldown + resolved.CooldownOffset)
 
 		// set dynamic disabled state
 		if !a.Disabled {
-			if a.Cooldown != nil {
+			if a.Cooldown != nil && *a.Cooldown >= 0 {
 				resolved.Actions[i].Disabled = true
 			}
 			if resolved.ActionLocked && resolved.LastUsedActionID != nil {

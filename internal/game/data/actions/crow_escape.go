@@ -15,7 +15,7 @@ func MakeMirageCrow() game.Action {
 
 	config := game.ActionConfig{
 		Name:        "Crow Escape",
-		Description: "Lowers the target's Chakra Attack stat by 2 stages. User then switches out.",
+		Description: "Lowers the target's Chakra Attack by 2 stages. User then switches out.",
 		Nature:      game.Ptr(game.NsYin),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(30),

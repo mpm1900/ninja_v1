@@ -15,7 +15,7 @@ func MakeSwordsStance() game.Action {
 		Name:        "Swords Stance",
 		Nature:      game.Ptr(game.NsTai),
 		Jutsu:       game.Taijutsu,
-		Description: "Raises the user's Physical Attack stat by 2 stages.",
+		Description: "Raises the user's Physical Attack by 2 stages.",
 	}
 	return game.Action{
 		ID:              uuid.MustParse("cdda818c-edac-4de4-99e8-d0890fcc9214"),

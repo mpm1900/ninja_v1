@@ -77,6 +77,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.C0UltimateArt.ID: actions.C0UltimateArt,
 	actions.SelfDestruct.ID:  actions.SelfDestruct,
 	actions.C1Bird.ID:        actions.C1Bird,
+	actions.PaperBomb.ID:     actions.PaperBomb,
 
 	actions.FlyingSwallow.ID:    actions.FlyingSwallow,
 	actions.GiantRasengan.ID:    actions.GiantRasengan,
@@ -135,6 +136,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.VacuumBlast.ID:    actions.VacuumBlast,
 	actions.WindSlash.ID:      actions.WindSlash,
 	actions.Hirudora.ID:       actions.Hirudora,
+	actions.ShikigamiDance.ID: actions.ShikigamiDance,
 
 	actions.KebariSenbon.ID: actions.KebariSenbon,
 

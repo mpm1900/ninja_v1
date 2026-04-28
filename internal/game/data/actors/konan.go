@@ -35,5 +35,7 @@ var Konan = game.ActorDef{
 	ActionIDs: append([]uuid.UUID{
 		actions.Dissipate.ID,
 		actions.VacuumBlast.ID,
+		actions.ShikigamiDance.ID,
+		actions.PaperBomb.ID,
 	}, GlobalActions...),
 }

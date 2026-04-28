@@ -1,4 +1,4 @@
-import type { ActorAttackStat } from './actor'
+import type { ActorNatureStat } from './actor'
 import type { Context } from './context'
 import type { NatureSet } from './nature'
 
@@ -11,7 +11,7 @@ type Action = {
     cost?: number
     cooldown?: number
     accuracy?: number
-    stat?: ActorAttackStat
+    stat?: ActorNatureStat
     power?: number
     description: string
   }

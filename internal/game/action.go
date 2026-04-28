@@ -9,6 +9,7 @@ import (
 
 const (
 	ActionPrioritySwitch  = 10
+	ActionPriorityP5      = 5
 	ActionPriorityProtect = 4
 	ActionPriorityP3      = 3
 	ActionPriorityP2      = 2
@@ -149,7 +150,7 @@ func ResolveAction(game *Game, transaction Transaction[Action]) []GameTransactio
 		return []GameTransaction{}
 	}
 
-	if action.Config.Cooldown != nil {
+	if action.Config.Cooldown != nil && *action.Config.Cooldown > 0 {
 		game.SetActionCooldown(
 			*transaction.Context.SourceActorID,
 			action.ID,

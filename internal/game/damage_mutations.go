@@ -26,6 +26,9 @@ func getDefenseStat(a ActorStat) ActorStat {
 	if a == StatChakraAttack {
 		return StatChakraDefense
 	}
+	if a == StatChakraDefense {
+		return StatChakraDefense
+	}
 	return StatDefense
 }
 

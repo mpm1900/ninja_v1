@@ -27,12 +27,6 @@ function BattleActions({ actor }: { actor: Actor }) {
   const action = actor.actions.find((a) => a.ID === context.action_ID)
   const idle = status === 'idle'
   const staged = actions.find((tx) => tx.context.source_actor_ID === actor.ID)
-  const action_locked = actor.action_locked && actor.last_used_action_ID != null
-  const action_enabled = action?.cooldown == null && !action?.disabled
-  const is_switch = action?.config.name == 'Switch'
-  const switch_locked = actor.switch_locked && is_switch
-  const choice_locked =
-    action_locked && actor.last_used_action_ID !== action?.ID
 
   return (
     <LayoutGroup id="battle-actions">
@@ -62,12 +56,7 @@ function BattleActions({ actor }: { actor: Actor }) {
                 <ActionControl
                   action={action}
                   staged={staged}
-                  enabled={
-                    idle &&
-                    !!actor.position_ID &&
-                    action_enabled
-
-                  }
+                  enabled={idle && !!actor.position_ID && !action?.disabled}
                   context={context}
                   onContextChange={setContext}
                 />
