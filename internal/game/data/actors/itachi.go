@@ -36,7 +36,7 @@ var Itachi = game.ActorDef{
 		modifiers.Intimidate,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Disable.ID,
 		actions.PatternBreak.ID,
 		actions.Flash.ID,
@@ -52,5 +52,5 @@ var Itachi = game.ActorDef{
 		actions.Taunt.ID,
 		actions.DisarmingStrike.ID,
 		actions.SharinganGlare.ID,
-	},
+	}, GlobalActions...),
 }

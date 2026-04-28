@@ -34,10 +34,10 @@ var Hidan = game.ActorDef{
 		modifiers.ShadowCage,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Redirect.ID,
 		actions.BloodPrice.ID,
 		actions.Curse.ID,
 		actions.PerishSong.ID,
-	},
+	}, GlobalActions...),
 }

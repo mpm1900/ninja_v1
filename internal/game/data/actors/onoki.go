@@ -34,11 +34,11 @@ var Onoki = game.ActorDef{
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.RockFist.ID,
 		actions.MudWall.ID,
 		actions.Barrier.ID,
 		actions.DisarmingStrike.ID,
 		actions.AtomicDismantling.ID,
-	},
+	}, GlobalActions...),
 }

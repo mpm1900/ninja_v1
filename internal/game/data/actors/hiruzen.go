@@ -32,7 +32,7 @@ var Hiruzen = game.ActorDef{
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Haze.ID,
 		actions.Fireball.ID,
 		actions.GreatFireball.ID,
@@ -42,5 +42,5 @@ var Hiruzen = game.ActorDef{
 		actions.SummonAlly.ID,
 		actions.Firestorm.ID,
 		actions.VacuumBlast.ID,
-	},
+	}, GlobalActions...),
 }

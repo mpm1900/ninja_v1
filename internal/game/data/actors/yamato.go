@@ -35,12 +35,12 @@ var Yamato = game.ActorDef{
 		modifiers.NeutralizingChakra,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Chidori.ID,
 		actions.DragonStance.ID,
 		actions.Fireball.ID,
 		actions.WhirlwindKick.ID,
 		actions.GreatTreeSpear.ID,
 		actions.SummonAlly.ID,
-	},
+	}, GlobalActions...),
 }

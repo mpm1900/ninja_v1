@@ -32,10 +32,10 @@ var Haku = game.ActorDef{
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Haze.ID,
 		actions.CollidingWave.ID,
 		actions.HiddenMist.ID,
 		actions.CreateRain.ID,
-	},
+	}, GlobalActions...),
 }

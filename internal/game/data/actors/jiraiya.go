@@ -32,7 +32,7 @@ var Jiraiya = game.ActorDef{
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Rasengan.ID,
 		actions.GiantRasengan.ID,
 		actions.Haze.ID,
@@ -42,5 +42,5 @@ var Jiraiya = game.ActorDef{
 		actions.GreatFireball.ID,
 		actions.SummonGamabunta.ID,
 		actions.KebariSenbon.ID,
-	},
+	}, GlobalActions...),
 }

@@ -36,7 +36,7 @@ var Naruto = game.ActorDef{
 		narutoTransform,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Rasengan.ID,
 		actions.GiantRasengan.ID,
 		actions.PowerBoost.ID,
@@ -46,8 +46,7 @@ var Naruto = game.ActorDef{
 		actions.SummonGamabunta.ID,
 		actions.Rasenshuriken.ID,
 		actions.VacuumBlast.ID,
-		actions.ShadowClone.ID,
-	},
+	}, GlobalActions...),
 }
 
 var KCMNaurto = game.ActorDef{

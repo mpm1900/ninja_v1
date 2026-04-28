@@ -34,7 +34,7 @@ var PainNaraka = game.ActorDef{
 		modifiers.StatusReflection,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.PerishSong.ID,
 		actions.TempleOfNirvana.ID,
 		actions.Flash.ID,
@@ -43,7 +43,7 @@ var PainNaraka = game.ActorDef{
 		actions.SummonAlly.ID,
 		actions.BlackNeedle.ID,
 		actions.InstilFear.ID,
-	},
+	}, GlobalActions...),
 	Immunities: map[uuid.UUID]struct{}{
 		modifiers.BurdenOfPain.ID:    {},
 		modifiers.ChainsOfPain.ID:    {},

@@ -32,7 +32,7 @@ var Kabuto = game.ActorDef{
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Haze.ID,
 		actions.Tailwind.ID,
 		actions.Redirect.ID,
@@ -41,5 +41,5 @@ var Kabuto = game.ActorDef{
 		actions.ThirtyTwoPalms.ID,
 		actions.Flash.ID,
 		actions.Barrier.ID,
-	},
+	}, GlobalActions...),
 }

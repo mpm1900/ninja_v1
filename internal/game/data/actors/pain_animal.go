@@ -31,14 +31,13 @@ var PainAnimal = game.ActorDef{
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
-		actions.BodyReplacement.ID,
+	ActionIDs: append([]uuid.UUID{
 		actions.RetreatingStrike.ID,
 		actions.BlackNeedle.ID,
 		actions.SummonAlly.ID,
 		actions.DragonStance.ID,
 		actions.RetreatingStrike.ID,
-	},
+	}, GlobalActions...),
 	Immunities: map[uuid.UUID]struct{}{
 		modifiers.BurdenOfPain.ID:    {},
 		modifiers.ChainsOfPain.ID:    {},

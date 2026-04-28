@@ -36,17 +36,16 @@ var Hashirama = game.ActorDef{
 		modifiers.Regeneration,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.BodyReplacement.ID,
 		actions.Tailwind.ID,
 		actions.LeechSeed.ID,
 		actions.Haze.ID,
 		actions.GreatTreeSpear.ID,
 		actions.WhirlwindKick.ID,
-		actions.ShadowClone.ID,
 		actions.HeavyPunch.ID,
 		actions.SageMode.ID,
 		actions.VacuumBlast.ID,
 		actions.DeepForestEmergence.ID,
-	},
+	}, GlobalActions...),
 }

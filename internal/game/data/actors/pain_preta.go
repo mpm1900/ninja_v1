@@ -34,7 +34,7 @@ var PainPreta = game.ActorDef{
 		modifiers.NeutralizingChakra,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Recover.ID,
 		actions.RetreatingStrike.ID,
 		actions.NegateJutsu.ID,
@@ -42,7 +42,7 @@ var PainPreta = game.ActorDef{
 		actions.ChannelChakra.ID,
 		actions.Expansion.ID,
 		actions.BlackNeedle.ID,
-	},
+	}, GlobalActions...),
 	Immunities: map[uuid.UUID]struct{}{
 		modifiers.BurdenOfPain.ID:    {},
 		modifiers.ChainsOfPain.ID:    {},

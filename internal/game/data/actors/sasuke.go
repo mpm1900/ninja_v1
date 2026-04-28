@@ -37,7 +37,7 @@ var Sasuke = game.ActorDef{
 		modifiers.Unburden,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Chidori.ID,
 		actions.ChidoriSpear.ID,
 		actions.ChidoriStream.ID,
@@ -46,5 +46,5 @@ var Sasuke = game.ActorDef{
 		actions.Fireball.ID,
 		actions.GreatFireball.ID,
 		actions.Amaterasu.ID,
-	},
+	}, GlobalActions...),
 }

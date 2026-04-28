@@ -35,16 +35,15 @@ var Sakura = game.ActorDef{
 		modifiers.HealingTactics,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.CreateRain.ID,
 		actions.Haze.ID,
 		actions.Redirect.ID,
-		actions.BodyReplacement.ID,
 		actions.GreatWaterfall.ID,
 		actions.RockFist.ID,
 		actions.CherryBlossomImpact.ID,
 		actions.SageMode.ID,
 		actions.TeamHeal.ID,
 		actions.MudWall.ID,
-	},
+	}, GlobalActions...),
 }

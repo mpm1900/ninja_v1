@@ -35,12 +35,11 @@ var Zetsu = game.ActorDef{
 		modifiers.Regeneration,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Rest.ID,
-		actions.BodyReplacement.ID,
 		actions.TempleOfNirvana.ID,
 		actions.Redirect.ID,
 		actions.Graft.ID,
 		actions.FlowerBomb.ID,
-	},
+	}, GlobalActions...),
 }

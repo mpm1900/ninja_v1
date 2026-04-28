@@ -37,18 +37,16 @@ var Tobirama = game.ActorDef{
 		modifiers.MoldBreaker,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.CreateRain.ID,
-		actions.BodyReplacement.ID,
 		actions.Tailwind.ID,
 		actions.LeechSeed.ID,
 		actions.Haze.ID,
 		actions.GreatTreeSpear.ID,
 		actions.WhirlwindKick.ID,
-		actions.ShadowClone.ID,
 		actions.VacuumBlast.ID,
 		actions.WaterDragon.ID,
 		actions.GreatWaterfall.ID,
 		actions.WaterSlicer.ID,
-	},
+	}, GlobalActions...),
 }

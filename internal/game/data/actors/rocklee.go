@@ -31,7 +31,7 @@ var RockLee = game.ActorDef{
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.LuckyStrikes.ID,
 		actions.DragonStance.ID,
 		actions.WhirlwindKick.ID,
@@ -39,5 +39,5 @@ var RockLee = game.ActorDef{
 		actions.FlyingLotus.ID,
 		actions.Asakujaku.ID,
 		actions.Hirudora.ID,
-	},
+	}, GlobalActions...),
 }

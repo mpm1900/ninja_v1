@@ -32,7 +32,7 @@ var Asuma = game.ActorDef{
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.FlyingSwallow.ID,
 		actions.Fireball.ID,
 		actions.DragonFire.ID,
@@ -40,5 +40,5 @@ var Asuma = game.ActorDef{
 		actions.HeavyPunch.ID,
 		actions.VacuumBlast.ID,
 		actions.WindSlash.ID,
-	},
+	}, GlobalActions...),
 }

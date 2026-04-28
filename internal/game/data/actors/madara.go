@@ -36,9 +36,8 @@ var Madara = game.ActorDef{
 		modifiers.Guts,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Flash.ID,
-		actions.BodyReplacement.ID,
 		actions.Taunt.ID,
 		actions.DragonStance.ID,
 		actions.Fireball.ID,
@@ -48,5 +47,5 @@ var Madara = game.ActorDef{
 		actions.MajesticFlame.ID,
 		actions.Firestorm.ID,
 		actions.SharinganGlare.ID,
-	},
+	}, GlobalActions...),
 }

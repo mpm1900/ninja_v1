@@ -35,7 +35,7 @@ var Minato = game.ActorDef{
 		modifiers.SpeedBoost,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Rasengan.ID,
 		actions.GiantRasengan.ID,
 		actions.Chidori.ID,
@@ -45,5 +45,5 @@ var Minato = game.ActorDef{
 		actions.WhirlwindKick.ID,
 		actions.FlyingRaijin.ID,
 		actions.SummonAlly.ID,
-	},
+	}, GlobalActions...),
 }

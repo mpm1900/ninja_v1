@@ -34,7 +34,7 @@ var Kakuzu = game.ActorDef{
 		modifiers.ConsumeChakra,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.IronSkin.ID,
 		actions.IronBody.ID,
 		actions.DragonStance.ID,
@@ -42,5 +42,5 @@ var Kakuzu = game.ActorDef{
 		actions.FalseDarkness.ID,
 		actions.PressureDamage.ID,
 		actions.WhirlwindKick.ID,
-	},
+	}, GlobalActions...),
 }

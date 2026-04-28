@@ -42,7 +42,7 @@ var Kakashi = game.ActorDef{
 		modifiers.AccuracyUpSource,
 	},
 	ActionCount: 6,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Raikiri.ID,
 		actions.LightningHound.ID,
 		actions.Chidori.ID,
@@ -53,7 +53,6 @@ var Kakashi = game.ActorDef{
 		actions.Kamui.ID,
 		actions.KamuiCounter.ID,
 		actions.KamuiSlash.ID,
-		actions.ShadowClone.ID,
 		actions.MudWall.ID,
-	},
+	}, GlobalActions...),
 }

@@ -37,9 +37,9 @@ var Gaara = game.ActorDef{
 		modifiers.SandAura,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.DragonStance.ID,
 		actions.WhirlwindKick.ID,
 		actions.EarthDomePrison.ID,
-	},
+	}, GlobalActions...),
 }

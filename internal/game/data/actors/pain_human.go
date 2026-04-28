@@ -33,7 +33,7 @@ var PainHuman = game.ActorDef{
 		modifiers.BurdenOfPain,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Redirect.ID,
 		actions.PerishSong.ID,
 		actions.MindTransfer.ID,
@@ -42,7 +42,7 @@ var PainHuman = game.ActorDef{
 		actions.RetreatingStrike.ID,
 		actions.SummonAlly.ID,
 		actions.BlackNeedle.ID,
-	},
+	}, GlobalActions...),
 	Immunities: map[uuid.UUID]struct{}{
 		modifiers.BurdenOfPain.ID:    {},
 		modifiers.ChainsOfPain.ID:    {},

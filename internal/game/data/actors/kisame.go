@@ -35,7 +35,7 @@ var Kisame = game.ActorDef{
 		modifiers.WaterAbsorb,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.CollidingWave.ID,
 		actions.DragonStance.ID,
 		actions.Fireball.ID,
@@ -45,5 +45,5 @@ var Kisame = game.ActorDef{
 		actions.SharkBomb.ID,
 		actions.GreatWaterfall.ID,
 		actions.WaterSlicer.ID,
-	},
+	}, GlobalActions...),
 }

@@ -35,8 +35,7 @@ var Orochimaru = game.ActorDef{
 		modifiers.Focused,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
-		actions.BodyReplacement.ID,
+	ActionIDs: append([]uuid.UUID{
 		actions.Recover.ID,
 		actions.Chidori.ID,
 		actions.DragonStance.ID,
@@ -45,5 +44,5 @@ var Orochimaru = game.ActorDef{
 		actions.MindTransfer.ID,
 		actions.PatternBreak.ID,
 		actions.SnakeStrike.ID,
-	},
+	}, GlobalActions...),
 }

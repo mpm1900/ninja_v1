@@ -36,11 +36,10 @@ var Nagato = game.ActorDef{
 		modifiers.Raincaller,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Sekiryoku.ID,
-		actions.BodyReplacement.ID,
 		actions.Tailwind.ID,
 		actions.MindTransfer.ID,
 		actions.CollidingWave.ID,
-	},
+	}, GlobalActions...),
 }

@@ -31,13 +31,12 @@ var PainAsura = game.ActorDef{
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.SelfDestruct.ID,
 		actions.Sekiryoku.ID,
-		actions.BodyReplacement.ID,
 		actions.BlackNeedle.ID,
 		actions.RetreatingStrike.ID,
-	},
+	}, GlobalActions...),
 	Immunities: map[uuid.UUID]struct{}{
 		modifiers.BurdenOfPain.ID:    {},
 		modifiers.ChainsOfPain.ID:    {},

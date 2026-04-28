@@ -35,11 +35,11 @@ var Tsunade = game.ActorDef{
 		modifiers.Regeneration,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Haze.ID,
 		actions.Fireball.ID,
 		actions.HeavyPunch.ID,
 		actions.SageMode.ID,
 		actions.TeamHeal.ID,
-	},
+	}, GlobalActions...),
 }

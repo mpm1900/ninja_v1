@@ -34,7 +34,7 @@ var PainDeva = game.ActorDef{
 		modifiers.VoiceOfPain,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.CreateRain.ID,
 		actions.Sekiryoku.ID,
 		actions.ShinraTensei.ID,
@@ -43,7 +43,7 @@ var PainDeva = game.ActorDef{
 		actions.MindTransfer.ID,
 		actions.RetreatingStrike.ID,
 		actions.BlackNeedle.ID,
-	},
+	}, GlobalActions...),
 	Immunities: map[uuid.UUID]struct{}{
 		modifiers.BurdenOfPain.ID:    {},
 		modifiers.ChainsOfPain.ID:    {},

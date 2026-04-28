@@ -34,13 +34,12 @@ var Kimimaro = game.ActorDef{
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Taunt.ID,
-		actions.BodyReplacement.ID,
 		actions.DragonStance.ID,
 		actions.WhirlwindKick.ID,
 		actions.CamelliaDance.ID,
 		actions.ClematisDanceFlower.ID,
 		actions.BodyFlicker.ID,
-	},
+	}, GlobalActions...),
 }

@@ -32,9 +32,9 @@ var Deidara = game.ActorDef{
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Expansion.ID,
 		actions.C0UltimateArt.ID,
 		actions.C1Bird.ID,
-	},
+	}, GlobalActions...),
 }

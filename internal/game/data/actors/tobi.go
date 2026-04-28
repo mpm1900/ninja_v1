@@ -33,7 +33,7 @@ var Tobi = game.ActorDef{
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Kamui.ID,
 		actions.KamuiCounter.ID,
 		actions.KamuiSlash.ID,
@@ -41,5 +41,5 @@ var Tobi = game.ActorDef{
 		actions.PatternBreak.ID,
 		actions.KusariChains.ID,
 		actions.SwordsStance.ID,
-	},
+	}, GlobalActions...),
 }

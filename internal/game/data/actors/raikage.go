@@ -32,10 +32,10 @@ var Raikage = game.ActorDef{
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Chidori.ID,
 		actions.DragonStance.ID,
 		actions.Fireball.ID,
 		actions.WhirlwindKick.ID,
-	},
+	}, GlobalActions...),
 }

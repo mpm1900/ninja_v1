@@ -22,7 +22,6 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.SummonAlly.ID:       actions.SummonAlly,
 	actions.Redirect.ID:         actions.Redirect,
 	actions.Taunt.ID:            actions.Taunt,
-	actions.BodyReplacement.ID:  actions.BodyReplacement,
 	actions.Barrier.ID:          actions.Barrier,
 	actions.Kamui.ID:            actions.Kamui,
 	actions.NegateJutsu.ID:      actions.NegateJutsu,

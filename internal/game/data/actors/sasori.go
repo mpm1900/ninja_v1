@@ -37,9 +37,9 @@ var Sasori = game.ActorDef{
 		modifiers.PoisonInfused,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.DragonStance.ID,
 		actions.WhirlwindKick.ID,
 		actions.SnakeStrike.ID,
-	},
+	}, GlobalActions...),
 }

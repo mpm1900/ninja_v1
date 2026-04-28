@@ -37,7 +37,7 @@ var Guy = game.ActorDef{
 		modifiers.Rage,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.LuckyStrikes.ID,
 		actions.DragonStance.ID,
 		actions.FlyingLotus.ID,
@@ -45,5 +45,5 @@ var Guy = game.ActorDef{
 		actions.Hirudora.ID,
 		actions.WhirlwindKick.ID,
 		actions.HeavyPunch.ID,
-	},
+	}, GlobalActions...),
 }

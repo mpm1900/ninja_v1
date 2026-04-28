@@ -36,7 +36,7 @@ var Shisui = game.ActorDef{
 		modifiers.PriorityFailure,
 	},
 	ActionCount: 4,
-	ActionIDs: []uuid.UUID{
+	ActionIDs: append([]uuid.UUID{
 		actions.Taunt.ID,
 		actions.SharinganGlare.ID,
 		actions.Redirect.ID,
@@ -48,5 +48,5 @@ var Shisui = game.ActorDef{
 		actions.Firestorm.ID,
 		actions.BodyFlicker.ID,
 		actions.Recover.ID,
-	},
+	}, GlobalActions...),
 }
