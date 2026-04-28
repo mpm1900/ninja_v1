@@ -17,6 +17,22 @@ const stageCoef = {
   [6]: '4.0',
 }
 
+const accEvaCoef = {
+  [-6]: '0.33',
+  [-5]: '0.36',
+  [-4]: '0.43',
+  [-3]: '0.5',
+  [-2]: '0.6',
+  [-1]: '0.75',
+  [0]: '1',
+  [1]: '1.33',
+  [2]: '1.66',
+  [3]: '2.0',
+  [4]: '2.33',
+  [5]: '2.66',
+  [6]: '3.0',
+}
+
 const statName: Record<ActorBaseStat, string> = {
   hp: 'HP',
   stamina: 'STA',
@@ -39,6 +55,8 @@ function StageBadge({
   if (stage === 0) return null
   if (stage > 6) stage = 6
   if (stage < -6) stage = -6
+  const is_eva = stat === 'evasion' || stat === 'accuracy'
+  const stage_value = is_eva ? accEvaCoef[stage] : stageCoef[stage]
   return (
     <span
       className={cn(
@@ -49,7 +67,7 @@ function StageBadge({
         }
       )}
     >
-      x{stageCoef[stage]} <span className='opacity-70'>{statName[stat]}</span>
+      x{stage_value} <span className='opacity-70'>{statName[stat]}</span>
     </span>
   )
 }
