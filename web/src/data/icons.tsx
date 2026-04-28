@@ -24,6 +24,7 @@ import {
   GiPoisonGas,
   GiLookAt,
   GiEcology,
+  GiLightningDissipation,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -129,6 +130,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
     <GiDoubled className={cn('text-orange-300', className)} {...props} />
   ),
   disabled: TbCancel,
+  electrified: GiLightningDissipation,
   physical_reduction_up: ({ className, ...props }) => (
     <GiArmorUpgrade className={cn('text-orange-300', className)} {...props} />
   ),

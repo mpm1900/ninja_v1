@@ -2,6 +2,7 @@ package actions
 
 import (
 	"ninja_v1/internal/game"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -13,7 +14,7 @@ func MakeVacuumBlast() game.Action {
 
 	config := game.ActionConfig{
 		Name:        "Vacuum Blast",
-		Description: "Hits all enemy shinobi.",
+		Description: "Hits all enemy shinobi. Clears weather.",
 		Nature:      game.Ptr(game.NsWind),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(80),
@@ -26,9 +27,13 @@ func MakeVacuumBlast() game.Action {
 		CritMod:     1.5,
 	}
 
-	action := makeBasicAttack(
+	action := makeBasicAttackWith(
 		ID,
 		config,
+		func(g game.Game, context, tcontext game.Context) []game.GameTransaction {
+			return modifiers.ClearWeather()
+		},
+		nil,
 	)
 	action.TargetPredicate = game.NoneFilter
 	action.MapContext = func(g game.Game, context game.Context) game.Context {

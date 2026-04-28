@@ -65,3 +65,29 @@ func FloodedTerrain() game.Modifier {
 	}
 	return mod
 }
+
+var electrifiedTerrainID = uuid.MustParse("b8b348b6-fd35-4eca-a0fa-790994d6f205")
+
+func ElectrifiedTerrain() game.Modifier {
+	mod := SetTerrain(electrifiedTerrainID, game.GameTerrainElectrified)
+	mod.Name = "Electrified Terrain"
+	mod.Icon = "electrified"
+	mod.Description = "<< TODO >>"
+	mod.ActorMutations = []game.ActorMutation{
+		game.MakeActorMutation(
+			&electrifiedTerrainID,
+			game.MutPriorityDefault,
+			game.ComposeAF(game.ActiveFilter, game.GameHasTerrain(game.GameTerrainElectrified)),
+			func(g game.Game, actor game.Actor, context game.Context) game.Actor {
+				state, _ := g.GetState(context)
+				if state.Terrain != game.GameTerrainElectrified {
+					return actor
+				}
+
+				// TODO
+				return actor
+			},
+		),
+	}
+	return mod
+}

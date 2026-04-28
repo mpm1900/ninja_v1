@@ -17,6 +17,13 @@ func FilterWeather() game.GameTransaction {
 	return game.MakeTransaction(filter, game.NewContext())
 }
 
+func ClearWeather() []game.GameTransaction {
+	var transactions = []game.GameTransaction{}
+	transactions = append(transactions, FilterWeather())
+
+	return transactions
+}
+
 func SetWeather(gid uuid.UUID, weather game.GameWeather) game.Modifier {
 	return game.Modifier{
 		ID:       gid,
