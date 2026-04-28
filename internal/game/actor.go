@@ -425,6 +425,7 @@ func (a *Actor) Transform(def ActorDef) {
 }
 
 func (a *Actor) Reset() {
+	a.Alive = true
 	a.PositionID = nil
 	a.Damage = 0
 	a.StaminaDamage = 0
