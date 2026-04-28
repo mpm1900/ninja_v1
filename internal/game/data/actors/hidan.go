@@ -29,6 +29,7 @@ var Hidan = game.ActorDef{
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsJashin,
+		game.NsTai,
 	}),
 	Abilities: []game.Modifier{
 		modifiers.ShadowCage,

@@ -29,8 +29,8 @@ var Hashirama = game.ActorDef{
 	NatureDamage:     game.NewNatureSetValues(),
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
-		game.NsWind,
 		game.NsWood,
+		game.NsEarth,
 	}),
 	Abilities: []game.Modifier{
 		modifiers.Regeneration,

@@ -29,6 +29,7 @@ var Nagato = game.ActorDef{
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsYinYang,
+		game.NsWater,
 	}),
 	Abilities: []game.Modifier{
 		modifiers.BurdenOfPain,

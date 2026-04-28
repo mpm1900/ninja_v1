@@ -7,18 +7,18 @@ import (
 	"github.com/google/uuid"
 )
 
-var Raikage = game.ActorDef{
-	ActorID:      uuid.MustParse("e92a1675-7ea0-52c7-a43c-f2bb2068e365"),
+var Raikage4 = game.ActorDef{
+	ActorID:      uuid.MustParse("aecc5cde-93ae-42f7-8e0f-0e9db4294c6a"),
 	SpriteURL:    "/sprites/4_raikage_64.png",
-	Name:         "A (4th Raikage)",
+	Name:         "Ay (4th Raikage)",
 	Affiliations: []string{game.AffKumo},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            80,
-		game.StatStamina:       80,
-		game.StatAttack:        135,
+		game.StatHP:            70,
+		game.StatStamina:       100,
+		game.StatAttack:        130,
 		game.StatDefense:       100,
-		game.StatChakraAttack:  90,
+		game.StatChakraAttack:  70,
 		game.StatChakraDefense: 60,
 		game.StatSpeed:         150,
 		game.StatEvasion:       100,
@@ -28,14 +28,13 @@ var Raikage = game.ActorDef{
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsLightning,
-		game.NsEarth,
+		game.NsWater,
 	}),
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
-		actions.Chidori.ID,
 		actions.DragonStance.ID,
-		actions.Fireball.ID,
-		actions.WhirlwindKick.ID,
+		actions.RockFist.ID,
+		actions.LightningLariat.ID,
 	}, GlobalActions...),
 }

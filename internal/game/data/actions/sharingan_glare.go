@@ -14,7 +14,7 @@ func MakeSharinganGlare() game.Action {
 	ID := uuid.MustParse("ac1ce2ba-7bec-4b26-b72e-9a657d498697")
 
 	config := game.ActionConfig{
-		Name:        "Sharingan Glare",
+		Name:        "Sharingan: Glare",
 		Description: "Hits all enemy shinobi. Lowers targets' speed.",
 		Nature:      game.Ptr(game.NsYin),
 		Accuracy:    game.Ptr(95),
