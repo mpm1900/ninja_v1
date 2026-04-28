@@ -35,9 +35,10 @@ var Mu = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
-		actions.Chidori.ID,
-		actions.DragonStance.ID,
-		actions.Fireball.ID,
-		actions.WhirlwindKick.ID,
+		actions.RockFist.ID,
+		actions.MudWall.ID,
+		actions.Barrier.ID,
+		actions.DisarmingStrike.ID,
+		actions.AtomicDismantling.ID,
 	},
 }

@@ -107,6 +107,12 @@ func (g *Game) PreAction() bool {
 	if err != nil {
 		return false
 	}
+
+	source, ok := g.GetSource(transaction.Context)
+	if !ok || !source.Alive {
+		return false
+	}
+
 	if !g.Turn.PreAction {
 		g.Turn.PreAction = true
 		g.ActiveTransaction = MakeGameActiveTransaction(transaction)
@@ -131,9 +137,9 @@ func (g *Game) NextAction() bool {
 	}
 
 	source, ok := g.GetSource(transaction.Context)
-	if !ok {
+	if !ok || !source.Alive {
 		g.ActiveTransaction = nil
-		return false
+		return true
 	}
 
 	resolved := source.Resolve(*g)

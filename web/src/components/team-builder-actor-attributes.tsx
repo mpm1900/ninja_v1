@@ -5,6 +5,7 @@ import { ItemSelect } from './item-select'
 
 function TeamBuilderActorAttributes({
   def,
+  otherItemIDs,
   focus,
   onFocusChange,
   abilityID,
@@ -13,6 +14,7 @@ function TeamBuilderActorAttributes({
   onItemIDChange,
 }: {
   def: ActorDef
+  otherItemIDs: string[]
   focus: ActorFocus
   onFocusChange: (f: ActorFocus) => void
   abilityID: string | undefined | null
@@ -28,7 +30,7 @@ function TeamBuilderActorAttributes({
         value={abilityID ?? null}
         onValueChange={onAbilityIDChange}
       />
-      <ItemSelect value={itemID ?? null} onValueChange={onItemIDChange} />
+      <ItemSelect otherItemIDs={otherItemIDs} value={itemID ?? null} onValueChange={onItemIDChange} />
     </div>
   )
 }

@@ -35,9 +35,10 @@ var Onoki = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
 	ActionIDs: []uuid.UUID{
-		actions.LuckyStrikes.ID,
-		actions.Chidori.ID,
-		actions.DragonStance.ID,
-		actions.Fireball.ID,
+		actions.RockFist.ID,
+		actions.MudWall.ID,
+		actions.Barrier.ID,
+		actions.DisarmingStrike.ID,
+		actions.AtomicDismantling.ID,
 	},
 }

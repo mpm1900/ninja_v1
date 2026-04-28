@@ -405,7 +405,7 @@ func (g *Game) FilterParentActions(actorID uuid.UUID) {
 
 	for _, tx := range g.Actions {
 		parent := tx.Context.ParentActorID
-		if parent != nil && *parent != actorID {
+		if parent == nil || *parent != actorID {
 			actions = append(actions, tx)
 		}
 	}

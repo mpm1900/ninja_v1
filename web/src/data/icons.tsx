@@ -30,6 +30,7 @@ import {
   PiArrowFatLinesDownBold,
   PiPlantBold,
   PiWindFill,
+  PiSpiralFill,
 } from 'react-icons/pi'
 import type { IconType } from 'react-icons/lib'
 import { MdFileUploadOff } from 'react-icons/md'
@@ -170,6 +171,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   ichiraku_ramen: GiNoodles,
   inner_focus: TbScanEye,
   intimidate: GiBeastEye,
+  naruto_transform: PiSpiralFill,
   onigiri: PiOnigiriFill,
   paralyzed: ({ className, ...props }) => (
     <GiLightningTrio className={cn('text-yellow-400', className)} {...props} />

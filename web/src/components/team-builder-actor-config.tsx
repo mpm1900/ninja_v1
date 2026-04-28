@@ -22,7 +22,9 @@ function TeamBuilderActorConfig({
     <form.Subscribe
       selector={(state) => {
         const actor = state.values.actors[state.values.selected_index]
+        const items = state.values.actors.map(a => a.config.item_ID).filter(id => id !== null)
         return {
+          items,
           selected_index: state.values.selected_index,
           actors: state.values.actors,
           actor,
@@ -33,7 +35,7 @@ function TeamBuilderActorConfig({
         }
       }}
     >
-      {({ actor, selected_index, total }) => (
+      {({ actor, selected_index, total, items }) => (
         <div className="flex gap-4">
           <div className="flex flex-col gap-2 min-w-1/4">
             <div className="flex">
@@ -58,6 +60,7 @@ function TeamBuilderActorConfig({
             </div>
             <TeamBuilderActorAttributes
               def={def}
+              otherItemIDs={items}
               focus={actor.config?.focus ?? 'none'}
               onFocusChange={(focus) => {
                 form.setFieldValue(

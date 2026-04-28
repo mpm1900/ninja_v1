@@ -795,3 +795,8 @@ func (r ResolvedActor) IsProtected(mut GameMutation) (GameTransaction, bool) {
 
 	return GameTransaction{}, false
 }
+func (r ResolvedActor) GetHealthRatio() float64 {
+	hp := float64(r.Stats[StatHP])
+	dmg := float64(r.Damage)
+	return (hp - dmg) / hp
+}

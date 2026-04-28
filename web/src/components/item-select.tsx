@@ -12,9 +12,11 @@ import {
 import { ModifierTooltip } from './modifier-tooltip'
 
 function ItemSelect({
+  otherItemIDs,
   value,
   onValueChange,
 }: {
+  otherItemIDs: string[]
   value: string | null
   onValueChange: (value: string | null) => void
 }) {
@@ -35,7 +37,7 @@ function ItemSelect({
                   modifier={item}
                   contentProps={{ side: 'right' }}
                 >
-                  <SelectItem value={item.ID}>{item.name}</SelectItem>
+                  <SelectItem value={item.ID} disabled={otherItemIDs.includes(item.ID)}>{item.name}</SelectItem>
                 </ModifierTooltip>
               ))}
             </SelectGroup>
