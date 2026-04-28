@@ -43,7 +43,7 @@ var PainDeva = game.ActorDef{
 		actions.MindTransfer.ID,
 		actions.RetreatingStrike.ID,
 		actions.BlackNeedle.ID,
-	}, GlobalActions...),
+	}, GlobalActionsExcept(actions.BodyReplacement.ID)...),
 	Immunities: map[uuid.UUID]struct{}{
 		modifiers.BurdenOfPain.ID:    {},
 		modifiers.ChainsOfPain.ID:    {},

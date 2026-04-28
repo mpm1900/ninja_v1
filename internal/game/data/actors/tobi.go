@@ -41,5 +41,5 @@ var Tobi = game.ActorDef{
 		actions.PatternBreak.ID,
 		actions.KusariChains.ID,
 		actions.SwordsStance.ID,
-	}, GlobalActions...),
+	}, GlobalActionsExcept(actions.BodyReplacement.ID)...),
 }
