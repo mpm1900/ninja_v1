@@ -25,6 +25,7 @@ import {
   GiLookAt,
   GiEcology,
   GiLightningDissipation,
+  GiSharkJaws,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -195,6 +196,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   raining: BsCloudRain,
   regeneration: GiHealthIncrease,
   sage_mode: FaFrog,
+  samehada_transform: GiSharkJaws,
   sand_aura: GiSandstorm,
   sandstorm: GiSandstorm,
   seal_up: TbTagPlus,

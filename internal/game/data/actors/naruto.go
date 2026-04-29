@@ -77,7 +77,7 @@ var KCMNaurto = game.ActorDef{
 
 var narutoTransformID = uuid.MustParse("d9be7d8f-55cf-4877-ace6-85f97f05a4f2")
 var narutoTransformTrigger = game.Trigger{
-	ID:         uuid.MustParse("7b318f68-7d68-4bb6-b542-092b52fe2e9a"),
+	ID:         uuid.New(),
 	ModifierID: narutoTransformID,
 	On:         game.OnActorEnter,
 	Check:      game.Match__SourceActor_SourceActor,
