@@ -10,10 +10,10 @@ var regenerationID = uuid.MustParse("23d1b13b-4ad6-464e-a005-936cbc121ae1")
 var RegenerationTrigger game.Trigger = game.Trigger{
 	ID:         uuid.New(),
 	ModifierID: regenerationID,
-	On:         game.OnActorLeave,
+	On:         game.OnActorEnter,
 	Check:      game.Match__SourceActor_SourceActor,
 	ActionMutation: game.ActionMutation{
-		Priority: game.ActionPriorityDefault,
+		Priority: game.ActionPriorityP1,
 		Filter:   game.TrueGameFilter,
 		Delta: func(p game.Game, g game.Game, context game.Context) []game.GameTransaction {
 			transactions := []game.GameTransaction{}
@@ -37,7 +37,7 @@ var Regeneration game.Modifier = game.Modifier{
 	GroupID:     &regenerationID,
 	Icon:        "regeneration",
 	Name:        "Regeneration",
-	Description: "On exit: heal for 1/4th HP.",
+	Description: "On enter: heal for 1/4th HP.",
 	Show:        true,
 	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{

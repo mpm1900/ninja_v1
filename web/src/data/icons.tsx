@@ -26,6 +26,7 @@ import {
   GiEcology,
   GiLightningDissipation,
   GiSharkJaws,
+  GiCaltrops,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -133,6 +134,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   ),
   disabled: TbCancel,
   electrified: GiLightningDissipation,
+  entry_hazard: GiCaltrops,
   chakra_reduction_up: ({ className, ...props }) => (
     <GiArmorUpgrade className={cn('text-indigo-400', className)} {...props} />
   ),

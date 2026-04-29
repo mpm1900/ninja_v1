@@ -20,6 +20,16 @@ func SwitchFilter(game Game, actor Actor, context Context) bool {
 	return NotNewlyInactiveFilter(game, actor, context)
 }
 
+func NewNoopPlayer(groupID *uuid.UUID) ActorMutation {
+	return MakeActorMutation(
+		groupID,
+		0,
+		PlayerFilter,
+		func(g Game, a Actor, c Context) Actor {
+			return a
+		},
+	)
+}
 func NewNoopSource(groupID *uuid.UUID) ActorMutation {
 	return MakeActorMutation(
 		groupID,

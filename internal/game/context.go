@@ -65,7 +65,10 @@ func ResolveModifierTransactionContext(
 
 	return fallback
 }
-
+func (c Context) WithPlayer(playerID uuid.UUID) Context {
+	c.SourcePlayerID = &playerID
+	return c
+}
 func (c Context) WithSource(sourceID uuid.UUID) Context {
 	c.SourceActorID = &sourceID
 	return c

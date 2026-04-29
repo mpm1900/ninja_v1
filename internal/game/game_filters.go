@@ -178,6 +178,13 @@ func ComposeTF(filters ...TriggerFilter) TriggerFilter {
 		return true
 	}
 }
+func Match__Player_Player(p, g Game, context Context, tx Transaction[Modifier]) bool {
+	if context.SourcePlayerID == nil || tx.Context.SourcePlayerID == nil {
+		return false
+	}
+
+	return *context.SourcePlayerID == *tx.Context.SourcePlayerID
+}
 func Match__TargetActor_SourceActor(parent Game, game Game, context Context, modifier_tx Transaction[Modifier]) bool {
 	targets := game.GetTargets(context)
 	if len(targets) == 0 || modifier_tx.Context.SourceActorID == nil {

@@ -56,6 +56,12 @@ func ActiveFilter(game Game, actor Actor, context Context) bool {
 func InactiveFilter(game Game, actor Actor, context Context) bool {
 	return actor.PositionID == nil
 }
+func PlayerFilter(game Game, actor Actor, context Context) bool {
+	if context.SourcePlayerID == nil {
+		return false
+	}
+	return actor.PlayerID == *context.SourcePlayerID
+}
 func SourceFilter(game Game, actor Actor, context Context) bool {
 	if context.SourceActorID == nil {
 		return false
