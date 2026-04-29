@@ -34,7 +34,7 @@ func MakeCollidingWave() game.Action {
 			transactions := []game.GameTransaction{}
 
 			state, _ := g.GetState(context)
-			if state.Weather == game.GameWeatherRain {
+			if state.Terrain == game.GameTerrainFlooded {
 				return transactions
 			}
 

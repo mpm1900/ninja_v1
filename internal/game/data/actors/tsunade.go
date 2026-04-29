@@ -11,13 +11,14 @@ import (
 var Tsunade = game.ActorDef{
 	ActorID:      uuid.MustParse("aad15064-9fcb-4bdb-a66b-36e56694316e"),
 	SpriteURL:    "/sprites/tsunade_64.png",
-	Name:         "Tsunade",
+	Name:         "Tsunade Senju",
+	Clan:         game.ClanSenju,
 	Affiliations: []string{game.AffKonoha},
 
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            110,
 		game.StatStamina:       100,
-		game.StatAttack:        100,
+		game.StatAttack:        110,
 		game.StatDefense:       110,
 		game.StatChakraAttack:  75,
 		game.StatChakraDefense: 120,

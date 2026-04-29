@@ -32,6 +32,14 @@ func MakeLightningArmor() game.Action {
 				mod_tx := game.MakeTransaction(mutation, context)
 				transactions = append(transactions, mod_tx)
 
+				state, _ := g.GetState(context)
+				if state.Terrain == game.GameTerrainElectrified {
+					return transactions
+				}
+
+				filter := modifiers.FilterTerrain()
+				transactions = append(transactions, filter)
+
 				mod := modifiers.ElectrifiedTerrain()
 				mod.Duration = 4
 				mut := mutations.AddModifiers(false, mod)

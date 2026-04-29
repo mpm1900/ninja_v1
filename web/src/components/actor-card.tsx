@@ -14,6 +14,7 @@ import { ActorModifiers } from './actor-modifiers'
 import { ActorStatus } from './actor-status'
 import { useStore } from '@tanstack/react-store'
 import { gameStore } from '#/lib/stores/game'
+import { useDebounce } from 'use-debounce'
 
 const frameVariants = cva('border border-transparent', {
   variants: {
@@ -59,9 +60,11 @@ type ActorCardProps = {
   summonClass?: string
 }
 
+type Variant = VariantProps<typeof frameVariants>['variant']
+
 function getVariant(
   props: Partial<ActorCardProps>
-): VariantProps<typeof frameVariants>['variant'] {
+): Variant {
   if (props.targeted) return 'targeted'
   if (props.selected) return 'selected'
   return 'default'
@@ -92,6 +95,8 @@ function ActorCard({
   )
   const action_tx = actions.find((t) => t.context.source_actor_ID === actor?.ID)
   const is_player = actor?.player_ID === client_ID
+  const v = getVariant({ selected, targeted })
+  const [variant] = useDebounce(v, 200)
 
   return (
     <div
@@ -120,7 +125,7 @@ function ActorCard({
         )}
         {...rest}
       >
-        <ActorAvatar actor={actor} selected={selected} targeted={targeted} />
+        <ActorAvatar actor={actor} variant={variant} />
         <div className="flex flex-1 flex-col relative gap-0">
           {actor && (
             <div className="flex justify-between items-end gap-4">
@@ -128,7 +133,7 @@ function ActorCard({
                 className={cn(
                   'pl-2 pr-4 pb-2 pt-1.5 -mb-3 rounded-sm rounded-tl-none shadow-[2px_1px_0px_rgba(0,0,0,1)]',
                   frameVariants({
-                    variant: getVariant({ selected, targeted }),
+                    variant,
                   }),
                   'border-l-0'
                 )}
@@ -137,7 +142,7 @@ function ActorCard({
                   className={cn(
                     'font-semibold text-2xl text-nowrap',
                     !selected && 'text-shadow-[1px_1px_0px_#000000]',
-                    'nanum-brush-script-regular'
+                    'nanum-brush-script-regular select-none'
                   )}
                 >
                   {actor.name}
@@ -216,12 +221,10 @@ function ActorNatures({ actor }: { actor: Actor | undefined }) {
 
 function ActorAvatar({
   actor,
-  selected,
-  targeted,
+  variant,
 }: {
   actor: Actor | undefined
-  selected?: boolean
-  targeted?: boolean
+  variant: Variant,
 }) {
   if (!actor) return null
 
@@ -230,7 +233,7 @@ function ActorAvatar({
       className={cn(
         'relative px-1 pb-2 -mb-3.5 -mr-1 rounded-sm rounded-tr-none rounded-tl-4xl rounded-br-4xl shadow-[2px_1px_0px_rgba(0,0,0,1)]',
         frameVariants({
-          variant: getVariant({ selected, targeted }),
+          variant: variant,
         }),
         'border-r-0'
       )}

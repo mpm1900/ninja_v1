@@ -24,7 +24,6 @@ import { GiSharpShuriken } from 'react-icons/gi'
 import { useLogout } from '#/lib/mutations/logout'
 import { useUser } from '#/lib/queries/auth'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
-import { Badge } from './ui/badge'
 
 function getActiveTable(pathname: string) {
   switch (pathname) {
@@ -45,7 +44,6 @@ function AppHeader() {
   const instanceID = useStore(socketStore, (s) => s.instanceID)
   const status = useStore(socketStore, (s) => s.status)
   const client = useStore(clientsStore, (c) => c.me)
-  const turn = useStore(gameStore, (g) => g.turn)
   const game_status = useStore(gameStore, (g) => g.status)
   const actions = useStore(gameStore, (g) => g.actions)
   const pathname = useRouterState({
@@ -104,18 +102,6 @@ function AppHeader() {
               }}
             >
               Run
-            </Button>
-            <Button
-              disabled={!client || game_status === 'running'}
-              onClick={() => {
-                sendContextMessage({
-                  type: 'validate-state',
-                  client_ID: client.ID,
-                  context: NULL_CONTEXT,
-                })
-              }}
-            >
-              Validate
             </Button>
           </div>
         )}

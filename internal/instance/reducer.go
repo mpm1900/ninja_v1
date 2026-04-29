@@ -199,13 +199,6 @@ func Reducer(instance *Instance, request Request) int {
 
 		instance.RunGameActions()
 		return state
-	case ValidateState:
-		if instance.Game.Status == game.GameStatusRunning {
-			return none
-		}
-
-		instance.RunGameActions()
-		return state
 
 	default:
 		return none

@@ -32,7 +32,6 @@ type SocketRequestType =
   | 'remove-action'
   | 'run-game-actions'
   | 'resolve-prompt'
-  | 'validate-state'
   | 'validate-context'
   | 'get-targets'
 
