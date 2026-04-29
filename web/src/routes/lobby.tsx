@@ -20,7 +20,8 @@ import {
 import { sendContextMessage } from '#/lib/stores/socket'
 import { NULL_CONTEXT } from '#/lib/game/context'
 import { Button } from '#/components/ui/button'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { LobbyThumbnails } from '#/components/lobby-thumbnails'
 
 export const Route = createFileRoute('/lobby')({
   beforeLoad: ({ context }) => {
@@ -39,6 +40,9 @@ function App() {
   const ready = players.length > 0
   const unstarted = game.status !== 'running' && game.turn.count == 0
   const nav = Route.useNavigate()
+  const [enabled, setEnabled] = useState<string[]>([])
+
+  console.log(players, enemies)
 
   useEffect(() => {
     if (game.status === 'running') {
@@ -55,22 +59,28 @@ function App() {
           <div className="min-w-0 space-y-2 flex-1 overflow-auto">
             <Card className="m-6">
               <CardHeader>
-                <CardTitle>Lobby</CardTitle>
+                <CardTitle>Pre-Game Lobby</CardTitle>
                 <CardAction>
-                  {client && ready && (
-                    unstarted ?
+                  {client &&
+                    ready &&
+                    (unstarted ? (
                       <Button
-                        asChild
+                        disabled={
+                          players.some((p) => !p.ready) ||
+                          enemies.some((e) => !e.ready)
+                        }
                         onClick={() => {
                           sendContextMessage({
-                            type: 'validate-state',
+                            type: 'run-game-actions',
                             client_ID: client!.ID,
                             context: NULL_CONTEXT,
                           })
                         }}
                       >
                         <Link to="/battle">Start Battle</Link>
-                      </Button> : <Button
+                      </Button>
+                    ) : (
+                      <Button
                         onClick={() => {
                           sendContextMessage({
                             type: 'reset',
@@ -81,31 +91,43 @@ function App() {
                       >
                         Reset
                       </Button>
-
-                  )}
+                    ))}
                 </CardAction>
               </CardHeader>
               <CardContent>
                 <div className="flex justify-between">
-                  <div className="flex flex-col">
-                    <div className="left-0 z-10">
-                      {players.map((player) => (
-                        <PlayerThumbnails
-                          key={player.ID}
-                          player_ID={player.ID}
-                        />
-                      ))}
+                  {players.map((player) => (
+                    <div key={player.ID} className="flex flex-col gap-2">
+                      <LobbyThumbnails
+                        player_ID={player.ID}
+                        enabled={enabled}
+                        onEnabledChange={setEnabled}
+                      />
+                      {enabled.length === 4 && !player.ready && (
+                        <Button
+                          onClick={() => {
+                            sendContextMessage({
+                              type: 'ready-team',
+                              client_ID: client!.ID,
+                              context: {
+                                ...NULL_CONTEXT,
+                                target_actor_IDs: enabled,
+                              },
+                            })
+                          }}
+                        >
+                          Ready Team
+                        </Button>
+                      )}
+                      {player.ready && (
+                        <Button variant="destructive">Cancel</Button>
+                      )}
                     </div>
-                  </div>
+                  ))}
                   <div className="flex flex-col items-end">
-                    <div className="left-0 z-10">
-                      {enemies.map((player) => (
-                        <PlayerThumbnails
-                          key={player.ID}
-                          player_ID={player.ID}
-                        />
-                      ))}
-                    </div>
+                    {enemies.map((player) => (
+                      <PlayerThumbnails key={player.ID} player_ID={player.ID} />
+                    ))}
                   </div>
                 </div>
               </CardContent>

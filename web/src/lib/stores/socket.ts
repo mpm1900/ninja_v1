@@ -27,6 +27,7 @@ type SocketState = {
 
 type SocketRequestType =
   | 'set-team'
+  | 'ready-team'
   | 'reset'
   | 'push-action'
   | 'remove-action'
@@ -336,7 +337,7 @@ function sendContextMessage(request: SocketRequest) {
 }
 
 const connect = createIsomorphicFn()
-  .server(() => { })
+  .server(() => {})
   .client(() => {
     if (savedInstanceID) {
       connectSocket(savedInstanceID)

@@ -41,6 +41,7 @@ function MiniHealthBar({
 
 function ActorThumbnail({
   actor,
+  active,
   hidden,
   index,
   size = 64,
@@ -51,6 +52,7 @@ function ActorThumbnail({
   ...props
 }: ComponentProps<'div'> & {
   actor: Actor
+  active?: boolean
   hidden?: boolean
   index?: number
   size?: number
@@ -58,7 +60,7 @@ function ActorThumbnail({
   showHealthBar?: boolean
   imgClass?: string
 }) {
-  const active = !!actor.position_ID
+  active = active || !!actor.position_ID
   const alive = actor.alive
   return (
     <div
@@ -74,11 +76,12 @@ function ActorThumbnail({
       })}
       {...props}
     >
-      <div className={cn('h-full w-full', className)}>
+      <div className={cn('h-full w-full select-none', className)}>
         {!alive && <div className="bg-red-950 absolute inset-0"></div>}
         {!hidden && (
           <img
             src={actor.sprite_url}
+            draggable={false}
             className={cn(
               'h-full w-full object-cover absolute inset-0 z-10',
               imgClass

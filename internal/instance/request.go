@@ -12,6 +12,7 @@ type RequestType = string
 const (
 	SetTeam        RequestType = "set-team"
 	Reset          RequestType = "reset"
+	ReadyTeam      RequestType = "ready-team"
 	PushAction     RequestType = "push-action"
 	RemoveAction   RequestType = "remove-action"
 	RunGameActions RequestType = "run-game-actions" // TEMP

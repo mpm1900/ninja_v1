@@ -11,7 +11,7 @@ import { useActiveActor } from '#/hooks/use-active-actor'
 import { battleContext, setContextSource } from '#/lib/stores/battle-context'
 import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { ClientOnly, createFileRoute, redirect } from '@tanstack/react-router'
 import { useStore } from '@tanstack/react-store'
 
 export const Route = createFileRoute('/battle')({
@@ -32,7 +32,7 @@ function RouteComponent() {
   const enemies = game.players.filter((p) => p.ID !== client?.ID)
 
   return (
-    <>
+    <ClientOnly>
       <PromptController />
       <BattleContextController />
       <main className="flex flex-col h-screen">
@@ -80,6 +80,6 @@ function RouteComponent() {
           </div>
         </div>
       </main>
-    </>
+    </ClientOnly>
   )
 }

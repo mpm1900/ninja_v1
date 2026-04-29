@@ -236,6 +236,7 @@ type Actor struct {
 	Experience int        `json:"experience"`
 	Focus      ActorFocus `json:"focus"`
 	Ability    *Modifier  `json:"ability"`
+	Enabled    bool       `json:"enabled"`
 	// [AuxAbility]
 	// - take priority over Ability
 	// - set to nil on switch-out
@@ -356,6 +357,7 @@ func MakeActor(
 		ActorDef:   clonedDef,
 		ID:         uuid.New(),
 		PlayerID:   playerID,
+		Enabled:    false,
 		Level:      GetLevel(experience),
 		Experience: experience,
 		Focus:      focus,

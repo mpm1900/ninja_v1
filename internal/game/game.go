@@ -555,6 +555,24 @@ func (g *Game) SetPlayerActors(playerID uuid.UUID, actors []Actor) {
 	result = append(result, actors...)
 	g.Actors = result
 }
+func (g *Game) EnableActors(playerID uuid.UUID, ids []uuid.UUID) {
+	for i, a := range g.Actors {
+		if a.PlayerID != playerID {
+			continue
+		}
+
+		if slices.Contains(ids, a.ID) {
+			g.Actors[i].Enabled = true
+		} else {
+			g.Actors[i].Enabled = false
+		}
+	}
+
+	g.UpdatePlayer(playerID, func(p Player) Player {
+		p.Ready = len(ids) == 4
+		return p
+	})
+}
 
 func (g *Game) UpdateActor(actorID uuid.UUID, updater func(Actor) Actor) {
 	index := slices.IndexFunc(g.Actors, func(a Actor) bool {

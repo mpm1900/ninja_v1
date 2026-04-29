@@ -18,13 +18,16 @@ import { useEffect, useState } from 'react'
 import type { ActionTransaction } from '#/lib/game/action'
 import { useValidateContext } from '#/hooks/use-validate-context'
 import { useGetTargets } from '#/hooks/use-get-targets'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, Loader2 } from 'lucide-react'
+import { useDebounce } from 'use-debounce'
 
 function PromptControl({
+  loading = false,
   prompt,
   context,
   onContextChange,
 }: {
+  loading?: boolean
   prompt?: ActionTransaction
   context: Context
   onContextChange: (context: Context) => void
@@ -46,7 +49,7 @@ function PromptControl({
               <TargetButton
                 key={a.ID}
                 actor={a}
-                enabled
+                enabled={!loading}
                 loading={false}
                 contextValid={!!valid}
                 context={context}
@@ -59,7 +62,7 @@ function PromptControl({
       <AlertDialogFooter>
         <AlertDialogAction asChild>
           <Button
-            disabled={!valid}
+            disabled={!valid || loading}
             onClick={() => {
               sendContextMessage({
                 type: 'resolve-prompt',
@@ -69,7 +72,8 @@ function PromptControl({
               })
             }}
           >
-            Select <ChevronRight />
+            Select{' '}
+            {loading ? <Loader2 className="animate-spin" /> : <ChevronRight />}
           </Button>
         </AlertDialogAction>
       </AlertDialogFooter>
@@ -79,7 +83,8 @@ function PromptControl({
 
 function PromptController() {
   const status = useStore(gameStore, (g) => g.status)
-  const prompt = useStore(gameStore, (g) => g.prompt)
+  const _prompt = useStore(gameStore, (g) => g.prompt)
+  const [prompt] = useDebounce(_prompt, 100)
   const [context, setContext] = useState(prompt?.context)
 
   useEffect(() => {
@@ -98,6 +103,7 @@ function PromptController() {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <PromptControl
+              loading={!_prompt}
               prompt={prompt}
               context={context}
               onContextChange={setContext}

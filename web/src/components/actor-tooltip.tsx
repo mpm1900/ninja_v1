@@ -71,7 +71,7 @@ function ActorTooltip({
   disabled?: boolean
 }) {
   return (
-    <HoverCard openDelay={100} closeDelay={100}>
+    <HoverCard openDelay={300} closeDelay={100}>
       <HoverCardTrigger {...props} />
       {!disabled && (
         <HoverCardContent
@@ -152,7 +152,7 @@ function ActorTooltip({
                 </tr>
               </tbody>
             </table>
-            <Separator orientation='vertical' />
+            <Separator orientation="vertical" />
             <table className="[&_td]:px-2 [&_td]:whitespace-nowrap">
               <tbody>
                 {actor.actions

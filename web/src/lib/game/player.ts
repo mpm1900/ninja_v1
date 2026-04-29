@@ -16,6 +16,7 @@ type Player = {
   positions: Array<PlayerPosition>
   team_capacity: number
   used_summon: boolean
+  ready: boolean
 }
 
 export type { Player, PlayerUser }
