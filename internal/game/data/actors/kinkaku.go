@@ -34,6 +34,7 @@ var Kinkaku = game.ActorDef{
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
 		actions.CollidingWave.ID,
+		actions.WaterWall.ID,
 		actions.DragonStance.ID,
 		actions.WhirlwindKick.ID,
 	}, GlobalActions...),

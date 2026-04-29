@@ -58,6 +58,8 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.Rest.ID:             actions.Rest,
 	actions.Dissipate.ID:        actions.Dissipate,
 
+	actions.OneThousandNeedles.ID: actions.OneThousandNeedles,
+
 	actions.Sekiryoku.ID:    actions.Sekiryoku,
 	actions.ShinraTensei.ID: actions.ShinraTensei,
 	actions.BlackNeedle.ID:  actions.BlackNeedle,
@@ -69,6 +71,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.SharkBomb.ID:      actions.SharkBomb,
 	actions.GreatWaterfall.ID: actions.GreatWaterfall,
 	actions.WaterSlicer.ID:    actions.WaterSlicer,
+	actions.WaterWall.ID:      actions.WaterWall,
 
 	actions.GreatTreeSpear.ID:      actions.GreatTreeSpear,
 	actions.FlowerBomb.ID:          actions.FlowerBomb,

@@ -8,24 +8,24 @@ import (
 	"github.com/google/uuid"
 )
 
-var KebariSenbon = MakeKebariSenbon()
+var OneThousandNeedles = MakeOneThousandNeedles()
 
-func MakeKebariSenbon() game.Action {
+func MakeOneThousandNeedles() game.Action {
 	config := game.ActionConfig{
-		Name:        "Kebari Senbon",
+		Name:        "1000 Needles",
 		Description: "Hits 2-5 times. High critical chance.",
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(25),
 		Stat:        game.Ptr(game.StatChakraAttack),
-		Nature:      game.Ptr(game.NsYang),
+		Nature:      game.Ptr(game.NsIce),
 		Cost:        game.Ptr(50),
 		TargetCount: game.Ptr(1),
-		Jutsu:       game.Bukijutsu,
+		Jutsu:       game.Ninjutsu,
 		CritChance:  game.Ptr(getCriticalStage(1)),
 		CritMod:     1.5,
 	}
 	return game.Action{
-		ID:              uuid.MustParse("0de3affc-7513-41b0-8622-c603ccb8ee8a"),
+		ID:              uuid.MustParse("58c829b9-aa81-4a44-84c7-73cf08501e48"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
 		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),

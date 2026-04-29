@@ -41,5 +41,7 @@ var Kabuto = game.ActorDef{
 		actions.ThirtyTwoPalms.ID,
 		actions.Flash.ID,
 		actions.Barrier.ID,
+		actions.MudWall.ID,
+		actions.WaterWall.ID,
 	}, GlobalActions...),
 }

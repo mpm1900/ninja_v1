@@ -45,5 +45,6 @@ var Sakura = game.ActorDef{
 		actions.SageMode.ID,
 		actions.TeamHeal.ID,
 		actions.MudWall.ID,
+		actions.WaterWall.ID,
 	}, GlobalActions...),
 }

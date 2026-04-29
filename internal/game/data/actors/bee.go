@@ -36,5 +36,6 @@ var KillerBee = game.ActorDef{
 		actions.CollidingWave.ID,
 		actions.DragonStance.ID,
 		actions.WhirlwindKick.ID,
+		actions.WaterWall.ID,
 	}, GlobalActions...),
 }

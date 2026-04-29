@@ -44,5 +44,7 @@ var Orochimaru = game.ActorDef{
 		actions.MindTransfer.ID,
 		actions.PatternBreak.ID,
 		actions.SnakeStrike.ID,
+		actions.MudWall.ID,
+		actions.WaterWall.ID,
 	}, GlobalActions...),
 }

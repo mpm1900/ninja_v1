@@ -39,7 +39,7 @@ var ChakraDamageDownTeam = game.Modifier{
 	Duration:    game.ModifierDurationInf,
 	ActorMutations: []game.ActorMutation{
 		game.MakeActorMutation(
-			&pddtID,
+			&cddtID,
 			game.MutPriorityPostStagedStats,
 			game.ComposeAF(game.ActiveFilter, game.TeamFilter),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {

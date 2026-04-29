@@ -40,6 +40,7 @@ import { GrFastForward } from 'react-icons/gr'
 import { TbTagPlus } from 'react-icons/tb'
 import { HiScale } from 'react-icons/hi2'
 import { FaFrog, FaHouseFloodWater, FaWeightHanging } from 'react-icons/fa6'
+import { FaHandsHelping } from "react-icons/fa";
 import { TbScanEye, TbCancel } from 'react-icons/tb'
 import { BsCloudRainHeavyFill, BsCloudRain, BsSpeedometer } from "react-icons/bs";
 
@@ -131,6 +132,9 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   ),
   disabled: TbCancel,
   electrified: GiLightningDissipation,
+  chakra_reduction_up: ({ className, ...props }) => (
+    <GiArmorUpgrade className={cn('text-indigo-400', className)} {...props} />
+  ),
   physical_reduction_up: ({ className, ...props }) => (
     <GiArmorUpgrade className={cn('text-orange-300', className)} {...props} />
   ),
@@ -184,6 +188,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
     <GiPoisonBottle className={cn('text-lime-500', className)} {...props} />
   ),
   poison_infused: GiPoisonGas,
+  power_boosted: FaHandsHelping,
   priority_failure: MdFileUploadOff,
   protected: GiShieldcomb,
   raincaller: BsCloudRainHeavyFill,

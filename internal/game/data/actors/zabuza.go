@@ -39,5 +39,6 @@ var Zabuza = game.ActorDef{
 		actions.HiddenMist.ID,
 		actions.CreateRain.ID,
 		actions.WaterDragon.ID,
+		actions.WaterWall.ID,
 	}, GlobalActions...),
 }

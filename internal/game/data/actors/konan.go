@@ -37,5 +37,6 @@ var Konan = game.ActorDef{
 		actions.VacuumBlast.ID,
 		actions.ShikigamiDance.ID,
 		actions.PaperBomb.ID,
+		actions.WaterWall.ID,
 	}, GlobalActions...),
 }

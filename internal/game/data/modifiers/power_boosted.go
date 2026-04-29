@@ -11,6 +11,7 @@ var PowerBoosted game.Modifier = game.Modifier{
 	ID:          uuid.New(),
 	GroupID:     &powerBoostedID,
 	Name:        "Power Boosted",
+	Icon:        "power_boosted",
 	Description: "Attack Power +50%",
 	Show:        true,
 	Duration:    0,
