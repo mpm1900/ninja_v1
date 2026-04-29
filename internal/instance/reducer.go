@@ -1,7 +1,6 @@
 package instance
 
 import (
-	"fmt"
 	"ninja_v1/internal/game"
 	data "ninja_v1/internal/game/data"
 	"slices"
@@ -128,8 +127,27 @@ func setTeam(instance *Instance, request Request) int {
 	return state
 }
 func readyTeam(instance *Instance, request Request) int {
-	fmt.Printf("%+v", request)
 	instance.Game.EnableActors(request.ClientID, request.Context.TargetActorIDs)
+	return state
+}
+func cancelTeam(instance *Instance, request Request) int {
+	instance.Game.ResetPlayer(request.ClientID)
+	return state
+}
+func startBattle(instance *Instance) int {
+	if instance.Game.Status == game.GameStatusRunning {
+		return none
+	}
+
+	actors := make([]game.Actor, 0)
+	for _, a := range instance.Game.Actors {
+		if a.Enabled {
+			actors = append(actors, a)
+		}
+	}
+
+	instance.Game.Actors = actors
+	instance.RunGameActions()
 	return state
 }
 func pushAction(instance *Instance, request Request) int {
@@ -207,6 +225,10 @@ func Reducer(instance *Instance, request Request) int {
 		return setTeam(instance, request)
 	case ReadyTeam:
 		return readyTeam(instance, request)
+	case CancelTeam:
+		return cancelTeam(instance, request)
+	case StartBattle:
+		return startBattle(instance)
 	case Reset:
 		instance.Game.Reset()
 		return state

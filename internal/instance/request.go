@@ -13,6 +13,8 @@ const (
 	SetTeam        RequestType = "set-team"
 	Reset          RequestType = "reset"
 	ReadyTeam      RequestType = "ready-team"
+	CancelTeam     RequestType = "cancel-team"
+	StartBattle    RequestType = "start-battle"
 	PushAction     RequestType = "push-action"
 	RemoveAction   RequestType = "remove-action"
 	RunGameActions RequestType = "run-game-actions" // TEMP

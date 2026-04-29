@@ -38,9 +38,9 @@ function LobbyThumbnails({
             active={enabled.includes(a.ID)}
             onClick={() => toggleActor(a.ID)}
             index={i}
-            showHealthBar={is_player}
+            showHealthBar
             showRing
-            hidden={!is_player && !a.seen && !a.position_ID}
+            hidden={false}
             className={cn({
               'cursor-pointer': enabled.length < 4 || enabled.includes(a.ID),
               'cursor-not-allowed':

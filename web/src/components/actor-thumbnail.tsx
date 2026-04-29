@@ -60,7 +60,7 @@ function ActorThumbnail({
   showHealthBar?: boolean
   imgClass?: string
 }) {
-  active = active || !!actor.position_ID
+  active = active ?? !!actor.position_ID
   const alive = actor.alive
   return (
     <div

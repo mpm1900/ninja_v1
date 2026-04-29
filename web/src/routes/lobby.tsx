@@ -40,9 +40,14 @@ function App() {
   const ready = players.length > 0
   const unstarted = game.status !== 'running' && game.turn.count == 0
   const nav = Route.useNavigate()
-  const [enabled, setEnabled] = useState<string[]>([])
+  const pids = players.map((p) => p.ID)
+  const default_enabled = game.actors.filter(
+    (a) => pids.includes(a.player_ID) && a.enabled
+  )
+  const [enabled, setEnabled] = useState<string[]>(
+    default_enabled.map((a) => a.ID)
+  )
 
-  console.log(players, enemies)
 
   useEffect(() => {
     if (game.status === 'running') {
@@ -71,7 +76,7 @@ function App() {
                         }
                         onClick={() => {
                           sendContextMessage({
-                            type: 'run-game-actions',
+                            type: 'start-battle',
                             client_ID: client!.ID,
                             context: NULL_CONTEXT,
                           })
@@ -103,24 +108,37 @@ function App() {
                         enabled={enabled}
                         onEnabledChange={setEnabled}
                       />
-                      {enabled.length === 4 && !player.ready && (
+                      {game.turn.phase === 'init' &&
+                        enabled.length === 4 &&
+                        !player.ready && (
+                          <Button
+                            onClick={() => {
+                              sendContextMessage({
+                                type: 'ready-team',
+                                client_ID: client!.ID,
+                                context: {
+                                  ...NULL_CONTEXT,
+                                  target_actor_IDs: enabled,
+                                },
+                              })
+                            }}
+                          >
+                            Ready Team
+                          </Button>
+                        )}
+                      {game.turn.phase === 'init' && player.ready && (
                         <Button
+                          variant="destructive"
                           onClick={() => {
                             sendContextMessage({
-                              type: 'ready-team',
+                              type: 'cancel-team',
                               client_ID: client!.ID,
-                              context: {
-                                ...NULL_CONTEXT,
-                                target_actor_IDs: enabled,
-                              },
+                              context: NULL_CONTEXT,
                             })
                           }}
                         >
-                          Ready Team
+                          Cancel
                         </Button>
-                      )}
-                      {player.ready && (
-                        <Button variant="destructive">Cancel</Button>
                       )}
                     </div>
                   ))}

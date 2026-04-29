@@ -9,6 +9,7 @@ import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
 import {
   Check,
+  ChevronRight,
   Loader,
   Loader2,
   LogOut,
@@ -80,9 +81,11 @@ function AppHeader() {
             <TabsTrigger value="team-builder" asChild>
               <Link to="/team-builder">Team Builder</Link>
             </TabsTrigger>
+            <ChevronRight />
             <TabsTrigger value="lobby" asChild>
-              <Link to="/lobby">Lobby</Link>
+              <Link to="/lobby">Pre Game</Link>
             </TabsTrigger>
+            <ChevronRight />
             <TabsTrigger value="battle" asChild>
               <Link to="/battle">Battle</Link>
             </TabsTrigger>

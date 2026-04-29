@@ -40,6 +40,13 @@ func NewPlayer(ID uuid.UUID, capacity int, user User) Player {
 	}
 }
 
+func (p *Player) Reset() {
+	p.Ready = false
+	for i, _ := range p.Positions {
+		p.Positions[i].ActorID = nil
+	}
+}
+
 func (p Player) HasPosition(pid uuid.UUID) bool {
 	for _, position := range p.Positions {
 		if position.ID == pid {

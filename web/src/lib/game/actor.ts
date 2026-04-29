@@ -108,6 +108,7 @@ type Actor = ActorDef &
   ActorState & {
     ID: string
     player_ID: string
+    enabled: boolean
     level: number
     experience: number
     focus: ActorFocus
@@ -159,8 +160,8 @@ function getVitals(actor: Actor) {
     stamina: {
       max: maxStamina,
       current: currentStamina,
-      ratio: staminaRatio
-    }
+      ratio: staminaRatio,
+    },
   }
 }
 
@@ -175,4 +176,10 @@ export type {
   ActorNatureStat,
   NatureStats,
 }
-export { checkActorStat, getTotalBaseStats, actorFocuses, ACTOR_FOCUS_DETAILS, getVitals, }
+export {
+  checkActorStat,
+  getTotalBaseStats,
+  actorFocuses,
+  ACTOR_FOCUS_DETAILS,
+  getVitals,
+}

@@ -131,18 +131,34 @@ func (g *Game) Reset() {
 	g.state = NewGameState()
 	g.ActiveTransaction = nil
 	g.Turn.Count = 0
+	g.Turn.Phase = TurnInit
 	g.Log = []GameLog{}
 	g.Modifiers = []Transaction[Modifier]{}
 	g.Actions = MakeQueue[Transaction[Action]]()
 	g.QueuedActions = make(map[uuid.UUID]Transaction[uuid.UUID])
 
 	for i, _ := range g.Players {
-		for j, _ := range g.Players[i].Positions {
-			g.Players[i].Positions[j].ActorID = nil
-		}
+		g.Players[i].Reset()
 	}
 
 	for i, _ := range g.Actors {
+		g.Actors[i].Reset()
+	}
+}
+func (g *Game) ResetPlayer(playerID uuid.UUID) {
+	for i, _ := range g.Players {
+		if g.Players[i].ID != playerID {
+			continue
+		}
+
+		g.Players[i].Reset()
+	}
+
+	for i, _ := range g.Actors {
+		if g.Actors[i].PlayerID != playerID {
+			continue
+		}
+
 		g.Actors[i].Reset()
 	}
 }
