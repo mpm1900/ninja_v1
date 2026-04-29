@@ -1,5 +1,6 @@
 import { gameStore } from "#/lib/stores/game"
 import { useStore } from "@tanstack/react-store"
+import { Modifier } from "./modifier"
 
 function BattleWeather() {
   const state = useStore(gameStore, g => g.state)
@@ -12,10 +13,8 @@ function BattleWeather() {
       <div>Weather: {state.weather}</div>
       <div>Terrain: {state.terrain}</div>
       <div>
-        Modifiers:{' '}
         {modifiers
-          .map((tx) => tx.mutation.name)
-          .join(',') || 'none'}
+          .map((tx) => <Modifier key={tx.ID} modifier={tx.mutation} count={1} />)}
       </div>
     </div>
   )
