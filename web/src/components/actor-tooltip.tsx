@@ -77,10 +77,10 @@ function ActorTooltip({
         <HoverCardContent
           sideOffset={8}
           collisionPadding={8}
-          className="w-auto"
+          className="w-auto flex flex-col"
         >
           <div className="flex justify-between">
-            <div>{actor.name}</div>
+            <div className='text-3xl nanum-brush-script-regular'>{actor.name}</div>
             <div>
               {(Object.keys(actor.natures) as Array<NatureSet>)
                 .sort((a, b) => natureIndexes[a] - natureIndexes[b])
@@ -89,7 +89,7 @@ function ActorTooltip({
                 ))}
             </div>
           </div>
-          <div className="flex items-start">
+          <div className="flex items-start mb-4">
             <table className="[&_td]:px-2 [&_td]:whitespace-nowrap">
               <tbody>
                 <tr>
@@ -148,6 +148,18 @@ function ActorTooltip({
                   <td>Speed</td>
                   <td>
                     <ActorStat actor={actor} showBase={false} stat={'speed'} />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Accuracy</td>
+                  <td>
+                    <ActorStat actor={actor} showBase={false} stat={'accuracy'} />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Evasion</td>
+                  <td>
+                    <ActorStat actor={actor} showBase={false} stat={'evasion'} />
                   </td>
                 </tr>
               </tbody>

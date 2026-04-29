@@ -198,20 +198,22 @@ func (e *damageHandler) run(g *Game) {
 }
 
 func (e *damageHandler) resolveTargetHit(g *Game, targetIndex int, target ResolvedActor) bool {
-	if target.Protected && !e.config.IgnoreProtect {
-		g.PushLog(NewLogContext("| $source$ was protected.", e.context.WithSource(target.ID)))
-		return false
-	}
-
 	targetContext := e.context
 	targetContext.TargetActorIDs = []uuid.UUID{target.ID}
 	targetContext.TargetPositionIDs = []uuid.UUID{}
+
+	if target.Protected && !e.config.IgnoreProtect {
+		g.PushLog(NewLogContext("| $source$ was protected.", targetContext.WithSource(target.ID)))
+		g.On(OnProtected, &targetContext)
+		return false
+	}
 
 	result := MakeAccuracyCheck(g, e.action, e.source, target, e.config.IgnoreModifiers)
 	if !result.Success {
 		if !e.config.Repeat || e.repeats == 0 {
 			g.PushLog(NewLog(fmt.Sprintf("%s missed!", e.action.Name)))
 			g.PushLog(NewLog(fmt.Sprintf("roll = %d, acc = %d", result.Roll, result.Chance)))
+			g.On(OnMiss, &targetContext)
 		}
 
 		if e.config.OnFailure != nil {
@@ -263,6 +265,7 @@ func (e *damageHandler) applySingleHit(g *Game, target ResolvedActor, damage int
 
 	if e.config.Critical > 1.0 {
 		g.PushLog(NewLog(fmt.Sprintf("| Critical Hit! (x%f)", e.config.Critical)))
+		g.On(OnCritical, &e.context)
 	}
 }
 func (e *damageHandler) queueRepeatHit(target ResolvedActor, damage int) {
@@ -282,7 +285,8 @@ func (e *damageHandler) queueRepeatHit(target ResolvedActor, damage int) {
 		critlogMux := AddLogs(critlog)
 		critlogMux.Filter = TargetsAreOneAlive
 		critlogTx := MakeTransaction(critlogMux, e.context)
-		e.repeatTransactions = append(e.repeatTransactions, logTx, critlogTx)
+		triggerTx := RunTriggerTx(OnCritical, e.context)
+		e.repeatTransactions = append(e.repeatTransactions, logTx, critlogTx, triggerTx)
 	} else {
 		e.repeatTransactions = append(e.repeatTransactions, logTx)
 	}

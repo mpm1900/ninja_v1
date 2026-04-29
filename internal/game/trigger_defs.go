@@ -4,6 +4,18 @@ import (
 	"github.com/google/uuid"
 )
 
+func RunTriggerTx(on TriggerOn, context Context) GameTransaction {
+	return GameTransaction{
+		Context: context,
+		Mutation: GameMutation{
+			Delta: func(p, g Game, context Context) Game {
+				g.On(on, &context)
+				return g
+			},
+		},
+	}
+}
+
 var END_OF_TURN_TRIGGER Trigger = Trigger{
 	ID:    uuid.MustParse("f63aefeb-02cf-4dbd-93f9-8f1908f99d4f"),
 	On:    OnTurnEnd,

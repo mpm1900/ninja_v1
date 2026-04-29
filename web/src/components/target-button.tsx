@@ -70,7 +70,7 @@ function TargetButton({
       }}
     >
       <div className={cn("flex items-end w-full justify-between gap-4 relative z-10", !includes && "text-shadow-[1px_1px_0px_#000000]")}>
-        <div>{actor.name}</div>
+        <div className='truncate'>{actor.name}</div>
         <div className='text-xs'>Lv<span className='font-black'>{actor.level}</span></div>
       </div>
 
