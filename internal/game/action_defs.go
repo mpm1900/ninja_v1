@@ -1,7 +1,6 @@
 package game
 
 import (
-	"fmt"
 	"math/rand/v2"
 
 	"github.com/google/uuid"
@@ -189,7 +188,6 @@ func makeAttack(
 				transactions := []GameTransaction{}
 
 				conf, _ := GetActiveActionConfig(g, config)
-				fmt.Printf("Using config: %+v\n", conf)
 				crit_result := MakeCriticalCheck(conf)
 				damages := NewDamage(conf, NewDamageConfig(crit_result.Ratio, RandomDamageFactor()))
 				transactions = append(

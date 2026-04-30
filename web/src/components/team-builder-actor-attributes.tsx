@@ -2,6 +2,8 @@ import type { ActorDef, ActorFocus } from '#/lib/game/actor'
 import { AbilitySelect } from './ability-select'
 import { FocusSelect } from './focus-select'
 import { ItemSelect } from './item-select'
+import { Modifier } from './modifier'
+import { Field, FieldContent, FieldLabel } from './ui/field'
 
 function TeamBuilderActorAttributes({
   def,
@@ -31,6 +33,14 @@ function TeamBuilderActorAttributes({
         onValueChange={onAbilityIDChange}
       />
       <ItemSelect otherItemIDs={otherItemIDs} value={itemID ?? null} onValueChange={onItemIDChange} />
+      <Field>
+        <FieldLabel>Default Modifiers:</FieldLabel>
+        <FieldContent className='flex items-start'>
+          {def.default_modifiers?.map(mod => (
+            <Modifier key={mod.ID} count={0} modifier={mod} />
+          )) ?? 'None'}
+        </FieldContent>
+      </Field>
     </div>
   )
 }

@@ -31,9 +31,11 @@ var Orochimaru = game.ActorDef{
 		game.NsWind,
 		game.NsYin,
 	}),
+	DefaultModifiers: []game.Modifier{
+		modifiers.Insomnia,
+	},
 	Abilities: []game.Modifier{
 		modifiers.Focused,
-		modifiers.Insomnia,
 	},
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{

@@ -135,9 +135,10 @@ type ActorDef struct {
 	NatureResistance map[Nature]float64     `json:"nature_resistance"`
 	Natures          map[NatureSet][]Nature `json:"natures"`
 
-	Abilities   []Modifier  `json:"abilities"`
-	ActionIDs   []uuid.UUID `json:"action_IDs,omitempty"`
-	ActionCount int         `json:"action_count"`
+	DefaultModifiers []Modifier  `json:"default_modifiers"`
+	Abilities        []Modifier  `json:"abilities"`
+	ActionIDs        []uuid.UUID `json:"action_IDs,omitempty"`
+	ActionCount      int         `json:"action_count"`
 
 	Immunities      map[uuid.UUID]struct{}   `json:"-"`
 	JutsuImmunities map[ActionJutsu]struct{} `json:"-"`
@@ -324,8 +325,12 @@ func makeActions(actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) []Action {
 func (ad ActorDef) Clone() ActorDef {
 	cloned := ad
 
-	if cloned.Immunities == nil {
-		cloned.Immunities = make(map[uuid.UUID]struct{})
+	if ad.Immunities == nil {
+		ad.Immunities = make(map[uuid.UUID]struct{})
+	}
+
+	if ad.DefaultModifiers == nil {
+		ad.DefaultModifiers = make([]Modifier, 0)
 	}
 
 	cloned.Affiliations = slices.Clone(ad.Affiliations)
@@ -338,6 +343,7 @@ func (ad ActorDef) Clone() ActorDef {
 		cloned.Natures[k] = slices.Clone(v)
 	}
 
+	cloned.DefaultModifiers = slices.Clone(ad.DefaultModifiers)
 	cloned.ActionIDs = slices.Clone(ad.ActionIDs)
 	cloned.Immunities = maps.Clone(ad.Immunities)
 	cloned.JutsuImmunities = maps.Clone(ad.JutsuImmunities)
@@ -559,6 +565,10 @@ func (a Actor) GetModifiers() []Modifier {
 	}
 	if a.Item != nil {
 		modifiers = append(modifiers, *a.Item)
+	}
+
+	for _, mod := range a.ActorDef.DefaultModifiers {
+		modifiers = append(modifiers, mod)
 	}
 
 	return modifiers

@@ -88,6 +88,7 @@ function ActorCard({
       .map((m) => m.mutation)
       .concat(g.actors.filter((a) => a.ability).map((a) => a.ability!))
       .concat(g.actors.filter((a) => a.item).map((a) => a.item!))
+      .concat(g.actors.filter(a => a.default_modifiers).flatMap(a => a.default_modifiers))
   )
   const has_queued_action = useStore(
     gameStore,

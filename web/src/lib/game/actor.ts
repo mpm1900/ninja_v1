@@ -82,6 +82,7 @@ type ActorDef = {
   natures: Partial<Record<NatureSet, Array<Nature>>>
   nature_damage: NatureStats<number>
   nature_resistance: NatureStats<number>
+  default_modifiers: Array<Modifier>
   abilities: Array<Modifier>
   action_count: number
   action_IDs: Array<string>

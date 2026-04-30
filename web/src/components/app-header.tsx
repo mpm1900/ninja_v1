@@ -25,6 +25,7 @@ import { GiSharpShuriken } from 'react-icons/gi'
 import { useLogout } from '#/lib/mutations/logout'
 import { useUser } from '#/lib/queries/auth'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
+import { TbHexagonNumber1Filled, TbHexagonNumber2Filled, TbHexagonNumber3Filled } from "react-icons/tb";
 
 function getActiveTable(pathname: string) {
   switch (pathname) {
@@ -79,15 +80,18 @@ function AppHeader() {
         <Tabs value={activeTab}>
           <TabsList>
             <TabsTrigger value="team-builder" asChild>
-              <Link to="/team-builder">Team Builder</Link>
+              <Link to="/team-builder">
+                <TbHexagonNumber1Filled />
+                Team Builder
+              </Link>
             </TabsTrigger>
             <ChevronRight />
             <TabsTrigger value="lobby" asChild>
-              <Link to="/lobby">Pre Game</Link>
+              <Link to="/lobby"><TbHexagonNumber2Filled />Pre Game</Link>
             </TabsTrigger>
             <ChevronRight />
             <TabsTrigger value="battle" asChild>
-              <Link to="/battle">Battle</Link>
+              <Link to="/battle"><TbHexagonNumber3Filled />Battle</Link>
             </TabsTrigger>
           </TabsList>
         </Tabs>
