@@ -324,6 +324,10 @@ func makeActions(actionIDs []uuid.UUID, ACTIONS map[uuid.UUID]Action) []Action {
 func (ad ActorDef) Clone() ActorDef {
 	cloned := ad
 
+	if cloned.Immunities == nil {
+		cloned.Immunities = make(map[uuid.UUID]struct{})
+	}
+
 	cloned.Affiliations = slices.Clone(ad.Affiliations)
 	cloned.Stats = maps.Clone(ad.Stats)
 	cloned.NatureDamage = maps.Clone(ad.NatureDamage)

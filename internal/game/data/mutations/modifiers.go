@@ -22,6 +22,9 @@ func CheckGameJutsuImmunity(g *game.Game, source game.Actor) bool {
 func CheckJutsuImmunity(config game.ActionConfig, source game.Actor) bool {
 	return source.HasJutsuImmunity(config.Jutsu)
 }
+func CheckImmunity(id uuid.UUID, source game.Actor) bool {
+	return source.HasImmunity(id)
+}
 
 func AddStatus(checkWarded bool, modifiers ...game.Modifier) game.GameMutation {
 	mut := AddModifiers(checkWarded, modifiers...)

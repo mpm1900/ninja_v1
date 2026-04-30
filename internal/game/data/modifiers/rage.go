@@ -43,6 +43,7 @@ var Rage game.Modifier = game.Modifier{
 	ID:          rageID,
 	GroupID:     &rageID,
 	Name:        "Rage",
+	Icon:        "rage",
 	Description: "On damage: gain Attack Up.",
 	Show:        true,
 	Duration:    game.ModifierDurationInf,

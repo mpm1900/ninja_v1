@@ -16,7 +16,7 @@ var Kisame = game.ActorDef{
 	Affiliations: []string{game.AffAkatsuki, game.AffKuri},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            120,
+		game.StatHP:            100,
 		game.StatStamina:       130,
 		game.StatAttack:        110,
 		game.StatDefense:       90,
@@ -58,13 +58,13 @@ var KisameSamehadaFusion = game.ActorDef{
 	Affiliations: []string{game.AffAkatsuki, game.AffKuri},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            120,
+		game.StatHP:            100,
 		game.StatStamina:       130,
-		game.StatAttack:        110,
-		game.StatDefense:       90,
-		game.StatChakraAttack:  110,
-		game.StatChakraDefense: 90,
-		game.StatSpeed:         80,
+		game.StatAttack:        130,
+		game.StatDefense:       100,
+		game.StatChakraAttack:  140,
+		game.StatChakraDefense: 120,
+		game.StatSpeed:         90,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},

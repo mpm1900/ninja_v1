@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -30,7 +31,9 @@ var Konan = game.ActorDef{
 		game.NsWind,
 		game.NsWater,
 	}),
-	Abilities:   []game.Modifier{},
+	Abilities: []game.Modifier{
+		modifiers.Insomnia,
+	},
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
 		actions.Dissipate.ID,

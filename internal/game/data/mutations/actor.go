@@ -19,7 +19,7 @@ var Sleep = game.GameMutation{
 					return a
 				}
 
-				a.SleepCounter = rand.IntN(3) + 1
+				a.SleepCounter = rand.IntN(2) + 1
 				a.Sleeping = true
 				a.Statused = true
 

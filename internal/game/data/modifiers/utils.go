@@ -5,6 +5,8 @@ import (
 	"math/rand/v2"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/mutations"
+
+	"github.com/google/uuid"
 )
 
 func applyModifier(checkWarded bool, config game.ActionConfig, context game.Context, actor game.Actor, modifier game.Modifier) []game.GameTransaction {
@@ -48,6 +50,14 @@ func applyStatus(checkWarded bool, config game.ActionConfig, context game.Contex
 	if mutations.CheckJutsuImmunity(config, actor) {
 		log_ctx := game.MakeContextForActor(actor)
 		log := game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", config.Jutsu), log_ctx)
+		tx := game.AddLogs(log)
+		transactions = append(transactions, game.MakeTransaction(tx, log_ctx))
+
+		return transactions
+	}
+	if mutations.CheckImmunity(modifier.ID, actor) {
+		log_ctx := game.MakeContextForActor(actor)
+		log := game.NewLogContext("| $source$ was immune.", log_ctx)
 		tx := game.AddLogs(log)
 		transactions = append(transactions, game.MakeTransaction(tx, log_ctx))
 
@@ -129,4 +139,18 @@ func ChancePoison(config game.ActionConfig, context game.Context, actor game.Act
 	}
 
 	return ApplyPoison(config, context, actor)
+}
+
+func ApplyImmunity(modifier_id uuid.UUID, immunity_id uuid.UUID) game.ActorMutation {
+	return game.MakeActorMutation(
+		&modifier_id,
+		game.MutPriorityDefault,
+		game.SourceFilter,
+		func(g game.Game, a game.Actor, ctx game.Context) game.Actor {
+			if a.Immunities == nil {
+				a.Immunities = map[uuid.UUID]struct{}{}
+			}
+			a.Immunities[immunity_id] = struct{}{}
+			return a
+		})
 }

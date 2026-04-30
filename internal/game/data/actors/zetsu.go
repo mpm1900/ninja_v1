@@ -33,6 +33,7 @@ var Zetsu = game.ActorDef{
 	}),
 	Abilities: []game.Modifier{
 		modifiers.Regeneration,
+		modifiers.Insomnia,
 	},
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{

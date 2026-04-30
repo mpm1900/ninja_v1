@@ -42,9 +42,14 @@ import { GrFastForward } from 'react-icons/gr'
 import { TbTagPlus } from 'react-icons/tb'
 import { HiScale } from 'react-icons/hi2'
 import { FaFrog, FaHouseFloodWater, FaWeightHanging } from 'react-icons/fa6'
-import { FaHandsHelping } from "react-icons/fa";
+import { FaHandsHelping } from 'react-icons/fa'
 import { TbScanEye, TbCancel } from 'react-icons/tb'
-import { BsCloudRainHeavyFill, BsCloudRain, BsSpeedometer } from "react-icons/bs";
+import {
+  BsCloudRainHeavyFill,
+  BsCloudRain,
+  BsSpeedometer,
+  BsMoonFill,
+} from 'react-icons/bs'
 
 const Aburame: IconType = (props) => (
   <img src="/icons/aburame.svg" alt="aburame" {...(props as any)} />
@@ -181,6 +186,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   ichiraku_ramen: GiNoodles,
   inner_focus: TbScanEye,
   intimidate: GiBeastEye,
+  insomnia: BsMoonFill,
   naruto_transform: PiSpiralFill,
   nature_specialist: GiEcology,
   onigiri: PiOnigiriFill,
@@ -204,12 +210,11 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   seal_up: TbTagPlus,
   seeded: PiPlantBold,
   shinobi_vest: GiKevlarVest,
-  sleeping: GiNightSleep,
+  sleeping: ({ className, ...props }) => (
+    <GiNightSleep className={cn('text-indigo-400', className)} {...props} />
+  ),
   rain_speed: ({ className, ...props }) => (
-    <BsSpeedometer
-      className={cn('text-blue-300', className)}
-      {...props}
-    />
+    <BsSpeedometer className={cn('text-blue-300', className)} {...props} />
   ),
   speed_up: ({ className, ...props }) => (
     <PiCaretDoubleUpDuotone
