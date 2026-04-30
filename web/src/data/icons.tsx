@@ -27,6 +27,8 @@ import {
   GiLightningDissipation,
   GiSharkJaws,
   GiCaltrops,
+  GiPunchBlast,
+  GiMissileSwarm,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -138,6 +140,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
     <GiDoubled className={cn('text-orange-300', className)} {...props} />
   ),
   disabled: TbCancel,
+  dynamic_entry: GiMissileSwarm,
   electrified: GiLightningDissipation,
   entry_hazard: GiCaltrops,
   chakra_reduction_up: ({ className, ...props }) => (
@@ -213,6 +216,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   sleeping: ({ className, ...props }) => (
     <GiNightSleep className={cn('text-indigo-400', className)} {...props} />
   ),
+  rage: GiPunchBlast,
   rain_speed: ({ className, ...props }) => (
     <BsSpeedometer className={cn('text-blue-300', className)} {...props} />
   ),
