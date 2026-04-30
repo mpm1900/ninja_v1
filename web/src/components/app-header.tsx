@@ -25,6 +25,7 @@ import { GiSharpShuriken } from 'react-icons/gi'
 import { useLogout } from '#/lib/mutations/logout'
 import { useUser } from '#/lib/queries/auth'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
+import { GiWhirlpoolShuriken } from "react-icons/gi";
 import { TbHexagonNumber1Filled, TbHexagonNumber2Filled, TbHexagonNumber3Filled } from "react-icons/tb";
 
 function getActiveTable(pathname: string) {
@@ -113,9 +114,8 @@ function AppHeader() {
           </div>
         )}
         <div className="flex items-center">
-          {game_status === 'running' && <Loader2 className="animate-spin" />}
-          {game_status === 'idle' && <Check />}
-          {game_status === 'waiting' && <Loader2 className="animate-spin" />}
+          {game_status === 'running' && <GiWhirlpoolShuriken className="animate-spin" />}
+          {game_status === 'waiting' && <GiWhirlpoolShuriken className="animate-spin" />}
         </div>
       </div>
       <div className="flex items-center gap-4 px-2">

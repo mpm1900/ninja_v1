@@ -17,7 +17,7 @@ func MakeTempleOfNirvana() game.Action {
 		Description: "Puts target to sleep",
 		Nature:      game.Ptr(game.NsYin),
 		TargetCount: game.Ptr(1),
-		Accuracy:    game.Ptr(100),
+		Accuracy:    game.Ptr(80),
 		Cost:        game.Ptr(30),
 		Jutsu:       game.Genjutsu,
 	}

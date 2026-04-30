@@ -21,8 +21,7 @@ var IntimidateTrigger game.Trigger = game.Trigger{
 			targets := g.GetActorsFilters(context, game.ComposeAF(
 				game.ActiveFilter,
 				game.AliveFilter,
-				game.OtherFilter,
-				// game.OtherTeamFilter,
+				game.OtherTeamFilter,
 			))
 
 			for _, target := range targets {

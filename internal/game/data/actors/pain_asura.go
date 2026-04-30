@@ -29,7 +29,9 @@ var PainAsura = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsYinYang,
 	}),
-	Abilities:   []game.Modifier{},
+	Abilities: []game.Modifier{
+		modifiers.DynamicEntry,
+	},
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
 		actions.SelfDestruct.ID,
