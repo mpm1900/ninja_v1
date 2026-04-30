@@ -69,7 +69,7 @@ function ActorThumbnail({
         height: size,
         width: size,
       }}
-      className={cn('overflow-hidden bg-card p-1 border rounded relative', {
+      className={cn('overflow-hidden bg-stone-950 p-1 border rounded relative', {
         'bg-transparent border-transparent': index === undefined,
         'bg-foreground': active && index !== undefined,
         'ring ring-black': showRing,

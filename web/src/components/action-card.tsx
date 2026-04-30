@@ -26,14 +26,14 @@ function ActionCard({
       disabled={disabled}
       className={cn(
         'group',
-        'flex flex-col w-[230px] h-[200px] rounded-lg border-2 border-zinc-900 hover:border-zinc-700 text-left relative',
+        'flex flex-col w-[230px] h-[200px] rounded-lg border-2 border-stone-900 hover:border-stone-700 text-left relative',
         `bg-black text-foreground`,
         'transition-all duration-200',
         'hover:-translate-y-0.5',
         'focus-visible:outline-none',
         'flex flex-col shadow-xl shadow-black/60 hover:shadow-black',
         {
-          'border-white hover:border-white shadow-lg shadow-black': selected,
+          'border-stone-100 hover:border-stone-100 shadow-lg shadow-black': selected,
           'border-orange-400/40 hover:border-orange-400':
             action.config.stat === 'attack',
           'border-orange-400': action.config.stat === 'defense' && selected,
@@ -56,7 +56,7 @@ function ActionCard({
       <div className="relative">
         <div
           className={cn(
-            'flex items-start justify-between gap-2 p-2 bg-zinc-900 text-white rounded-t-md',
+            'flex items-start justify-between gap-2 p-2 bg-stone-950 text-stone-100 rounded-t-md',
             disabled && 'opacity-50'
           )}
         >
@@ -77,7 +77,7 @@ function ActionCard({
                   {action.summon && usedSummon ? "summon used" : "disabled"}
                 </div>
               ) : (
-                <div className="text-[10px] uppercase tracking-wide text-white/50">
+                <div className="text-[10px] uppercase tracking-wide text-stone-100/50">
                   {action.config.jutsu || '-'}
                 </div>
               )}
@@ -85,7 +85,7 @@ function ActionCard({
           </div>
 
           {!!action.config.power && action.config.power > 0 && (
-            <div className="text-white/90 font-black nanum-brush-script-regular text-4xl h-8 -mt-0.5">
+            <div className="text-stone-100/90 font-black nanum-brush-script-regular text-4xl h-8 -mt-0.5">
               {action.config.power}
             </div>
           )}
@@ -93,7 +93,7 @@ function ActionCard({
         <BrushEdge />
       </div>
 
-      <div className="flex *:flex-1 text-[11px] border-t border-b bg-white shadow-md z-2">
+      <div className="flex *:flex-1 text-[11px] border-t border-b bg-stone-100 shadow-md z-2">
         <StatChip label='Acc' value={accuracyLabel} />
         <StatChip label="Cost" value={action.config.cost || '-'} />
         <StatChip label="Priority" value={action.priority || '-'} />
@@ -151,12 +151,12 @@ function StatChip({
   return (
     <div className="py-1 flex items-end justify-center gap-1">
       {label && (
-        <div className="text-[9px] uppercase tracking-wide text-neutral-800">
+        <div className="text-[9px] uppercase tracking-wide text-stone-800">
           {label}
         </div>
       )}
       {value && (
-        <div className="text-xs font-semibold leading-tight text-zinc-900">
+        <div className="text-xs font-semibold leading-tight text-stone-900">
           {value}
         </div>
       )}

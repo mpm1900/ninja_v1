@@ -23,8 +23,8 @@ func MakeRecover() game.Action {
 		ID:              uuid.MustParse("c0756ddc-2611-5eef-82cc-c2bc03f9f01c"),
 		Config:          config,
 		TargetType:      game.TargetPositionID,
-		TargetPredicate: game.ComposeAF(game.ActiveFilter),
-		ContextValidate: game.TargetLengthFilter(*config.TargetCount),
+		TargetPredicate: game.ComposeAF(game.ActiveFilter, game.TeamFilter),
+		ContextValidate: game.PositionsLengthFilter(*config.TargetCount),
 		Cost:            modifiers.UseStaminaCost(*config.Cost),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,

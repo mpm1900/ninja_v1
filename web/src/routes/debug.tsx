@@ -38,7 +38,7 @@ function App() {
   return (
     <ClientOnly>
       <PromptController />
-      <main className="min-w-0 overflow-x-hidden bg-zinc-800">
+      <main className="min-w-0 overflow-x-hidden bg-stone-800">
         <AppHeader />
         <div className="flex min-w-0">
           <div className="min-w-0 space-y-2 flex-1 overflow-auto">

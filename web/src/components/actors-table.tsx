@@ -35,7 +35,7 @@ const columns = [
       <div className="flex">
         {[row.original.clan].map((a) => {
           const C = SHINOBI_ICONS[a]
-          return C ? <C key={a} className="w-5 text-white" /> : null
+          return C ? <C key={a} className="w-5 text-stone-100" /> : null
         })}
       </div>
     ),

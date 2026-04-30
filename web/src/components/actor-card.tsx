@@ -20,8 +20,8 @@ const frameVariants = cva('border border-transparent', {
   variants: {
     variant: {
       default: 'bg-stone-900 text-stone-200 border-stone-700',
-      selected: 'bg-stone-300 text-stone-900 border-white text-shadow-none!',
-      targeted: 'bg-red-900 text-zinc-200 border-red-500',
+      selected: 'bg-stone-300 text-stone-900 border-stone-100 text-shadow-none!',
+      targeted: 'bg-red-900 text-stone-200 border-red-500',
     },
   },
   defaultVariants: {

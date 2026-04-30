@@ -14,7 +14,7 @@ import { ChevronRight } from 'lucide-react'
 type t = Record<string, Partial<Record<NatureSet | 'none', ClassValue>>>
 
 const variants = cva<t>(
-  'text-sm text-white px-1 py-0.5 rounded text-shadow-[1px_1px_0px_#000000] text-nowrap',
+  'text-sm text-stone-100 px-1 py-0.5 rounded text-shadow-[1px_1px_0px_#000000] text-nowrap',
   {
     variants: {
       variant: {
@@ -26,7 +26,7 @@ const variants = cva<t>(
         lightning: 'bg-yellow-400',
         earth: 'bg-taupe-600',
         water: 'bg-blue-500',
-        yang: 'bg-neutral-300',
+        yang: 'bg-stone-300',
         yin: 'bg-indigo-900',
         ice: 'bg-cyan-700 shadow-[inset_0_0_0_1px_theme(colors.amber.300)] text-amber-300!',
         explosion:

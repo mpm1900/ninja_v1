@@ -81,11 +81,11 @@ function HealthBar({
         {/* Inner chamber where HP lives */}
         <div className="absolute inset-px overflow-hidden rounded-sm border border-black/50 bg-black/35 shadow-inner">
           {/* low-contrast track */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-black/25" />
+          <div className="absolute inset-0 bg-gradient-to-b from-stone-100/5 to-black/25" />
 
           {/* delayed damage ghost */}
           <motion.div
-            className="absolute inset-y-0 left-0 bg-white/40"
+            className="absolute inset-y-0 left-0 bg-stone-100/40"
             style={{ width: hpGhostWidth }}
           />
 
@@ -98,20 +98,20 @@ function HealthBar({
           {/* moving highlight for premium sheen */}
           {selected && (
             <motion.div
-              className="absolute inset-y-0 left-[-30%] w-[30%] bg-gradient-to-r from-transparent via-white/20 to-transparent mix-blend-screen"
+              className="absolute inset-y-0 left-[-30%] w-[30%] bg-gradient-to-r from-transparent via-stone-100/20 to-transparent mix-blend-screen"
               animate={{ x: ['0%', '460%'] }}
               transition={{ duration: 2.6, ease: 'linear', repeat: Infinity }}
             />
           )}
 
           {/* subtle grid texture */}
-          <div className="absolute inset-0 bg-white/20 opacity-[0.15]" />
+          <div className="absolute inset-0 bg-stone-100/20 opacity-[0.15]" />
         </div>
 
         {/* text + values */}
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-end px-2">
           <div className="flex flex-row-reverse items-center gap-2">
-            <span className="text-2xl -mb-1 tabular-nums text-white drop-shadow text-shadow-[1px_1px_0px_#000000]">
+            <span className="text-2xl -mb-1 tabular-nums text-stone-100 drop-shadow text-shadow-[1px_1px_0px_#000000]">
               {percentage && (
                 <span className="font-bold">
                   {Math.round(vitals.hp.ratio * 100)}%
