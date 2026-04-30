@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -30,7 +31,9 @@ var KillerBee = game.ActorDef{
 		game.NsLightning,
 		game.NsWater,
 	}),
-	Abilities:   []game.Modifier{},
+	Abilities: []game.Modifier{
+		modifiers.ChakraArmor,
+	},
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
 		actions.CollidingWave.ID,
