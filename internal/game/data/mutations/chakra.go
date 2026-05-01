@@ -35,7 +35,7 @@ func CheckStaminaExhaustion(mod game.Modifier, mut game.GameMutation) game.GameM
 			resolved := source.Resolve(g)
 			ctx := game.MakeContextForActor(source)
 			if resolved.StaminaDamage >= resolved.Stats[game.StatStamina] {
-				g.PushLog(game.NewLogContext("| $source$ is exhausted.", ctx))
+				g.PushLog(game.MakeGameLog("$source$ is exhausted.", ctx, 1))
 				g = AddStatus(false, mod).Delta(p, g, ctx)
 				g = mut.Delta(p, g, ctx)
 				g.UpdateActor(resolved.ID, func(a game.Actor) game.Actor {

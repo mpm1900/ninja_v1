@@ -12,7 +12,7 @@ func CheckGameJutsuImmunity(g *game.Game, source game.Actor) bool {
 	if ok {
 		if CheckJutsuImmunity(config, source) {
 			log_ctx := game.MakeContextForActor(source)
-			g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", config.Jutsu), log_ctx))
+			g.PushLog(game.MakeGameLog(fmt.Sprintf("$source$ was immune to %s.", config.Jutsu), log_ctx, 1))
 			return true
 		}
 	}
@@ -58,7 +58,7 @@ func AddModifiers(checkWarded bool, modifiers ...game.Modifier) game.GameMutatio
 
 				// logs
 				if context.SourceActorID == nil && len(modifier.GameStateMutations) > 0 {
-					g.PushLog(game.NewLog(fmt.Sprintf("| The battlefield gained %s.", mod_tx.Mutation.Name)))
+					g.PushLog(game.MakeGameLog(fmt.Sprintf("The battlefield gained %s.", mod_tx.Mutation.Name), game.NewContext(), 1))
 				}
 				hasCandidate := false
 				hasApplicableTarget := false
@@ -75,14 +75,14 @@ func AddModifiers(checkWarded bool, modifiers ...game.Modifier) game.GameMutatio
 					 */
 					if CheckGameJutsuImmunity(&g, resolved.Actor) {
 						log_ctx := game.MakeContextForActor(resolved.Actor)
-						g.PushLog(game.NewLogContext("| $source$ was immune.", log_ctx))
+						g.PushLog(game.MakeGameLog("$source$ was immune.", log_ctx, 1))
 						continue
 					}
 					if (modifier.GroupID != nil && resolved.HasImmunity(*modifier.GroupID)) || resolved.HasImmunity(modifier.ID) {
 						mod_tx.Context.FilterOutTarget(actor)
 
 						log_ctx := game.MakeContextForActor(resolved.Actor)
-						g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", modifier.Name), log_ctx))
+						g.PushLog(game.MakeGameLog(fmt.Sprintf("$source$ was immune to %s.", modifier.Name), log_ctx, 1))
 						continue
 					}
 					if context.ModifierID != nil {
@@ -91,7 +91,7 @@ func AddModifiers(checkWarded bool, modifiers ...game.Modifier) game.GameMutatio
 							mod_tx.Context.FilterOutTarget(actor)
 
 							log_ctx := game.MakeContextForActor(resolved.Actor)
-							g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", parent_mod.Name), log_ctx))
+							g.PushLog(game.MakeGameLog(fmt.Sprintf("$source$ was immune to %s.", parent_mod.Name), log_ctx, 1))
 							continue
 						}
 					}
@@ -100,20 +100,20 @@ func AddModifiers(checkWarded bool, modifiers ...game.Modifier) game.GameMutatio
 						mod_tx.Context.FilterOutTarget(actor)
 
 						context.SourceActorID = &actor.ID
-						g.PushLog(game.NewLogContext("| $source$ was safeguarded.", context.WithSource(actor.ID)))
+						g.PushLog(game.MakeGameLog("$source$ was safeguarded.", context.WithSource(actor.ID), 1))
 						continue
 					}
 					if checkWarded && resolved.Warded {
 						mod_tx.Context.FilterOutTarget(actor)
 
 						context.SourceActorID = &actor.ID
-						g.PushLog(game.NewLogContext("| $source$ was warded.", context.WithSource(actor.ID)))
+						g.PushLog(game.MakeGameLog("$source$ was warded.", context.WithSource(actor.ID), 1))
 						continue
 					}
 
 					hasApplicableTarget = true
 					if hasCandidate {
-						g.PushLog(game.NewLogContext(fmt.Sprintf("| $source$ gained %s.", modifier.Name), context.WithSource(actor.ID)))
+						g.PushLog(game.MakeGameLog(fmt.Sprintf("$source$ gained %s.", modifier.Name), context.WithSource(actor.ID), 1))
 					}
 				}
 

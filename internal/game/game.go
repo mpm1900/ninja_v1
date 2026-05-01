@@ -13,11 +13,6 @@ import (
 type GameTransaction = Transaction[GameMutation]
 
 type GameStatus string
-type GameLog struct {
-	ID      uuid.UUID `json:"ID"`
-	Text    string    `json:"text"`
-	Context Context   `json:"context"`
-}
 
 type GameActiveTransaction struct {
 	Transaction[Action]
@@ -85,21 +80,6 @@ func MakeGameActiveTransaction(tx Transaction[Action]) *GameActiveTransaction {
 	return &GameActiveTransaction{
 		Transaction: tx,
 		Message:     "",
-	}
-}
-
-func NewLog(text string) GameLog {
-	return GameLog{
-		ID:      uuid.New(),
-		Text:    text,
-		Context: NewContext(),
-	}
-}
-func NewLogContext(text string, context Context) GameLog {
-	return GameLog{
-		ID:      uuid.New(),
-		Text:    text,
-		Context: context,
 	}
 }
 

@@ -35,7 +35,7 @@ func MakeHaze() game.Action {
 					}
 
 					if *tx.Context.SourcePlayerID == *context.SourcePlayerID && tx.Mutation.ID == modifiers.Haze.ID {
-						log := game.NewLogContext("$action$ failed.", context)
+						log := game.MakeGameLog("$action$ failed.", context, 0)
 						log_tx := game.MakeTransaction(game.AddLogs(log), context)
 						return append(transactions, log_tx)
 					}

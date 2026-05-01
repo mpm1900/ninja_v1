@@ -14,7 +14,7 @@ func applyModifier(checkWarded bool, config game.ActionConfig, context game.Cont
 
 	if mutations.CheckJutsuImmunity(config, actor) {
 		log_ctx := game.MakeContextForActor(actor)
-		log := game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", config.Jutsu), log_ctx)
+		log := game.MakeGameLog(fmt.Sprintf("$source$ was immune to %s.", config.Jutsu), log_ctx, 1)
 		tx := game.AddLogs(log)
 		transactions = append(transactions, game.MakeTransaction(tx, log_ctx))
 
@@ -49,7 +49,7 @@ func applyStatus(checkWarded bool, config game.ActionConfig, context game.Contex
 
 	if mutations.CheckJutsuImmunity(config, actor) {
 		log_ctx := game.MakeContextForActor(actor)
-		log := game.NewLogContext(fmt.Sprintf("| $source$ was immune to %s.", config.Jutsu), log_ctx)
+		log := game.MakeGameLog(fmt.Sprintf("$source$ was immune to %s.", config.Jutsu), log_ctx, 1)
 		tx := game.AddLogs(log)
 		transactions = append(transactions, game.MakeTransaction(tx, log_ctx))
 
@@ -57,7 +57,7 @@ func applyStatus(checkWarded bool, config game.ActionConfig, context game.Contex
 	}
 	if mutations.CheckImmunity(modifier.ID, actor) {
 		log_ctx := game.MakeContextForActor(actor)
-		log := game.NewLogContext("| $source$ was immune.", log_ctx)
+		log := game.MakeGameLog("$source$ was immune.", log_ctx, 1)
 		tx := game.AddLogs(log)
 		transactions = append(transactions, game.MakeTransaction(tx, log_ctx))
 

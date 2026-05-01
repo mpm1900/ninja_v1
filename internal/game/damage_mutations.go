@@ -50,7 +50,7 @@ func ApplyDamageWith(g *Game, source_ID *uuid.UUID, target ResolvedActor, damage
 			summonHP := a.Summon.Stats[StatHP]
 			a.Summon.Damage += clampDamage(damage)
 			a.Summon.Alive = summonHP > a.Summon.Damage
-			g.PushLog(NewLogContext("| $source$'s summon took the attack.", logCtx))
+			g.PushLog(MakeGameLog("$source$'s summon took the attack.", logCtx, 1))
 		} else {
 			a.Damage += damage
 			if source_ID != nil {
@@ -58,13 +58,13 @@ func ApplyDamageWith(g *Game, source_ID *uuid.UUID, target ResolvedActor, damage
 			}
 			ratio := min(int(float64(damage)*100/float64(hp)), 100)
 			if ratio > 0 {
-				g.PushLog(NewLogContext(fmt.Sprintf("| $source$ lost %d%% HP.", ratio), logCtx))
+				g.PushLog(MakeGameLog(fmt.Sprintf("$source$ lost %d%% HP.", ratio), logCtx, 1))
 			} else {
-				g.PushLog(NewLogContext(fmt.Sprintf("| $source$ gained %d%% HP.", ratio*-1), logCtx))
+				g.PushLog(MakeGameLog(fmt.Sprintf("$source$ gained %d%% HP.", ratio*-1), logCtx, 1))
 			}
 
 			if target.Immortal && hp <= a.Damage {
-				g.PushLog(NewLogContext("| $source$'s survived a fatal attack.", logCtx))
+				g.PushLog(MakeGameLog("$source$'s survived a fatal attack.", logCtx, 1))
 				a.Damage = hp - 1
 				g.On(OnImmortalSave, &logCtx)
 			}
@@ -172,7 +172,7 @@ func (e *damageHandler) run(g *Game) {
 
 		for ti, target := range e.resolvedTargets {
 			if target.HasJutsuImmunity(e.action.Jutsu) {
-				log := NewLogContext(fmt.Sprintf("$source$ was immune to %s", e.action.Jutsu), MakeContextForActor(target.Actor))
+				log := MakeGameLog(fmt.Sprintf("$source$ was immune to %s", e.action.Jutsu), MakeContextForActor(target.Actor), 1)
 				g.PushLog(log)
 				continue
 			}
@@ -203,7 +203,7 @@ func (e *damageHandler) resolveTargetHit(g *Game, targetIndex int, target Resolv
 	targetContext.TargetPositionIDs = []uuid.UUID{}
 
 	if target.Protected && !e.config.IgnoreProtect {
-		g.PushLog(NewLogContext("| $source$ was protected.", targetContext.WithSource(target.ID)))
+		g.PushLog(MakeGameLog("$source$ was protected.", targetContext.WithSource(target.ID), 1))
 		g.On(OnProtected, &targetContext)
 		return false
 	}
@@ -264,7 +264,7 @@ func (e *damageHandler) applySingleHit(g *Game, target ResolvedActor, damage int
 	}
 
 	if e.config.Critical > 1.0 {
-		g.PushLog(NewLog(fmt.Sprintf("| Critical Hit! (x%f)", e.config.Critical)))
+		g.PushLog(MakeGameLog(fmt.Sprintf("Critical Hit! (x%f)", e.config.Critical), NewContext(), 1))
 		g.On(OnCritical, &e.context)
 	}
 }
@@ -281,7 +281,7 @@ func (e *damageHandler) queueRepeatHit(target ResolvedActor, damage int) {
 	logTx := MakeTransaction(logMux, e.context)
 
 	if e.config.Critical > 1.0 {
-		critlog := NewLog(fmt.Sprintf("| Critical Hit! (x%f)", e.config.Critical))
+		critlog := MakeGameLog(fmt.Sprintf("Critical Hit! (x%f)", e.config.Critical), NewContext(), 1)
 		critlogMux := AddLogs(critlog)
 		critlogMux.Filter = TargetsAreOneAlive
 		critlogTx := MakeTransaction(critlogMux, e.context)
@@ -301,10 +301,10 @@ func (e *damageHandler) logNatureEffectiveness(g *Game, target ResolvedActor) {
 
 	natureMod := ResolveNatures(natures, e.source.NatureDamage, target.NatureResistance, target.Natures)
 	if natureMod >= 1.5 {
-		g.PushLog(NewLog("| Super effective!"))
+		g.PushLog(MakeGameLog("Super effective!", NewContext(), 1))
 	}
 	if natureMod < 0.75 {
-		g.PushLog(NewLog("| Not very effective!"))
+		g.PushLog(MakeGameLog("Not very effective!", NewContext(), 1))
 	}
 }
 func (e *damageHandler) buildSideEffects() {
@@ -400,7 +400,7 @@ func ApplyHealRawWith(g *Game, targetID uuid.UUID, amount int, updater func(Acto
 	hp := target.Stats[StatHP]
 	logCtx := MakeContextForActor(target.Actor)
 	ratio := int(float64(amount) * 100 / float64(hp))
-	g.PushLog(NewLogContext(fmt.Sprintf("| $source$ gained %d%% HP.", ratio), logCtx))
+	g.PushLog(MakeGameLog(fmt.Sprintf("$source$ gained %d%% HP.", ratio), logCtx, 1))
 
 	return amount
 }
