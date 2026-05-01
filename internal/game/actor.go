@@ -129,6 +129,7 @@ type ActorDef struct {
 	Name         string    `json:"name"`
 	Clan         string    `json:"clan"`
 	Affiliations []string  `json:"affiliations"`
+	Restricted   bool      `json:"restricted"`
 
 	Stats            map[ActorStat]int      `json:"stats"`
 	NatureDamage     map[Nature]float64     `json:"nature_damage"`

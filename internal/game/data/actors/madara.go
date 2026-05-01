@@ -14,6 +14,7 @@ var Madara = game.ActorDef{
 	Name:         "Madara Uchiha",
 	Clan:         game.ClanUchiha,
 	Affiliations: []string{game.AffAkatsuki, game.AffKonoha},
+	Restricted:   true,
 
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            100,

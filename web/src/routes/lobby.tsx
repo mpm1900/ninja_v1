@@ -103,6 +103,7 @@ function App() {
                 <div className="flex justify-between">
                   {players.map((player) => (
                     <div key={player.ID} className="flex flex-col gap-2">
+                      <h3 className='font-bold text-xl'>{player.user.email} (You)</h3>
                       <LobbyThumbnails
                         player_ID={player.ID}
                         enabled={enabled}
@@ -144,7 +145,10 @@ function App() {
                   ))}
                   <div className="flex flex-col items-end">
                     {enemies.map((player) => (
-                      <PlayerThumbnails key={player.ID} player_ID={player.ID} />
+                      <div key={player.ID}>
+                        <h3 className='font-bold text-xl'>{player.user.email}</h3>
+                        <PlayerThumbnails player_ID={player.ID} />
+                      </div>
                     ))}
                   </div>
                 </div>

@@ -36,6 +36,8 @@ function ActorCombobox({
   const sortedActors = actors.data.sort((a, b) => a.name.localeCompare(b.name))
   const actor = sortedActors.find((actor) => actor.actor_ID === value) ?? null
   const is_active = !!actor && active === actor.actor_ID
+  const selected_actors = selected.map(id => actors.data.find(a => a.actor_ID === id))
+  const has_restricted = selected_actors.some(a => a?.restricted)
 
   const handleValueChange = (actor: ActorDef | null) => {
     if (!actor?.actor_ID) return
@@ -57,6 +59,7 @@ function ActorCombobox({
               'relative justify-between font-normal h-16 px-2',
               {
                 'bg-input!': is_active,
+                'border border-amber-400!': actor?.restricted
               },
               className
             )}
@@ -86,7 +89,8 @@ function ActorCombobox({
                 <div
                   className={cn(
                     'font-semibold text-md',
-                    !is_active && 'text-muted-foreground!'
+                    !is_active && 'text-muted-foreground!',
+                    actor?.restricted && 'text-amber-400'
                   )}
                 >
                   <ComboboxValue placeholder="Select a shinobi..." />
@@ -125,7 +129,8 @@ function ActorCombobox({
             <ComboboxItem
               key={actor.actor_ID}
               value={actor}
-              disabled={selected.includes(actor.actor_ID)}
+              disabled={selected.includes(actor.actor_ID) || (actor.restricted && has_restricted)}
+              className={cn({ 'text-amber-400': actor.restricted })}
             >
               {actor.name}
             </ComboboxItem>

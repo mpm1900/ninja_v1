@@ -14,6 +14,8 @@ var Nagato = game.ActorDef{
 	Name:         "Nagato Uzumaki",
 	Clan:         game.ClanUzumaki,
 	Affiliations: []string{game.AffAkatsuki, game.AffAme},
+	Restricted:   true,
+
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            106,
 		game.StatStamina:       100,

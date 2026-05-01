@@ -78,6 +78,7 @@ type ActorDef = {
   name: string
   clan: string
   affiliations: Array<string>
+  restricted: boolean
   stats: ActorStats<number>
   natures: Partial<Record<NatureSet, Array<Nature>>>
   nature_damage: NatureStats<number>

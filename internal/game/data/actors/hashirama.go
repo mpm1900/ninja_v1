@@ -14,6 +14,7 @@ var Hashirama = game.ActorDef{
 	Name:         "Hashirama Senju",
 	Clan:         game.ClanSenju,
 	Affiliations: []string{game.AffKonoha},
+	Restricted:   true,
 
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            100,
