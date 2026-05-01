@@ -38,12 +38,14 @@ var Minato = game.ActorDef{
 	ActionIDs: append([]uuid.UUID{
 		actions.Rasengan.ID,
 		actions.GiantRasengan.ID,
-		actions.Chidori.ID,
+		actions.Raikiri.ID,
 		actions.DragonStance.ID,
 		actions.SageMode.ID,
 		actions.Fireball.ID,
 		actions.WhirlwindKick.ID,
 		actions.FlyingRaijin.ID,
 		actions.SummonAlly.ID,
+		actions.BodyFlicker.ID,
+		actions.WindSlash.ID,
 	}, GlobalActions...),
 }

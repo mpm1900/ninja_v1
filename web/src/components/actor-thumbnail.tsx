@@ -4,7 +4,7 @@ import { CircleQuestionMark, X } from 'lucide-react'
 import type { ComponentProps } from 'react'
 
 function clamp(value: number) {
-  return Math.max(0, Math.min(1, value))
+  return Math.max(0.02, Math.min(1, value))
 }
 
 function MiniHealthBar({

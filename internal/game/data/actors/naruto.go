@@ -60,7 +60,7 @@ var KCMNaurto = game.ActorDef{
 		game.StatHP:            100,
 		game.StatStamina:       130,
 		game.StatAttack:        116,
-		game.StatDefense:       87,
+		game.StatDefense:       97,
 		game.StatChakraAttack:  150,
 		game.StatChakraDefense: 97,
 		game.StatSpeed:         100,

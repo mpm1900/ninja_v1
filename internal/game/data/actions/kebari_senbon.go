@@ -16,7 +16,7 @@ func MakeKebariSenbon() game.Action {
 		Description: "Hits 2-5 times. High critical chance.",
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(25),
-		Stat:        game.Ptr(game.StatChakraAttack),
+		Stat:        game.Ptr(game.StatAttack),
 		Nature:      game.Ptr(game.NsYang),
 		Cost:        game.Ptr(50),
 		TargetCount: game.Ptr(1),
