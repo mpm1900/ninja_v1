@@ -259,8 +259,12 @@ func (e *damageHandler) resolveTargetHit(g *Game, targetIndex int, target Resolv
 func (e *damageHandler) applySingleHit(g *Game, target ResolvedActor, damage int) {
 	ApplyDamage(g, &e.source.ID, target, damage)
 
-	if damage > 0 {
-		g.On(OnDamageReceive, &e.context)
+	if damage > 0 && e.context.SourceActorID != nil {
+		targets := g.GetTargets(e.context)
+		for _, target := range targets {
+			ctx := MakeContextForActor(target).WithSource(*e.context.SourceActorID).WithPlayer(*e.context.SourcePlayerID)
+			g.On(OnDamageReceive, &ctx)
+		}
 	}
 
 	if e.config.Critical > 1.0 {

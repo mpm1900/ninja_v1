@@ -18,7 +18,7 @@ var Zabuza = game.ActorDef{
 		game.StatStamina:       100,
 		game.StatAttack:        125,
 		game.StatDefense:       90,
-		game.StatChakraAttack:  60,
+		game.StatChakraAttack:  90,
 		game.StatChakraDefense: 70,
 		game.StatSpeed:         85,
 		game.StatEvasion:       100,

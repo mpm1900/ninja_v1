@@ -14,8 +14,9 @@ func MakeDragonFire() game.Action {
 
 	config := game.ActionConfig{
 		Name:        "Dragon Fire",
-		Description: "5% chance to burn target. Never Misses.",
+		Description: "5% chance to burn target. In Ashen Terrain, hits all enemies.",
 		Nature:      game.Ptr(game.NsFire),
+		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(80),
 		Stat:        game.Ptr(game.StatChakraAttack),
 		TargetCount: game.Ptr(1),
@@ -26,7 +27,7 @@ func MakeDragonFire() game.Action {
 		CritMod:     1.5,
 	}
 
-	return makeBasicAttackWith(
+	action := makeBasicAttackWith(
 		ID,
 		config,
 		func(g game.Game, _, context game.Context) []game.GameTransaction {
@@ -40,4 +41,19 @@ func MakeDragonFire() game.Action {
 		},
 		nil,
 	)
+
+	action.MapContext = func(g game.Game, context game.Context) game.Context {
+		state, _ := g.GetState(context)
+		if state.Terrain != game.GameTerrainAshen {
+			return context
+		}
+
+		other_actors := g.GetActorsFilters(context, game.ComposeAF(game.ActiveFilter, game.OtherTeamFilter))
+		for _, t := range other_actors {
+			context.TargetPositionIDs = append(context.TargetPositionIDs, *t.PositionID)
+		}
+		return context
+	}
+
+	return action
 }

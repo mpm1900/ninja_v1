@@ -17,13 +17,13 @@ var SasukeEMS = game.ActorDef{
 	Restricted:   true,
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            106,
+		game.StatHP:            98,
 		game.StatStamina:       90,
 		game.StatAttack:        110,
 		game.StatDefense:       90,
 		game.StatChakraAttack:  130,
 		game.StatChakraDefense: 90,
-		game.StatSpeed:         154,
+		game.StatSpeed:         152,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},

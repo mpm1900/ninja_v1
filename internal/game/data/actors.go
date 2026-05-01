@@ -20,6 +20,7 @@ var ACTORS map[uuid.UUID]game.ActorDef = map[uuid.UUID]game.ActorDef{
 	actors.Hashirama.ActorID:  actors.Hashirama,
 	actors.Tobirama.ActorID:   actors.Tobirama,
 	actors.Naruto.ActorID:     actors.Naruto,
+	actors.NarutoSage.ActorID: actors.NarutoSage,
 	actors.Minato.ActorID:     actors.Minato,
 	actors.Nagato.ActorID:     actors.Nagato,
 	actors.PainAnimal.ActorID: actors.PainAnimal,

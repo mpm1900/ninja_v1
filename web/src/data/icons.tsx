@@ -30,6 +30,7 @@ import {
   GiPunchBlast,
   GiMissileSwarm,
   GiFireBowl,
+  GiDustCloud,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -126,6 +127,7 @@ const SHINOBI_ICONS: Record<string, IconType> = {
 }
 
 const MODIFIER_ICONS: Record<string, IconType> = {
+  ashen: GiDustCloud,
   burned: ({ className, ...props }) => (
     <GiFlamer className={cn('text-orange-400', className)} {...props} />
   ),

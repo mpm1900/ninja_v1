@@ -36,6 +36,7 @@ var Asuma = game.ActorDef{
 	},
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
+		actions.BurningAsh.ID,
 		actions.FlyingSwallow.ID,
 		actions.Fireball.ID,
 		actions.DragonFire.ID,
