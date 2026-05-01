@@ -29,6 +29,7 @@ import {
   GiCaltrops,
   GiPunchBlast,
   GiMissileSwarm,
+  GiFireBowl,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -233,6 +234,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   uchiha_fan: GiHandheldFan,
   unburden: FaWeightHanging,
   water_absorb: GiWaterRecycling,
+  will_of_fire: GiFireBowl,
 }
 
 export { Akatsuki, SHINOBI_ICONS, MODIFIER_ICONS }

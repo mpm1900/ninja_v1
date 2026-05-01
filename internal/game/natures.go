@@ -142,5 +142,9 @@ func ResolveNatures(
 		dr_ratio = dr_ratio * damages[nature] / res
 	}
 
-	return dr_ratio * avg_effectiveness
+	if dr_ratio == 0 || avg_effectiveness == 0 {
+		return 0
+	}
+
+	return max(0, dr_ratio+avg_effectiveness-1.0)
 }

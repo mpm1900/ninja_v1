@@ -90,7 +90,7 @@ function ActorCombobox({
                   className={cn(
                     'font-semibold text-md',
                     !is_active && 'text-muted-foreground!',
-                    actor?.restricted && 'text-amber-400'
+                    actor?.restricted && 'text-amber-400!'
                   )}
                 >
                   <ComboboxValue placeholder="Select a shinobi..." />
@@ -125,14 +125,14 @@ function ActorCombobox({
         <ComboboxInput showTrigger={false} placeholder="Search" />
         <ComboboxEmpty>No Shinobi found.</ComboboxEmpty>
         <ComboboxList>
-          {(actor) => (
+          {(a) => (
             <ComboboxItem
-              key={actor.actor_ID}
-              value={actor}
-              disabled={selected.includes(actor.actor_ID) || (actor.restricted && has_restricted)}
-              className={cn({ 'text-amber-400': actor.restricted })}
+              key={a.actor_ID}
+              value={a}
+              disabled={selected.includes(a.actor_ID) || (!actor?.restricted && a.restricted && has_restricted)}
+              className={cn({ 'text-amber-400': a.restricted })}
             >
-              {actor.name}
+              {a.name}
             </ComboboxItem>
           )}
         </ComboboxList>

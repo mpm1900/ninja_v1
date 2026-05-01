@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -30,7 +31,9 @@ var Asuma = game.ActorDef{
 		game.NsFire,
 		game.NsWind,
 	}),
-	Abilities:   []game.Modifier{},
+	Abilities: []game.Modifier{
+		modifiers.WillOfFire,
+	},
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
 		actions.FlyingSwallow.ID,
