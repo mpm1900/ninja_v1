@@ -54,6 +54,7 @@ import {
   BsSpeedometer,
   BsMoonFill,
 } from 'react-icons/bs'
+import { ImSleepy2 } from "react-icons/im";
 
 const Aburame: IconType = (props) => (
   <img src="/icons/aburame.svg" alt="aburame" {...(props as any)} />
@@ -223,6 +224,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   rain_speed: ({ className, ...props }) => (
     <BsSpeedometer className={cn('text-blue-300', className)} {...props} />
   ),
+  sleepy: ImSleepy2,
   speed_up: ({ className, ...props }) => (
     <PiCaretDoubleUpDuotone
       className={cn('text-emerald-400', className)}

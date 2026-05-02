@@ -42,5 +42,8 @@ var Shikamaru = game.ActorDef{
 		actions.Tailwind.ID,
 		actions.Redirect.ID,
 		actions.ShadowPossession.ID,
+		actions.MudWall.ID,
+		actions.WaterWall.ID,
+		actions.Yawn.ID,
 	}, GlobalActions...),
 }

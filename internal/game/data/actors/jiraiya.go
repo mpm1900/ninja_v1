@@ -42,5 +42,6 @@ var Jiraiya = game.ActorDef{
 		actions.GreatFireball.ID,
 		actions.SummonGamabunta.ID,
 		actions.KebariSenbon.ID,
+		actions.Yawn.ID,
 	}, GlobalActions...),
 }

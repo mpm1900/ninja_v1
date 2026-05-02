@@ -9,6 +9,24 @@ import (
 	"github.com/google/uuid"
 )
 
+func RemoveModifierSource(id uuid.UUID, actor game.Actor) []game.GameTransaction {
+	transactions := []game.GameTransaction{}
+
+	ctx := game.MakeContextForActor(actor)
+	ctx.ModifierID = &id
+	mod := mutations.RemoveModifierWhere(func(t game.Transaction[game.Modifier]) bool {
+		if t.Context.SourceActorID == nil {
+			return false
+		}
+
+		return actor.ID == *t.Context.SourceActorID &&
+			(t.Mutation.ID == id || (t.Mutation.GroupID != nil && *t.Mutation.GroupID == id))
+	})
+	mod_tx := game.MakeTransaction(mod, ctx)
+	transactions = append(transactions, mod_tx)
+
+	return transactions
+}
 func applyModifier(checkWarded bool, config game.ActionConfig, context game.Context, actor game.Actor, modifier game.Modifier) []game.GameTransaction {
 	transactions := []game.GameTransaction{}
 

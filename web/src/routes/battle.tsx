@@ -39,7 +39,7 @@ function RouteComponent() {
         <AppHeader />
         <div className="flex flex-col flex-1 relative overflow-auto">
           <div>
-            <div className="fixed top-14 px-4 flex flex-col items-end right-0 z-10">
+            <div className="fixed top-14 px-4 flex flex-col items-end right-4 z-10">
               <div>
                 {enemies.map((player) => (
                   <PlayerPositions key={player.ID} flip player_ID={player.ID} />
