@@ -1,5 +1,8 @@
 # Ninja Battler V1
 
+<img width="1403" height="999" alt="Screenshot 2026-05-02 at 2 19 33 PM" src="https://github.com/user-attachments/assets/203647ac-8e40-4fdf-9677-92af54044d62" />
+
+
 A modern web-based turn-based combat game inspired by the Naruto universe. Features an animated background, real-time combat logic, and a TanStack-powered frontend.
 
 ## Prerequisites
