@@ -20,7 +20,7 @@ var Tobirama = game.ActorDef{
 		game.StatStamina:       100,
 		game.StatAttack:        110,
 		game.StatDefense:       75,
-		game.StatChakraAttack:  135,
+		game.StatChakraAttack:  125,
 		game.StatChakraDefense: 85,
 		game.StatSpeed:         135,
 		game.StatEvasion:       100,

@@ -38,7 +38,6 @@ var Tsunade = game.ActorDef{
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
 		actions.Haze.ID,
-		actions.Fireball.ID,
 		actions.HeavyPunch.ID,
 		actions.SageMode.ID,
 		actions.TeamHeal.ID,

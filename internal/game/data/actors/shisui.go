@@ -43,7 +43,6 @@ var Shisui = game.ActorDef{
 		actions.PatternBreak.ID,
 		actions.Chidori.ID,
 		actions.DragonStance.ID,
-		actions.Fireball.ID,
 		actions.GreatFireball.ID,
 		actions.Firestorm.ID,
 		actions.BodyFlicker.ID,

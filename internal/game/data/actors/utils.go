@@ -9,6 +9,8 @@ import (
 
 var GlobalActions = []uuid.UUID{
 	actions.BodyReplacement.ID,
+	actions.LightningKunai.ID,
+	actions.Fireball.ID,
 	actions.Rest.ID,
 	actions.ShadowClone.ID,
 }

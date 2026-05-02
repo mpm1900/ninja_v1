@@ -34,10 +34,10 @@ var Choji = game.ActorDef{
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
 		actions.Expansion.ID,
-		actions.Fireball.ID,
 		actions.WhirlwindKick.ID,
 		actions.HumanBoulder.ID,
 		actions.HeavyPunch.ID,
 		actions.ChilliPill.ID,
+		actions.RockFist.ID,
 	}, GlobalActions...),
 }

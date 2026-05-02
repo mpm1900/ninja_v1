@@ -35,7 +35,6 @@ var Shino = game.ActorDef{
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
 		actions.DragonStance.ID,
-		actions.Fireball.ID,
 		actions.WhirlwindKick.ID,
 		actions.PoisonSting.ID,
 	}, GlobalActions...),

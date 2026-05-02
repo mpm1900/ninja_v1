@@ -21,7 +21,7 @@ var Guy = game.ActorDef{
 		game.StatStamina:       80,
 		game.StatAttack:        145,
 		game.StatDefense:       92,
-		game.StatChakraAttack:  75,
+		game.StatChakraAttack:  55,
 		game.StatChakraDefense: 86,
 		game.StatSpeed:         115,
 		game.StatEvasion:       100,

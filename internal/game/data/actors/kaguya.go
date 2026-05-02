@@ -33,6 +33,5 @@ var Kaguya = game.ActorDef{
 	ActionIDs: append([]uuid.UUID{
 		actions.Chidori.ID,
 		actions.DragonStance.ID,
-		actions.Fireball.ID,
 	}, GlobalActions...),
 }

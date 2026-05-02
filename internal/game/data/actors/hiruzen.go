@@ -34,7 +34,6 @@ var Hiruzen = game.ActorDef{
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
 		actions.Haze.ID,
-		actions.Fireball.ID,
 		actions.GreatFireball.ID,
 		actions.DragonFire.ID,
 		actions.WhirlwindKick.ID,

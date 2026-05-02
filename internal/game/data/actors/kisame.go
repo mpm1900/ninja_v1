@@ -41,7 +41,6 @@ var Kisame = game.ActorDef{
 	ActionIDs: append([]uuid.UUID{
 		actions.CollidingWave.ID,
 		actions.DragonStance.ID,
-		actions.Fireball.ID,
 		actions.WhirlwindKick.ID,
 		actions.HiddenMist.ID,
 		actions.WaterDragon.ID,

@@ -38,7 +38,6 @@ var Yamato = game.ActorDef{
 	ActionIDs: append([]uuid.UUID{
 		actions.Chidori.ID,
 		actions.DragonStance.ID,
-		actions.Fireball.ID,
 		actions.WhirlwindKick.ID,
 		actions.GreatTreeSpear.ID,
 		actions.SummonAlly.ID,

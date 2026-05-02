@@ -41,7 +41,6 @@ var Naruto = game.ActorDef{
 		actions.GiantRasengan.ID,
 		actions.PowerBoost.ID,
 		actions.SageMode.ID,
-		actions.Fireball.ID,
 		actions.WhirlwindKick.ID,
 		actions.SummonGamabunta.ID,
 		actions.Rasenshuriken.ID,

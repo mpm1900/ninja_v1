@@ -41,7 +41,6 @@ var Itachi = game.ActorDef{
 		actions.PatternBreak.ID,
 		actions.Flash.ID,
 		actions.MirageCrow.ID,
-		actions.Fireball.ID,
 		actions.GreatFireball.ID,
 		actions.PhoenixFlower.ID,
 		actions.PunishingFire.ID,

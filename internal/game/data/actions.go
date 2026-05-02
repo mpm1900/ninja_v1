@@ -125,6 +125,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.Firestorm.ID:             actions.Firestorm,
 	actions.PunishingFire.ID:         actions.PunishingFire,
 
+	actions.LightningKunai.ID:     actions.LightningKunai,
 	actions.Chidori.ID:            actions.Chidori,
 	actions.ChidoriSpear.ID:       actions.ChidoriSpear,
 	actions.ChidoriStream.ID:      actions.ChidoriStream,
