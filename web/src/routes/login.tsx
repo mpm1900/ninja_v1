@@ -2,7 +2,7 @@ import { Card, CardContent } from '#/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '#/components/ui/tabs'
 import { cn } from '#/lib/utils'
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { GiNinjaHead } from 'react-icons/gi'
+import { GiNinjaHead, GiSharpShuriken } from 'react-icons/gi'
 import { useForm } from '@tanstack/react-form'
 import z from 'zod'
 import { Field, FieldGroup, FieldLabel, FieldSet } from '#/components/ui/field'
@@ -59,9 +59,8 @@ function RouteComponent() {
       <div className="w-full max-w-sm">
         <a className="flex items-center justify-center gap-2 self-center font-medium p-4 mb-3">
           <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-            <GiNinjaHead className="size-4" />
+            <GiSharpShuriken className="size-4" />
           </div>
-          Shinobi
         </a>
         <form className={cn('flex flex-col gap-3')} onSubmit={form.handleSubmit}>
           <form.Field name="form">
