@@ -132,6 +132,12 @@ func MakeStatMultTeam(stat game.ActorStat, name string, groupID *uuid.UUID, mult
 	modifier.Show = true
 	return modifier
 }
+func MakeStatMultAll(stat game.ActorStat, name string, groupID *uuid.UUID, mult float64, priority int) game.Modifier {
+	modifier := NewStatMult(stat, groupID, game.ComposeAF(game.ActiveFilter), priority, mult)
+	modifier.Name = name
+	modifier.Show = true
+	return modifier
+}
 
 var AttackUpID = uuid.MustParse("ad74e7f2-2b26-50f7-a27a-24b24cb403bb")
 var AttackDownID = uuid.MustParse("ec4383a0-e6c2-5302-a63b-cfe988e88291")
@@ -199,7 +205,7 @@ var TailwindID = uuid.MustParse("cd2010e6-90d8-530f-be90-79634690e33d")
 var Tailwind = MakeStatMultTeam(game.StatSpeed, "Tailwind", &TailwindID, 2.0, game.MutPriorityPostStagedStats)
 
 var SageModeID = uuid.MustParse("764b5ee9-9136-5994-b598-40c3881e79dc")
-var SageMode = MakeStatMultTeam(game.StatSpeed, "Sage Mode", &SageModeID, -1, game.MutPriorityPostSet)
+var SageMode = MakeStatMultAll(game.StatSpeed, "Sage Mode", &SageModeID, -1, game.MutPriorityPostSet)
 
 var HiddenMistID = uuid.MustParse("2d007fb7-270b-492c-b114-f752f9c7a17a")
 var HiddenMist = MakeStatDeltaOtherTeam(game.StatAccuracy, "Hidden Mist", &HiddenMistID, -2)
