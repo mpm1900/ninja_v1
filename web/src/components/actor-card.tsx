@@ -20,7 +20,8 @@ const frameVariants = cva('border border-transparent', {
   variants: {
     variant: {
       default: 'bg-stone-900 text-stone-200 border-stone-700',
-      selected: 'bg-stone-300 text-stone-900 border-stone-100 text-shadow-none!',
+      selected:
+        'bg-stone-300 text-stone-900 border-stone-100 text-shadow-none!',
       targeted: 'bg-red-900 text-stone-200 border-red-500',
     },
   },
@@ -62,9 +63,7 @@ type ActorCardProps = {
 
 type Variant = VariantProps<typeof frameVariants>['variant']
 
-function getVariant(
-  props: Partial<ActorCardProps>
-): Variant {
+function getVariant(props: Partial<ActorCardProps>): Variant {
   if (props.targeted) return 'targeted'
   if (props.selected) return 'selected'
   return 'default'
@@ -88,7 +87,11 @@ function ActorCard({
       .map((m) => m.mutation)
       .concat(g.actors.filter((a) => a.ability).map((a) => a.ability!))
       .concat(g.actors.filter((a) => a.item).map((a) => a.item!))
-      .concat(g.actors.filter(a => a.default_modifiers).flatMap(a => a.default_modifiers))
+      .concat(
+        g.actors
+          .filter((a) => a.default_modifiers)
+          .flatMap((a) => a.default_modifiers)
+      )
   )
   const has_queued_action = useStore(
     gameStore,
@@ -225,7 +228,7 @@ function ActorAvatar({
   variant,
 }: {
   actor: Actor | undefined
-  variant: Variant,
+  variant: Variant
 }) {
   if (!actor) return null
 

@@ -4,7 +4,12 @@ import { gameStore } from '#/lib/stores/game'
 import { useStore } from '@tanstack/react-store'
 import { clientsStore } from '#/lib/stores/clients'
 import { cn } from '#/lib/utils'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from './ui/accordion'
 import { ScrollArea } from './ui/scroll-area'
 
 function GameLogItem({
@@ -14,7 +19,7 @@ function GameLogItem({
   item: GameLogType
   clientID: string
 }) {
-  const actors = useStore(gameStore, g => g.actors)
+  const actors = useStore(gameStore, (g) => g.actors)
   const source = actors.find((a) => a.ID === item.context.source_actor_ID)
   const action = source?.actions?.find((a) => a.ID === item.context.action_ID)
 
@@ -56,8 +61,7 @@ function GameLogList() {
   const clientID = useStore(clientsStore, (s) => s.me?.ID ?? '')
   const endRef = useRef<HTMLLIElement | null>(null)
 
-  const lastLogID =
-    log.length > 0 ? log[log.length - 1].ID : null
+  const lastLogID = log.length > 0 ? log[log.length - 1].ID : null
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: 'end' })
@@ -83,7 +87,7 @@ function GameLog() {
     <Accordion
       defaultValue={['log']}
       type="multiple"
-      className="bg-stone-950/80 px-3 rounded-sm border border-black min-w-96 mt-4"
+      className="bg-stone-950/80 px-3 rounded-sm border border-stone-300/30 ring-1 ring-black min-w-96 mt-4"
     >
       <AccordionItem value="log">
         <AccordionTrigger>Log</AccordionTrigger>

@@ -224,7 +224,7 @@ func (g *Game) Next() bool {
 	if g.PreAction() {
 		return true
 	}
-	g.Tick = time.Second * 2
+	g.Tick = time.Second * 200
 	if g.NextAction() {
 		return true
 	}
