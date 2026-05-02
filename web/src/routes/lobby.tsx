@@ -14,6 +14,7 @@ import {
   Card,
   CardAction,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from '#/components/ui/card'
@@ -22,6 +23,7 @@ import { NULL_CONTEXT } from '#/lib/game/context'
 import { Button } from '#/components/ui/button'
 import { useEffect, useState } from 'react'
 import { LobbyThumbnails } from '#/components/lobby-thumbnails'
+import { LobbyActorDetails } from '#/components/lobby-actor-details'
 
 export const Route = createFileRoute('/lobby')({
   beforeLoad: ({ context }) => {
@@ -48,7 +50,6 @@ function App() {
     default_enabled.map((a) => a.ID)
   )
 
-
   useEffect(() => {
     if (game.status === 'running') {
       nav({ to: '/battle' })
@@ -65,6 +66,7 @@ function App() {
             <Card className="m-6">
               <CardHeader>
                 <CardTitle>Pre-Game Lobby</CardTitle>
+                <CardDescription>Select 4-shinobi your line-up</CardDescription>
                 <CardAction>
                   {client &&
                     ready &&
@@ -103,7 +105,9 @@ function App() {
                 <div className="flex justify-between">
                   {players.map((player) => (
                     <div key={player.ID} className="flex flex-col gap-2">
-                      <h3 className='font-bold text-xl'>{player.user.email} (You)</h3>
+                      <h3 className="font-bold text-xl">
+                        {player.user.email} (You)
+                      </h3>
                       <LobbyThumbnails
                         player_ID={player.ID}
                         enabled={enabled}
@@ -141,12 +145,20 @@ function App() {
                           Cancel
                         </Button>
                       )}
+
+                      {game.actors
+                        .filter((a) => a.player_ID === player.ID)
+                        .map((a) => (
+                          <LobbyActorDetails key={a.ID} actor={a} />
+                        ))}
                     </div>
                   ))}
                   <div className="flex flex-col items-end">
                     {enemies.map((player) => (
                       <div key={player.ID}>
-                        <h3 className='font-bold text-xl'>{player.user.email}</h3>
+                        <h3 className="font-bold text-xl">
+                          {player.user.email}
+                        </h3>
                         <PlayerThumbnails player_ID={player.ID} />
                       </div>
                     ))}

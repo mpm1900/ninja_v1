@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"fmt"
 	"ninja_v1/internal/game"
 
 	"github.com/google/uuid"
@@ -19,7 +20,7 @@ func MakeCopyJutsu() game.Action {
 		ID:              uuid.MustParse("7bc916c9-f762-472c-ac29-d5e7996b64e3"),
 		Config:          config,
 		TargetType:      game.TargetActorID,
-		TargetPredicate: game.ComposeAF(game.TeamFilter, game.OtherFilter, game.TargetableFilter),
+		TargetPredicate: game.ComposeAF(game.OtherFilter, game.TargetableFilter),
 		ContextValidate: game.TargetLengthFilter(1),
 		ActionMutation: game.ActionMutation{
 			Priority: game.ActionPriorityDefault,
@@ -43,20 +44,27 @@ func MakeCopyJutsu() game.Action {
 					resolved := target.Resolve(g)
 					action, ok := resolved.GetActionByID(*resolved.LastUsedActionID)
 					if !ok {
+						fmt.Println("ERROR: COPY JUTSU ACTION NOT FOUND")
 						continue
 					}
 
-					action_ctx := game.Context{
-						ActionID:       &action.ID,
-						SourceActorID:  &source.ID,
-						SourcePlayerID: &source.PlayerID,
-						TargetActorIDs: []uuid.UUID{target.ID}, // this assignment could be problematic in the future. maybe.
-					}
+					action_ctx := game.MakeContextForActor(source)
+					action_ctx.ActionID = &action.ID
+					action_ctx.TargetActorIDs = []uuid.UUID{target.ID}
+					action_ctx.TargetPositionIDs = []uuid.UUID{}
 
-					transactions = append(transactions, action.Delta(p, g, action_ctx)...)
+
+					// Copied attack deltas read active action config from game state.
+					// Run against a local copy with no active transaction so the
+					// copied action's own config is used (power/stat/accuracy).
+					gCopy := g
+					gCopy.ActiveTransaction = nil
+					transactions = append(transactions, action.Delta(p, gCopy, action_ctx)...)
 					// TODO, maybe add the action to use until switch out? (modifier add action)
 					//transaction := game.MakeTransaction(mut, context)
 					//transactions = append(transactions, transaction)
+
+					fmt.Println(action.Config.Name, len(transactions))
 				}
 
 				return transactions

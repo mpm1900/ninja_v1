@@ -576,8 +576,8 @@ func (a Actor) GetModifiers() []Modifier {
 }
 
 func MapBaseStat(stat, level int, focus float64, ev int) int {
-	base := float64((stat * 2) + 31)
-	ratio := float64((base+(float64(ev)))*float64(level)) / 100
+	base := float64((stat * 2) + 32)
+	ratio := float64((base+(float64(ev * 2)))*float64(level)) / 100
 	return Round((ratio + 5) * focus)
 }
 

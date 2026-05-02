@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"fmt"
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/mutations"
 
@@ -37,8 +36,6 @@ func MakeFlyingLotus() game.Action {
 				repeats = 0
 			}
 
-			fmt.Println(repeats)
-			fmt.Printf("%+v", context)
 			context.SetMeta(key, repeats+1)
 			if repeats < 2 {
 				recharge := mutations.QueueAction(flyingLotusID, context)

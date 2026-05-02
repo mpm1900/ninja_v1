@@ -5,7 +5,7 @@ import { NatureBadge } from './nature-badge'
 
 type ActionCardProps = ComponentProps<'button'> & {
   action: Action
-  selected?: boolean,
+  selected?: boolean
   usedSummon?: boolean
 }
 
@@ -32,8 +32,10 @@ function ActionCard({
         'hover:-translate-y-0.5',
         'focus-visible:outline-none',
         'flex flex-col shadow-xl shadow-black/60 hover:shadow-black',
+        'ring ring-black',
         {
-          'border-stone-100 hover:border-stone-100 shadow-lg shadow-black': selected,
+          'border-stone-100 hover:border-stone-100 shadow-lg shadow-black':
+            selected,
           'border-orange-400/40 hover:border-orange-400':
             action.config.stat === 'attack',
           'border-orange-400': action.config.stat === 'defense' && selected,
@@ -74,7 +76,7 @@ function ActionCard({
                 </div>
               ) : disabled ? (
                 <div className="text-[10px] uppercase tracking-wide text-destructive">
-                  {action.summon && usedSummon ? "summon used" : "disabled"}
+                  {action.summon && usedSummon ? 'summon used' : 'disabled'}
                 </div>
               ) : (
                 <div className="text-[10px] uppercase tracking-wide text-stone-100/50">
@@ -94,7 +96,7 @@ function ActionCard({
       </div>
 
       <div className="flex *:flex-1 text-[11px] border-t border-b bg-stone-100 shadow-md z-2">
-        <StatChip label='Acc' value={accuracyLabel} />
+        <StatChip label="Acc" value={accuracyLabel} />
         <StatChip label="Cost" value={action.config.cost || '-'} />
         <StatChip label="Priority" value={action.priority || '-'} />
       </div>

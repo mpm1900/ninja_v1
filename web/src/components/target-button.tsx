@@ -62,26 +62,35 @@ function TargetButton({
             ...context,
             target_position_IDs: includes
               ? (context.target_position_IDs?.filter(
-                (id) => id !== actor.position_ID
-              ) ?? null)
+                  (id) => id !== actor.position_ID
+                ) ?? null)
               : [...(context.target_position_IDs ?? []), actor.position_ID],
           })
         }
       }}
     >
-      <div className={cn("flex items-end w-full justify-between gap-4 relative z-10", !includes && "text-shadow-[1px_1px_0px_#000000]")}>
-        <div className='truncate'>{actor.name}</div>
-        <div className='text-xs'>Lv<span className='font-black'>{actor.level}</span></div>
+      <div
+        className={cn(
+          'flex items-end w-full justify-between gap-4 relative z-10',
+          !includes && 'text-shadow-[1px_1px_0px_#000000]'
+        )}
+      >
+        <div className="truncate">{actor.name}</div>
+        <div className="text-xs">
+          Lv<span className="font-black">{actor.level}</span>
+        </div>
       </div>
 
       <div className="relative w-full">
         <MiniHealthBar actor={actor} className="left-0 right-0" />
       </div>
-      <div className='absolute z-0 opacity-30 -left-4 -top-3'>
-        {actor.affiliations?.filter((_, i) => i == 0).map((a) => {
-          const C = SHINOBI_ICONS[a]
-          return C ? <C key={a} className="w-12" /> : null
-        })}
+      <div className="absolute z-0 opacity-30 -left-4 -top-3">
+        {actor.affiliations
+          ?.filter((_, i) => i == 0)
+          .map((a) => {
+            const C = SHINOBI_ICONS[a]
+            return C ? <C key={a} className="w-12" /> : null
+          })}
       </div>
     </Button>
   )

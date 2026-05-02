@@ -2,7 +2,6 @@ import { cn } from '#/lib/utils'
 import { useStore } from '@tanstack/react-store'
 import { ActorThumbnail } from './actor-thumbnail'
 import { gameStore } from '#/lib/stores/game'
-import { clientsStore } from '#/lib/stores/clients'
 
 function LobbyThumbnails({
   player_ID,
@@ -13,9 +12,7 @@ function LobbyThumbnails({
   enabled: string[]
   onEnabledChange: (enabled: string[]) => void
 }) {
-  const client = useStore(clientsStore, (s) => s.me)
   const actors = useStore(gameStore, (g) => g.actors)
-  const is_player = client?.ID == player_ID
 
   function toggleActor(ID: string) {
     if (enabled.length >= 4 && !enabled.includes(ID)) {
@@ -27,6 +24,7 @@ function LobbyThumbnails({
       onEnabledChange([...enabled, ID])
     }
   }
+
   return (
     <div className="flex gap-2">
       {actors

@@ -80,7 +80,9 @@ function ActorTooltip({
           className="w-auto flex flex-col"
         >
           <div className="flex justify-between">
-            <div className='text-3xl nanum-brush-script-regular'>{actor.name}</div>
+            <div className="text-3xl nanum-brush-script-regular">
+              {actor.name}
+            </div>
             <div>
               {(Object.keys(actor.natures) as Array<NatureSet>)
                 .sort((a, b) => natureIndexes[a] - natureIndexes[b])
@@ -89,6 +91,16 @@ function ActorTooltip({
                 ))}
             </div>
           </div>
+          <div className="bg-stone-700 rounded-xs overflow-hidden ring ring-black mb-2">
+            <div className="mb-1 h-px w-full bg-gradient-to-r to-stone-100/35 from-transparent" />
+            <div className="grid grid-cols-3 px-2">
+              <div className="capitalize">{actor.focus}</div>
+              <div>{actor.item?.name ?? '-'}</div>
+              <div>{actor.ability?.name ?? '-'}</div>
+            </div>
+            <div className="mt-1 h-px w-full bg-gradient-to-r to-transparent from-stone-100/35" />
+          </div>
+
           <div className="flex items-start mb-4">
             <table className="[&_td]:px-2 [&_td]:whitespace-nowrap">
               <tbody>
@@ -153,13 +165,21 @@ function ActorTooltip({
                 <tr>
                   <td>Accuracy</td>
                   <td>
-                    <ActorStat actor={actor} showBase={false} stat={'accuracy'} />
+                    <ActorStat
+                      actor={actor}
+                      showBase={false}
+                      stat={'accuracy'}
+                    />
                   </td>
                 </tr>
                 <tr>
                   <td>Evasion</td>
                   <td>
-                    <ActorStat actor={actor} showBase={false} stat={'evasion'} />
+                    <ActorStat
+                      actor={actor}
+                      showBase={false}
+                      stat={'evasion'}
+                    />
                   </td>
                 </tr>
               </tbody>
