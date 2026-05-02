@@ -13,9 +13,13 @@ import { ChevronRight } from 'lucide-react'
 import type { Actor } from '#/lib/game/actor'
 import type { Player } from '#/lib/game/player'
 
-function sortActors(a: Actor, b: Actor, player: Player) {
-  const a_posi = player.positions.map((p) => p.ID).indexOf(a.position_ID)
-  const b_posi = player.positions.map((p) => p.ID).indexOf(b.position_ID)
+function sortActors(
+  a: Actor | undefined,
+  b: Actor | undefined,
+  player: Player
+) {
+  const a_posi = player.positions.map((p) => p.actor_ID).indexOf(a?.ID ?? null)
+  const b_posi = player.positions.map((p) => p.actor_ID).indexOf(b?.ID ?? null)
   return a_posi - b_posi
 }
 
@@ -42,9 +46,16 @@ function ActionControl({
   )
   const enemy = game.players.find((p) => p.ID !== client.ID)
   const player = game.players.find((p) => p.ID === client.ID)
-  const enemy_actors = actors.filter((a) => a.player_ID !== client.ID)
-  const player_actors = actors.filter((a) => a.player_ID === client.ID)
+  const enemy_actors =
+    enemy?.positions.map((pos) =>
+      actors.find((a) => a.position_ID == pos.ID)
+    ) ?? []
+  const player_actors =
+    player?.positions.map((pos) =>
+      actors.find((a) => a.position_ID == pos.ID)
+    ) ?? []
   const has_queued_action = game.queued_actions[context.source_actor_ID ?? '']
+  console.log(player_actors)
 
   if (!!staged) {
     return (
@@ -80,9 +91,10 @@ function ActionControl({
         <div className="flex flex-col gap-2">
           {enemy && (
             <div className="gap-3 grid grid-cols-2">
-              {enemy_actors
-                .sort((a, b) => sortActors(a, b, enemy))
-                .map((a) => (
+              {enemy.positions.map((pos) => {
+                const a = actors.find((a) => a.ID === pos.actor_ID)
+                if (!a) return <div />
+                return (
                   <TargetButton
                     key={a.ID}
                     actor={a}
@@ -93,14 +105,16 @@ function ActionControl({
                     context={context}
                     onContextChange={onContextChange}
                   />
-                ))}
+                )
+              })}
             </div>
           )}
           {player && (
             <div className="gap-3 grid grid-cols-2">
-              {player_actors
-                .sort((a, b) => sortActors(a, b, player))
-                .map((a) => (
+              {player.positions.map((pos) => {
+                const a = actors.find((a) => a.ID === pos.actor_ID)
+                if (!a) return <div />
+                return (
                   <TargetButton
                     key={a.ID}
                     actor={a}
@@ -111,7 +125,8 @@ function ActionControl({
                     context={context}
                     onContextChange={onContextChange}
                   />
-                ))}
+                )
+              })}
             </div>
           )}
           {actors.length == 0 && valid === false && (
