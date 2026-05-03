@@ -13,18 +13,13 @@ const deleteTeam = createServerFn({ method: 'POST' })
     const request = getRequest()
     const cookies = request?.headers.get('cookie') || ''
 
-    const response = await fetch(
-      `${process.env.API_URL}/api/teams/${data.team_id}`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Cookie: cookies,
-        },
-      }
-    )
-
-    await response.json()
+    await fetch(`${process.env.API_URL}/api/teams/${data.team_id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: cookies,
+      },
+    })
   })
 
 function useDeleteTeam() {
@@ -33,7 +28,7 @@ function useDeleteTeam() {
       mutationKey: ['delete-team'],
       mutationFn: async (team_id: string | null) => {
         if (team_id === null) return
-        return await deleteTeam({
+        await deleteTeam({
           data: {
             team_id,
           },
