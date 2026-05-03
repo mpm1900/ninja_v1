@@ -10,19 +10,19 @@ import {
   SidebarMenuItem,
 } from './ui/sidebar'
 import { cloneTeamConfig } from '#/lib/team-storage'
-import type { Team } from '#/lib/queries/teams'
+import { teamsQuery, type Team } from '#/lib/queries/teams'
 import { Button } from './ui/button'
-import { Trash } from 'lucide-react'
+import { Loader2, Plus, Trash } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
 
 function TeamBuilderSidebar({
-  savedTeams,
   onLoadTeam,
   onDeleteTeam,
 }: {
-  savedTeams: Team[]
   onLoadTeam: (team: Team) => void
   onDeleteTeam: (team: Team) => void
 }) {
+  const teams = useQuery(teamsQuery)
   const loadSavedTeam = (team: Team) => {
     const team_config = cloneTeamConfig(team.team_config)
     onLoadTeam({
@@ -53,7 +53,8 @@ function TeamBuilderSidebar({
           <SidebarGroupLabel className="justify-between">
             Teams{' '}
             <Button
-              size="xs"
+              size="icon-xs"
+              variant="outline"
               onClick={() => {
                 onLoadTeam({
                   id: null,
@@ -65,12 +66,12 @@ function TeamBuilderSidebar({
                 })
               }}
             >
-              Add Team
+              <Plus />
             </Button>
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
-              {savedTeams.length === 0 ? (
+              {teams.data?.length === 0 ? (
                 <SidebarMenuItem>
                   <SidebarMenuButton disabled>
                     <span className="text-muted-foreground">
@@ -79,15 +80,16 @@ function TeamBuilderSidebar({
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ) : (
-                savedTeams.map((team) => (
+                teams.data?.map((team) => (
                   <SidebarMenuItem key={team.team_config.name}>
                     <SidebarMenuButton
-                      className="justify-between"
+                      className="justify-between group"
                       onClick={() => loadSavedTeam(team)}
                     >
                       <span>{team.team_config.name}</span>
                       <Button
                         size="icon-xs"
+                        className="hidden group-hover:block"
                         variant="ghost"
                         onClick={(e) => {
                           e.stopPropagation()
@@ -100,6 +102,11 @@ function TeamBuilderSidebar({
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))
+              )}
+              {teams.isPending && (
+                <div className="grid place-items-center">
+                  <Loader2 className="animate-spin" />
+                </div>
               )}
             </SidebarMenu>
           </SidebarGroupContent>
