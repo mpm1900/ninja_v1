@@ -96,8 +96,52 @@ function setActionID(actor_ID: string, action_ID: string, game: Game) {
       [actor_ID]: action_ID,
     }
 
-    const nextActor = getNextActionableActor(game, s, actor_ID)
-    if (!nextActor) {
+    let resolvedNextActor = getNextActionableActor(game, s, actor_ID)
+    let nextActionID = resolvedNextActor
+      ? nextAction(resolvedNextActor, previous_action_IDs)
+      : null
+
+    if (!resolvedNextActor || !nextActionID) {
+      const playerID =
+        s.source_player_ID ??
+        game.actors.find((a) => a.ID === actor_ID)?.player_ID ??
+        null
+
+      if (playerID) {
+        const actedActorIDs = new Set(
+          game.actions
+            .map((tx) => tx.context.source_actor_ID)
+            .filter(Boolean) as string[]
+        )
+        actedActorIDs.add(actor_ID)
+
+        const fallbackActors = game.actors.filter(
+          (a) =>
+            a.player_ID === playerID &&
+            !!a.position_ID &&
+            !a.stunned &&
+            !actedActorIDs.has(a.ID)
+        )
+
+        const orderedFallbackActors = resolvedNextActor
+          ? [
+              resolvedNextActor,
+              ...fallbackActors.filter((a) => a.ID !== resolvedNextActor?.ID),
+            ]
+          : fallbackActors
+
+        for (const candidate of orderedFallbackActors) {
+          const candidateActionID = nextAction(candidate, previous_action_IDs)
+          if (candidateActionID) {
+            resolvedNextActor = candidate
+            nextActionID = candidateActionID
+            break
+          }
+        }
+      }
+    }
+
+    if (!resolvedNextActor || !nextActionID) {
       return {
         ...s,
         action_ID: null,
@@ -110,12 +154,11 @@ function setActionID(actor_ID: string, action_ID: string, game: Game) {
       }
     }
 
-    let nextActionID = nextAction(nextActor, previous_action_IDs)
     return {
       ...s,
       action_ID: nextActionID,
-      parent_actor_ID: nextActor.ID,
-      source_actor_ID: nextActor.ID,
+      parent_actor_ID: resolvedNextActor.ID,
+      source_actor_ID: resolvedNextActor.ID,
       target_actor_IDs: [],
       target_position_IDs: [],
       previous_action_IDs,
