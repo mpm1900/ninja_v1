@@ -12,6 +12,7 @@ var TeamHeal = MakeTeamHeal()
 func MakeTeamHeal() game.Action {
 	config := game.ActionConfig{
 		Name:        "Team Heal",
+		Description: "All active ally shinobi heal for 1/4th HP.",
 		Nature:      game.Ptr(game.NsYang),
 		TargetCount: game.Ptr(0),
 		Cost:        game.Ptr(30),

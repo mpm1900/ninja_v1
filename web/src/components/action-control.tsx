@@ -102,7 +102,7 @@ function ActionControl({
               <div className="gap-3 grid grid-cols-2">
                 {enemy.positions.map((pos) => {
                   const a = actors.find((a) => a.ID === pos.actor_ID)
-                  if (!a) return <div />
+                  if (!a) return <div key={pos.ID} />
                   return (
                     <TargetButton
                       key={a.ID}
@@ -122,7 +122,7 @@ function ActionControl({
               <div className="gap-3 grid grid-cols-2">
                 {player.positions.map((pos) => {
                   const a = actors.find((a) => a.ID === pos.actor_ID)
-                  if (!a) return <div />
+                  if (!a) return <div key={pos.ID} />
                   return (
                     <TargetButton
                       key={a.ID}
