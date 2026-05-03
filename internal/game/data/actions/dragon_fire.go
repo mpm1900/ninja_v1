@@ -14,7 +14,7 @@ func MakeDragonFire() game.Action {
 
 	config := game.ActionConfig{
 		Name:        "Dragon Fire",
-		Description: "5% chance to burn target. In Ashen Terrain, hits all enemies.",
+		Description: "5% chance to burn target. In Flamable Terrain, hits all enemies.",
 		Nature:      game.Ptr(game.NsFire),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(80),
@@ -44,7 +44,7 @@ func MakeDragonFire() game.Action {
 
 	action.MapContext = func(g game.Game, context game.Context) game.Context {
 		state, _ := g.GetState(context)
-		if state.Terrain != game.GameTerrainAshen {
+		if state.Terrain != game.GameTerrainFlamable {
 			return context
 		}
 

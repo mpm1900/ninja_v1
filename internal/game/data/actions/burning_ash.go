@@ -16,7 +16,7 @@ func MakeBurningAsh() game.Action {
 		Name:        "Burning Ash",
 		Nature:      game.Ptr(game.NsFire),
 		Jutsu:       game.Ninjutsu,
-		Description: "Sets ashen terrain.",
+		Description: "Sets Flamable Terrain.",
 	}
 
 	return game.Action{
@@ -32,14 +32,14 @@ func MakeBurningAsh() game.Action {
 				transactions := []game.GameTransaction{}
 
 				state, _ := g.GetState(context)
-				if state.Terrain == game.GameTerrainAshen {
+				if state.Terrain == game.GameTerrainFlamable {
 					return transactions
 				}
 
 				filter := modifiers.FilterTerrain()
 				transactions = append(transactions, filter)
 
-				mod := modifiers.AshenTerrain()
+				mod := modifiers.FloodedTerrain()
 				mod.Duration = 4
 				mut := mutations.AddModifiers(false, mod)
 				terrain_tx := game.MakeTransaction(mut, game.NewContext().WithSource(*context.SourceActorID))

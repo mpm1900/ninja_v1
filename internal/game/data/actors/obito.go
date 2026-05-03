@@ -7,21 +7,21 @@ import (
 	"github.com/google/uuid"
 )
 
-var Tobi = game.ActorDef{
-	ActorID:      uuid.MustParse("e02084f2-2545-468d-8395-b7b5c84fc63d"),
-	SpriteURL:    "/sprites/tobi_64.png",
-	Name:         "Tobi",
+var Obito = game.ActorDef{
+	ActorID:      uuid.MustParse("e01398df-0a65-45a4-a4d6-878af3fa9d4c"),
+	SpriteURL:    "/sprites/obito_64.png",
+	Name:         "Obito Uchiha",
 	Clan:         game.ClanUchiha,
 	Affiliations: []string{game.AffAkatsuki, game.AffKonoha},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            95,
+		game.StatHP:            100,
 		game.StatStamina:       100,
-		game.StatAttack:        115,
-		game.StatDefense:       90,
-		game.StatChakraAttack:  80,
-		game.StatChakraDefense: 90,
-		game.StatSpeed:         60,
+		game.StatAttack:        135,
+		game.StatDefense:       120,
+		game.StatChakraAttack:  60,
+		game.StatChakraDefense: 85,
+		game.StatSpeed:         50,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},
@@ -35,11 +35,11 @@ var Tobi = game.ActorDef{
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
 		actions.Kamui.ID,
-		actions.KamuiEscape.ID,
 		actions.KamuiCounter.ID,
 		actions.KamuiSlash.ID,
-		actions.GreatFireball.ID,
-		actions.Flash.ID,
-		actions.RetreatingStrike.ID,
+		actions.SageMode.ID,
+		actions.PatternBreak.ID,
+		actions.KusariChains.ID,
+		actions.SwordsStance.ID,
 	}, GlobalActionsExcept(actions.BodyReplacement.ID)...),
 }

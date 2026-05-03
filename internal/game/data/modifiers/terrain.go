@@ -92,19 +92,19 @@ func ElectrifiedTerrain() game.Modifier {
 	return mod
 }
 
-func AshenTerrain() game.Modifier {
-	mod := SetTerrain(electrifiedTerrainID, game.GameTerrainAshen)
-	mod.Name = "Ashen Terrain"
-	mod.Icon = "ashen"
+func FlamableTerrain() game.Modifier {
+	mod := SetTerrain(electrifiedTerrainID, game.GameTerrainFlamable)
+	mod.Name = "Flamable Terrain"
+	mod.Icon = "flamable"
 	mod.Description = "<< TODO >>"
 	mod.ActorMutations = []game.ActorMutation{
 		game.MakeActorMutation(
 			&electrifiedTerrainID,
 			game.MutPriorityDefault,
-			game.ComposeAF(game.ActiveFilter, game.GameHasTerrain(game.GameTerrainAshen)),
+			game.ComposeAF(game.ActiveFilter, game.GameHasTerrain(game.GameTerrainFlamable)),
 			func(g game.Game, actor game.Actor, context game.Context) game.Actor {
 				state, _ := g.GetState(context)
-				if state.Terrain != game.GameTerrainAshen {
+				if state.Terrain != game.GameTerrainFlamable {
 					return actor
 				}
 

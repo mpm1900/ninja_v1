@@ -12,7 +12,7 @@ const (
 
 const (
 	GameTerrainNone        GameTerrain = "none"
-	GameTerrainAshen       GameTerrain = "ashen"
+	GameTerrainFlamable    GameTerrain = "flamable"
 	GameTerrainElectrified GameTerrain = "electrified"
 	GameTerrainFlooded     GameTerrain = "flooded"
 )
