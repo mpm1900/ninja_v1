@@ -9,6 +9,7 @@ import {
 } from './ui/select'
 import type { Modifier } from '#/lib/game/modifier'
 import { ModifierTooltip } from './modifier-tooltip'
+import { MODIFIER_ICONS } from '#/data/icons'
 
 function AbilitySelect({
   value,
@@ -29,16 +30,24 @@ function AbilitySelect({
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {options.map((ability) => (
-                <ModifierTooltip
-                  key={ability.ID}
-                  modifier={ability}
-                  contentProps={{ side: 'right' }}
-                  description={m => m.parent_description || m.description}
-                >
-                  <SelectItem value={ability.ID}>{ability.name}</SelectItem>
-                </ModifierTooltip>
-              ))}
+              {options.map((ability) => {
+                const Icon = ability.icon
+                  ? MODIFIER_ICONS[ability.icon]
+                  : undefined
+                return (
+                  <ModifierTooltip
+                    key={ability.ID}
+                    modifier={ability}
+                    contentProps={{ side: 'right' }}
+                    description={(m) => m.parent_description || m.description}
+                  >
+                    <SelectItem value={ability.ID}>
+                      {Icon && <Icon />}
+                      {ability.name}
+                    </SelectItem>
+                  </ModifierTooltip>
+                )
+              })}
             </SelectGroup>
           </SelectContent>
         </Select>

@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from './ui/select'
 import { ModifierTooltip } from './modifier-tooltip'
+import { MODIFIER_ICONS } from '#/data/icons'
 
 function ItemSelect({
   otherItemIDs,
@@ -31,15 +32,24 @@ function ItemSelect({
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {query.data?.map((item) => (
-                <ModifierTooltip
-                  key={item.ID}
-                  modifier={item}
-                  contentProps={{ side: 'right' }}
-                >
-                  <SelectItem value={item.ID} disabled={otherItemIDs.includes(item.ID)}>{item.name}</SelectItem>
-                </ModifierTooltip>
-              ))}
+              {query.data?.map((item) => {
+                const Icon = item.icon ? MODIFIER_ICONS[item.icon] : undefined
+                return (
+                  <ModifierTooltip
+                    key={item.ID}
+                    modifier={item}
+                    contentProps={{ side: 'right' }}
+                  >
+                    <SelectItem
+                      value={item.ID}
+                      disabled={otherItemIDs.includes(item.ID)}
+                    >
+                      {Icon && <Icon />}
+                      {item.name}
+                    </SelectItem>
+                  </ModifierTooltip>
+                )
+              })}
             </SelectGroup>
           </SelectContent>
         </Select>
