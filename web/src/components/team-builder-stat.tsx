@@ -71,7 +71,7 @@ function TeamBuilderStatGuage({ baseStat }: { baseStat: number }) {
   const barColor = getStatBarColor(baseStat)
 
   return (
-    <div className="relative bg-gray-600 rounded-md h-6 w-full min-w-40 overflow-hidden">
+    <div className="relative bg-gray-600 rounded-md h-6 w-full min-w-40 overflow-hidden ring ring-black">
       <div
         className="absolute top-0 left-0 rounded-md h-6"
         style={{

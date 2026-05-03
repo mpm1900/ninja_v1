@@ -9,19 +9,26 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from './ui/sidebar'
-import type { TeamConfig } from '#/lib/stores/config'
 import { cloneTeamConfig } from '#/lib/team-storage'
+import type { Team } from '#/lib/queries/teams'
+import { Button } from './ui/button'
+import { Trash } from 'lucide-react'
 
 function TeamBuilderSidebar({
   savedTeams,
   onLoadTeam,
+  onDeleteTeam,
 }: {
-  savedTeams: TeamConfig[]
-  onLoadTeam: (config: TeamConfig) => void
+  savedTeams: Team[]
+  onLoadTeam: (team: Team) => void
+  onDeleteTeam: (team: Team) => void
 }) {
-  const loadSavedTeam = (team: TeamConfig) => {
-    const loadedTeam = cloneTeamConfig(team)
-    onLoadTeam(loadedTeam)
+  const loadSavedTeam = (team: Team) => {
+    const team_config = cloneTeamConfig(team.team_config)
+    onLoadTeam({
+      ...team,
+      team_config,
+    })
   }
 
   return (
@@ -43,7 +50,24 @@ function TeamBuilderSidebar({
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Teams</SidebarGroupLabel>
+          <SidebarGroupLabel className="justify-between">
+            Teams{' '}
+            <Button
+              size="xs"
+              onClick={() => {
+                onLoadTeam({
+                  id: null,
+                  team_config: {
+                    name: '',
+                    selected_index: 0,
+                    actors: [],
+                  },
+                })
+              }}
+            >
+              Add Team
+            </Button>
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
               {savedTeams.length === 0 ? (
@@ -56,9 +80,23 @@ function TeamBuilderSidebar({
                 </SidebarMenuItem>
               ) : (
                 savedTeams.map((team) => (
-                  <SidebarMenuItem key={team.name}>
-                    <SidebarMenuButton onClick={() => loadSavedTeam(team)}>
-                      <span>{team.name}</span>
+                  <SidebarMenuItem key={team.team_config.name}>
+                    <SidebarMenuButton
+                      className="justify-between"
+                      onClick={() => loadSavedTeam(team)}
+                    >
+                      <span>{team.team_config.name}</span>
+                      <Button
+                        size="icon-xs"
+                        variant="ghost"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          e.preventDefault()
+                          onDeleteTeam(team)
+                        }}
+                      >
+                        <Trash />
+                      </Button>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))

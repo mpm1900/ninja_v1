@@ -16,6 +16,13 @@ type Session struct {
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
 }
 
+type Team struct {
+	ID         uuid.UUID          `json:"id"`
+	UserID     uuid.UUID          `json:"user_id"`
+	TeamConfig TeamConfig         `json:"team_config"`
+	CreatedAt  pgtype.Timestamptz `json:"created_at"`
+}
+
 type User struct {
 	ID        uuid.UUID          `json:"id"`
 	Username  string             `json:"username"`

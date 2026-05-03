@@ -1,15 +1,19 @@
-import { mutationOptions, useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  mutationOptions,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { createServerFn } from '@tanstack/react-start'
-import { setResponseHeader } from '@tanstack/react-start/server'
 import z from 'zod'
 import type { User } from '#/lib/queries/auth'
+import { setResponseCookie } from '#/utils/set-cookie'
 
 const requestSchema = z.object({
   email: z.string(),
   password: z.string(),
 })
 
-const signup = createServerFn()
+const signup = createServerFn({ method: 'POST' })
   .inputValidator(requestSchema)
   .handler(async ({ data }) => {
     const response = await fetch(`${process.env.API_URL}/api/auth/signup`, {
@@ -18,10 +22,7 @@ const signup = createServerFn()
       body: JSON.stringify(data),
     })
 
-    const setCookie = response.headers.get('set-cookie')
-    if (setCookie) {
-      setResponseHeader('set-cookie', setCookie)
-    }
+    setResponseCookie(response)
 
     if (!response.ok) {
       throw new Error(`Signup failed with status ${response.status}`)

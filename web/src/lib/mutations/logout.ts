@@ -1,9 +1,14 @@
-import { mutationOptions, useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  mutationOptions,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { createServerFn } from '@tanstack/react-start'
-import { getRequest, setResponseHeader } from '@tanstack/react-start/server'
+import { getRequest } from '@tanstack/react-start/server'
 import { useRouter } from '@tanstack/react-router'
+import { setResponseCookie } from '#/utils/set-cookie'
 
-const logout = createServerFn().handler(async () => {
+const logout = createServerFn({ method: 'POST' }).handler(async () => {
   const request = getRequest()
   const cookies = request?.headers.get('cookie') || ''
 
@@ -14,10 +19,7 @@ const logout = createServerFn().handler(async () => {
     },
   })
 
-  const setCookie = response.headers.get('set-cookie')
-  if (setCookie) {
-    setResponseHeader('set-cookie', setCookie)
-  }
+  setResponseCookie(response)
 })
 
 function useLogout() {

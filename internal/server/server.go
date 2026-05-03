@@ -19,8 +19,8 @@ func NewServer(ctx context.Context, queries *db.Queries) *Server {
 	logger := slog.Default()
 
 	dataHandler := NewDataHandler(ctx)
+	teamsHandler := NewTeamsHandler(ctx, queries)
 	instancesHandler := NewInstancesHandler(ctx)
-	authenticatedInstancesHandler := auth.WithSession(instancesHandler.ServeHTTP, queries)
 
 	mux := http.NewServeMux()
 	api := http.NewServeMux()
@@ -30,6 +30,10 @@ func NewServer(ctx context.Context, queries *db.Queries) *Server {
 	api.HandleFunc("POST /auth/logout", auth.WithSession(handleLogout(ctx, queries), queries))
 	api.HandleFunc("GET  /auth/me", auth.WithSession(handleMe(), queries))
 
+	api.HandleFunc("GET /teams", auth.WithSession(teamsHandler.HandleGetTeams, queries))
+	api.HandleFunc("POST /teams/upsert", auth.WithSession(teamsHandler.HandleUpsertTeam, queries))
+	api.HandleFunc("DELETE /teams/{team_id}", auth.WithSession(teamsHandler.HandleDeleteTeam, queries))
+
 	api.HandleFunc("GET /actions", dataHandler.HandleGetActions)
 	api.HandleFunc("GET /actors", dataHandler.HandleGetActors)
 	api.HandleFunc("GET /items", dataHandler.HandleGetItems)
@@ -37,7 +41,7 @@ func NewServer(ctx context.Context, queries *db.Queries) *Server {
 	api.HandleFunc("GET /instances", instancesHandler.HandleGetGames)
 
 	mux.Handle("/api/", http.StripPrefix("/api", api))
-	mux.Handle("/socket/", http.StripPrefix("/socket", authenticatedInstancesHandler))
+	mux.Handle("/socket/", http.StripPrefix("/socket", auth.WithSession(instancesHandler.ServeHTTP, queries)))
 
 	// CORS and other global middleware
 	handler := http.Handler(mux)

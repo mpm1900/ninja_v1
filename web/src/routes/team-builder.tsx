@@ -9,15 +9,18 @@ import { instancesQuery } from '#/lib/queries/instances'
 import { clientsStore } from '#/lib/stores/clients'
 import { type TeamConfig } from '#/lib/stores/config'
 import { useStore } from '@tanstack/react-form'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { ClientOnly, createFileRoute, redirect } from '@tanstack/react-router'
-import { Save, Swords, Trash } from 'lucide-react'
+import { Loader2, Save, Swords, Trash } from 'lucide-react'
 import { TeamBuilderSidebar } from '#/components/team-builder-sidebar'
-import { useSavedTeams } from '#/hooks/use-saved-teams'
 import { useTeamBuilderForm } from '#/hooks/use-team-builder-form'
 import { TeamBuilderActionsTable } from '#/components/team-builder-actions-table'
 import { TeamBuilderList } from '#/components/team-builder-list'
 import { TeamBuilderActorConfig } from '#/components/team-builder-actor-config'
+import { teamsQuery, type Team } from '#/lib/queries/teams'
+import { useUpsertTeam } from '#/lib/mutations/upsert-team'
+import { useState } from 'react'
+import { useDeleteTeam } from '#/lib/mutations/delete-team'
 
 export const Route = createFileRoute('/team-builder')({
   component: RouteComponent,
@@ -46,14 +49,18 @@ function RouteComponent() {
     },
   })
 
-  const { savedTeams, saveTeam } = useSavedTeams()
+  const savedQuery = useQuery(teamsQuery)
+  const [id, setID] = useState<string | null>(null)
+  const upsertMutation = useUpsertTeam()
+  const deleteMutation = useDeleteTeam()
 
-  const loadSavedTeam = (team: TeamConfig) => {
-    form.setFieldValue('name', team.name)
-    form.setFieldValue('actors', team.actors)
+  const loadSavedTeam = (team: Team) => {
+    setID(team.id)
+    form.setFieldValue('name', team.team_config.name)
+    form.setFieldValue('actors', team.team_config.actors)
     form.setFieldValue(
       'selected_index',
-      Math.min(team.selected_index, Math.max(team.actors.length - 1, 0))
+      Math.min(team.team_config.selected_index ?? 0, Math.max(team.team_config.actors.length - 1, 0))
     )
   }
 
@@ -66,7 +73,14 @@ function RouteComponent() {
           <SidebarProvider className="h-full min-h-0 w-full overflow-hidden rounded-xl border border-stone-300/30 ring ring-black bg-stone-950 shadow-sm">
             <TeamBuilderSidebar
               onLoadTeam={loadSavedTeam}
-              savedTeams={savedTeams}
+              savedTeams={savedQuery.data ?? []}
+              onDeleteTeam={t => {
+                deleteMutation.mutate(t.id, {
+                  onSuccess: () => {
+                    savedQuery.refetch()
+                  }
+                })
+              }}
             />
 
             <SidebarInset className="min-h-0 bg-stone-950">
@@ -80,10 +94,19 @@ function RouteComponent() {
                             <div className="flex gap-2">
                               <Button
                                 size="icon"
-                                disabled={!values.name.trim() || !isValid}
-                                onClick={() => saveTeam(values as TeamConfig)}
+                                disabled={upsertMutation.isPending || !values.name.trim() || !isValid}
+                                onClick={() => {
+                                  upsertMutation.mutate({
+                                    id,
+                                    config: values as TeamConfig
+                                  }, {
+                                    onSuccess: () => {
+                                      savedQuery.refetch()
+                                    }
+                                  })
+                                }}
                               >
-                                <Save />
+                                {upsertMutation.isPending ? <Loader2 className='animate-spin' /> : <Save />}
                               </Button>
                               <Button
                                 size="icon"

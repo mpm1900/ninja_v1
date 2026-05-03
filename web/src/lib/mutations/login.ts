@@ -4,16 +4,16 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import { createServerFn } from '@tanstack/react-start'
-import { setResponseHeader } from '@tanstack/react-start/server'
 import z from 'zod'
 import type { User } from '../queries/auth'
+import { setResponseCookie } from '#/utils/set-cookie'
 
 const requestSchema = z.object({
   email: z.string(),
   password: z.string(),
 })
 
-const login = createServerFn()
+const login = createServerFn({ method: 'POST' })
   .inputValidator(requestSchema)
   .handler(async ({ data }) => {
     const response = await fetch(`${process.env.API_URL}/api/auth/login`, {
@@ -26,10 +26,7 @@ const login = createServerFn()
       throw new Error(`Login failed with status ${response.status}`)
     }
 
-    const setCookie = response.headers.get('set-cookie')
-    if (setCookie) {
-      setResponseHeader('set-cookie', setCookie)
-    }
+    setResponseCookie(response)
 
     return (await response.json()) as User
   })

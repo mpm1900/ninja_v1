@@ -5,7 +5,6 @@ import type { Game } from '../game/game'
 import type { Context } from '../game/context'
 import { setContextPlayer } from './battle-context'
 import type { ActorConfig, TeamConfig } from './config'
-import { createIsomorphicFn } from '@tanstack/react-start'
 
 type SocketStatus =
   | 'idle'
@@ -79,12 +78,15 @@ function getSocketUrl(instanceID: string): string {
   return `${protocol}://${hostname}:${port}/socket/${instanceID}/connect`
 }
 
-const savedInstanceID = createIsomorphicFn()
-  .server(() => null as string | null)
-  .client(() => localStorage.getItem(INSTANCE_ID_KEY))()
+function readSavedInstanceID(): string | null {
+  if (typeof window === 'undefined') {
+    return null
+  }
+  return localStorage.getItem(INSTANCE_ID_KEY)
+}
 
 const socketStore = new Store<SocketState>({
-  instanceID: savedInstanceID,
+  instanceID: null,
   socket: null,
   status: 'idle',
   url: null,
@@ -338,15 +340,12 @@ function sendContextMessage(request: SocketRequest) {
   return sendSocketMessage(JSON.stringify(request))
 }
 
-const connect = createIsomorphicFn()
-  .server(() => { })
-  .client(() => {
-    if (savedInstanceID) {
-      connectSocket(savedInstanceID)
-    }
-  })
-
-connect()
+if (typeof window !== 'undefined') {
+  const savedInstanceID = readSavedInstanceID()
+  if (savedInstanceID) {
+    connectSocket(savedInstanceID)
+  }
+}
 
 export type { SocketResponse, SocketMessageSubscriber, ActorConfig }
 export {

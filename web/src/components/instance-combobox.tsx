@@ -15,6 +15,8 @@ import type { ReactNode } from 'react'
 import { v4 } from 'uuid'
 import { cn } from '#/lib/utils'
 
+const CREATE_INSTANCE_VALUE = '__create_instance__'
+
 function InstanceCombobox({
   icon,
   value = null,
@@ -25,18 +27,28 @@ function InstanceCombobox({
   onValueChange: (value: string) => void
 }) {
   const query = useQuery(instancesQuery)
+  const instanceItems = query.data ?? []
+  const hasSelectedValue =
+    !!value && instanceItems.some((instance) => instance.ID === value)
+  const items = [
+    ...(hasSelectedValue || !value ? [] : [{ ID: value }]),
+    ...instanceItems,
+    { ID: CREATE_INSTANCE_VALUE },
+  ]
 
   return (
     <Combobox
-      items={[...(query.data ?? []), { ID: null }]}
+      items={items}
       value={value}
       onValueChange={(v) => {
-        if (v) {
-          onValueChange(v)
-        } else {
-          onValueChange(v4())
+        if (!v) {
+          return
         }
-        query.refetch()
+        if (v === CREATE_INSTANCE_VALUE) {
+          onValueChange(v4())
+        } else {
+          onValueChange(v)
+        }
       }}
     >
       <ComboboxTrigger
@@ -64,7 +76,7 @@ function InstanceCombobox({
                 "[&_[data-slot='combobox-item-indicator']]:hidden": !value,
               })}
             >
-              {item.ID ?? 'Create Instance'}
+              {item.ID === CREATE_INSTANCE_VALUE ? 'Create Instance' : item.ID}
             </ComboboxItem>
           )}
         </ComboboxList>
