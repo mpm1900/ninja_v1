@@ -78,77 +78,78 @@ function ActionControl({
 
   return (
     <div className="flex flex-col items-center gap-4 min-w-xs">
-      {action && action.meta.switch ? (
-        <div className="gap-3 grid grid-cols-2">
-          {actors.map((a) => {
-            return (
-              <TargetButton
-                key={a.ID}
-                actor={a}
-                enabled={enabled}
-                loading={false}
-                contextValid={!!valid}
-                targetType={action.target_type}
-                context={context}
-                onContextChange={onContextChange}
-              />
-            )
-          })}
-        </div>
-      ) : (
-        <div className="flex flex-col gap-2">
-          {enemy && (
-            <div className="gap-3 grid grid-cols-2">
-              {enemy.positions.map((pos) => {
-                const a = actors.find((a) => a.ID === pos.actor_ID)
-                if (!a) return <div />
-                return (
-                  <TargetButton
-                    key={a.ID}
-                    actor={a}
-                    enabled={enabled}
-                    loading={false}
-                    contextValid={!!valid}
-                    targetType={action.target_type}
-                    context={context}
-                    onContextChange={onContextChange}
-                  />
-                )
-              })}
-            </div>
-          )}
-          {player && (
-            <div className="gap-3 grid grid-cols-2">
-              {player.positions.map((pos) => {
-                const a = actors.find((a) => a.ID === pos.actor_ID)
-                if (!a) return <div />
-                return (
-                  <TargetButton
-                    key={a.ID}
-                    actor={a}
-                    enabled={enabled}
-                    loading={false}
-                    contextValid={!!valid}
-                    targetType={action.target_type}
-                    context={context}
-                    onContextChange={onContextChange}
-                  />
-                )
-              })}
-            </div>
-          )}
-          {actors.length == 0 && valid === false && (
-            <span className="text-muted-foreground text-sm mb-4">
-              no targets available
-            </span>
-          )}
-          {actors.length == 0 && valid === true && (
-            <span className="text-muted-foreground/50 text-sm mb-4">
-              this action does not target
-            </span>
-          )}
-        </div>
-      )}
+      {action &&
+        (action.meta.switch ? (
+          <div className="gap-3 grid grid-cols-2">
+            {actors.map((a) => {
+              return (
+                <TargetButton
+                  key={a.ID}
+                  actor={a}
+                  enabled={enabled}
+                  loading={false}
+                  contextValid={!!valid}
+                  targetType={action.target_type}
+                  context={context}
+                  onContextChange={onContextChange}
+                />
+              )
+            })}
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {enemy && (
+              <div className="gap-3 grid grid-cols-2">
+                {enemy.positions.map((pos) => {
+                  const a = actors.find((a) => a.ID === pos.actor_ID)
+                  if (!a) return <div />
+                  return (
+                    <TargetButton
+                      key={a.ID}
+                      actor={a}
+                      enabled={enabled}
+                      loading={false}
+                      contextValid={!!valid}
+                      targetType={action.target_type}
+                      context={context}
+                      onContextChange={onContextChange}
+                    />
+                  )
+                })}
+              </div>
+            )}
+            {player && (
+              <div className="gap-3 grid grid-cols-2">
+                {player.positions.map((pos) => {
+                  const a = actors.find((a) => a.ID === pos.actor_ID)
+                  if (!a) return <div />
+                  return (
+                    <TargetButton
+                      key={a.ID}
+                      actor={a}
+                      enabled={enabled}
+                      loading={false}
+                      contextValid={!!valid}
+                      targetType={action.target_type}
+                      context={context}
+                      onContextChange={onContextChange}
+                    />
+                  )
+                })}
+              </div>
+            )}
+            {actors.length == 0 && valid === false && (
+              <span className="text-muted-foreground text-sm mb-4">
+                no targets available
+              </span>
+            )}
+            {actors.length == 0 && valid === true && (
+              <span className="text-muted-foreground/50 text-sm mb-4">
+                this action does not target
+              </span>
+            )}
+          </div>
+        ))}
 
       <div className="flex w-full justify-end">
         <Button
