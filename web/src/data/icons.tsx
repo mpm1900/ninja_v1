@@ -64,7 +64,7 @@ import {
   BsMoonFill,
 } from 'react-icons/bs'
 import { ImSleepy2 } from 'react-icons/im'
-import { SiComma } from 'react-icons/si'
+import { SiComma, SiRazorpay } from 'react-icons/si'
 import { LuRefreshCwOff } from "react-icons/lu";
 
 const Aburame: IconType = (props) => (
@@ -255,6 +255,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   sages_scroll: ({ className, ...props }) => (
     <FaScroll className={cn('text-stone-300', className)} {...props} />
   ),
+  shark_skin: SiRazorpay,
   sleepy: ImSleepy2,
   speed_up: ({ className, ...props }) => (
     <PiCaretDoubleUpDuotone

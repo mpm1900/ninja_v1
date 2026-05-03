@@ -24,4 +24,5 @@ var ITEMS map[uuid.UUID]game.Modifier = map[uuid.UUID]game.Modifier{
 	modifiers.ConductiveBracers.ID:    modifiers.ConductiveBracers,
 	modifiers.OnyxMagatama.ID:         modifiers.OnyxMagatama,
 	modifiers.SagesScroll.ID:          modifiers.SagesScroll,
+	modifiers.SharkSkin.ID:            modifiers.SharkSkin,
 }

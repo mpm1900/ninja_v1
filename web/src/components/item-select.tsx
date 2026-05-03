@@ -34,6 +34,7 @@ function ItemSelect({
             <SelectGroup>
               {query.data?.map((item) => {
                 const Icon = item.icon ? MODIFIER_ICONS[item.icon] : undefined
+                const used = otherItemIDs.includes(item.ID)
                 return (
                   <ModifierTooltip
                     key={item.ID}
@@ -42,7 +43,7 @@ function ItemSelect({
                   >
                     <SelectItem
                       value={item.ID}
-                      disabled={otherItemIDs.includes(item.ID)}
+                      disabled={used}
                     >
                       {Icon && <Icon />}
                       {item.name}

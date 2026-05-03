@@ -20,19 +20,12 @@ var RageTrigger game.Trigger = game.Trigger{
 			transactions := []game.GameTransaction{}
 
 			targets := g.GetTargets(context)
-			if len(targets) == 0 {
-				return transactions
+			for _, target := range targets {
+				mut_ctx := game.MakeContextForActor(target)
+				mutation := mutations.AddModifiers(false, AttackUpSource)
+				transaction := game.MakeTransaction(mutation, mut_ctx)
+				transactions = append(transactions, transaction)
 			}
-
-			target := targets[0]
-			mut_ctx := game.Context{
-				SourcePlayerID: &target.PlayerID,
-				SourceActorID:  &target.ID,
-				ParentActorID:  &target.ID,
-			}
-			mutation := mutations.AddModifiers(false, AttackUpSource)
-			transaction := game.MakeTransaction(mutation, mut_ctx)
-			transactions = append(transactions, transaction)
 
 			return transactions
 		},

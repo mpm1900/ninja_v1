@@ -264,6 +264,13 @@ func (e *damageHandler) applySingleHit(g *Game, target ResolvedActor, damage int
 		for _, target := range targets {
 			ctx := MakeContextForActor(target).WithSource(*e.context.SourceActorID).WithPlayer(*e.context.SourcePlayerID)
 			g.On(OnDamageReceive, &ctx)
+
+			if e.action.Stat != nil {
+				stat := *e.action.Stat
+				if stat == StatAttack || stat == StatDefense {
+					g.On(OnDamagePhysical, &ctx)
+				}
+			}
 		}
 	}
 
