@@ -15,7 +15,7 @@ var Deidara = game.ActorDef{
 
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            100,
-		game.StatStamina:       110,
+		game.StatStamina:       100,
 		game.StatAttack:        60,
 		game.StatDefense:       80,
 		game.StatChakraAttack:  130,

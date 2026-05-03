@@ -16,7 +16,7 @@ var Shisui = game.ActorDef{
 	Affiliations: []string{game.AffKonoha},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            100,
+		game.StatHP:            80,
 		game.StatStamina:       70,
 		game.StatAttack:        90,
 		game.StatDefense:       75,

@@ -6,12 +6,12 @@ import (
 	"github.com/google/uuid"
 )
 
-var FlyingRaijin = MakeFlyingRaijin()
+var FlyingRaijinStrike = MakeFlyingRaijin()
 
 func MakeFlyingRaijin() game.Action {
 	ID := uuid.MustParse("1a54031e-0ae6-49ed-b8b5-931c692417bf")
 	config := game.ActionConfig{
-		Name:        "Flying Raijin",
+		Name:        "Flying Raijin: Strike",
 		Description: "+2 priority. High critical hit chance.",
 		Nature:      game.Ptr(game.NsTai),
 		Accuracy:    game.Ptr(100),

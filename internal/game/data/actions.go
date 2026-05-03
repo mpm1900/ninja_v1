@@ -89,7 +89,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.GiantRasengan.ID:    actions.GiantRasengan,
 	actions.Rasengan.ID:         actions.Rasengan,
 	actions.RasenganRecharge.ID: actions.RasenganRecharge,
-	actions.FlyingRaijin.ID:     actions.FlyingRaijin,
+	actions.FlyingRaijinStrike.ID:     actions.FlyingRaijinStrike,
 
 	actions.LuckyStrikes.ID:        actions.LuckyStrikes,
 	actions.HeavyPunch.ID:          actions.HeavyPunch,
