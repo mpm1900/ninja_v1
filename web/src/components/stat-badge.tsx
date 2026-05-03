@@ -1,4 +1,4 @@
-import { type ActorAttackStat, type ActorDefenseStat } from '#/lib/game/actor'
+import { type ActorNatureStat } from '#/lib/game/actor'
 import { cn } from '#/lib/utils'
 import { cva } from 'class-variance-authority'
 import type { ClassValue } from 'class-variance-authority/types'
@@ -8,7 +8,7 @@ import type { ComponentProps } from 'react'
 type t = Record<
   string,
   Partial<
-    Record<ActorAttackStat | ActorDefenseStat | 'speed' | 'none', ClassValue>
+    Record<ActorNatureStat | 'none', ClassValue>
   >
 >
 const variants = cva<t>(
@@ -37,7 +37,7 @@ function StatBadge({
   stat,
   ...props
 }: React.ComponentProps<'span'> & {
-  stat: ActorAttackStat | ActorDefenseStat | 'speed'
+  stat: ActorNatureStat
   contentProps?: Partial<ComponentProps<typeof TooltipContent>>
 }) {
   return (

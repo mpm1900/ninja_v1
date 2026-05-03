@@ -7,22 +7,22 @@ import (
 	"github.com/google/uuid"
 )
 
-var Fireball = MakeFireball()
+var StoneBullet = MakeStoneBullet()
 
-func MakeFireball() game.Action {
-	ID := uuid.MustParse("aaf5174b-f386-54b1-84c4-0c062937c770")
+func MakeStoneBullet() game.Action {
+	ID := uuid.MustParse("37ff4e8e-14e1-4d00-bde9-3f834b97cb73")
 
 	config := game.ActionConfig{
-		Name:        "Fireball",
-		Description: "10% chance to burn target.",
-		Nature:      game.Ptr(game.NsFire),
+		Name:        "Stone Bullet",
+		Description: "10% chance to stun target.",
+		Nature:      game.Ptr(game.NsEarth),
 		Accuracy:    game.Ptr(100),
 		Power:       game.Ptr(55),
-		Stat:        game.Ptr(game.StatChakraAttack),
+		Stat:        game.Ptr(game.StatAttack),
 		TargetCount: game.Ptr(1),
 		Cost:        game.Ptr(40),
 		Cooldown:    game.Ptr(0),
-		Jutsu:       game.Ninjutsu,
+		Jutsu:       game.Taijutsu,
 		CritChance:  game.Ptr(getCriticalStage(0)),
 		CritMod:     1.5,
 	}
@@ -34,7 +34,7 @@ func MakeFireball() game.Action {
 			transactions := []game.GameTransaction{}
 			targets := g.GetTargets(context)
 			for _, target := range targets {
-				transactions = append(transactions, modifiers.ChanceBurn(config, context, target, 10)...)
+				transactions = append(transactions, modifiers.ChanceModifier(config, context, target, modifiers.Stunned, 10)...)
 			}
 
 			return transactions

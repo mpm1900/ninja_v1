@@ -17,5 +17,11 @@ var ITEMS map[uuid.UUID]game.Modifier = map[uuid.UUID]game.Modifier{
 	modifiers.GedoShard.ID:            modifiers.GedoShard,
 	modifiers.Onigiri.ID:              modifiers.Onigiri,
 	modifiers.ShinobiVest.ID:          modifiers.ShinobiVest,
-	modifiers.UchihaFan.ID:            modifiers.UchihaFan,
+	modifiers.DragonFlamePepper.ID:    modifiers.DragonFlamePepper,
+	modifiers.CoralFragment.ID:        modifiers.CoralFragment,
+	modifiers.GraniteRing.ID:          modifiers.GraniteRing,
+	modifiers.FoldingWarFan.ID:        modifiers.FoldingWarFan,
+	modifiers.ConductiveBracers.ID:    modifiers.ConductiveBracers,
+	modifiers.OnyxMagatama.ID:         modifiers.OnyxMagatama,
+	modifiers.SagesScroll.ID:          modifiers.SagesScroll,
 }

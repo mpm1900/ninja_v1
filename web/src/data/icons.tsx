@@ -31,6 +31,9 @@ import {
   GiMissileSwarm,
   GiFireBowl,
   GiDustCloud,
+  GiBellPepper,
+  GiCoral,
+  GiLinkedRings,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -45,7 +48,7 @@ import { MdFileUploadOff } from 'react-icons/md'
 import { GrFastForward } from 'react-icons/gr'
 import { TbTagPlus } from 'react-icons/tb'
 import { HiScale } from 'react-icons/hi2'
-import { FaFrog, FaHouseFloodWater, FaWeightHanging } from 'react-icons/fa6'
+import { FaFrog, FaHouseFloodWater, FaWeightHanging, FaRing, FaScroll } from 'react-icons/fa6'
 import { FaHandsHelping } from 'react-icons/fa'
 import { TbScanEye, TbCancel } from 'react-icons/tb'
 import {
@@ -55,6 +58,7 @@ import {
   BsMoonFill,
 } from 'react-icons/bs'
 import { ImSleepy2 } from "react-icons/im";
+import { SiComma } from "react-icons/si";
 
 const Aburame: IconType = (props) => (
   <img src="/icons/aburame.svg" alt="aburame" {...(props as any)} />
@@ -133,6 +137,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
     <GiFlamer className={cn('text-orange-400', className)} {...props} />
   ),
   coerced: GiComa,
+  conductive_bracers: GiLinkedRings,
   consume_chakra: GiHeartOrgan,
   cmo_chakra: ({ className, ...props }) => (
     <GiDoubled className={cn('text-indigo-400', className)} {...props} />
@@ -150,6 +155,8 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   chakra_reduction_up: ({ className, ...props }) => (
     <GiArmorUpgrade className={cn('text-indigo-400', className)} {...props} />
   ),
+  coral_fragment: GiCoral,
+  dragon_flame_pepper: GiBellPepper,
   physical_reduction_up: ({ className, ...props }) => (
     <GiArmorUpgrade className={cn('text-orange-300', className)} {...props} />
   ),
@@ -187,6 +194,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   flooded: FaHouseFloodWater,
   focused: GiLookAt,
   gedo_shard: GiTopaz,
+  granite_ring: FaRing,
   guts: GiMinotaur,
   haze: HiScale,
   healing_tactics: GiHealing,
@@ -197,6 +205,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   naruto_transform: PiSpiralFill,
   nature_specialist: GiEcology,
   onigiri: PiOnigiriFill,
+  onyx_magatama: SiComma,
   paralyzed: ({ className, ...props }) => (
     <GiLightningTrio className={cn('text-yellow-400', className)} {...props} />
   ),
@@ -224,6 +233,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   rain_speed: ({ className, ...props }) => (
     <BsSpeedometer className={cn('text-blue-300', className)} {...props} />
   ),
+  sages_scroll: FaScroll,
   sleepy: ImSleepy2,
   speed_up: ({ className, ...props }) => (
     <PiCaretDoubleUpDuotone
@@ -235,7 +245,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   stunned: GiStarSwirl,
   tailwind: PiWindFill,
   taunted: Anger,
-  uchiha_fan: GiHandheldFan,
+  folding_war_fan: GiHandheldFan,
   unburden: FaWeightHanging,
   water_absorb: GiWaterRecycling,
   will_of_fire: GiFireBowl,

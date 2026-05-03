@@ -66,6 +66,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.ShinraTensei.ID: actions.ShinraTensei,
 	actions.BlackNeedle.ID:  actions.BlackNeedle,
 
+	actions.WaterBullet.ID:    actions.WaterBullet,
 	actions.HiddenMist.ID:     actions.HiddenMist,
 	actions.CreateRain.ID:     actions.CreateRain,
 	actions.CollidingWave.ID:  actions.CollidingWave,
@@ -104,6 +105,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.RetreatingStrike.ID:    actions.RetreatingStrike,
 	actions.FlyingLotus.ID:         actions.FlyingLotus,
 
+	actions.StoneBullet.ID:     actions.StoneBullet,
 	actions.IronSkin.ID:        actions.IronSkin,
 	actions.IronBody.ID:        actions.IronBody,
 	actions.HumanBoulder.ID:    actions.HumanBoulder,
@@ -137,6 +139,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 	actions.LightningArmor.ID:     actions.LightningArmor,
 	actions.LightningLigerBomb.ID: actions.LightningLigerBomb,
 
+	actions.GalePalm.ID:       actions.GalePalm,
 	actions.Rasenshuriken.ID:  actions.Rasenshuriken,
 	actions.PressureDamage.ID: actions.PressureDamage,
 	actions.BodyFlicker.ID:    actions.BodyFlicker,
@@ -147,8 +150,7 @@ var ACTIONS map[uuid.UUID]game.Action = map[uuid.UUID]game.Action{
 
 	actions.KebariSenbon.ID: actions.KebariSenbon,
 
-	actions.PoisonSting.ID: actions.PoisonSting,
-
+	actions.PoisonSting.ID:    actions.PoisonSting,
 	actions.SnakeStrike.ID:    actions.SnakeStrike,
 	actions.SharinganGlare.ID: actions.SharinganGlare,
 

@@ -38,10 +38,10 @@ function ActionCard({
             selected,
           'border-orange-400/40 hover:border-orange-400':
             action.config.stat === 'attack',
-          'border-orange-400': action.config.stat === 'defense' && selected,
+          'border-orange-400': action.config.stat === 'attack' && selected,
           'border-red-400/40 hover:border-red-400':
             action.config.stat === 'defense',
-          'border-red-400': action.config.stat === 'attack' && selected,
+          'border-red-400': action.config.stat === 'defense' && selected,
           'border-indigo-400/50 hover:border-indigo-400':
             action.config.stat === 'chakra_attack',
           'border-indigo-400':
