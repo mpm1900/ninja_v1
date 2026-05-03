@@ -46,16 +46,7 @@ function ActionControl({
   )
   const enemy = game.players.find((p) => p.ID !== client.ID)
   const player = game.players.find((p) => p.ID === client.ID)
-  const enemy_actors =
-    enemy?.positions.map((pos) =>
-      actors.find((a) => a.position_ID == pos.ID)
-    ) ?? []
-  const player_actors =
-    player?.positions.map((pos) =>
-      actors.find((a) => a.position_ID == pos.ID)
-    ) ?? []
   const has_queued_action = game.queued_actions[context.source_actor_ID ?? '']
-  console.log(player_actors)
 
   if (!!staged) {
     return (
@@ -87,7 +78,24 @@ function ActionControl({
 
   return (
     <div className="flex flex-col items-center gap-4 min-w-xs">
-      {action && (
+      {action && action.meta.switch ? (
+        <div className="gap-3 grid grid-cols-2">
+          {actors.map((a) => {
+            return (
+              <TargetButton
+                key={a.ID}
+                actor={a}
+                enabled={enabled}
+                loading={false}
+                contextValid={!!valid}
+                targetType={action.target_type}
+                context={context}
+                onContextChange={onContextChange}
+              />
+            )
+          })}
+        </div>
+      ) : (
         <div className="flex flex-col gap-2">
           {enemy && (
             <div className="gap-3 grid grid-cols-2">

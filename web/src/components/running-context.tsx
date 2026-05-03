@@ -19,7 +19,10 @@ function RunningContext({ context }: { context: Context }) {
 
   return (
     <div className="pointer-events-none absolute inset-0 z-30 grid place-items-center px-4">
-      <div className="relative w-full max-w-2xl animate-in fade-in-0 zoom-in-95 duration-300">
+      <div
+        key={context.source_actor_ID}
+        className="relative w-full max-w-2xl animate-in fade-in-0 zoom-in-95 duration-300"
+      >
         <div
           className={cn(
             'absolute -inset-4 -z-10 rounded-2xl opacity-70 blur-2xl',

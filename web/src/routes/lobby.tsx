@@ -63,7 +63,7 @@ function App() {
         <AppHeader />
         <div className="flex min-w-0">
           <div className="min-w-0 space-y-2 flex-1 overflow-auto">
-            <Card className="m-6">
+            <Card className="m-6 bg-stone-950">
               <CardHeader>
                 <CardTitle>Pre-Game Lobby</CardTitle>
                 <CardDescription>Select 4-shinobi your line-up</CardDescription>
