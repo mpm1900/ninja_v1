@@ -14,7 +14,7 @@ import { ChevronRight } from 'lucide-react'
 type t = Record<string, Partial<Record<NatureSet | 'none', ClassValue>>>
 
 const variants = cva<t>(
-  'text-sm text-stone-100 px-1 py-0.5 rounded text-shadow-[1px_1px_0px_#000000] text-nowrap',
+  'text-sm text-stone-100 px-1 py-0.5 rounded text-shadow-[1px_1px_0px_#000000] text-nowrap cursor-default',
   {
     variants: {
       variant: {

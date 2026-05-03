@@ -37,6 +37,7 @@ var Shisui = game.ActorDef{
 	},
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
+		actions.NoEscape.ID,
 		actions.Taunt.ID,
 		actions.SharinganGlare.ID,
 		actions.Redirect.ID,

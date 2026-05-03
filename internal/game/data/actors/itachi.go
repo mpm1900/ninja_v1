@@ -37,6 +37,7 @@ var Itachi = game.ActorDef{
 	},
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
+		actions.NoEscape.ID,
 		actions.Disable.ID,
 		actions.PatternBreak.ID,
 		actions.Flash.ID,

@@ -65,6 +65,7 @@ import {
 } from 'react-icons/bs'
 import { ImSleepy2 } from 'react-icons/im'
 import { SiComma } from 'react-icons/si'
+import { LuRefreshCwOff } from "react-icons/lu";
 
 const Aburame: IconType = (props) => (
   <img src="/icons/aburame.svg" alt="aburame" {...(props as any)} />
@@ -263,6 +264,7 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   ),
   status_reflection: GiShieldReflect,
   stunned: GiStarSwirl,
+  switch_locked: LuRefreshCwOff,
   tailwind: PiWindFill,
   taunted: Anger,
   folding_war_fan: ({ className, ...props }) => (

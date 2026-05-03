@@ -44,6 +44,7 @@ var Kakashi = game.ActorDef{
 	},
 	ActionCount: 6,
 	ActionIDs: append([]uuid.UUID{
+		actions.NoEscape.ID,
 		actions.Raikiri.ID,
 		actions.LightningHound.ID,
 		actions.Chidori.ID,

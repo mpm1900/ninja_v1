@@ -34,6 +34,7 @@ var Obito = game.ActorDef{
 	Abilities:   []game.Modifier{},
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
+		actions.NoEscape.ID,
 		actions.Kamui.ID,
 		actions.KamuiCounter.ID,
 		actions.KamuiSlash.ID,

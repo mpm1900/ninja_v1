@@ -17,7 +17,7 @@ import { Separator } from './ui/separator'
 
 function SwitchButton({ actor }: { actor: Actor }) {
   const active = useActiveActor()
-  const switch_action = active?.actions.find((a) => a.config.name === 'Switch')
+  const switch_action = active?.actions.find(a => a.meta.switch)
   const context = {
     ...NULL_CONTEXT,
     action_ID: switch_action?.ID ?? null,
@@ -36,8 +36,9 @@ function SwitchButton({ actor }: { actor: Actor }) {
         a.mutation.ID === switch_action?.ID)
   )
 
+
   const { context: t_context } = useGetTargets(context)
-  if (!idle || !t_context?.target_actor_IDs?.includes(actor.ID)) {
+  if (switch_action?.disabled || !idle || !t_context?.target_actor_IDs?.includes(actor.ID)) {
     return null
   }
 

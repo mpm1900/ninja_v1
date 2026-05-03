@@ -33,14 +33,6 @@ function TeamBuilderStats({
             /66
           </td>
         </tr>
-
-        <TeamBuilderStat
-          total={total}
-          base={def}
-          stat="hp"
-          config={config}
-          onConfigChange={onConfigChange}
-        />
         <TeamBuilderStat
           total={total}
           base={def}
@@ -48,6 +40,14 @@ function TeamBuilderStats({
           config={config}
           onConfigChange={onConfigChange}
         />
+        <TeamBuilderStat
+          total={total}
+          base={def}
+          stat="hp"
+          config={config}
+          onConfigChange={onConfigChange}
+        />
+
 
         <TeamBuilderStat
           total={total}
