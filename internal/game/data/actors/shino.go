@@ -16,7 +16,7 @@ var Shino = game.ActorDef{
 
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            80,
-		game.StatStamina:       80,
+		game.StatStamina:       100,
 		game.StatAttack:        80,
 		game.StatDefense:       80,
 		game.StatChakraAttack:  100,

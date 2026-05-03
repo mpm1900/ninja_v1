@@ -15,7 +15,7 @@ var Jiraiya = game.ActorDef{
 
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            91,
-		game.StatStamina:       90,
+		game.StatStamina:       100,
 		game.StatAttack:        90,
 		game.StatDefense:       106,
 		game.StatChakraAttack:  130,

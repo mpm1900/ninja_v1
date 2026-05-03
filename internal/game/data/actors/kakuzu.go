@@ -16,7 +16,7 @@ var Kakuzu = game.ActorDef{
 
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            80,
-		game.StatStamina:       80,
+		game.StatStamina:       100,
 		game.StatAttack:        110,
 		game.StatDefense:       125,
 		game.StatChakraAttack:  125,

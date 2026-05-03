@@ -17,7 +17,7 @@ var Shisui = game.ActorDef{
 
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            80,
-		game.StatStamina:       70,
+		game.StatStamina:       100,
 		game.StatAttack:        90,
 		game.StatDefense:       75,
 		game.StatChakraAttack:  133,

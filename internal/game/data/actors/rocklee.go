@@ -15,7 +15,7 @@ var RockLee = game.ActorDef{
 
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            50,
-		game.StatStamina:       80,
+		game.StatStamina:       100,
 		game.StatAttack:        150,
 		game.StatDefense:       80,
 		game.StatChakraAttack:  20,

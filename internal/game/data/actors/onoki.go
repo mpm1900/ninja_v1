@@ -17,7 +17,7 @@ var Onoki = game.ActorDef{
 
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            56,
-		game.StatStamina:       80,
+		game.StatStamina:       100,
 		game.StatAttack:        80,
 		game.StatDefense:       114,
 		game.StatChakraAttack:  124,

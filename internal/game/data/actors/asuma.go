@@ -16,7 +16,7 @@ var Asuma = game.ActorDef{
 
 	Stats: map[game.ActorStat]int{
 		game.StatHP:            90,
-		game.StatStamina:       90,
+		game.StatStamina:       100,
 		game.StatAttack:        110,
 		game.StatDefense:       80,
 		game.StatChakraAttack:  110,

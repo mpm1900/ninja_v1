@@ -29,10 +29,12 @@ var Zetsu = game.ActorDef{
 	NatureResistance: game.NewNatureSetValues(),
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsWood,
-		game.NsYinYang,
+		game.NsYin,
 	}),
 	Abilities: []game.Modifier{
 		modifiers.Regeneration,
+	},
+	DefaultModifiers: []game.Modifier{
 		modifiers.Insomnia,
 	},
 	ActionCount: 4,
