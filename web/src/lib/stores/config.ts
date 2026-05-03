@@ -22,10 +22,10 @@ const ActorConfigSchema = z
       (sum, value) => sum + value,
       0
     )
-    if (total > 64) {
+    if (total > 66) {
       ctx.addIssue({
         code: 'custom',
-        message: 'Total aux stats cannot exceed 64',
+        message: 'Total aux stats cannot exceed 66',
       })
     }
   })

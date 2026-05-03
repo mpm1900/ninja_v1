@@ -63,7 +63,7 @@ function RouteComponent() {
         <AppHeader />
 
         <section className="flex flex-1 min-h-0 p-4 md:p-6">
-          <SidebarProvider className="h-full min-h-0 w-full overflow-hidden rounded-xl border bg-stone-950 shadow-sm">
+          <SidebarProvider className="h-full min-h-0 w-full overflow-hidden rounded-xl border border-stone-300/30 ring ring-black bg-stone-950 shadow-sm">
             <TeamBuilderSidebar
               onLoadTeam={loadSavedTeam}
               savedTeams={savedTeams}

@@ -12,7 +12,7 @@ function LobbyActorDetails({
     <button
       {...props}
       className={cn(
-        'border border-stone-300/40 ring ring-black bg-stone-800 rounded text-left cursor-pointer',
+        'border border-stone-300/30 ring ring-black bg-stone-800 rounded text-left cursor-pointer',
         'p-2 flex flex-col gap-2',
         className
       )}

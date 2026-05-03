@@ -27,10 +27,10 @@ function TeamBuilderStats({
           </td>
           <td
             colSpan={3}
-            className={cn('text-end', total > 64 ? 'text-destructive' : '')}
+            className={cn('text-end', total > 66 ? 'text-destructive' : '')}
           >
             {total}
-            /64
+            /66
           </td>
         </tr>
 

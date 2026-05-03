@@ -12,7 +12,7 @@ import { cn } from '#/lib/utils'
 import { Input } from './ui/input'
 import { Slider } from './ui/slider'
 
-const CAP = 64
+const CAP = 66
 const PER_STAT_MAX = 31
 const MAX_COLOR_STAT = 255
 const MAX_BAR_WIDTH_PERCENT = 140
