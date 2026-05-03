@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-var sagesScrollID = uuid.MustParse("84369b0e-b364-4a83-b4d2-979477ec50f5")
+var sagesScrollID = uuid.MustParse("0a88ef04-e105-47ec-ae74-3bec50bd62cd")
 var SagesScroll game.Modifier = game.Modifier{
 	ID:          sagesScrollID,
 	GroupID:     &sagesScrollID,

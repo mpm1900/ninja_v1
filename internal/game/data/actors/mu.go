@@ -22,7 +22,7 @@ var Mu = game.ActorDef{
 		game.StatDefense:       70,
 		game.StatChakraAttack:  135,
 		game.StatChakraDefense: 90,
-		game.StatSpeed:         121,
+		game.StatSpeed:         101,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},

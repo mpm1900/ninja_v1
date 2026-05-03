@@ -48,7 +48,13 @@ import { MdFileUploadOff } from 'react-icons/md'
 import { GrFastForward } from 'react-icons/gr'
 import { TbTagPlus } from 'react-icons/tb'
 import { HiScale } from 'react-icons/hi2'
-import { FaFrog, FaHouseFloodWater, FaWeightHanging, FaRing, FaScroll } from 'react-icons/fa6'
+import {
+  FaFrog,
+  FaHouseFloodWater,
+  FaWeightHanging,
+  FaRing,
+  FaScroll,
+} from 'react-icons/fa6'
 import { FaHandsHelping } from 'react-icons/fa'
 import { TbScanEye, TbCancel } from 'react-icons/tb'
 import {
@@ -57,8 +63,8 @@ import {
   BsSpeedometer,
   BsMoonFill,
 } from 'react-icons/bs'
-import { ImSleepy2 } from "react-icons/im";
-import { SiComma } from "react-icons/si";
+import { ImSleepy2 } from 'react-icons/im'
+import { SiComma } from 'react-icons/si'
 
 const Aburame: IconType = (props) => (
   <img src="/icons/aburame.svg" alt="aburame" {...(props as any)} />
@@ -137,7 +143,9 @@ const MODIFIER_ICONS: Record<string, IconType> = {
     <GiFlamer className={cn('text-orange-400', className)} {...props} />
   ),
   coerced: GiComa,
-  conductive_bracers: GiLinkedRings,
+  conductive_bracers: ({ className, ...props }) => (
+    <GiLinkedRings className={cn('text-yellow-400', className)} {...props} />
+  ),
   consume_chakra: GiHeartOrgan,
   cmo_chakra: ({ className, ...props }) => (
     <GiDoubled className={cn('text-indigo-400', className)} {...props} />
@@ -155,8 +163,12 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   chakra_reduction_up: ({ className, ...props }) => (
     <GiArmorUpgrade className={cn('text-indigo-400', className)} {...props} />
   ),
-  coral_fragment: GiCoral,
-  dragon_flame_pepper: GiBellPepper,
+  coral_fragment: ({ className, ...props }) => (
+    <GiCoral className={cn('text-blue-500', className)} {...props} />
+  ),
+  dragon_flame_pepper: ({ className, ...props }) => (
+    <GiBellPepper className={cn('text-red-500', className)} {...props} />
+  ),
   physical_reduction_up: ({ className, ...props }) => (
     <GiArmorUpgrade className={cn('text-orange-300', className)} {...props} />
   ),
@@ -194,7 +206,9 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   flooded: FaHouseFloodWater,
   focused: GiLookAt,
   gedo_shard: GiTopaz,
-  granite_ring: FaRing,
+  granite_ring: ({ className, ...props }) => (
+    <FaRing className={cn('text-taupe-500', className)} {...props} />
+  ),
   guts: GiMinotaur,
   haze: HiScale,
   healing_tactics: GiHealing,
@@ -205,7 +219,9 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   naruto_transform: PiSpiralFill,
   nature_specialist: GiEcology,
   onigiri: PiOnigiriFill,
-  onyx_magatama: SiComma,
+  onyx_magatama: ({ className, ...props }) => (
+    <SiComma className={cn('text-indigo-900', className)} {...props} />
+  ),
   paralyzed: ({ className, ...props }) => (
     <GiLightningTrio className={cn('text-yellow-400', className)} {...props} />
   ),
@@ -225,7 +241,9 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   sandstorm: GiSandstorm,
   seal_up: TbTagPlus,
   seeded: PiPlantBold,
-  shinobi_vest: GiKevlarVest,
+  shinobi_vest: ({ className, ...props }) => (
+    <GiKevlarVest className={cn('text-blue-400', className)} {...props} />
+  ),
   sleeping: ({ className, ...props }) => (
     <GiNightSleep className={cn('text-indigo-400', className)} {...props} />
   ),
@@ -233,7 +251,9 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   rain_speed: ({ className, ...props }) => (
     <BsSpeedometer className={cn('text-blue-300', className)} {...props} />
   ),
-  sages_scroll: FaScroll,
+  sages_scroll: ({ className, ...props }) => (
+    <FaScroll className={cn('text-stone-300', className)} {...props} />
+  ),
   sleepy: ImSleepy2,
   speed_up: ({ className, ...props }) => (
     <PiCaretDoubleUpDuotone
@@ -245,7 +265,9 @@ const MODIFIER_ICONS: Record<string, IconType> = {
   stunned: GiStarSwirl,
   tailwind: PiWindFill,
   taunted: Anger,
-  folding_war_fan: GiHandheldFan,
+  folding_war_fan: ({ className, ...props }) => (
+    <GiHandheldFan className={cn('text-emerald-500', className)} {...props} />
+  ),
   unburden: FaWeightHanging,
   water_absorb: GiWaterRecycling,
   will_of_fire: GiFireBowl,

@@ -63,7 +63,7 @@ function RouteComponent() {
         <AppHeader />
 
         <section className="flex flex-1 min-h-0 p-4 md:p-6">
-          <SidebarProvider className="h-full min-h-0 w-full overflow-hidden rounded-xl border bg-background shadow-sm">
+          <SidebarProvider className="h-full min-h-0 w-full overflow-hidden rounded-xl border bg-stone-950 shadow-sm">
             <TeamBuilderSidebar
               onLoadTeam={loadSavedTeam}
               savedTeams={savedTeams}
@@ -88,7 +88,10 @@ function RouteComponent() {
                               <Button
                                 size="icon"
                                 disabled={
-                                  !isValid || isSubmitting || isValidating || !client
+                                  !isValid ||
+                                  isSubmitting ||
+                                  isValidating ||
+                                  !client
                                 }
                                 onClick={form.handleSubmit}
                               >
@@ -128,7 +131,7 @@ function RouteComponent() {
                           <div className="flex justify-between items-end gap-6">
                             <form.Field name="name">
                               {(field) => (
-                                <Field className='max-w-sm'>
+                                <Field className="max-w-sm">
                                   <FieldLabel>Team Name</FieldLabel>
                                   <FieldContent>
                                     <Input
@@ -143,7 +146,7 @@ function RouteComponent() {
                               )}
                             </form.Field>
                             <Button
-                              size='icon'
+                              size="icon"
                               variant="destructive"
                               onClick={() => {
                                 form.removeFieldValue('actors', selected_index)

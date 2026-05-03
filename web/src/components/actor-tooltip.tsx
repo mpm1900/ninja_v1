@@ -93,9 +93,11 @@ function ActorTooltip({
           </div>
           <div className="bg-stone-700 rounded-xs overflow-hidden ring ring-black mb-2">
             <div className="mb-1 h-px w-full bg-gradient-to-r to-stone-100/35 from-transparent" />
-            <div className="grid grid-cols-3 px-2">
+            <div className="flex gap-2 [&>div]:flex-1 [&>div]:text-nowrap px-2">
               <div className="capitalize">{actor.focus}</div>
+              <span>|</span>
               <div>{actor.item?.name ?? '-'}</div>
+              <span>|</span>
               <div>{actor.ability?.name ?? '-'}</div>
             </div>
             <div className="mt-1 h-px w-full bg-gradient-to-r to-transparent from-stone-100/35" />

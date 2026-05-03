@@ -185,7 +185,7 @@ function ActionsTable({
   const renderRow = (row: Row<Action>) => (
     <Fragment key={row.id}>
       <TableRow
-        className={cn(row.getIsPinned() && 'bg-muted/50')}
+        className={cn(row.getIsPinned() && 'bg-muted/50', 'cursor-default')}
         onClick={() => row.toggleSelected()}
       >
         {row.getVisibleCells().map((cell) => (

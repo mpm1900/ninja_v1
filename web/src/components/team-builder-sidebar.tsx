@@ -25,7 +25,7 @@ function TeamBuilderSidebar({
   }
 
   return (
-    <Sidebar collapsible="none" className="border-r">
+    <Sidebar collapsible="none" className="border-r bg-stone-900">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
