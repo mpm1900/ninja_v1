@@ -41,5 +41,6 @@ var Gaara = game.ActorDef{
 		actions.DragonStance.ID,
 		actions.WhirlwindKick.ID,
 		actions.EarthDomePrison.ID,
+		actions.Earthquake.ID,
 	}, GlobalActions...),
 }

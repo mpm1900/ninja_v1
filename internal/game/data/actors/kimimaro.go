@@ -41,5 +41,6 @@ var Kimimaro = game.ActorDef{
 		actions.CamelliaDance.ID,
 		actions.ClematisDanceFlower.ID,
 		actions.BodyFlicker.ID,
+		actions.Earthquake.ID,
 	}, GlobalActions...),
 }

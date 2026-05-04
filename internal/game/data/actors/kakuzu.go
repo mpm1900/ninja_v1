@@ -42,5 +42,6 @@ var Kakuzu = game.ActorDef{
 		actions.FalseDarkness.ID,
 		actions.PressureDamage.ID,
 		actions.WhirlwindKick.ID,
+		actions.Earthquake.ID,
 	}, GlobalActions...),
 }

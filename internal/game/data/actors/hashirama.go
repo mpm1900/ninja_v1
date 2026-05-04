@@ -48,5 +48,6 @@ var Hashirama = game.ActorDef{
 		actions.SageMode.ID,
 		actions.VacuumBlast.ID,
 		actions.DeepForestEmergence.ID,
+		actions.Earthquake.ID,
 	}, GlobalActions...),
 }

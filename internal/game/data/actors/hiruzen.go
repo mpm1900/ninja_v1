@@ -41,5 +41,6 @@ var Hiruzen = game.ActorDef{
 		actions.SummonAlly.ID,
 		actions.Firestorm.ID,
 		actions.VacuumBlast.ID,
+		actions.Earthquake.ID,
 	}, GlobalActions...),
 }

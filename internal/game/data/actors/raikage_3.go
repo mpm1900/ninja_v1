@@ -37,5 +37,6 @@ var Raikage3 = game.ActorDef{
 		actions.RockFist.ID,
 		actions.LightningLariat.ID,
 		actions.LightningArmor.ID,
+		actions.Earthquake.ID,
 	}, GlobalActions...),
 }

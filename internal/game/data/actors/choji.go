@@ -39,5 +39,6 @@ var Choji = game.ActorDef{
 		actions.HeavyPunch.ID,
 		actions.ChilliPill.ID,
 		actions.RockFist.ID,
+		actions.Earthquake.ID,
 	}, GlobalActions...),
 }
