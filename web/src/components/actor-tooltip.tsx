@@ -14,10 +14,11 @@ import { sendContextMessage } from '#/lib/stores/socket'
 import { setActionID } from '#/lib/stores/battle-context'
 import { cn } from '#/lib/utils'
 import { Separator } from './ui/separator'
+import { MODIFIER_ICONS } from '#/data/icons'
 
 function SwitchButton({ actor }: { actor: Actor }) {
   const active = useActiveActor()
-  const switch_action = active?.actions.find(a => a.meta.switch)
+  const switch_action = active?.actions.find((a) => a.meta.switch)
   const context = {
     ...NULL_CONTEXT,
     action_ID: switch_action?.ID ?? null,
@@ -36,9 +37,12 @@ function SwitchButton({ actor }: { actor: Actor }) {
         a.mutation.ID === switch_action?.ID)
   )
 
-
   const { context: t_context } = useGetTargets(context)
-  if (switch_action?.disabled || !idle || !t_context?.target_actor_IDs?.includes(actor.ID)) {
+  if (
+    switch_action?.disabled ||
+    !idle ||
+    !t_context?.target_actor_IDs?.includes(actor.ID)
+  ) {
     return null
   }
 
@@ -71,6 +75,12 @@ function ActorTooltip({
   actor: Actor
   disabled?: boolean
 }) {
+  const ItemIcon = actor?.item?.icon
+    ? MODIFIER_ICONS[actor.item.icon]
+    : undefined
+  const AbilityIcon = actor?.ability?.icon
+    ? MODIFIER_ICONS[actor.ability.icon]
+    : undefined
   return (
     <HoverCard openDelay={300} closeDelay={100}>
       <HoverCardTrigger {...props} />
@@ -94,12 +104,16 @@ function ActorTooltip({
           </div>
           <div className="bg-stone-700 rounded-xs overflow-hidden ring ring-black mb-2">
             <div className="mb-1 h-px w-full bg-gradient-to-r to-stone-100/35 from-transparent" />
-            <div className="flex gap-2 [&>div]:flex-1 [&>div]:text-nowrap px-2">
+            <div className="flex gap-8 [&>div]:flex-1 [&>div]:text-nowrap px-2">
               <div className="capitalize">{actor.focus}</div>
-              <span>|</span>
-              <div>{actor.item?.name ?? '-'}</div>
-              <span>|</span>
-              <div>{actor.ability?.name ?? '-'}</div>
+              <div className="flex gap-1 items-center">
+                {ItemIcon && <ItemIcon />}
+                {actor.item?.name ?? '-'}
+              </div>
+              <div className="flex gap-1 items-center">
+                {AbilityIcon && <AbilityIcon />}
+                {actor.ability?.name ?? '-'}
+              </div>
             </div>
             <div className="mt-1 h-px w-full bg-gradient-to-r to-transparent from-stone-100/35" />
           </div>

@@ -24,6 +24,7 @@ import { Button } from '#/components/ui/button'
 import { useEffect, useState } from 'react'
 import { LobbyThumbnails } from '#/components/lobby-thumbnails'
 import { LobbyActorDetails } from '#/components/lobby-actor-details'
+import { LobbyActorsList } from '#/components/lobby-actors-list'
 
 export const Route = createFileRoute('/lobby')({
   beforeLoad: ({ context }) => {
@@ -146,11 +147,11 @@ function App() {
                         </Button>
                       )}
 
-                      {game.actors
-                        .filter((a) => a.player_ID === player.ID)
-                        .map((a) => (
-                          <LobbyActorDetails key={a.ID} actor={a} />
-                        ))}
+                      <LobbyActorsList
+                        player={player}
+                        enabled={enabled}
+                        onEnabledChange={setEnabled}
+                      />
                     </div>
                   ))}
                   <div className="flex flex-col items-end">

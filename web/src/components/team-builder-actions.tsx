@@ -24,7 +24,7 @@ function TeamBuilderActions({
       <form.Subscribe>
         {({ isValid, isSubmitting, isValidating, values }) => {
           return (
-            <div className="flex gap-2">
+            <div className="flex gap-2 w-full">
               <form.Field name="name">
                 {(field) => (
                   <Input
