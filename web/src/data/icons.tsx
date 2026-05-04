@@ -34,6 +34,7 @@ import {
   GiBellPepper,
   GiCoral,
   GiLinkedRings,
+  GiArmorPunch,
 } from 'react-icons/gi'
 import {
   PiCaretDoubleUpDuotone,
@@ -140,6 +141,9 @@ const SHINOBI_ICONS: Record<string, IconType> = {
 
 const MODIFIER_ICONS: Record<string, IconType> = {
   ashen: GiDustCloud,
+  attack_double: ({ className, ...props }) => (
+    <GiArmorPunch className={cn('text-orange-300', className)} {...props} />
+  ),
   burned: ({ className, ...props }) => (
     <GiFlamer className={cn('text-orange-400', className)} {...props} />
   ),

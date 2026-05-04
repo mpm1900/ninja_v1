@@ -3,6 +3,7 @@ package actors
 import (
 	"ninja_v1/internal/game"
 	"ninja_v1/internal/game/data/actions"
+	"ninja_v1/internal/game/data/modifiers"
 
 	"github.com/google/uuid"
 )
@@ -14,13 +15,13 @@ var RockLee = game.ActorDef{
 	Affiliations: []string{game.AffKonoha},
 
 	Stats: map[game.ActorStat]int{
-		game.StatHP:            50,
+		game.StatHP:            60,
 		game.StatStamina:       100,
-		game.StatAttack:        150,
-		game.StatDefense:       80,
-		game.StatChakraAttack:  20,
-		game.StatChakraDefense: 70,
-		game.StatSpeed:         105,
+		game.StatAttack:        60,
+		game.StatDefense:       75,
+		game.StatChakraAttack:  60,
+		game.StatChakraDefense: 75,
+		game.StatSpeed:         100,
 		game.StatEvasion:       100,
 		game.StatAccuracy:      100,
 	},
@@ -29,7 +30,9 @@ var RockLee = game.ActorDef{
 	Natures: game.MapNatures([]game.NatureSet{
 		game.NsTai,
 	}),
-	Abilities:   []game.Modifier{},
+	Abilities: []game.Modifier{
+		modifiers.PurePower,
+	},
 	ActionCount: 4,
 	ActionIDs: append([]uuid.UUID{
 		actions.LuckyStrikes.ID,
