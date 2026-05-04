@@ -54,7 +54,14 @@ func DamageEquation(terms DamageTerms) int {
 	pow_ad := float64(terms.Power) * float64(terms.Attack) / float64(terms.Defense)
 	level_mod := float64(2*terms.Level)/5 + 2
 	base := (pow_ad*level_mod)/50 + 2
-	raw := (base * terms.Critical * terms.Nature * terms.STAB * terms.Targets * terms.Random * terms.Other)
+	mods := terms.Critical * terms.Nature * terms.STAB * terms.Targets * terms.Random * terms.Other
+	raw := (base * mods)
+	fmt.Println("DAMAGE REPORT:")
+	fmt.Printf("A/D POW: %d * %d / %d  = %f\n", terms.Power, terms.Attack, terms.Defense, pow_ad)
+	fmt.Printf("LEVEL: \t (2 * %d / 5) + 2 = %f\n", terms.Level, level_mod)
+	fmt.Printf("BASE: \t (%f * %f) / 50 + 2 = %f\n", pow_ad, level_mod, base)
+	fmt.Printf("MODS: \t %f = crit=%f, nature=%f, stab=%f, targets=%f, random=%f, other=%f\n", mods, terms.Critical, terms.Nature, terms.STAB, terms.Targets, terms.Random, terms.Other)
+	fmt.Println("")
 	fmt.Printf(
 		"(((%d * %d / %d) * ((2 * %d / 5) + 2) / 50 + 2) * (%f * %f * %f * %f * %f * %f)  = %f \n",
 		terms.Power, terms.Attack, terms.Defense, terms.Level, terms.Critical, terms.Nature, terms.STAB, terms.Targets, terms.Random, terms.Other, raw,
