@@ -23,8 +23,8 @@ import { NULL_CONTEXT } from '#/lib/game/context'
 import { Button } from '#/components/ui/button'
 import { useEffect, useState } from 'react'
 import { LobbyThumbnails } from '#/components/lobby-thumbnails'
-import { LobbyActorDetails } from '#/components/lobby-actor-details'
 import { LobbyActorsList } from '#/components/lobby-actors-list'
+import { Swords } from 'lucide-react'
 
 export const Route = createFileRoute('/lobby')({
   beforeLoad: ({ context }) => {
@@ -64,15 +64,15 @@ function App() {
         <AppHeader />
         <div className="flex min-w-0">
           <div className="min-w-0 space-y-2 flex-1 overflow-auto">
-            <Card className="m-6 bg-stone-950">
-              <CardHeader>
+            <Card className="m-6 bg-stone-950 py-4">
+              <CardHeader className='px-4'>
                 <CardTitle>Pre-Game Lobby</CardTitle>
                 <CardDescription>Select 4-shinobi your line-up</CardDescription>
                 <CardAction>
                   {client &&
                     ready &&
                     (unstarted ? (
-                      <Button
+                      <Link to="/battle"><Button
                         disabled={
                           players.some((p) => !p.ready) ||
                           enemies.some((e) => !e.ready)
@@ -85,8 +85,9 @@ function App() {
                           })
                         }}
                       >
-                        <Link to="/battle">Start Battle</Link>
+                        <Swords /> Start Battle
                       </Button>
+                      </Link>
                     ) : (
                       <Button
                         onClick={() => {
@@ -115,9 +116,9 @@ function App() {
                         onEnabledChange={setEnabled}
                       />
                       {game.turn.phase === 'init' &&
-                        enabled.length === 4 &&
                         !player.ready && (
                           <Button
+                            disabled={enabled.length !== 4}
                             onClick={() => {
                               sendContextMessage({
                                 type: 'ready-team',
@@ -129,7 +130,7 @@ function App() {
                               })
                             }}
                           >
-                            Ready Team
+                            Ready Team ({enabled.length}/4)
                           </Button>
                         )}
                       {game.turn.phase === 'init' && player.ready && (

@@ -1,5 +1,5 @@
 import type { TeamBuilderForm } from '#/hooks/use-team-builder-form'
-import { Loader2, Save, Swords } from 'lucide-react'
+import { ChevronRight, Loader2, Save, Swords } from 'lucide-react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { clientsStore } from '#/lib/stores/clients'
@@ -62,11 +62,11 @@ function TeamBuilderActions({
                 )}
               </Button>
               <Button
-                size="icon"
                 disabled={!isValid || isSubmitting || isValidating || !client}
                 onClick={form.handleSubmit}
               >
-                <Swords />
+                Load
+                <ChevronRight />
               </Button>
             </div>
           )
