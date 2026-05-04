@@ -1,9 +1,7 @@
 import type { Context } from '#/lib/game/context'
+import { subscribe } from '#/lib/socket/connect'
 import { clientsStore } from '#/lib/stores/clients'
-import {
-  sendContextMessage,
-  subscribeSocketMessages,
-} from '#/lib/stores/socket'
+import { sendContextMessage } from '#/lib/stores/socket'
 import { useStore } from '@tanstack/react-store'
 import { useEffect, useRef, useState } from 'react'
 
@@ -42,7 +40,7 @@ function useGetTargets(context: Context, prompt_ID?: string) {
   }, [context])
 
   useEffect(() => {
-    return subscribeSocketMessages((_, message) => {
+    return subscribe((_, message) => {
       if (message?.type !== 'target-IDs' || !message.context) return
 
       // Ignore responses from unrelated get-targets requests.

@@ -1,6 +1,7 @@
 import { contextToString, type Context } from '#/lib/game/context'
+import { subscribe } from '#/lib/socket/connect'
 import { clientsStore } from '#/lib/stores/clients'
-import { sendContextMessage, subscribeSocketMessages } from '#/lib/stores/socket'
+import { sendContextMessage } from '#/lib/stores/socket'
 import { useStore } from '@tanstack/react-store'
 import { useEffect, useRef, useState } from 'react'
 
@@ -25,7 +26,7 @@ function useValidateContext(context: Context, prompt_ID?: string) {
   const seqRef = useRef(0)
 
   useEffect(() => {
-    return subscribeSocketMessages((_, message) => {
+    return subscribe((_, message) => {
       if (message?.type !== 'validate-context' || !message.context) return
 
       const pending = pendingRef.current

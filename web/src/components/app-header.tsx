@@ -1,17 +1,11 @@
 import { useStore } from '@tanstack/react-store'
 import { InstanceCombobox } from './instance-combobox'
-import {
-  connectSocket,
-  sendContextMessage,
-  socketStore,
-} from '#/lib/stores/socket'
+import { sendContextMessage, socketStore } from '#/lib/stores/socket'
 import { clientsStore } from '#/lib/stores/clients'
 import { gameStore } from '#/lib/stores/game'
 import {
-  Check,
   ChevronRight,
   Loader,
-  Loader2,
   LogOut,
   Signal,
   TriangleAlert,
@@ -25,8 +19,13 @@ import { GiSharpShuriken } from 'react-icons/gi'
 import { useLogout } from '#/lib/mutations/logout'
 import { useUser } from '#/lib/queries/auth'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
-import { GiWhirlpoolShuriken } from "react-icons/gi";
-import { TbHexagonNumber1Filled, TbHexagonNumber2Filled, TbHexagonNumber3Filled } from "react-icons/tb";
+import { GiWhirlpoolShuriken } from 'react-icons/gi'
+import {
+  TbHexagonNumber1Filled,
+  TbHexagonNumber2Filled,
+  TbHexagonNumber3Filled,
+} from 'react-icons/tb'
+import { connect } from '#/lib/socket/connect'
 
 function getActiveTable(pathname: string) {
   switch (pathname) {
@@ -75,7 +74,7 @@ function AppHeader() {
               </>
             }
             value={instanceID}
-            onValueChange={(instanceID) => connectSocket(instanceID)}
+            onValueChange={(instanceID) => connect(instanceID)}
           />
         )}
         <Tabs value={activeTab}>
@@ -88,11 +87,17 @@ function AppHeader() {
             </TabsTrigger>
             <ChevronRight />
             <TabsTrigger value="lobby" asChild>
-              <Link to="/lobby"><TbHexagonNumber2Filled />Pre Game</Link>
+              <Link to="/lobby">
+                <TbHexagonNumber2Filled />
+                Pre Game
+              </Link>
             </TabsTrigger>
             <ChevronRight />
             <TabsTrigger value="battle" asChild>
-              <Link to="/battle"><TbHexagonNumber3Filled />Battle</Link>
+              <Link to="/battle">
+                <TbHexagonNumber3Filled />
+                Battle
+              </Link>
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -114,8 +119,12 @@ function AppHeader() {
           </div>
         )}
         <div className="flex items-center">
-          {game_status === 'running' && <GiWhirlpoolShuriken className="animate-spin" />}
-          {game_status === 'waiting' && <GiWhirlpoolShuriken className="animate-spin" />}
+          {game_status === 'running' && (
+            <GiWhirlpoolShuriken className="animate-spin" />
+          )}
+          {game_status === 'waiting' && (
+            <GiWhirlpoolShuriken className="animate-spin" />
+          )}
         </div>
       </div>
       <div className="flex items-center gap-4 px-2">
