@@ -69,11 +69,14 @@ function ActorThumbnail({
         height: size,
         width: size,
       }}
-      className={cn('overflow-hidden bg-stone-950 p-1 border rounded relative', {
-        'bg-transparent border-transparent': index === undefined,
-        'bg-foreground': active && index !== undefined,
-        'ring ring-black': showRing,
-      })}
+      className={cn(
+        'overflow-hidden bg-stone-950 p-1 border rounded relative',
+        {
+          'bg-transparent border-transparent': index === undefined,
+          'bg-foreground': active && index !== undefined,
+          'ring ring-black': showRing,
+        }
+      )}
       {...props}
     >
       <div className={cn('h-full w-full select-none', className)}>
@@ -86,6 +89,9 @@ function ActorThumbnail({
               'h-full w-full object-cover absolute inset-0 z-10',
               imgClass
             )}
+            style={{
+              imageRendering: 'pixelated',
+            }}
             width={size}
             height={size}
           />

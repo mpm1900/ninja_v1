@@ -42,12 +42,12 @@ function RouteComponent() {
     },
   })
 
-  const [id, setID] = useState<string | null>(null)
+  const [team, setTeam] = useState<Team>()
   const qc = useQueryClient()
   const deleteMutation = useDeleteTeam()
 
   const loadSavedTeam = (team: Team) => {
-    setID(team.id)
+    setTeam(team)
     form.setFieldValue('name', team.team_config.name)
     form.setFieldValue('actors', team.team_config.actors)
     form.setFieldValue(
@@ -81,8 +81,12 @@ function RouteComponent() {
               <form.AppForm>
                 <div className="flex h-full min-h-0 flex-row-reverse items-stretch p-4 gap-8">
                   <div>
-                    <TeamBuilderActions id={id} form={form} />
-                    <TeamBuilderList form={form} />
+                    <TeamBuilderActions id={team?.id ?? null} form={form} />
+                    <TeamBuilderList
+                      created_at={team?.created_at ?? null}
+                      id={team?.id ?? null}
+                      form={form}
+                    />
                   </div>
 
                   <TeamBuilderActor form={form} />

@@ -58,6 +58,7 @@ function TeamBuilderSidebar({
               onClick={() => {
                 onLoadTeam({
                   id: null,
+                  created_at: null,
                   team_config: {
                     name: '',
                     selected_index: 0,

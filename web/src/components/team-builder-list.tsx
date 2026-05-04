@@ -1,8 +1,17 @@
 import type { TeamBuilderForm } from '#/hooks/use-team-builder-form'
 import { makeConfigFromDef } from '#/lib/game/team'
 import { ActorCombobox } from './actor-combobox'
+import { formatDistanceToNow } from 'date-fns'
 
-function TeamBuilderList({ form }: { form: TeamBuilderForm }) {
+function TeamBuilderList({
+  form,
+  created_at,
+  id,
+}: {
+  form: TeamBuilderForm
+  created_at: string | null
+  id: string | null
+}) {
   return (
     <form.Field name="actors" mode="array">
       {(field) => (
@@ -14,7 +23,14 @@ function TeamBuilderList({ form }: { form: TeamBuilderForm }) {
         >
           {({ selected, active }) => (
             <div className="flex flex-col gap-2 min-w-sm">
-              <div className="">Team: {selected.length}/6</div>
+              <div className="flex items-center justify-between">
+                <div>Team: {selected.length}/6</div>
+                {created_at && (
+                  <div className="text-xs">
+                    {formatDistanceToNow(new Date(created_at))}
+                  </div>
+                )}
+              </div>
               {field.state.value.map((_, i) => (
                 <form.Field key={i} name={`actors[${i}]`}>
                   {(actorID) => (
@@ -42,6 +58,9 @@ function TeamBuilderList({ form }: { form: TeamBuilderForm }) {
                   }}
                 />
               )}
+              <div className="text-xs text-muted-foreground text-center">
+                {id}
+              </div>
             </div>
           )}
         </form.Subscribe>

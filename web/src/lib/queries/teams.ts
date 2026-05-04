@@ -6,6 +6,7 @@ import type { TeamConfig } from '../stores/config'
 type Team = {
   id: string | null
   team_config: TeamConfig
+  created_at: string | null
 }
 
 const getTeams = createServerFn().handler(async () => {

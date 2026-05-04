@@ -30,6 +30,9 @@ function LobbyActorDetails({
         src={actor.sprite_url}
         draggable={false}
         className={cn('absolute left-0 bottom-0 opacity-40')}
+        style={{
+          imageRendering: 'pixelated',
+        }}
         width={128}
         height={128}
       />
